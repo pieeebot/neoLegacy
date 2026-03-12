@@ -9,5 +9,5 @@ const wstring ClientConstants::BRANCH_STRING = VER_BRANCHVERSION_STR_W;
 #ifdef VER_SHOW_VERSION_WATERMARK
 const bool ClientConstants::SHOW_VERSION_WATERMARK = (VER_SHOW_VERSION_WATERMARK != 0);
 #else
-const bool ClientConstants::SHOW_VERSION_WATERMARK = true;
+const bool ClientConstants::SHOW_VERSION_WATERMARK = false;
 #endif
