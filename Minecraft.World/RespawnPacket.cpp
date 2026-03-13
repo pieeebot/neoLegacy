@@ -45,7 +45,9 @@ void RespawnPacket::handle(PacketListener *listener)
 void RespawnPacket::read(DataInputStream *dis) //throws IOException
 {
 	dimension = dis->readByte();
-	playerGameType = GameType::byId(dis->readByte());
+	int rawGameType = dis->readByte();
+	m_isHardcore = (rawGameType & 0x8) != 0;
+	playerGameType = GameType::byId(rawGameType & ~0x8);
 	mapHeight = dis->readShort();
 	wstring typeName = readUtf(dis, 16);
 	m_pLevelType = LevelType::getLevelType(typeName);
@@ -61,7 +63,6 @@ void RespawnPacket::read(DataInputStream *dis) //throws IOException
 	m_xzSize = dis->readShort();
 	m_hellScale = dis->read();
 #endif
-	m_isHardcore = dis->readBoolean();
 	app.DebugPrintf("RespawnPacket::read - Difficulty = %d\n",difficulty);
 
 }
@@ -69,7 +70,7 @@ void RespawnPacket::read(DataInputStream *dis) //throws IOException
 void RespawnPacket::write(DataOutputStream *dos) //throws IOException
 {
 	dos->writeByte(dimension);
-	dos->writeByte(playerGameType->getId());
+	dos->writeByte(playerGameType->getId() | (m_isHardcore ? 0x8 : 0));
 	dos->writeShort(mapHeight);
 	if (m_pLevelType == nullptr)
 	{
@@ -87,7 +88,6 @@ void RespawnPacket::write(DataOutputStream *dos) //throws IOException
 	dos->writeShort(m_xzSize);
 	dos->write(m_hellScale);
 #endif
-	dos->writeBoolean(m_isHardcore);
 }
 
 int RespawnPacket::getEstimatedSize()
@@ -97,5 +97,5 @@ int RespawnPacket::getEstimatedSize()
 	{
 		length = static_cast<int>(m_pLevelType->getGeneratorName().length());
 	}
-	return 14+length;
+	return 13+length;
 }

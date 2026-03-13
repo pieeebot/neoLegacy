@@ -109,6 +109,8 @@ void LoginPacket::read(DataInputStream *dis) //throws IOException
 	}
 	seed = dis->readLong();
 	gameType = dis->readInt();
+	m_isHardcore = (gameType & 0x8) != 0;
+	gameType = gameType & ~0x8;
 	dimension = dis->readByte();
 	mapHeight = dis->readByte();
 	maxPlayers = dis->readByte();
@@ -130,7 +132,6 @@ void LoginPacket::read(DataInputStream *dis) //throws IOException
 	m_xzSize = dis->readShort();
 	m_hellScale = dis->read();
 #endif
-	m_isHardcore = dis->readBoolean();
 	app.DebugPrintf("LoginPacket::read - Difficulty = %d\n",difficulty);
 
 }
@@ -148,7 +149,7 @@ void LoginPacket::write(DataOutputStream *dos) //throws IOException
 		writeUtf(m_pLevelType->getGeneratorName(), dos);
 	}
 	dos->writeLong(seed);
-	dos->writeInt(gameType);
+	dos->writeInt(gameType | (m_isHardcore ? 0x8 : 0));
 	dos->writeByte(dimension);
 	dos->writeByte(mapHeight);
 	dos->writeByte(maxPlayers);
@@ -168,7 +169,6 @@ void LoginPacket::write(DataOutputStream *dos) //throws IOException
 	dos->writeShort(m_xzSize);
 	dos->write(m_hellScale);
 #endif
-	dos->writeBoolean(m_isHardcore);
 }
 
 void LoginPacket::handle(PacketListener *listener)
@@ -184,5 +184,5 @@ int LoginPacket::getEstimatedSize()
 		length = static_cast<int>(m_pLevelType->getGeneratorName().length());
 	}
 
-	return static_cast<int>(sizeof(int) + userName.length() + 4 + 6 + sizeof(int64_t) + sizeof(char) + sizeof(int) + (2 * sizeof(PlayerUID)) + 1 + sizeof(char) + sizeof(BYTE) + sizeof(bool) + sizeof(bool) + length + sizeof(unsigned int) + sizeof(bool));
+	return static_cast<int>(sizeof(int) + userName.length() + 4 + 6 + sizeof(int64_t) + sizeof(char) + sizeof(int) + (2 * sizeof(PlayerUID)) + 1 + sizeof(char) + sizeof(BYTE) + sizeof(bool) + sizeof(bool) + length + sizeof(unsigned int));
 }
