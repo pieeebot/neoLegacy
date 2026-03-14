@@ -801,7 +801,7 @@ void PreStitchedTextureMap::loadUVs()
 		ADD_ICON(8,		9,	L"melon_top");
 		ADD_ICON(8,		10,	L"cauldron_top");
 		ADD_ICON(8,		11,	L"cauldron_inner");
-		//ADD_ICON(8,		12,	L"unused");
+		ADD_ICON(8,		12,	L"sponge_wet");
 		ADD_ICON(8,		13,	L"mushroom_block_skin_stem");
 		ADD_ICON(8,		14,	L"mushroom_block_inside");
 		ADD_ICON(8,		15,	L"vine");
@@ -922,12 +922,14 @@ void PreStitchedTextureMap::loadUVs()
 		ADD_ICON(16,	0,	L"coal_block");
 		ADD_ICON(16,	1,	L"hardened_clay");
 		ADD_ICON(16,	2,	L"noteblock");
-		//ADD_ICON(16,	3,	L"unused");
-		//ADD_ICON(16,	4,	L"unused");
-		//ADD_ICON(16,	5,	L"unused");
-		//ADD_ICON(16,	6,	L"unused");
-		//ADD_ICON(16,	7,	L"unused");
-		//ADD_ICON(16,	8,	L"unused");
+
+		ADD_ICON(16, 3, L"stone_andesite");
+		ADD_ICON(16, 4, L"stone_andesite_smooth");
+		ADD_ICON(16, 5, L"stone_diorite");
+		ADD_ICON(16, 6, L"stone_diorite_smooth");
+		ADD_ICON(16, 7, L"stone_granite");
+		ADD_ICON(16, 8, L"stone_granite_smooth");
+
 		ADD_ICON(16,	9,	L"potatoes_stage_0");
 		ADD_ICON(16,	10,	L"potatoes_stage_1");
 		ADD_ICON(16,	11,	L"potatoes_stage_2");
@@ -987,44 +989,45 @@ void PreStitchedTextureMap::loadUVs()
 		ADD_ICON(19,	14,	L"glass_pane_top_white");
 		ADD_ICON(19,	15,	L"glass_pane_top_yellow");
 
-		ADD_ICON(20, 0, L"door_spruce_upper");
-		ADD_ICON(20, 1, L"door_birch_upper");
-		ADD_ICON(20, 2, L"door_jungle_upper");
-		ADD_ICON(20, 3, L"door_acacia_upper");
-		ADD_ICON(20, 4, L"door_dark_upper");
-		ADD_ICON(20, 5, L"log_acacia_top");
-		ADD_ICON(20, 6, L"log_acacia");
-		ADD_ICON(20, 7, L"planks_acacia");
-		ADD_ICON(20, 8, L"log_dark_top");
-		ADD_ICON(20, 9, L"log_dark");
-		ADD_ICON(20, 10, L"planks_dark");
-		ADD_ICON(20, 11, L"iron_trapdoor");
-		ADD_ICON(20, 12, L"inverted_daylight_detector");
+		
+		ADD_ICON(20, 5, L"flower_tulip_orange");
 
-		ADD_ICON(20, 13, L"dirt_podzol_side");
-		ADD_ICON(20, 14, L"dirt_podzol_top");
-		ADD_ICON(20, 15, L"coarse_dirt");
+		ADD_ICON(20, 8, L"log_acacia");
+		ADD_ICON(20, 9, L"log_acacia_top");
+		ADD_ICON(20, 10, L"planks_acacia");
+		ADD_ICON(20, 14, L"red_sand");
 
-		ADD_ICON(21, 0, L"door_spruce_lower");
-		ADD_ICON(21, 1, L"door_birch_lower");
-		ADD_ICON(21, 2, L"door_jungle_lower");
-		ADD_ICON(21, 3, L"door_acacia_lower");
-		ADD_ICON(21, 4, L"door_dark_lower");
+		ADD_ICON(21, 8, L"log_dark");
+		ADD_ICON(21, 9, L"log_dark_top");
+		ADD_ICON(21, 10, L"planks_dark");
 
-		ADD_ICON(21, 5, L"stone_andesite");
-		ADD_ICON(21, 6, L"stone_andesite_smooth");
-		ADD_ICON(21, 7, L"stone_granite");
-		ADD_ICON(21, 8, L"stone_granite_smooth");
-		ADD_ICON(21, 9, L"stone_diorite");
-		ADD_ICON(21, 10, L"stone_diorite_smooth");
+		ADD_ICON(21, 5, L"flower_tulip_pink");
 
-		ADD_ICON(22, 0, L"flower_blue_orchid");
-		ADD_ICON(22, 1, L"flower_allium");
+		ADD_ICON(22, 0, L"flower_allium");
+		ADD_ICON(22, 1, L"flower_blue_orchid");
 		ADD_ICON(22, 2, L"flower_houstonia");
-		ADD_ICON(22, 3, L"flower_tulip_red");
-		ADD_ICON(22, 4, L"flower_tulip_orange");
+		ADD_ICON(22, 3, L"flower_oxeye_daisy");
+		ADD_ICON(22, 4, L"flower_tulip_red");
 		ADD_ICON(22, 5, L"flower_tulip_white");
-		ADD_ICON(22, 6, L"flower_tulip_pink");
-		ADD_ICON(22, 7, L"flower_oxeye_daisy");
+
+		ADD_ICON(22, 8, L"coarse_dirt");
+		ADD_ICON(22, 9, L"dirt_podzol_side");
+		ADD_ICON(22, 10, L"dirt_podzol_top");
+		
+
+		ADD_ICON(23, 0, L"door_acacia_upper");
+		ADD_ICON(23, 1, L"door_birch_upper");
+		ADD_ICON(23, 2, L"door_dark_upper");
+		ADD_ICON(23, 3, L"door_jungle_upper");
+		ADD_ICON(23, 4, L"door_spruce_upper");
+
+		ADD_ICON(23, 14, L"inverted_daylight_detector");
+		ADD_ICON(23, 15, L"iron_trapdoor");
+
+		ADD_ICON(24, 0, L"door_acacia_lower");
+		ADD_ICON(24, 1, L"door_birch_lower");
+		ADD_ICON(24, 2, L"door_dark_lower");
+		ADD_ICON(24, 3, L"door_jungle_lower");
+		ADD_ICON(24, 4, L"door_spruce_lower");
 	}
 }
