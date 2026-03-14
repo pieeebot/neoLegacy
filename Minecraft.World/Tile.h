@@ -371,7 +371,8 @@ public:
 	static const int coalBlock_Id = 173;
 
 	static const int invertedDaylightDetector_Id = 178;
-
+	static const int red_sandstone_Id = 179;
+	static const int stairs_red_sandstone_Id = 180;
 
 	static const int spruceGate_Id = 183;
 	static const int birchGate_Id = 184;
@@ -584,7 +585,8 @@ public:
 	static Tile* darkGate;
 
 	static Tile* invertedDaylightDetector;
-
+	static Tile* red_sandstone;
+	static Tile* stairs_red_sandstone;
 	static void staticCtor();
 
 	int id;

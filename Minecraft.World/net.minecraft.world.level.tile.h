@@ -130,5 +130,6 @@
 #include "WoodSlabTile.h"
 #include "WoolCarpetTile.h"
 #include "Rose.h"
-
+#include "SandTile.h"
+#include "RedSandStoneTile.h"
 

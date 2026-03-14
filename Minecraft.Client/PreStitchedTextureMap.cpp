@@ -996,12 +996,16 @@ void PreStitchedTextureMap::loadUVs()
 		ADD_ICON(20, 9, L"log_acacia_top");
 		ADD_ICON(20, 10, L"planks_acacia");
 		ADD_ICON(20, 14, L"red_sand");
+		ADD_ICON(20, 15, L"red_sandstone_top");
+
+		ADD_ICON(21, 5, L"flower_tulip_pink");
 
 		ADD_ICON(21, 8, L"log_dark");
 		ADD_ICON(21, 9, L"log_dark_top");
 		ADD_ICON(21, 10, L"planks_dark");
 
-		ADD_ICON(21, 5, L"flower_tulip_pink");
+		ADD_ICON(21, 14, L"red_sandstone_bottom");
+		ADD_ICON(21, 15, L"red_sandstone_normal");
 
 		ADD_ICON(22, 0, L"flower_allium");
 		ADD_ICON(22, 1, L"flower_blue_orchid");
@@ -1013,6 +1017,9 @@ void PreStitchedTextureMap::loadUVs()
 		ADD_ICON(22, 8, L"coarse_dirt");
 		ADD_ICON(22, 9, L"dirt_podzol_side");
 		ADD_ICON(22, 10, L"dirt_podzol_top");
+
+		ADD_ICON(22, 14, L"red_sandstone_carved");
+		ADD_ICON(22, 15, L"red_sandstone_smooth");
 		
 
 		ADD_ICON(23, 0, L"door_acacia_upper");

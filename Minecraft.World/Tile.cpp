@@ -244,6 +244,9 @@ Tile* Tile::acaciaGate = nullptr;
 Tile* Tile::darkGate = nullptr;
 
 Tile* Tile::invertedDaylightDetector = nullptr;
+Tile* Tile::red_sandstone = nullptr;
+Tile* Tile::stairs_red_sandstone = nullptr;
+
 
 DWORD Tile::tlsIdxShape = TlsAlloc();
 
@@ -295,7 +298,7 @@ void Tile::staticCtor()
 	Tile::lava = static_cast<LiquidTile *>((new LiquidTileDynamic(10, Material::lava))->setDestroyTime(00.0f)->setLightEmission(1.0f)->setLightBlock(255)->setIconName(L"lava_flow")->setDescriptionId(IDS_TILE_LAVA)->setNotCollectStatistics()->sendTileData()->setUseDescriptionId(IDS_DESC_LAVA));
 
 	Tile::calmLava = (new LiquidTileStatic(11, Material::lava))	->setDestroyTime(100.0f)->setLightEmission(1.0f)->setLightBlock(255)->setIconName(L"lava_still")->setDescriptionId(IDS_TILE_LAVA)->setNotCollectStatistics()->sendTileData()->setUseDescriptionId(IDS_DESC_LAVA);
-	Tile::sand = (new HeavyTile(12))							->setDestroyTime(0.5f)->setSoundType(Tile::SOUND_SAND)->setIconName(L"sand")->setDescriptionId(IDS_TILE_SAND)->setUseDescriptionId(IDS_DESC_SAND);
+	Tile::sand = (new SandTile(12))							->setDestroyTime(0.5f)->setSoundType(Tile::SOUND_SAND)->setIconName(L"sand")->setDescriptionId(IDS_TILE_SAND)->setUseDescriptionId(IDS_DESC_SAND);
 	Tile::gravel = (new GravelTile(13))							->setDestroyTime(0.6f)->setSoundType(Tile::SOUND_GRAVEL)->setIconName(L"gravel")->setDescriptionId(IDS_TILE_GRAVEL)->setUseDescriptionId(IDS_DESC_GRAVEL);
 	Tile::goldOre = (new OreTile(14))							->setDestroyTime(3.0f)->setExplodeable(5)->setSoundType(Tile::SOUND_STONE)->setIconName(L"gold_ore")->setDescriptionId(IDS_TILE_ORE_GOLD)->setUseDescriptionId(IDS_DESC_ORE_GOLD);
 	Tile::ironOre = (new OreTile(15))							->setDestroyTime(3.0f)->setExplodeable(5)->setSoundType(Tile::SOUND_STONE)->setIconName(L"iron_ore")->setDescriptionId(IDS_TILE_ORE_IRON)->setUseDescriptionId(IDS_DESC_ORE_IRON);
@@ -472,6 +475,8 @@ void Tile::staticCtor()
 	Tile::coalBlock = (new Tile(173, Material::stone))				->setBaseItemTypeAndMaterial(Item::eBaseItemType_block,	Item::eMaterial_coal)->setDestroyTime(5.0f)->setExplodeable(10)->setSoundType(SOUND_STONE)->setIconName(L"coal_block")->setDescriptionId(IDS_TILE_COAL)->setUseDescriptionId(IDS_DESC_COAL_BLOCK);
 
 	Tile::invertedDaylightDetector = static_cast<DaylightDetectorTile*>((new DaylightDetectorTile(178, true))->setDestroyTime(0.2f)->setSoundType(SOUND_WOOD)->setIconName(L"daylight_detector")->setDescriptionId(IDS_TILE_DAYLIGHT_DETECTOR)->setUseDescriptionId(IDS_DESC_DAYLIGHT_DETECTOR));
+	Tile::red_sandstone = (new RedSandStoneTile(179))->setBaseItemTypeAndMaterial(Item::eBaseItemType_structblock, Item::eMaterial_sand)->setSoundType(Tile::SOUND_STONE)->setDestroyTime(0.8f)->sendTileData()->setIconName(L"red_sandstone")->setDescriptionId(IDS_TILE_SANDSTONE)->setUseDescriptionId(IDS_DESC_SANDSTONE)->sendTileData();
+	Tile::stairs_red_sandstone = (new StairTile(180, Tile::red_sandstone, 0))->setBaseItemTypeAndMaterial(Item::eBaseItemType_stairs, Item::eMaterial_sand)->setIconName(L"stairsRedSandstone")->setDescriptionId(IDS_TILE_STAIRS_SANDSTONE)->sendTileData()->setUseDescriptionId(IDS_DESC_STAIRS);
 
 	Tile::spruceGate = (new FenceGateTile(183))->setDestroyTime(2.0f)->setExplodeable(5)->setSoundType(SOUND_WOOD)->setIconName(L"planks_spruce")->setDescriptionId(IDS_TILE_SPRUCE_GATE)->sendTileData()->setUseDescriptionId(IDS_DESC_FENCE_GATE);
 	Tile::birchGate = (new FenceGateTile(184))->setDestroyTime(2.0f)->setExplodeable(5)->setSoundType(SOUND_WOOD)->setIconName(L"planks_birch")->setDescriptionId(IDS_TILE_BIRCH_GATE)->sendTileData()->setUseDescriptionId(IDS_DESC_FENCE_GATE);
@@ -522,6 +527,8 @@ void Tile::staticCtor()
 	Item::items[dirt_Id] = (new MultiTextureTileItem(Tile::dirt_Id - 256, dirt, (int*)DirtTile::DIRT_NAMES, 3))->setIconName(L"dirt")->setDescriptionId(IDS_TILE_DIRT)->setUseDescriptionId(IDS_DESC_DIRT);
 	Item::items[stone_Id] = (new MultiTextureTileItem(Tile::stone_Id - 256, dirt, (int*)StoneTile::STONE_NAMES, 3))->setIconName(L"stone")->setDescriptionId(IDS_TILE_STONE)->setUseDescriptionId(IDS_DESC_STONE);
 	Item::items[rose_Id] = (new MultiTextureTileItem(Tile::rose_Id - 256, rose, (int*)Rose::FLOWER_NAMES, Rose::FLOWER_NAMES_LENGTH))->setIconName(L"flower_rose")->setDescriptionId(IDS_TILE_ROSE)->setUseDescriptionId(IDS_DESC_FLOWER);
+	Item::items[sand_Id] = (new MultiTextureTileItem(Tile::sand_Id - 256, sand, (int*)SandTile::SAND_NAMES, SandTile::SAND_NAMES_LENGTH))->setIconName(L"sand")->setDescriptionId(IDS_TILE_SAND)->setUseDescriptionId(IDS_DESC_SAND);
+	Item::items[red_sandstone_Id] = (new MultiTextureTileItem(Tile::red_sandstone_Id - 256, red_sandstone, (int*)RedSandStoneTile::SANDSTONE_NAMES, RedSandStoneTile::SANDSTONE_BLOCK_NAMES))->setIconName(L"red_sandstone")->setDescriptionId(IDS_TILE_SANDSTONE)->setUseDescriptionId(IDS_DESC_SANDSTONE);
 
 	for (int i = 0; i < 256; i++)
 	{

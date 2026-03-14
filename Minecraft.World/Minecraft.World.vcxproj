@@ -2706,9 +2706,11 @@
     <ClInclude Include="AbstractProjectileDispenseBehavior.h" />
     <ClInclude Include="Rabbit.h" />
     <ClInclude Include="RailTile.h" />
+    <ClInclude Include="RedSandStoneTile.h" />
     <ClInclude Include="Redstone.h" />
     <ClInclude Include="RepeaterTile.h" />
     <ClInclude Include="RotatedPillarTile.h" />
+    <ClInclude Include="SandTile.h" />
     <ClInclude Include="Score.h" />
     <ClInclude Include="Scoreboard.h" />
     <ClInclude Include="ScoreboardSaveData.h" />
@@ -3632,11 +3634,13 @@
     <ClCompile Include="AbstractProjectileDispenseBehavior.cpp" />
     <ClCompile Include="Rabbit.cpp" />
     <ClCompile Include="RailTile.cpp" />
+    <ClCompile Include="RedSandStoneTile.cpp" />
     <ClCompile Include="Redstone.cpp" />
     <ClCompile Include="RepeaterTile.cpp" />
     <ClCompile Include="Rose.cpp" />
     <ClInclude Include="Rose.h" />
     <ClCompile Include="RotatedPillarTile.cpp" />
+    <ClCompile Include="SandTile.cpp" />
     <ClCompile Include="Score.cpp" />
     <ClCompile Include="Scoreboard.cpp" />
     <ClCompile Include="SimpleFoiledItem.cpp" />
