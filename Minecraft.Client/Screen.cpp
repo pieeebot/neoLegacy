@@ -204,7 +204,7 @@ void Screen::updateEvents()
 		// Map to Screen::keyPressed
 		int mappedKey = -1;
 		wchar_t ch = 0;
-		if (vk == VK_ESCAPE)  mappedKey = Keyboard::KEY_ESCAPE;
+		if (vk == VK_ESCAPE)	   mappedKey = Keyboard::KEY_ESCAPE;
 		else if (vk == VK_RETURN)  mappedKey = Keyboard::KEY_RETURN;
 		else if (vk == VK_BACK)    mappedKey = Keyboard::KEY_BACK;
 		else if (vk == VK_UP)      mappedKey = Keyboard::KEY_UP;

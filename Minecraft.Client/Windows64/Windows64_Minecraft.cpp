@@ -1765,7 +1765,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 		}
 
 		// F1 toggles the HUD
-		if (g_KBMInput.IsKeyPressed(VK_F1))
+		if (g_KBMInput.IsKeyPressed(KeyboardMouseInput::KEY_TOGGLE_HUD))
 		{
 			const int primaryPad = ProfileManager.GetPrimaryPad();
 			const unsigned char displayHud = app.GetGameSettings(primaryPad, eGameSetting_DisplayHUD);
@@ -1774,7 +1774,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 		}
 
 		// F3 toggles onscreen debug info
-		if (g_KBMInput.IsKeyPressed(VK_F3))
+		if (g_KBMInput.IsKeyPressed(KeyboardMouseInput::KEY_DEBUG_INFO))
 		{
 			if (const Minecraft* pMinecraft = Minecraft::GetInstance())
 			{
@@ -1787,7 +1787,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
 #ifdef _DEBUG_MENUS_ENABLED
         // F6 Open debug console
-        if (g_KBMInput.IsKeyPressed(VK_F6))
+        if (g_KBMInput.IsKeyPressed(KeyboardMouseInput::KEY_DEBUG_CONSOLE))
         {
         	static bool s_debugConsole = false;
         	s_debugConsole = !s_debugConsole;
@@ -1795,14 +1795,14 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
         }
 #endif
 
-		// F11 Toggle fullscreen
-		if (g_KBMInput.IsKeyPressed(VK_F11))
+		// toggle fullscreen
+		if (g_KBMInput.IsKeyPressed(KeyboardMouseInput::KEY_FULLSCREEN))
 		{
 			ToggleFullscreen();
 		}
 
 		// TAB opens game info menu. - Vvis :3 - Updated by detectiveren
-		if (g_KBMInput.IsKeyPressed(VK_TAB) && !ui.GetMenuDisplayed(0))
+		if (g_KBMInput.IsKeyPressed(KeyboardMouseInput::KEY_HOST_SETTINGS) && !ui.GetMenuDisplayed(0))
 		{
 			if (Minecraft* pMinecraft = Minecraft::GetInstance())
 			{
@@ -1814,7 +1814,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 		}
 
 		// Open chat
-		if (g_KBMInput.IsKeyPressed('T') && app.GetGameStarted() && !ui.GetMenuDisplayed(0) && pMinecraft->screen == NULL)
+		if (g_KBMInput.IsKeyPressed(KeyboardMouseInput::KEY_CHAT) && app.GetGameStarted() && !ui.GetMenuDisplayed(0) && pMinecraft->screen == NULL)
 		{
 			g_KBMInput.ClearCharBuffer();
 			pMinecraft->setScreen(new ChatScreen());
