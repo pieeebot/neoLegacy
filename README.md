@@ -19,6 +19,7 @@ Proper implementation of Hardcore Mode in LCE!
 - difficulty slider forces "Difficulty: Hardcore" on world load
 - singleplayer: host death, force no respawn, on exit deletes world
 - multiplayer: host death = world delete upon exit --- joiner death = only exit available, persists upon rejoin (no respawn option)
+- multiplayer fixes: added fix to prevent host from using exit-without-saving loophole for nonhost players that died
 
 The current goal of MinecraftConsoles is to be a multi-platform base for further development, such as modding, backports, and anything else LCE. On top of that, we're working to make this a quality experience on Desktop with or without a controller while (long-term) retaining console support. 
 
