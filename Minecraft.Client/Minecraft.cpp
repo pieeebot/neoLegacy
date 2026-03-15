@@ -3788,13 +3788,15 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 					hr = g_pImmediateContext->Map(pStaging, 0, D3D11_MAP_READ, 0, &mapped);
 					if (SUCCEEDED(hr))
 					{
-						// Copy RGBA rows (back buffer is R8G8B8A8_UNORM, already RGBA)
+						// Copy rows and force alpha to fully opaque
 						unsigned char* rgba = new unsigned char[desc.Width * desc.Height * 4];
 						for (UINT row = 0; row < desc.Height; row++)
 						{
 							unsigned char* src = (unsigned char*)mapped.pData + row * mapped.RowPitch;
 							unsigned char* dst = rgba + row * desc.Width * 4;
 							memcpy(dst, src, desc.Width * 4);
+							for (UINT x = 0; x < desc.Width; x++)
+								dst[x * 4 + 3] = 0xFF;
 						}
 						g_pImmediateContext->Unmap(pStaging, 0);
 
@@ -3803,7 +3805,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 						int writeResult = stbi_write_png(narrowPath.c_str(), desc.Width, desc.Height, 4, rgba, desc.Width * 4);
 						delete[] rgba;
 
-						// Local chat message — only on success
+						// Send local-only chat message on success
 						if (writeResult)
 						{
 							wstring msg = L"Saved screenshot to " + wstring(filename);
