@@ -16,6 +16,7 @@ Proper implementation of Hardcore Mode in LCE!
 - difficulty slider forces "Difficulty: Hardcore" on world load
 - singleplayer: host death, force no respawn, on exit deletes world
 - multiplayer: host death = world delete upon exit --- joiner death = only exit available, persists upon rejoin (no respawn option)
+- multiplayer fixes: added fix to prevent host from using exit-without-saving loophole for nonhost players that died
 
 ## Introduction
 
