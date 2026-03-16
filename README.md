@@ -14,6 +14,12 @@ This project is based on source code of Minecraft Legacy Console Edition v1.6.05
 
 ## Latest:
 
+Dedicated server releases support Hardcore Mode!
+- Dedicated server is fully compatible with `smartcmd/MinecraftConsoles` clients, even with hardcore mode!
+- Client (`LCEWindows64.zip`): download from the Nightly release on GitHub
+- Dedicated Server (`LCEServerWindows64.zip`): download from the Nightly-Dedicated-Server release on GitHub
+- Docker: pull `ghcr.io/itsrevela/minecraft-lce-dedicated-server:nightly` for server container
+
 In-game screenshot functionality with F2!
 - pressing F2 will save a screenshot to a `screenshots` folder in your root game directory
 - a local-only chat message is shown to the player notifying the screenshot filename that was saved
@@ -24,6 +30,7 @@ Proper implementation of Hardcore Mode in LCE!
 - singleplayer: host death, force no respawn, on exit deletes world
 - multiplayer: host death = world delete upon exit --- joiner death = only exit available, persists upon rejoin (no respawn option)
 - multiplayer fixes: added fix to prevent host from using exit-without-saving loophole for nonhost players that died
+- to-do: hardcore hearts texture
 
 The current goal of MinecraftConsoles is to be a multi-platform base for further development, such as modding, backports, and anything else LCE. On top of that, we're working to make this a quality experience on Desktop with or without a controller while (long-term) retaining console support. 
 
