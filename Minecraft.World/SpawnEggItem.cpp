@@ -193,20 +193,29 @@ bool SpawnEggItem::useOn(shared_ptr<ItemInstance> itemInstance, shared_ptr<Playe
 
 	int tile = level->getTile(x, y, z);
 
-#ifndef _CONTENT_PACKAGE
-	if(app.DebugArtToolsOn() && tile == Tile::mobSpawner_Id)
+	if (tile == Tile::mobSpawner_Id)
 	{
-		// 4J Stu - Force adding this as a tile update
-		level->removeTile(x,y,z);
-		level->setTileAndData(x,y,z,Tile::mobSpawner_Id, 0, Tile::UPDATE_ALL);
-		shared_ptr<MobSpawnerTileEntity> mste = dynamic_pointer_cast<MobSpawnerTileEntity>( level->getTileEntity(x,y,z) );
-		if(mste != nullptr)
+		
+		shared_ptr<MobSpawnerTileEntity> spawnerTile = dynamic_pointer_cast<MobSpawnerTileEntity>(level->getTileEntity(x, y, z));
+		
+		if (spawnerTile != nullptr)
 		{
-			mste->setEntityId( EntityIO::getEncodeId(itemInstance->getAuxValue()) );
+			
+			int mobId = itemInstance->getAuxValue() & 0xFFF; 
+			spawnerTile->setEntityId(EntityIO::getEncodeId(mobId));
+			
+			
+			
+			
+			
+			if (!player->abilities.instabuild && !bTestUseOnOnly)
+			{
+				itemInstance->count--;
+			}
+			
 			return true;
 		}
 	}
-#endif
 
 	x += Facing::STEP_X[face];
 	y += Facing::STEP_Y[face];

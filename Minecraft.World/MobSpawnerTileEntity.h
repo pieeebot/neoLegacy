@@ -46,4 +46,5 @@ public:
 	// 4J Added
 	virtual shared_ptr<TileEntity> clone();
 	void setEntityId(const wstring &id);
+	void setEntityIdFromEgg(const wstring &id);
 };

@@ -99,4 +99,27 @@ shared_ptr<TileEntity> MobSpawnerTileEntity::clone()
 void MobSpawnerTileEntity::setEntityId(const wstring &id)
 {
 	spawner->setEntityId(id);
+
+	if (spawner != nullptr)
+	{
+		
+		spawner->spawnDelay = 20;
+	}
+	
+	if (level != nullptr) 
+	{
+		level->sendTileUpdated(x, y, z);
+	}
+
+}
+
+void MobSpawnerTileEntity::setEntityIdFromEgg(const wstring &id)
+{
+    
+    spawner->setEntityId(id);
+    
+    
+    if (level != nullptr) {
+        level->sendTileUpdated(x, y, z);
+    }
 }
