@@ -168,24 +168,113 @@ finally {
 
 Write-Host "    Created: $ServerZipPath" -ForegroundColor Green
 
-# --- Step 3: Get the Nightly release info ---
+# --- Step 3: Delete and recreate the Nightly-Dedicated-Server release (first, so client is most recent) ---
+Write-Host "==> Fetching Nightly-Dedicated-Server release info..." -ForegroundColor Cyan
+
+$serverRelease = Invoke-RestMethod -Uri "$ApiBase/releases/tags/$ServerReleaseTag" -Headers $Headers -Method Get
+$serverReleaseId = $serverRelease.id
+$serverCurrentTitle = $serverRelease.name
+$serverReleaseBody = if ($serverRelease.body) { $serverRelease.body } else { "" }
+Write-Host "    Release ID: $serverReleaseId"
+Write-Host "    Current title: $serverCurrentTitle"
+
+# Compute new title
+$serverNewTitle = $serverCurrentTitle -replace '(?<=Server:\s{1,4})[0-9a-f]{7}', $shortHash
+if ($serverNewTitle -eq $serverCurrentTitle -and $serverCurrentTitle -notmatch $shortHash) {
+    $serverNewTitle = "Server: $shortHash"
+    Write-Host "    Warning: Could not parse existing title format, using fallback." -ForegroundColor Yellow
+}
+
+Write-Host "==> Deleting old Nightly-Dedicated-Server release..." -ForegroundColor Cyan
+Invoke-RestMethod -Uri "$ApiBase/releases/$serverReleaseId" -Headers $Headers -Method Delete
+Write-Host "    Deleted." -ForegroundColor Green
+
+# Force-update the server tag to point to the latest commit
+Write-Host "==> Updating $ServerReleaseTag tag to $shortHash..." -ForegroundColor Cyan
+$serverTagRefBody = @{ sha = $fullHash; force = $true } | ConvertTo-Json
+Invoke-RestMethod -Uri "$ApiBase/git/refs/tags/$ServerReleaseTag" -Headers $Headers -Method Patch -Body $serverTagRefBody -ContentType "application/json" | Out-Null
+Write-Host "    Tag updated." -ForegroundColor Green
+
+# Create fresh release
+Write-Host "==> Creating new Nightly-Dedicated-Server release..." -ForegroundColor Cyan
+$serverCreateBody = @{
+    tag_name = $ServerReleaseTag
+    name     = $serverNewTitle
+    body     = $serverReleaseBody
+    draft    = $false
+    prerelease = $false
+} | ConvertTo-Json
+$newServerRelease = Invoke-RestMethod -Uri "$ApiBase/releases" -Headers $Headers -Method Post -Body $serverCreateBody -ContentType "application/json"
+$serverReleaseId = $newServerRelease.id
+Write-Host "    Created release ID: $serverReleaseId" -ForegroundColor Green
+Write-Host "    Title: $serverNewTitle"
+
+# --- Step 4: Upload server zip ---
+Write-Host "==> Uploading server assets..." -ForegroundColor Cyan
+
+$serverUploadBase = "https://uploads.github.com/repos/$RepoOwner/$RepoName/releases/$serverReleaseId/assets"
+
+if (-not (Test-Path $ServerZipPath)) {
+    Write-Error "File not found: $ServerZipPath"
+    exit 1
+}
+
+$serverUploadUrl = "$serverUploadBase`?name=$ServerZipName"
+$serverFileBytes = [System.IO.File]::ReadAllBytes($ServerZipPath)
+$serverSizeMB = [math]::Round($serverFileBytes.Length / 1MB, 2)
+Write-Host "    Uploading: $ServerZipName ($serverSizeMB MB)..."
+
+Invoke-RestMethod -Uri $serverUploadUrl -Headers @{
+    Authorization  = "token $Token"
+    Accept         = "application/vnd.github+json"
+    "Content-Type" = "application/zip"
+} -Method Post -Body $serverFileBytes | Out-Null
+
+Write-Host "    Uploaded: $ServerZipName" -ForegroundColor Green
+
+# --- Step 5: Delete and recreate the Nightly release (last, so it shows as most recent) ---
+# Deleting and recreating gives a fresh "released just now" timestamp.
 Write-Host "==> Fetching Nightly release info..." -ForegroundColor Cyan
 
 $release = Invoke-RestMethod -Uri "$ApiBase/releases/tags/$ReleaseTag" -Headers $Headers -Method Get
 $releaseId = $release.id
 $currentTitle = $release.name
+$releaseBody = if ($release.body) { $release.body } else { "" }
 Write-Host "    Release ID: $releaseId"
 Write-Host "    Current title: $currentTitle"
 
-# --- Step 4: Delete existing assets ---
-Write-Host "==> Deleting old assets..." -ForegroundColor Cyan
-
-foreach ($asset in $release.assets) {
-    Write-Host "    Deleting: $($asset.name) (ID: $($asset.id))"
-    Invoke-RestMethod -Uri "$ApiBase/releases/assets/$($asset.id)" -Headers $Headers -Method Delete
+# Compute new title
+$newTitle = $currentTitle -replace '(?<=Client:\s{1,4})[0-9a-f]{7}', $shortHash
+if ($newTitle -eq $currentTitle -and $currentTitle -notmatch $shortHash) {
+    $newTitle = "Latest:  $shortHash"
+    Write-Host "    Warning: Could not parse existing title format, using fallback." -ForegroundColor Yellow
 }
 
-# --- Step 5: Upload new assets ---
+Write-Host "==> Deleting old Nightly release..." -ForegroundColor Cyan
+Invoke-RestMethod -Uri "$ApiBase/releases/$releaseId" -Headers $Headers -Method Delete
+Write-Host "    Deleted." -ForegroundColor Green
+
+# Force-update the tag to point to the latest commit
+Write-Host "==> Updating $ReleaseTag tag to $shortHash..." -ForegroundColor Cyan
+$tagRefBody = @{ sha = $fullHash; force = $true } | ConvertTo-Json
+Invoke-RestMethod -Uri "$ApiBase/git/refs/tags/$ReleaseTag" -Headers $Headers -Method Patch -Body $tagRefBody -ContentType "application/json" | Out-Null
+Write-Host "    Tag updated." -ForegroundColor Green
+
+# Create fresh release
+Write-Host "==> Creating new Nightly release..." -ForegroundColor Cyan
+$createBody = @{
+    tag_name = $ReleaseTag
+    name     = $newTitle
+    body     = $releaseBody
+    draft    = $false
+    prerelease = $false
+} | ConvertTo-Json
+$newRelease = Invoke-RestMethod -Uri "$ApiBase/releases" -Headers $Headers -Method Post -Body $createBody -ContentType "application/json"
+$releaseId = $newRelease.id
+Write-Host "    Created release ID: $releaseId" -ForegroundColor Green
+Write-Host "    Title: $newTitle"
+
+# --- Step 6: Upload new assets ---
 Write-Host "==> Uploading new assets..." -ForegroundColor Cyan
 
 $uploadBase = "https://uploads.github.com/repos/$RepoOwner/$RepoName/releases/$releaseId/assets"
@@ -216,81 +305,6 @@ foreach ($file in $filesToUpload) {
 
     Write-Host "    Uploaded: $($file.Name)" -ForegroundColor Green
 }
-
-# --- Step 6: Update release title with latest commit hash ---
-Write-Host "==> Updating release title..." -ForegroundColor Cyan
-
-# Replace the old 7-char hash in the title with the new one
-# Title format: "Latest:  8bd6690 (+Hardcore Mode)"
-$newTitle = $currentTitle -replace '(?<=Client:\s{1,4})[0-9a-f]{7}', $shortHash
-
-if ($newTitle -eq $currentTitle -and $currentTitle -notmatch $shortHash) {
-    # Fallback if regex didn't match — just set a reasonable title
-    $newTitle = "Latest:  $shortHash"
-    Write-Host "    Warning: Could not parse existing title format, using fallback." -ForegroundColor Yellow
-}
-
-Write-Host "    New title: $newTitle"
-
-$body = @{ name = $newTitle } | ConvertTo-Json
-Invoke-RestMethod -Uri "$ApiBase/releases/$releaseId" -Headers $Headers -Method Patch -Body $body -ContentType "application/json" | Out-Null
-Write-Host "    Title updated." -ForegroundColor Green
-
-# --- Step 7: Get the Nightly-Dedicated-Server release info ---
-Write-Host "==> Fetching Nightly-Dedicated-Server release info..." -ForegroundColor Cyan
-
-$serverRelease = Invoke-RestMethod -Uri "$ApiBase/releases/tags/$ServerReleaseTag" -Headers $Headers -Method Get
-$serverReleaseId = $serverRelease.id
-$serverCurrentTitle = $serverRelease.name
-Write-Host "    Release ID: $serverReleaseId"
-Write-Host "    Current title: $serverCurrentTitle"
-
-# --- Step 8: Delete existing server release assets ---
-Write-Host "==> Deleting old server assets..." -ForegroundColor Cyan
-
-foreach ($asset in $serverRelease.assets) {
-    Write-Host "    Deleting: $($asset.name) (ID: $($asset.id))"
-    Invoke-RestMethod -Uri "$ApiBase/releases/assets/$($asset.id)" -Headers $Headers -Method Delete
-}
-
-# --- Step 9: Upload server zip ---
-Write-Host "==> Uploading server assets..." -ForegroundColor Cyan
-
-$serverUploadBase = "https://uploads.github.com/repos/$RepoOwner/$RepoName/releases/$serverReleaseId/assets"
-
-if (-not (Test-Path $ServerZipPath)) {
-    Write-Error "File not found: $ServerZipPath"
-    exit 1
-}
-
-$serverUploadUrl = "$serverUploadBase`?name=$ServerZipName"
-$serverFileBytes = [System.IO.File]::ReadAllBytes($ServerZipPath)
-$serverSizeMB = [math]::Round($serverFileBytes.Length / 1MB, 2)
-Write-Host "    Uploading: $ServerZipName ($serverSizeMB MB)..."
-
-Invoke-RestMethod -Uri $serverUploadUrl -Headers @{
-    Authorization  = "token $Token"
-    Accept         = "application/vnd.github+json"
-    "Content-Type" = "application/zip"
-} -Method Post -Body $serverFileBytes | Out-Null
-
-Write-Host "    Uploaded: $ServerZipName" -ForegroundColor Green
-
-# --- Step 10: Update server release title with latest commit hash ---
-Write-Host "==> Updating server release title..." -ForegroundColor Cyan
-
-$serverNewTitle = $serverCurrentTitle -replace '(?<=Server:\s{1,4})[0-9a-f]{7}', $shortHash
-
-if ($serverNewTitle -eq $serverCurrentTitle -and $serverCurrentTitle -notmatch $shortHash) {
-    $serverNewTitle = "Server: $shortHash"
-    Write-Host "    Warning: Could not parse existing title format, using fallback." -ForegroundColor Yellow
-}
-
-Write-Host "    New title: $serverNewTitle"
-
-$serverBody = @{ name = $serverNewTitle } | ConvertTo-Json
-Invoke-RestMethod -Uri "$ApiBase/releases/$serverReleaseId" -Headers $Headers -Method Patch -Body $serverBody -ContentType "application/json" | Out-Null
-Write-Host "    Title updated." -ForegroundColor Green
 
 # --- Done ---
 Write-Host ""
