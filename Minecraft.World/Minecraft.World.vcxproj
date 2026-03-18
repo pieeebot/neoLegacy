@@ -2715,6 +2715,7 @@
     <ClInclude Include="RedSandStoneTile.h" />
     <ClInclude Include="Redstone.h" />
     <ClInclude Include="RepeaterTile.h" />
+    <ClInclude Include="RoofedForestBiome.h" />
     <ClInclude Include="RotatedPillarTile.h" />
     <ClInclude Include="SandTile.h" />
     <ClInclude Include="Sapling2.h" />
@@ -3654,6 +3655,7 @@
     <ClCompile Include="RedSandStoneTile.cpp" />
     <ClCompile Include="Redstone.cpp" />
     <ClCompile Include="RepeaterTile.cpp" />
+    <ClCompile Include="RoofedForestBiome.cpp" />
     <ClCompile Include="Rose.cpp" />
     <ClInclude Include="Rose.h" />
     <ClCompile Include="RotatedPillarTile.cpp" />

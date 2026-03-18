@@ -34,10 +34,8 @@ bool HugeMushroomFeature::place(Level *level, Random *random, int x, int y, int 
 				if (yy >= 0 && yy < Level::maxBuildHeight)
 				{
 					int tt = level->getTile(xx, yy, zz);
-					if (tt != 0 && tt != Tile::leaves_Id)
-					{
+					if (tt != 0 && tt != Tile::leaves_Id && tt != Tile::leaves2_Id && tt != Tile::tallgrass_Id && tt != Tile::mushroom_brown_Id && tt != Tile::mushroom_red_Id &&tt != Tile::sapling_Id && tt != Tile::sapling2_Id)
 						free = false;
-					}
 				}
 				else
 				{

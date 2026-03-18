@@ -28,3 +28,13 @@ Feature *SavannaBiome::getTreeFeature(Random *random)
     
     return new TreeFeature(false);
 }
+
+int SavannaBiome::getGrassColor()
+{
+    return 0xBFB755; 
+}
+
+int SavannaBiome::getFolageColor() 
+{
+    return 0xAEA42A; 
+}

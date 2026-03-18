@@ -825,6 +825,7 @@
     <ClCompile Include="SavannaTreeFeature.cpp" />
     <ClCompile Include="DarkOakFeature.cpp" />
     <ClCompile Include="SavannaBiome.cpp" />
+    <ClCompile Include="RoofedForestBiome.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABB.h" />
@@ -1819,6 +1820,7 @@
     <ClInclude Include="SavannaTreeFeature.h" />
     <ClInclude Include="DarkOakFeature.h" />
     <ClInclude Include="SavannaBiome.h" />
+    <ClInclude Include="RoofedForestBiome.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Minecraft.Client\Xbox\res\audio\Minecraft.xgs" />

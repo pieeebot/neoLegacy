@@ -131,8 +131,12 @@ bool DarkOakFeature::checkSpace(Level *worldIn, int x, int y, int z, int height)
             for (int k1 = -i1; k1 <= i1; ++k1) {
                 int tile = worldIn->getTile(x + j1, y + l, z + k1);
                 
-                if (tile != 0 && tile != Tile::leaves_Id && tile != Tile::leaves2_Id && 
-                    tile != Tile::tallgrass_Id && tile != Tile::sapling_Id) {
+                // ignores grass, dirt e trunks. 
+                if (tile != 0 && 
+                    tile != Tile::leaves_Id && tile != Tile::leaves2_Id && 
+                    tile != Tile::tallgrass_Id && tile != Tile::sapling_Id &&
+                    tile != Tile::grass_Id && tile != Tile::dirt_Id && 
+                    tile != Tile::treeTrunk_Id && tile != Tile::tree2Trunk_Id) {
                     return false;
                 }
             }
