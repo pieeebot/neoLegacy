@@ -1500,7 +1500,7 @@ shared_ptr<ItemInstance> Recipes::getItemForRecipe(Recipy *r)
 void Recipes::buildRecipeIngredientsArray(void)
 {
 	//RecipyList *recipes = ((Recipes *)Recipes::getInstance())->getRecipies();
-
+	 
 	int iRecipeC=static_cast<int>(recipies->size());
 
 	m_pRecipeIngredientsRequired= new Recipy::INGREDIENTS_REQUIRED [iRecipeC];

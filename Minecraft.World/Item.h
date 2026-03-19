@@ -657,10 +657,11 @@ public:
 	static const int mutton_cooked_Id = 424;
 	static const int rabbit_raw_Id = 411;
 	static const int rabbit_cooked_Id = 412;
+	static const int rabbitStew_Id = 413;
 	static const int rabbits_foot_Id = 414;
 	static const int rabbit_hide_Id = 415;
 	static const int armor_stand_Id = 416;
-	static const int rabbitStew_Id = 413;
+	
 
 	static const int prismarine_cystal_Id = 432;
 	static const int prismarine_shard_Id = 433;

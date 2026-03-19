@@ -557,7 +557,7 @@ void PreStitchedTextureMap::loadUVs()
 		ADD_ICON(13, 2, L"doorDark")
 		ADD_ICON(13, 3, L"doorJungle")
 		ADD_ICON(13, 4, L"doorSpruce")
-		ADD_ICON(13, 5, L"rabbitStew")
+		ADD_ICON(13, 5, L"rabbitStew") 
 		ADD_ICON(13, 6, L"salmonCooked")
 		
 
