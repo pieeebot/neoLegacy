@@ -1012,11 +1012,11 @@ static bool ResizeD3D(int newW, int newH)
 
 	// Verify offsets by checking device and swap chain pointers
 	ID3D11Device** ppRM_Device = (ID3D11Device**)(pRM + 0x10);
-	if (*ppRM_Device != g_pd3dDevice || *ppRM_SC != g_pSwapChain)
+	if (*ppRM_Device != g_pd3dDevice || *ppRM_SC != (IDXGISwapChain*)&g_swapChainProxy)
 	{
 		app.DebugPrintf("[RESIZE] ERROR: RenderManager offset verification failed! "
 			"device=%p (expected %p) swapchain=%p (expected %p)\n",
-			*ppRM_Device, g_pd3dDevice, *ppRM_SC, g_pSwapChain);
+			*ppRM_Device, g_pd3dDevice, *ppRM_SC, (IDXGISwapChain*)&g_swapChainProxy);
 		return false;
 	}
 
