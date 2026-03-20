@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "net.minecraft.world.level.tile.h"
 #include "ColoredTileItem.h"
+#include "Facing.h"
 
 ColoredTileItem::ColoredTileItem(int id, bool stackedByData) : TileItem(id)
 {
@@ -58,3 +59,13 @@ unsigned int ColoredTileItem::getDescriptionId(shared_ptr<ItemInstance> instance
 	}
 	return TileItem::getDescriptionId(instance);
 }
+class TallGrass2TileItem : public ColoredTileItem
+{
+public:
+	TallGrass2TileItem(int id) : ColoredTileItem(id, true) {}
+
+	virtual Icon* getIcon(int auxValue) override
+	{
+		return Tile::tiles[getTileId()]->getTexture(Facing::UP, auxValue);
+	}
+};

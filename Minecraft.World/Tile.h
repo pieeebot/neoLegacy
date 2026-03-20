@@ -42,6 +42,7 @@ class TileEntity;
 class HalfSlabTile;
 class Icon;
 class IconRegister;
+class TallGrass2;
 
 class ChunkRebuildData;
 
@@ -380,7 +381,7 @@ public:
 	static const int clayHardened_Id = 172;
 	static const int coalBlock_Id = 173;
 	static const int packed_ice_Id = 174;
-	//175 double_plant
+	static const int tallgrass2_Id = 175;
 	//176 standing_banner
 	//177 wall_banner
 	static const int invertedDaylightDetector_Id = 178;
@@ -613,6 +614,8 @@ public:
 	static Tile* packed_ice;
 	static Tile* seaLantern;
 	static Tile* prismarine;
+
+	static TallGrass2* tallgrass2;
 	
 
 	static void staticCtor();

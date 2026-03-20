@@ -827,6 +827,7 @@
     <ClCompile Include="RoofedForestBiome.cpp" />
     <ClCompile Include="PrismarineTile.cpp" />
     <ClCompile Include="FishFoodItem.cpp" />
+    <ClCompile Include="Tallgrass2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABB.h" />
@@ -1823,6 +1824,7 @@
     <ClInclude Include="RoofedForestBiome.h" />
     <ClInclude Include="PrismarineTile.h" />
     <ClInclude Include="FishFoodItem.h" />
+    <ClInclude Include="Tallgrass2.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Minecraft.Client\Xbox\res\audio\Minecraft.xgs" />

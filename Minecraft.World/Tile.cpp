@@ -16,6 +16,10 @@
 #include "net.minecraft.world.h"
 #include "net.minecraft.h"
 #include "Tile.h"
+#include "Tallgrass2.h"
+#include "facing.h"
+
+
 
 
 
@@ -257,6 +261,8 @@ Tile* Tile::prismarine = nullptr;
 Tile* Tile::tree2Trunk = nullptr;
 Tile* Tile::packed_ice = nullptr;
 
+TallGrass2* Tile::tallgrass2 = nullptr;
+
 DWORD Tile::tlsIdxShape = TlsAlloc();
 
 Tile::ThreadStorage::ThreadStorage()
@@ -276,6 +282,24 @@ void Tile::ReleaseThreadStorage()
 	ThreadStorage *tls = static_cast<ThreadStorage *>(TlsGetValue(Tile::tlsIdxShape));
 	delete tls;
 }
+class TallGrass2TileItem : public ColoredTileItem
+{
+public:
+	TallGrass2TileItem(int id) : ColoredTileItem(id, true) {}
+
+	virtual Icon* getIcon(int auxValue) override
+	{
+		return Tile::tiles[getTileId()]->getTexture(Facing::UP, auxValue);
+	}
+
+	virtual int getColor(shared_ptr<ItemInstance> item, int spriteLayer) override
+	{
+		int variant = item->getAuxValue();
+		if (variant == TallGrass2::TALL_GRASS || variant == TallGrass2::LARGE_FERN)
+			return Tile::tiles[getTileId()]->getColor(variant);
+		return 0xFFFFFF;
+	}
+};
 
 void Tile::staticCtor()
 {
@@ -510,6 +534,7 @@ void Tile::staticCtor()
 	Tile::seaLantern = (new SeaLanternTile(169, Material::glass))->setBaseItemTypeAndMaterial(Item::eBaseItemType_torch, Item::eMaterial_glowstone)->setDestroyTime(0.3f)->setSoundType(Tile::SOUND_GLASS)->setLightEmission(1.0f)->setIconName(L"glowstone")->setDescriptionId(IDS_TILE_SEA_LANTERN)->setUseDescriptionId(IDS_DESC_GLOWSTONE);
 	Tile::prismarine = (new PrismarineTile(168))->setBaseItemTypeAndMaterial(Item::eBaseItemType_structblock, Item::eMaterial_stone)->setDestroyTime(1.5f)->setExplodeable(10)->setSoundType(SOUND_STONE)->setIconName(L"prismarine")->setDescriptionId(IDS_TILE_PRISMARINE)->setUseDescriptionId(IDS_ITEM_PRISMARINE_DESC);
 
+	Tile::tallgrass2 = static_cast<TallGrass2*>((new TallGrass2(175))->setDestroyTime(0.0f)->setSoundType(Tile::SOUND_GRASS)->setIconName(L"tallgrass2_tall_grass_upper")->setDescriptionId(IDS_TILE_TALL_GRASS2)->setUseDescriptionId(IDS_DESC_TALL_GRASS)->disableMipmap()->sendTileData(0xFF));
 
 	// Special cases for certain items since they can have different icons
 	Item::items[wool_Id]				= ( new WoolTileItem(Tile::wool_Id- 256) )->setIconName(L"cloth")->setDescriptionId(IDS_TILE_CLOTH)->setUseDescriptionId(IDS_DESC_WOOL);
@@ -548,7 +573,9 @@ void Tile::staticCtor()
 	Item::items[red_sandstone_Id] = (new MultiTextureTileItem(Tile::red_sandstone_Id - 256, red_sandstone, (int*)RedSandStoneTile::SANDSTONE_NAMES, RedSandStoneTile::SANDSTONE_BLOCK_NAMES))->setIconName(L"red_sandstone")->setDescriptionId(IDS_TILE_SANDSTONE)->setUseDescriptionId(IDS_DESC_SANDSTONE);
 	Item::items[tree2Trunk_Id] = (new MultiTextureTileItem(Tile::tree2Trunk_Id - 256, tree2Trunk, (int*)TreeTile2::TREE_NAMES, TreeTile2::TREE_NAMES_LENGTH))->setIconName(L"log")->setDescriptionId(IDS_TILE_LOG)->setUseDescriptionId(IDS_DESC_LOG);
 	Item::items[sponge_Id] = (new MultiTextureTileItem(Tile::sponge_Id - 256, sponge, (int*)Sponge::SPONGE_NAMES, Sponge::SPONGE_NAMES_LENGTH))->setIconName(L"sponge")->setDescriptionId(IDS_TILE_SPONGE)->setUseDescriptionId(IDS_DESC_SPONGE);
-
+	int tallgrass2IdsData[5] = { IDS_TILE_TALL_GRASS2, IDS_TILE_LARGE_FERN, IDS_TILE_LILAC, IDS_TILE_ROSE_BUSH, IDS_TILE_PEONY };
+	intArray tallgrass2Ids = intArray(tallgrass2IdsData, 5);
+	Item::items[tallgrass2_Id] = static_cast<TallGrass2TileItem*>((new TallGrass2TileItem(Tile::tallgrass2_Id - 256))->setDescriptionId(IDS_TILE_TALL_GRASS2)->setUseDescriptionId(IDS_DESC_TALL_GRASS))->setDescriptionPostfixes(tallgrass2Ids);
 
 	for (int i = 0; i < 256; i++)
 	{
@@ -1630,6 +1657,7 @@ int Tile::SoundType::getPlaceSound() const
 {
 	return iPlaceSound;
 }
+
 
 
 /*

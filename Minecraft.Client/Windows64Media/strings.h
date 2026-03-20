@@ -2350,5 +2350,10 @@
 #define IDS_ITEM_PRISMARINE_DARK_DESC						   2344
 #define IDS_ITEM_PRISMARINE_BRICK_DESC						   2345
 #define IDS_ITEM_PRISMARINE_CRYSTAL_DESC					   2346
-#define IDS_ITEM_PRISMARINE_SHARD_DESC						   2346
-#define IDS_ITEM_RABBIT_STEW                                   2347
+#define IDS_ITEM_PRISMARINE_SHARD_DESC						   2347
+#define IDS_ITEM_RABBIT_STEW                                   2348
+#define IDS_TILE_TALL_GRASS2                                   2349
+#define IDS_TILE_LARGE_FERN                                    2350
+#define IDS_TILE_LILAC                                         2351
+#define IDS_TILE_ROSE_BUSH                                     2352
+#define IDS_TILE_PEONY                                         2353

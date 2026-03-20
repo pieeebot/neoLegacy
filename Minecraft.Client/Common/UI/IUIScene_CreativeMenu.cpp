@@ -12,6 +12,7 @@
 #include "..\..\..\Minecraft.World\net.minecraft.world.entity.h"
 #include "..\..\..\Minecraft.World\net.minecraft.world.entity.animal.h"
 #include "..\..\..\Minecraft.World\JavaMath.h"
+#include "..\..\..\Minecraft.World\TallGrass2.h"
 
 // 4J JEV - Images for each tab.
 IUIScene_CreativeMenu::TabSpec **IUIScene_CreativeMenu::specs = nullptr;
@@ -231,7 +232,12 @@ void IUIScene_CreativeMenu::staticCtor()
 		ITEM_AUX(Tile::rose_Id, Rose::WHITE_TULIP)
 		ITEM_AUX(Tile::rose_Id, Rose::PINK_TULIP)
 		ITEM_AUX(Tile::rose_Id, Rose::OXEYE_DAISY)
-
+		// SUNFLOWER LOCATION
+		ITEM_AUX(Tile::tallgrass2_Id, TallGrass2::LILAC)
+		ITEM_AUX(Tile::tallgrass2_Id, TallGrass2::TALL_GRASS)
+		ITEM_AUX(Tile::tallgrass2_Id, TallGrass2::LARGE_FERN)
+		ITEM_AUX(Tile::tallgrass2_Id, TallGrass2::ROSE_BUSH)
+		ITEM_AUX(Tile::tallgrass2_Id, TallGrass2::PEONY)
 		ITEM(Tile::mushroom_brown_Id)
 		ITEM(Tile::mushroom_red_Id)
 		ITEM(Tile::cactus_Id)

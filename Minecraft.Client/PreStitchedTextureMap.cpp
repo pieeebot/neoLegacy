@@ -1058,5 +1058,16 @@ void PreStitchedTextureMap::loadUVs()
 		ADD_ICON(24, 3, L"door_jungle_lower");
 		ADD_ICON(24, 4, L"door_spruce_lower");
 
+		ADD_ICON(21, 1, L"tallgrass2_tall_grass_lower");
+		ADD_ICON(20, 1, L"tallgrass2_tall_grass_upper");
+		ADD_ICON(21, 0, L"tallgrass2_large_fern_lower");
+		ADD_ICON(20, 0, L"tallgrass2_large_fern_upper");
+		ADD_ICON(21, 2, L"tallgrass2_peony_lower");
+		ADD_ICON(20, 2, L"tallgrass2_peony_upper");
+		ADD_ICON(21, 3, L"tallgrass2_rose_bush_lower");
+		ADD_ICON(20, 3, L"tallgrass2_rose_bush_upper");
+		ADD_ICON(21, 4, L"tallgrass2_lilac_lower");
+		ADD_ICON(20, 4, L"tallgrass2_lilac_upper");
+
 	}
 }
