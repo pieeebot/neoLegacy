@@ -431,6 +431,7 @@ void IUIScene_CreativeMenu::staticCtor()
 		ITEM_AUX(Item::spawnEgg_Id, 96); // Mooshroom
 		ITEM_AUX(Item::spawnEgg_Id, 98); // Ozelot
 		ITEM_AUX(Item::spawnEgg_Id, 100); // Horse
+		ITEM_AUX(Item::spawnEgg_Id, 67); // Endermite
 		
 		ITEM_AUX(Item::spawnEgg_Id, 100 | ((EntityHorse::TYPE_DONKEY + 1) << 12) ); // Donkey
 		ITEM_AUX(Item::spawnEgg_Id, 100 | ((EntityHorse::TYPE_MULE + 1) << 12)); // Mule

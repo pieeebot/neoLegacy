@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "net.minecraft.world.entity.player.h"
 #include "net.minecraft.world.entity.h"
 #include "net.minecraft.world.entity.ai.attributes.h"
@@ -11,6 +11,10 @@
 #include "com.mojang.nbt.h"
 #include "..\Minecraft.Client\Textures.h"
 #include "EnderMan.h"
+
+#include "Endermite.h"
+
+
 
 AttributeModifier *EnderMan::SPEED_MODIFIER_ATTACKING = (new AttributeModifier(eModifierId_MOB_ENDERMAN_ATTACKSPEED, 6.2f, AttributeModifier::OPERATION_ADDITION))->setSerialize(false);
 
@@ -52,6 +56,7 @@ EnderMan::EnderMan(Level *level) : Monster( level )
 
 	setSize(0.6f, 2.9f);
 	footSize = 1;
+	
 }
 
 void EnderMan::registerAttributes()
@@ -89,32 +94,51 @@ void EnderMan::readAdditionalSaveData(CompoundTag *tag)
 shared_ptr<Entity> EnderMan::findAttackTarget()
 {
 #ifndef _FINAL_BUILD
-	if(app.GetMobsDontAttackEnabled())
-	{
-		return shared_ptr<Player>();
-	}
+    if(app.GetMobsDontAttackEnabled())
+    {
+        return shared_ptr<Player>();
+    }
 #endif
 
-	shared_ptr<Player> player = level->getNearestAttackablePlayer(shared_from_this(), 64);
-	if (player != nullptr)
-	{
-		if (isLookingAtMe(player))
-		{
-			aggroedByPlayer = true;
-			if (aggroTime == 0) level->playEntitySound(player, eSoundType_MOB_ENDERMAN_STARE, 1, 1);
-			if (aggroTime++ == 5)
-			{
-				aggroTime = 0;
-				setCreepy(true);
-				return player;
-			}
-		}
-		else
-		{
-			aggroTime = 0;
-		}
-	}
-	return nullptr;
+    
+    vector<shared_ptr<Entity>> *entities = level->getEntitiesOfClass(typeid(Endermite), bb->grow(64.0f, 10.0f, 64.0f));
+    
+    if (entities != nullptr)
+    {
+        for (auto it = entities->begin(); it != entities->end(); ++it)
+        {
+            shared_ptr<Endermite> mite = dynamic_pointer_cast<Endermite>(*it);
+            
+            if (mite != nullptr)
+            {
+                setCreepy(true); 
+                return mite;     
+            }
+        }
+    }
+
+    
+    shared_ptr<Player> player = level->getNearestAttackablePlayer(shared_from_this(), 64);
+    if (player != nullptr)
+    {
+        if (isLookingAtMe(player))
+        {
+            aggroedByPlayer = true;
+            if (aggroTime == 0) level->playEntitySound(player, eSoundType_MOB_ENDERMAN_STARE, 1, 1);
+            if (aggroTime++ == 5)
+            {
+                aggroTime = 0;
+                setCreepy(true);
+                return player;
+            }
+        }
+        else
+        {
+            aggroTime = 0;
+        }
+    }
+    
+    return nullptr;
 }
 
 bool EnderMan::isLookingAtMe(shared_ptr<Player> player)

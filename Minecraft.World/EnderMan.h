@@ -63,4 +63,5 @@ public:
 	virtual bool hurt(DamageSource *source, float damage);
 	bool isCreepy();
 	void setCreepy(bool creepy);
+	
 };

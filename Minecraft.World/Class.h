@@ -169,6 +169,8 @@ enum eINSTANCEOF
 						eTYPE_WITCH			= eTYPE_MONSTER | eTYPE_VALID_IN_SPAWNER_FLAG | 0x7,
 						eTYPE_WITHERBOSS	= eTYPE_MONSTER | eTYPE_VALID_IN_SPAWNER_FLAG | 0x8,
 
+						eTYPE_ENDERMITE	= eTYPE_MONSTER | eTYPE_VALID_IN_SPAWNER_FLAG | 0x10,
+
 
 				eTYPE_AMBIENT			= eTYPE_MOB | BIT_AMBIENT_MOB,
 					eTYPE_BAT			= eTYPE_AMBIENT | eTYPE_VALID_IN_SPAWNER_FLAG | 0x1,
@@ -484,7 +486,7 @@ public:
 		classes->push_back( SUBCLASS(eTYPE_MULTIENTITY_MOB_PART	)->addParent( eTYPE_ENTITY  ) );
 		classes->push_back( SUBCLASS(eTYPE_NETHER_SPHERE			)->addParent( eTYPE_ENTITY  ) );
 		classes->push_back( SUBCLASS(eTYPE_ENDER_CRYSTAL			)->addParent( eTYPE_ENTITY  ) );
-
+		classes->push_back( SUBCLASS(eTYPE_ENDERMITE    )->addParent( eTYPE_MONSTER)->addParent(eTYPE_VALID_IN_SPAWNER_FLAG ) );
 		classes->push_back( SUBCLASS(eType_BREAKINGITEMPARTICLE)->addParent(eTYPE_ENTITY) );
 		classes->push_back( SUBCLASS(eType_BUBBLEPARTICLE)->addParent(eTYPE_ENTITY) );
 		classes->push_back( SUBCLASS(eType_EXPLODEPARTICLE)->addParent(eTYPE_ENTITY) );

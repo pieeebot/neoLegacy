@@ -109,10 +109,13 @@ void EntityIO::staticCtor()
 	setId(EntityHorse::create, eTYPE_HORSE, L"EntityHorse", 100, eMinecraftColour_Mob_Horse_Colour1, eMinecraftColour_Mob_Horse_Colour2, IDS_HORSE);
 	setId(Rabbit::create, eTYPE_RABBIT, L"Rabbit", 101,
       eMinecraftColour_Mob_Rabbit_Colour1,
-      eMinecraftColour_Mob_Rabbit_Colour2, IDS_RABBIT);//change IDS_RABBIT later
+      eMinecraftColour_Mob_Rabbit_Colour2, IDS_RABBIT);
 
 	setId(ArmorStand::create, eTYPE_ARMORSTAND, L"ArmorStand", 102);
 
+	setId(Endermite::create, eTYPE_ENDERMITE, L"Endermite", 67,
+      eMinecraftColour_Mob_Endermite_Colour1,
+      eMinecraftColour_Mob_Endermite_Colour2, IDS_RABBIT);//change IDS_Endermite later
 
 	setId(Villager::create, eTYPE_VILLAGER, L"Villager", 120, eMinecraftColour_Mob_Villager_Colour1, eMinecraftColour_Mob_Villager_Colour2, IDS_VILLAGER);
 

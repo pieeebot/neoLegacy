@@ -16,6 +16,7 @@
 #include "EnderMan.h"
 #include "Silverfish.h"
 
+
 // 1.0.1
 #include "Blaze.h"
 #include "LavaSlime.h"
@@ -24,3 +25,6 @@
 #include "RangedAttackMob.h"
 #include "SharedMonsterAttributes.h"
 #include "Witch.h"
+
+//TU 31
+#include "Endermite.h"

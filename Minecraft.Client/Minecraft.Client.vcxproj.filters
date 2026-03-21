@@ -3805,6 +3805,12 @@
     <ClInclude Include="ArmorStandRenderer.h">
       <Filter>net\minecraft\client\renderer\entity</Filter>
     </ClInclude>
+    <ClInclude Include="EndermiteModel.h">
+      <Filter>net\minecraft\client\model</Filter>
+    </ClInclude>
+    <ClInclude Include="EndermiteRenderer.h">
+      <Filter>net\minecraft\client\renderer\entity</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -5971,6 +5977,12 @@
       <Filter>net\minecraft\client\model</Filter>
     </ClCompile>
     <ClCompile Include="ArmorStandRenderer.cpp">
+      <Filter>net\minecraft\client\renderer\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="EndermiteModel.cpp">
+      <Filter>net\minecraft\client\model</Filter>
+    </ClCompile>
+    <ClCompile Include="EndermiteRenderer.cpp">
       <Filter>net\minecraft\client\renderer\entity</Filter>
     </ClCompile>
   </ItemGroup>

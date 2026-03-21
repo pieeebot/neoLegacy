@@ -83,6 +83,7 @@
 #include "CaveSpiderRenderer.h"
 #include "RabbitRenderer.h"
 #include "ArmorStandRenderer.h"
+#include "EndermiteRenderer.h"
 #include "MobRenderer.h"
 
 double EntityRenderDispatcher::xOff = 0.0;
@@ -173,6 +174,7 @@ EntityRenderDispatcher::EntityRenderDispatcher()
 	renderers[eTYPE_LIGHTNINGBOLT] = new LightningBoltRenderer();
 
 	renderers[eTYPE_ARMORSTAND] = new ArmorStandRenderer();
+	renderers[eTYPE_ENDERMITE] = new EndermiteRenderer();
 	glDisable(GL_LIGHTING);
 
 	for( auto& it : renderers )

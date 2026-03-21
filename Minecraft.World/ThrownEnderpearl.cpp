@@ -6,6 +6,7 @@
 #include "..\Minecraft.Client\ServerPlayer.h"
 #include "..\Minecraft.Client\PlayerConnection.h"
 #include "ThrownEnderpearl.h"
+#include "Endermite.h"
 
 
 
@@ -56,6 +57,17 @@ void ThrownEnderpearl::onHit(HitResult *res)
 			{
 				if(!serverPlayer->connection->done && serverPlayer->level == this->level)
 				{
+
+					if (random->nextFloat() < 0.05f /* && level->getGameRules()->getBoolean("doMobSpawning") //for a future gamerule*/)
+                    {
+                        Endermite* endermite = new Endermite(level);
+                        endermite->setSpawnedByPlayer(true);
+                        
+                        endermite->moveTo(serverPlayer->x, serverPlayer->y, serverPlayer->z, serverPlayer->yRot, serverPlayer->xRot);
+                        level->addEntity(shared_ptr<Entity>(endermite));
+                    }
+
+
 					if (getOwner()->isRiding())
 					{
 						getOwner()->ride(nullptr);

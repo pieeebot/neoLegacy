@@ -2473,6 +2473,7 @@
     <ClInclude Include="DropperTileEntity.h" />
     <ClInclude Include="DummyCriteria.h" />
     <ClInclude Include="EmptyMapItem.h" />
+    <ClInclude Include="Endermite.h" />
     <ClInclude Include="EntityTile.h" />
     <ClInclude Include="FireworksChargeItem.h" />
     <ClInclude Include="FireworksItem.h" />
@@ -3560,6 +3561,7 @@
     <ClCompile Include="DropperTileEntity.cpp" />
     <ClCompile Include="DummyCriteria.cpp" />
     <ClCompile Include="EmptyMapItem.cpp" />
+    <ClCompile Include="Endermite.cpp" />
     <ClCompile Include="FireworksChargeItem.cpp" />
     <ClCompile Include="FireworksItem.cpp" />
     <ClCompile Include="FireworksMenu.cpp" />
