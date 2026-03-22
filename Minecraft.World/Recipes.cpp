@@ -415,13 +415,13 @@ Recipes::Recipes()
 		L'#', new ItemInstance(Tile::wood, 1, TreeTile::BIRCH_TRUNK),
 		L'S');
 
-	addShapedRecipy(new ItemInstance(Tile::woodStairsDark, 4), //
+	addShapedRecipy(new ItemInstance(Tile::woodStairsSpruce, 4), //
 		L"sssczg",
 		L"#  ", //
 		L"## ", //
 		L"###", //
 
-		L'#', new ItemInstance(Tile::wood, 1, TreeTile::DARK_TRUNK),
+		L'#', new ItemInstance(Tile::wood, 1, TreeTile::SPRUCE_TRUNK),
 		L'S');
 
 	addShapedRecipy(new ItemInstance(Tile::woodStairsJungle, 4), //
@@ -431,6 +431,24 @@ Recipes::Recipes()
 		L"###", //
 
 		L'#', new ItemInstance(Tile::wood, 1, TreeTile::JUNGLE_TRUNK),
+		L'S');
+
+	addShapedRecipy(new ItemInstance(Tile::woodStairsAcacia, 4), //
+		L"sssczg",
+		L"#  ", //
+		L"## ", //
+		L"###", //
+
+		L'#', new ItemInstance(Tile::wood, 1, TreeTile::ACACIA_TRUNK),
+		L'S');
+
+	addShapedRecipy(new ItemInstance(Tile::woodStairsDark, 4), //
+		L"sssczg",
+		L"#  ", //
+		L"## ", //
+		L"###", //
+
+		L'#', new ItemInstance(Tile::wood, 1, TreeTile::DARK_TRUNK),
 		L'S');
 
 	addShapedRecipy(new ItemInstance(Tile::stairs_quartz, 4), //
@@ -588,11 +606,11 @@ Recipes::Recipes()
 		L'S');
 
 
-	addShapedRecipy(new ItemInstance(Tile::woodSlabHalf, 6, TreeTile::DARK_TRUNK), //
+	addShapedRecipy(new ItemInstance(Tile::woodSlabHalf, 6, TreeTile::SPRUCE_TRUNK), //
 		L"sczg",
 		L"###", //
 
-		L'#', new ItemInstance(Tile::wood, 1, TreeTile::DARK_TRUNK),
+		L'#', new ItemInstance(Tile::wood, 1, TreeTile::SPRUCE_TRUNK),
 		L'S');
 
 	addShapedRecipy(new ItemInstance(Tile::woodSlabHalf, 6, TreeTile::JUNGLE_TRUNK), //
@@ -600,6 +618,20 @@ Recipes::Recipes()
 		L"###", //
 
 		L'#', new ItemInstance(Tile::wood, 1, TreeTile::JUNGLE_TRUNK),
+		L'S');
+
+	addShapedRecipy(new ItemInstance(Tile::woodSlabHalf, 6, TreeTile::ACACIA_TRUNK), //
+		L"sczg",
+		L"###", //
+
+		L'#', new ItemInstance(Tile::wood, 1, TreeTile::ACACIA_TRUNK),
+		L'S');
+
+	addShapedRecipy(new ItemInstance(Tile::woodSlabHalf, 6, TreeTile::DARK_TRUNK), //
+		L"sczg",
+		L"###", //
+
+		L'#', new ItemInstance(Tile::wood, 1, TreeTile::DARK_TRUNK),
 		L'S');
 
 
