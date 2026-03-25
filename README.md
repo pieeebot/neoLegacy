@@ -17,6 +17,13 @@ See our our [Contributor's Guide](./CONTRIBUTING.md) for more information on the
 # Download
 Users can download our [Nightly Build](https://github.com/piebotc/LegacyEvolved/releases/tag/nightly)! Simply download the `.zip` file and extract it!
 
+# Acknowledgments
+
+Huge thanks to the following projects:
+
+- [Patoke/LCERenewed](https://github.com/Patoke/LCERenewed) - for some of the deeper patches that required deep decompilation
+- [smartcmd/MinecraftConsoles](https://github.com/smartcmd/MinecraftConsoles) - for creating such a great repo
+
 ## Build & Run
 
 1. Install [Visual Studio 2022](https://aka.ms/vs/17/release/vs_community.exe) or [newer](https://visualstudio.microsoft.com/downloads/).
