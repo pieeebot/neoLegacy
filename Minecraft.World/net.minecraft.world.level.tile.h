@@ -57,6 +57,7 @@
 #include "JukeboxTile.h"
 #include "LadderTile.h"
 #include "LeafTile.h"
+#include "LeafTile2.h"
 #include "LevelEvent.h"
 #include "LeverTile.h"
 #include "LiquidTile.h"
@@ -127,7 +128,7 @@
 #include "WoodButtonTile.h"
 #include "WorkbenchTile.h"
 #include "WoodTile.h"
-#include "HalfSlabTile.h"
+
 #include "WoodSlabTile.h"
 #include "WoolCarpetTile.h"
 #include "Rose.h"
@@ -135,9 +136,10 @@
 #include "RedSandStoneTile.h"
 #include "TreeTile2.h"
 #include "SeaLanternTile.h"
-#include "LeafTile2.h"
+
 #include "PrismarineTile.h"
+#include "Tallgrass2.h"
 
 #include "PackedIceTile.h"
 
-#include "Tallgrass2.h"
+

@@ -16,7 +16,7 @@
 #include "net.minecraft.world.h"
 #include "net.minecraft.h"
 #include "Tile.h"
-#include "Tallgrass2.h"
+
 #include "facing.h"
 
 
@@ -552,6 +552,7 @@ void Tile::staticCtor()
 	Item::items[treeTrunk_Id] = (new MultiTextureTileItem(Tile::treeTrunk_Id - 256, treeTrunk, (int*)TreeTile::TREE_NAMES, 6))->setIconName(L"log")->setDescriptionId(IDS_TILE_LOG)->setUseDescriptionId(IDS_DESC_LOG);
 	Item::items[wood_Id] = (new MultiTextureTileItem(Tile::wood_Id - 256, Tile::wood, (int*)WoodTile::WOOD_NAMES, 6, IDS_TILE_PLANKS))->setIconName(L"wood")->setDescriptionId(IDS_TILE_OAKWOOD_PLANKS)->setUseDescriptionId(IDS_DESC_LOG); //  <- TODO
 	Item::items[monsterStoneEgg_Id]		= ( new MultiTextureTileItem(Tile::monsterStoneEgg_Id - 256, monsterStoneEgg, (int *)StoneMonsterTile::STONE_MONSTER_NAMES, 3))->setIconName(L"monsterStoneEgg")->setDescriptionId(IDS_TILE_STONE_SILVERFISH)->setUseDescriptionId(IDS_DESC_STONE_SILVERFISH); // 4J - Brought forward from post-1.2 to fix stacking problem
+	Item::items[stone_Id]			= ( new MultiTextureTileItem(Tile::stone_Id - 256,Tile::stone,(int*)StoneTile::STONE_NAMES, StoneTile::STONE_NAMES_LENGTH))->setIconName(L"stone")->setDescriptionId(IDS_TILE_STONE);
 	Item::items[stoneBrick_Id]			= ( new MultiTextureTileItem(Tile::stoneBrick_Id - 256, stoneBrick,(int *)SmoothStoneBrickTile::SMOOTH_STONE_BRICK_NAMES, 4))->setIconName(L"stonebricksmooth")->setDescriptionId(IDS_TILE_STONE_BRICK_SMOOTH);
 	Item::items[sandStone_Id]			= ( new MultiTextureTileItem(sandStone_Id - 256, sandStone, SandStoneTile::SANDSTONE_NAMES, SandStoneTile::SANDSTONE_BLOCK_NAMES) )->setIconName(L"sandStone")->setDescriptionId(IDS_TILE_SANDSTONE)->setUseDescriptionId(IDS_DESC_SANDSTONE);
 	Item::items[quartzBlock_Id]			= ( new MultiTextureTileItem(quartzBlock_Id - 256, quartzBlock, QuartzBlockTile::BLOCK_NAMES, QuartzBlockTile::QUARTZ_BLOCK_NAMES) )->setIconName(L"quartzBlock")->setDescriptionId(IDS_TILE_QUARTZ_BLOCK)->setUseDescriptionId(IDS_DESC_QUARTZ_BLOCK);
@@ -562,7 +563,7 @@ void Tile::staticCtor()
 	Item::items[sapling_Id] = (new MultiTextureTileItem(Tile::sapling_Id - 256, Tile::sapling, Sapling::SAPLING_NAMES, Sapling::SAPLING_NAMES_SIZE))->setIconName(L"sapling")->setDescriptionId(IDS_TILE_SAPLING)->setUseDescriptionId(IDS_DESC_SAPLING);;
 	//Item::items[sapling2_Id]				= ( new MultiTextureTileItem(Tile::sapling2_Id - 256, Tile::sapling2, Sapling2::SAPLING_NAMES, 2) )->setIconName(L"sapling2")->setDescriptionId(IDS_TILE_SAPLING)->setUseDescriptionId(IDS_DESC_SAPLING);
 	Item::items[leaves_Id]				= ( new LeafTileItem(Tile::leaves_Id - 256) )->setIconName(L"leaves")->setDescriptionId(IDS_TILE_LEAVES)->setUseDescriptionId(IDS_DESC_LEAVES);
-	Item::items[leaves2_Id]				= ( new LeafTileItem(Tile::leaves2_Id - 256) )->setIconName(L"leaves_acacia")->setDescriptionId(IDS_TILE_LEAVES)->setUseDescriptionId(IDS_DESC_LEAVES);
+	Item::items[leaves2_Id]				= ( new LeafTileItem2(Tile::leaves2_Id - 256) )->setIconName(L"leaves_acacia")->setDescriptionId(IDS_TILE_LEAVES)->setUseDescriptionId(IDS_DESC_LEAVES);
 	Item::items[vine_Id]				= ( new ColoredTileItem(Tile::vine_Id - 256, false))->setDescriptionId(IDS_TILE_VINE)->setUseDescriptionId(IDS_DESC_VINE);
 	int idsData[3] = {IDS_TILE_SHRUB, IDS_TILE_TALL_GRASS, IDS_TILE_FERN};
 	intArray ids = intArray(idsData, 3);
@@ -574,12 +575,16 @@ void Tile::staticCtor()
 	Item::items[cobbleWall_Id]			= ( new MultiTextureTileItem(cobbleWall_Id - 256, cobbleWall, (int *)WallTile::COBBLE_NAMES, 2) )->setDescriptionId(IDS_TILE_COBBLESTONE_WALL)->setUseDescriptionId(IDS_DESC_COBBLESTONE_WALL);
 	Item::items[anvil_Id]				= ( new AnvilTileItem(anvil) )->setDescriptionId(IDS_TILE_ANVIL)->setUseDescriptionId(IDS_DESC_ANVIL);
 	Item::items[dirt_Id] = (new MultiTextureTileItem(Tile::dirt_Id - 256, dirt, (int*)DirtTile::DIRT_NAMES, 3))->setIconName(L"dirt")->setDescriptionId(IDS_TILE_DIRT)->setUseDescriptionId(IDS_DESC_DIRT);
-	Item::items[stone_Id] = (new MultiTextureTileItem(Tile::stone_Id - 256, dirt, (int*)StoneTile::STONE_NAMES, 3))->setIconName(L"stone")->setDescriptionId(IDS_TILE_STONE)->setUseDescriptionId(IDS_DESC_STONE);
+		
 	Item::items[rose_Id] = (new MultiTextureTileItem(Tile::rose_Id - 256, rose, (int*)Rose::FLOWER_NAMES, Rose::FLOWER_NAMES_LENGTH))->setIconName(L"flower_rose")->setDescriptionId(IDS_TILE_ROSE)->setUseDescriptionId(IDS_DESC_FLOWER);
 	Item::items[sand_Id] = (new MultiTextureTileItem(Tile::sand_Id - 256, sand, (int*)SandTile::SAND_NAMES, SandTile::SAND_NAMES_LENGTH))->setIconName(L"sand")->setDescriptionId(IDS_TILE_SAND)->setUseDescriptionId(IDS_DESC_SAND);
 	Item::items[red_sandstone_Id] = (new MultiTextureTileItem(Tile::red_sandstone_Id - 256, red_sandstone, (int*)RedSandStoneTile::SANDSTONE_NAMES, RedSandStoneTile::SANDSTONE_BLOCK_NAMES))->setIconName(L"red_sandstone")->setDescriptionId(IDS_TILE_SANDSTONE)->setUseDescriptionId(IDS_DESC_SANDSTONE);
 	Item::items[tree2Trunk_Id] = (new MultiTextureTileItem(Tile::tree2Trunk_Id - 256, tree2Trunk, (int*)TreeTile2::TREE_NAMES, TreeTile2::TREE_NAMES_LENGTH))->setIconName(L"log")->setDescriptionId(IDS_TILE_LOG)->setUseDescriptionId(IDS_DESC_LOG);
 	Item::items[sponge_Id] = (new MultiTextureTileItem(Tile::sponge_Id - 256, sponge, (int*)Sponge::SPONGE_NAMES, Sponge::SPONGE_NAMES_LENGTH))->setIconName(L"sponge")->setDescriptionId(IDS_TILE_SPONGE)->setUseDescriptionId(IDS_DESC_SPONGE);
+
+
+
+
 	int tallgrass2IdsData[TallGrass2::VARIANT_COUNT] = {
 		IDS_TILE_SUNFLOWER,			  // 0 - Sunflower, not implemented yet
 		IDS_TILE_LILAC,				  // 1 - Lilac
@@ -588,7 +593,7 @@ void Tile::staticCtor()
 		IDS_TILE_ROSE_BUSH,			  // 4 - Rose Bush
 		IDS_TILE_PEONY,				  // 5 - Peony
 	};
-	intArray tallgrass2Ids = intArray(tallgrass2IdsData, 5);
+	intArray tallgrass2Ids = intArray(tallgrass2IdsData, 6);
 	Item::items[tallgrass2_Id] = static_cast<TallGrass2TileItem*>((new TallGrass2TileItem(Tile::tallgrass2_Id - 256))->setDescriptionId(IDS_TILE_DOUBLE_TALL_GRASS)->setUseDescriptionId(IDS_DESC_TALL_GRASS))->setDescriptionPostfixes(tallgrass2Ids);
 
 	for (int i = 0; i < 256; i++)

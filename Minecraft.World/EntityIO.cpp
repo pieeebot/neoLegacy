@@ -115,7 +115,7 @@ void EntityIO::staticCtor()
 
 	setId(Endermite::create, eTYPE_ENDERMITE, L"Endermite", 67,
       eMinecraftColour_Mob_Endermite_Colour1,
-      eMinecraftColour_Mob_Endermite_Colour2, IDS_RABBIT);//change IDS_Endermite later
+      eMinecraftColour_Mob_Endermite_Colour2, IDS_ENDERMITE);//change IDS_Endermite later
 
 	setId(Villager::create, eTYPE_VILLAGER, L"Villager", 120, eMinecraftColour_Mob_Villager_Colour1, eMinecraftColour_Mob_Villager_Colour2, IDS_VILLAGER);
 

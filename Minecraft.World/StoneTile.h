@@ -6,6 +6,7 @@ class Random;
 class StoneTile : public Tile
 {
 public:
+	static const int TYPE_DEFAULT = 0;
 	static const int GRANITE = 1;
 	static const int POLISHED_GRANITE = 2;
 	static const int DIORITE = 3;

@@ -2416,3 +2416,4 @@
 #define IDS_DESC_LARGE_FERN                                    2410
 #define IDS_DESC_ROSE_BUSH                                     2411
 #define IDS_DESC_PEONY                                         2412
+#define IDS_ENDERMITE                                      	2413

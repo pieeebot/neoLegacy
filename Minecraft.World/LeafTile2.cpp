@@ -100,37 +100,36 @@ void LeafTile2::playerDestroy(Level *level, shared_ptr<Player> player, int x, in
 	}
 }
 
-void LeafTile2::spawnResources(Level *level, int x, int y, int z, int data, float odds, int playerBonusLevel)
-{
-    if (!level->isClientSide)
-    {
-        int chance = 20; 
-        if (playerBonusLevel > 0)
-        {
-            chance -= 2 << playerBonusLevel;
-            if (chance < 10) chance = 10;
-        }
+void LeafTile2::spawnResources(Level* level, int x, int y, int z, int data, float odds, int playerBonusLevel) {
+	if (!level->isClientSide)
+	{
+		int chance = 20;
+		if (playerBonusLevel > 0)
+		{
+			chance -= 2 << playerBonusLevel;
+			if (chance < 10) chance = 10;
+		}
 
-        if (level->random->nextInt(chance) == 0)
-        {
-            
-            
-            popResource(level, x, y, z, std::make_shared<ItemInstance>(Tile::sapling_Id, 1, (data & 3) + 4));
-        }
+		if (level->random->nextInt(chance) == 0)
+		{
 
-        
-        if ((data & 3) == 1) 
-        {
-            int appleChance = 200;
-            if (playerBonusLevel > 0)
-            {
-                appleChance -= 10 << playerBonusLevel;
-                if (appleChance < 40) appleChance = 40;
-            }
-            if (level->random->nextInt(appleChance) == 0)
-            {
-                popResource(level, x, y, z, std::make_shared<ItemInstance>(Item::apple_Id, 1, 0));
-            }
-        }
-    }
+
+			popResource(level, x, y, z, std::make_shared<ItemInstance>(Tile::sapling_Id, 1, (data & 3) + 4));
+		}
+
+
+		if ((data & 3) == 1)
+		{
+			int appleChance = 200;
+			if (playerBonusLevel > 0)
+			{
+				appleChance -= 10 << playerBonusLevel;
+				if (appleChance < 40) appleChance = 40;
+			}
+			if (level->random->nextInt(appleChance) == 0)
+			{
+				popResource(level, x, y, z, std::make_shared<ItemInstance>(Item::apple_Id, 1, 0));
+			}
+		}
+	}
 }
