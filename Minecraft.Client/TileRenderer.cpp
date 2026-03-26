@@ -8505,6 +8505,44 @@ void TileRenderer::renderTile( Tile* tile, int data, float brightness, float fAl
 		tesselateHopperInWorld(tile, 0, 0, 0, 0, true);
 		glTranslatef(0.5f, 0.5f, 0.5f);
 	}
+	else if (shape == Tile::SHAPE_THIN_PANE)
+	{
+		setShape(7.0f / 16.0f, 0, 0, 9.0f / 16.0f, 1.0f, 1.0f);
+
+		glTranslatef(-0.5f, -0.5f, -0.5f);
+		t->begin();
+		t->normal(0, -1, 0);
+		renderFaceDown(tile, 0, 0, 0, getTexture(tile, 0, data));
+		t->end();
+
+		t->begin();
+		t->normal(0, 1, 0);
+		renderFaceUp(tile, 0, 0, 0, getTexture(tile, 1, data));
+		t->end();
+
+		t->begin();
+		t->normal(0, 0, -1);
+		renderNorth(tile, 0, 0, 0, getTexture(tile, 2, data));
+		t->end();
+
+		t->begin();
+		t->normal(0, 0, 1);
+		renderSouth(tile, 0, 0, 0, getTexture(tile, 3, data));
+		t->end();
+
+		t->begin();
+		t->normal(-1, 0, 0);
+		renderWest(tile, 0, 0, 0, getTexture(tile, 4, data));
+		t->end();
+
+		t->begin();
+		t->normal(1, 0, 0);
+		renderEast(tile, 0, 0, 0, getTexture(tile, 5, data));
+		t->end();
+
+		glTranslatef(0.5f, 0.5f, 0.5f);
+		setShape(0, 0, 0, 1, 1, 1);
+		}
 
 	t->setMipmapEnable( true );	// 4J added
 }
@@ -8525,6 +8563,8 @@ bool TileRenderer::canRender( int renderShape )
 	if ( renderShape == Tile::SHAPE_WALL) return true;
 	if ( renderShape == Tile::SHAPE_BEACON) return true;
 	if ( renderShape == Tile::SHAPE_ANVIL) return true;
+	if (renderShape == Tile::SHAPE_THIN_PANE) return true;
+	if (renderShape == Tile::SHAPE_WATER) return true;
 	return false;
 }
 

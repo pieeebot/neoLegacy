@@ -243,8 +243,11 @@ void ItemInHandRenderer::renderItem(shared_ptr<LivingEntity> mob, shared_ptr<Ite
 		MemSect(31);
         minecraft->textures->bindTexture(minecraft->textures->getTextureLocation(Icon::TYPE_TERRAIN));
 		MemSect(0);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         tileRenderer->renderTile(Tile::tiles[item->id], item->getAuxValue(), SharedConstants::TEXTURE_LIGHTING ? 1.0f : mob->getBrightness(1));		// 4J - change brought forward from 1.8.2
-    }
+		glDisable(GL_BLEND);
+	}
 	else
 	{
 		MemSect(31);

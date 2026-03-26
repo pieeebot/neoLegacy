@@ -79,7 +79,7 @@ bool NoteBlockTile::triggerEvent(Level *level, int x, int y, int z, int i, int n
 		break;
 	}
 	app.DebugPrintf("NoteBlockTile::triggerEvent - playSound - pitch = %f\n",pitch);
-	level->playSound(x + 0.5, y + 0.5, z + 0.5, iSound, 3, pitch);
+	level->playSound(x + 0.5, y + 0.5, z + 0.5, iSound, 3, pitch, 64.0f);
 	level->addParticle(eParticleType_note, x + 0.5, y + 1.2, z + 0.5, note / 24.0, 0, 0);
 
 	return true;
