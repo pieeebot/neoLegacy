@@ -2,6 +2,7 @@
 #include "net.minecraft.world.item.h"
 #include "net.minecraft.world.level.h"
 #include "net.minecraft.world.h"
+#include "net.minecraft.world.level.tile.h"
 #include "FenceTile.h"
 
 FenceTile::FenceTile(int id, const wstring &texture, Material *material) : Tile( id, material, isSolidRender())
@@ -122,18 +123,24 @@ int FenceTile::getRenderShape()
 bool FenceTile::connectsTo(LevelSource *level, int x, int y, int z)
 {
 	int tile = level->getTile(x, y, z);
-	if (isFence(tile) || tile == Tile::fenceGate_Id)
-	{
+	Tile* tileInstance = Tile::tiles[tile];
+
+	if (tileInstance == nullptr)
+		return false;
+
+	FenceTile* asFence = dynamic_cast<FenceTile*>(tileInstance);
+
+	// more reliable fence check
+	if (asFence && asFence->material == this->material)
 		return true;
-	}
-	Tile *tileInstance = Tile::tiles[tile];
-	if (tileInstance != nullptr)
-	{
-		if (tileInstance->material->isSolidBlocking() && tileInstance->isCubeShaped())
-		{
-			return tileInstance->material != Material::vegetable;
-		}
-	}
+
+	// check if its a fencegate
+	if (dynamic_cast<FenceGateTile*>(tileInstance))
+		return true;
+
+	if (tileInstance->material->isSolidBlocking() && tileInstance->isCubeShaped())
+		return tileInstance->material != Material::vegetable;
+
 	return false;
 }
 
