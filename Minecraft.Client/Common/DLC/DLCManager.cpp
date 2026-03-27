@@ -10,6 +10,7 @@
 
 const WCHAR *DLCManager::wchTypeNamesA[]=
 {
+	L"XMLVERSION",
 	L"DISPLAYNAME",
 	L"THEMENAME",
 	L"FREE", 
@@ -405,6 +406,7 @@ bool DLCManager::processDLCDataFile(DWORD &dwFilesProcessed, PBYTE pbData, DWORD
 	unsigned int uiParameterCount=readUInt32(&pbData[uiCurrentByte], bSwapEndian);
 	uiCurrentByte+=sizeof(int);
 	C4JStorage::DLC_FILE_PARAM *pParams = (C4JStorage::DLC_FILE_PARAM *)&pbData[uiCurrentByte];
+	bool bXMLVersion = false;
 	//DWORD dwwchCount=0;
 	for(unsigned int i=0;i<uiParameterCount;i++)
 	{
@@ -421,11 +423,22 @@ bool DLCManager::processDLCDataFile(DWORD &dwFilesProcessed, PBYTE pbData, DWORD
 		if( type != e_DLCParamType_Invalid )
 		{
 			parameterMapping[pParams->dwType] = type;
+
+			if (type == e_DLCParamType_XMLVersion)
+			{
+				bXMLVersion = true;
+			}
 		}
 		uiCurrentByte+= sizeof(C4JStorage::DLC_FILE_PARAM)+(pParams->dwWchCount*sizeof(WCHAR));
 		pParams = (C4JStorage::DLC_FILE_PARAM *)&pbData[uiCurrentByte];
 	}
 	//ulCurrentByte+=ulParameterCount * sizeof(C4JStorage::DLC_FILE_PARAM);
+
+	if (bXMLVersion)
+	{
+		uiCurrentByte += sizeof(int);
+	}
+
 	unsigned int uiFileCount=readUInt32(&pbData[uiCurrentByte], bSwapEndian);
 	uiCurrentByte+=sizeof(int);
 	C4JStorage::DLC_FILE_DETAILS *pFile = (C4JStorage::DLC_FILE_DETAILS *)&pbData[uiCurrentByte];

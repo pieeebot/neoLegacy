@@ -31,7 +31,8 @@ public:
 	{
 		e_DLCParamType_Invalid = -1,
 
-		e_DLCParamType_DisplayName = 0,
+		e_DLCParamType_XMLVersion = 0,
+		e_DLCParamType_DisplayName,
 		e_DLCParamType_ThemeName,
 		e_DLCParamType_Free, // identify free skins
 		e_DLCParamType_Credit, // legal credits for DLC
