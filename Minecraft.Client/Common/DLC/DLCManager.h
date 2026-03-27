@@ -31,7 +31,8 @@ public:
 	{
 		e_DLCParamType_Invalid = -1,
 
-		e_DLCParamType_DisplayName = 0,
+		e_DLCParamType_XMLVersion = 0,
+		e_DLCParamType_DisplayName,
 		e_DLCParamType_ThemeName,
 		e_DLCParamType_Free, // identify free skins
 		e_DLCParamType_Credit, // legal credits for DLC
@@ -93,6 +94,30 @@ public:
 	bool readDLCDataFile(DWORD &dwFilesProcessed, const wstring &path, DLCPack *pack, bool fromArchive = false);
 	bool readDLCDataFile(DWORD &dwFilesProcessed, const string &path, DLCPack *pack, bool fromArchive = false);
 	DWORD retrievePackIDFromDLCDataFile(const string &path, DLCPack *pack);
+
+	static unsigned short SwapInt16(unsigned short value) {
+		return (value >> 8) | (value << 8);
+	}
+	
+	static unsigned int SwapInt32(unsigned int value) {
+		return ((value & 0xFF) << 24) |
+			((value & 0xFF00) << 8) |
+			((value & 0xFF0000) >> 8) |
+			((value & 0xFF000000) >> 24);
+	}
+	
+	static void SwapUTF16Bytes(char16_t* buffer, size_t count) {
+		for (size_t i = 0; i < count; ++i) {
+			char16_t& c = buffer[i];
+			c = (c >> 8) | (c << 8);
+		}
+	}
+	
+	static unsigned int readUInt32(unsigned char* ptr, bool endian) {
+	    unsigned int val = *(unsigned int*)ptr;
+	    if (endian) val = SwapInt32(val);
+	    return val;
+	}
 
 private:
 	bool processDLCDataFile(DWORD &dwFilesProcessed, PBYTE pbData, DWORD dwLength, DLCPack *pack);

@@ -10,6 +10,7 @@
 
 const WCHAR *DLCManager::wchTypeNamesA[]=
 {
+	L"XMLVERSION",
 	L"DISPLAYNAME",
 	L"THEMENAME",
 	L"FREE", 
@@ -387,41 +388,65 @@ bool DLCManager::processDLCDataFile(DWORD &dwFilesProcessed, PBYTE pbData, DWORD
 	// // unsigned long, p = number of parameters
 	// // p * DLC_FILE_PARAM describing each parameter for this file
 	// // ulFileSize bytes of data blob of the file added
-	unsigned int uiVersion=*(unsigned int *)pbData;
+	unsigned int uiVersion=readUInt32(pbData, false);
 	uiCurrentByte+=sizeof(int);
 
-	if(uiVersion < CURRENT_DLC_VERSION_NUM)
-	{
-		if(pbData!=nullptr) delete [] pbData;
-		app.DebugPrintf("DLC version of %d is too old to be read\n", uiVersion);
+	bool bSwapEndian = false;
+	unsigned int uiVersionSwapped = SwapInt32(uiVersion);
+	if (uiVersion >= 0 && uiVersion <= CURRENT_DLC_VERSION_NUM) {
+	    bSwapEndian = false;
+	} else if (uiVersionSwapped >= 0 && uiVersionSwapped <= CURRENT_DLC_VERSION_NUM) {
+	    bSwapEndian = true;
+	} else {
+	    if(pbData!=nullptr) delete [] pbData;
+		app.DebugPrintf("Unknown DLC version of %d\n", uiVersion);
 		return false;
 	}
 	pack->SetDataPointer(pbData);
-	unsigned int uiParameterCount=*(unsigned int *)&pbData[uiCurrentByte];
+	unsigned int uiParameterCount=readUInt32(&pbData[uiCurrentByte], bSwapEndian);
 	uiCurrentByte+=sizeof(int);
 	C4JStorage::DLC_FILE_PARAM *pParams = (C4JStorage::DLC_FILE_PARAM *)&pbData[uiCurrentByte];
+	bool bXMLVersion = false;
 	//DWORD dwwchCount=0;
 	for(unsigned int i=0;i<uiParameterCount;i++)
 	{
+		pParams->dwType = bSwapEndian ? SwapInt32(pParams->dwType) : pParams->dwType;
+		pParams->dwWchCount = bSwapEndian ? SwapInt32(pParams->dwWchCount) : pParams->dwWchCount;
+		char16_t* wchData = reinterpret_cast<char16_t*>(pParams->wchData);
+		if (bSwapEndian) {
+		    SwapUTF16Bytes(wchData, pParams->dwWchCount);
+		}
+
 		// Map DLC strings to application strings, then store the DLC index mapping to application index
 		wstring parameterName(static_cast<WCHAR *>(pParams->wchData));
 		EDLCParameterType type = getParameterType(parameterName);
 		if( type != e_DLCParamType_Invalid )
 		{
 			parameterMapping[pParams->dwType] = type;
+
+			if (type == e_DLCParamType_XMLVersion)
+			{
+				bXMLVersion = true;
+			}
 		}
 		uiCurrentByte+= sizeof(C4JStorage::DLC_FILE_PARAM)+(pParams->dwWchCount*sizeof(WCHAR));
 		pParams = (C4JStorage::DLC_FILE_PARAM *)&pbData[uiCurrentByte];
 	}
 	//ulCurrentByte+=ulParameterCount * sizeof(C4JStorage::DLC_FILE_PARAM);
 
-	unsigned int uiFileCount=*(unsigned int *)&pbData[uiCurrentByte];
+	if (bXMLVersion)
+	{
+		uiCurrentByte += sizeof(int);
+	}
+
+	unsigned int uiFileCount=readUInt32(&pbData[uiCurrentByte], bSwapEndian);
 	uiCurrentByte+=sizeof(int);
 	C4JStorage::DLC_FILE_DETAILS *pFile = (C4JStorage::DLC_FILE_DETAILS *)&pbData[uiCurrentByte];
 
 	DWORD dwTemp=uiCurrentByte;
 	for(unsigned int i=0;i<uiFileCount;i++)
 	{
+		pFile->dwWchCount = bSwapEndian ? SwapInt32(pFile->dwWchCount) : pFile->dwWchCount;
 		dwTemp+=sizeof(C4JStorage::DLC_FILE_DETAILS)+pFile->dwWchCount*sizeof(WCHAR);
 		pFile = (C4JStorage::DLC_FILE_DETAILS *)&pbData[dwTemp];
 	}
@@ -430,6 +455,13 @@ bool DLCManager::processDLCDataFile(DWORD &dwFilesProcessed, PBYTE pbData, DWORD
 
 	for(unsigned int i=0;i<uiFileCount;i++)
 	{
+		pFile->dwType = bSwapEndian ? SwapInt32(pFile->dwType) : pFile->dwType;
+		pFile->uiFileSize = bSwapEndian ? SwapInt32(pFile->uiFileSize) : pFile->uiFileSize;
+		char16_t* wchFile = reinterpret_cast<char16_t*>(pFile->wchFile);
+		if (bSwapEndian) {
+		    SwapUTF16Bytes(wchFile, pFile->dwWchCount);
+		}
+
 		EDLCType type = static_cast<EDLCType>(pFile->dwType);
 
 		DLCFile *dlcFile = nullptr;
@@ -445,12 +477,18 @@ bool DLCManager::processDLCDataFile(DWORD &dwFilesProcessed, PBYTE pbData, DWORD
 		}
 
 		// Params
-		uiParameterCount=*(unsigned int *)pbTemp;
+		uiParameterCount=readUInt32(pbTemp, bSwapEndian);
 		pbTemp+=sizeof(int);
 		pParams = (C4JStorage::DLC_FILE_PARAM *)pbTemp;
 		for(unsigned int j=0;j<uiParameterCount;j++)
 		{
 			//DLCManager::EDLCParameterType paramType = DLCManager::e_DLCParamType_Invalid;
+			pParams->dwType = bSwapEndian ? SwapInt32(pParams->dwType) : pParams->dwType;
+			pParams->dwWchCount = bSwapEndian ? SwapInt32(pParams->dwWchCount) : pParams->dwWchCount;
+			char16_t* wchData = reinterpret_cast<char16_t*>(pParams->wchData);
+			if (bSwapEndian) {
+			    SwapUTF16Bytes(wchData, pParams->dwWchCount);
+			}
 
 			auto it = parameterMapping.find(pParams->dwType);
 
