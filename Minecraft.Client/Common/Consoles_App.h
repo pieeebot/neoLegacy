@@ -753,10 +753,14 @@ public:
 private:
 	BYTE m_playerColours[MINECRAFT_NET_MAX_PLAYERS]; // An array of QNet small-id's
 	unsigned int m_playerGamePrivileges[MINECRAFT_NET_MAX_PLAYERS];
+	struct PlayerMapIconEntry { wchar_t name[32]; char icon; };
+	PlayerMapIconEntry m_playerMapIcons[MINECRAFT_NET_MAX_PLAYERS];
 
 public:
 	void UpdatePlayerInfo(BYTE networkSmallId, SHORT playerColourIndex, unsigned int playerGamePrivileges);
 	short GetPlayerColour(BYTE networkSmallId);
+	void SetPlayerMapIcon(const wchar_t* name, char icon);
+	char GetPlayerMapIconByName(const wchar_t* name);
 	unsigned int GetPlayerPrivileges(BYTE networkSmallId);
 
 	wstring getEntityName(eINSTANCEOF type);

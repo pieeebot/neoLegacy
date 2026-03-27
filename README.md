@@ -14,6 +14,9 @@ This project is based on source code of Minecraft Legacy Console Edition v1.6.05
 
 ## Latest:
 
+Player list map icon color fix:
+- The colored map icon shown next to each player in the tab player list and teleport menu now matches their actual map marker color. Previously the icon was determined by a broken small-ID lookup that produced incorrect colors. The icon is now computed client-side using the same hash the map renderer uses, keyed by player name for reliable lookup
+
 End dimension fixes for dedicated servers:
 - Fixed the Ender Dragon being immune to melee damage on dedicated servers. The server's entity ID allocator (smallId pool) assigned non-sequential IDs to the dragon's body parts, but the client assumed sequential offsets. Melee attacks targeted IDs the server didn't recognize, so hits were silently dropped. The server now reassigns sub-entity IDs to be sequential from the parent when an entity with parts is added to the level
 - Fixed entering the End exit portal after defeating the dragon crashing the game. The player entity was never added to the Overworld level during the dimension transition, leaving the player as a ghost entity that caused a crash on the next interaction

@@ -512,7 +512,7 @@ UIScene_InGameInfoMenu::PlayerInfo *UIScene_InGameInfoMenu::BuildPlayerInfo(INet
 	}
 
 	info->m_voiceStatus = voiceStatus;
-	info->m_colorState = app.GetPlayerColour(info->m_smallId);
+	info->m_colorState = app.GetPlayerMapIconByName(player->GetOnlineName());
 	info->m_name = playerName;
 
 	return info;

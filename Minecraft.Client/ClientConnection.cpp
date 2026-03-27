@@ -66,6 +66,30 @@
 #include "..\Minecraft.World\GenericStats.h"
 #endif
 
+namespace
+{
+	char mapIconToFrame(char iconSlot)
+	{
+		if (iconSlot >= 8) return iconSlot - 4;
+		return iconSlot;
+	}
+
+	// Same hash as getRandomPlayerMapIcon in MapItemSavedData.cpp, returning
+	// the Iggy/SWF frame index (0-7) instead of the raw icon slot.
+	char computePlayerMapFrame(int entityId, int playerIndex)
+	{
+		static const char PLAYER_MAP_ICON_SLOTS[] = { 0, 1, 2, 3, 8, 9, 10, 11 };
+		unsigned int seed = static_cast<unsigned int>(entityId);
+		seed ^= static_cast<unsigned int>(playerIndex * 0x9E3779B9u);
+		seed ^= (seed >> 16);
+		seed *= 0x7FEB352Du;
+		seed ^= (seed >> 15);
+		seed *= 0x846CA68Bu;
+		seed ^= (seed >> 16);
+		return mapIconToFrame(PLAYER_MAP_ICON_SLOTS[seed % 8]);
+	}
+}
+
 ClientConnection::ClientConnection(Minecraft *minecraft, const wstring& ip, int port)
 {
 	// 4J Stu - No longer used as we use the socket version below.
@@ -377,6 +401,7 @@ void ClientConnection::handleLogin(shared_ptr<LoginPacket> packet)
 
 		BYTE networkSmallId = getSocket()->getSmallId();
 		app.UpdatePlayerInfo(networkSmallId, packet->m_playerIndex, packet->m_uiGamePrivileges);
+		app.SetPlayerMapIcon(minecraft->player->getName().c_str(), computePlayerMapFrame(packet->clientVersion, packet->m_playerIndex));
 		minecraft->player->setPlayerGamePrivilege(Player::ePlayerGamePrivilege_All, packet->m_uiGamePrivileges);
 
 		// Assume all privileges are on, so that the first message we see only indicates things that have been turned off
@@ -447,6 +472,7 @@ void ClientConnection::handleLogin(shared_ptr<LoginPacket> packet)
 
 		BYTE networkSmallId = getSocket()->getSmallId();
 		app.UpdatePlayerInfo(networkSmallId, packet->m_playerIndex, packet->m_uiGamePrivileges);
+		app.SetPlayerMapIcon(player->getName().c_str(), computePlayerMapFrame(packet->clientVersion, packet->m_playerIndex));
 		player->setPlayerGamePrivilege(Player::ePlayerGamePrivilege_All, packet->m_uiGamePrivileges);
 
 		// Assume all privileges are on, so that the first message we see only indicates things that have been turned off
@@ -976,6 +1002,7 @@ void ClientConnection::handleAddPlayer(shared_ptr<AddPlayerPacket> packet)
 	player->setPlayerIndex( packet->m_playerIndex );
 	player->setCustomSkin( packet->m_skinId );
 	player->setCustomCape( packet->m_capeId );
+	app.SetPlayerMapIcon(packet->name.c_str(), computePlayerMapFrame(packet->id, packet->m_playerIndex));
 	player->setPlayerGamePrivilege(Player::ePlayerGamePrivilege_All, packet->m_uiGamePrivileges);
 
     if (!player->customTextureUrl.empty() && player->customTextureUrl.substr(0, 3).compare(L"def") != 0 && !app.IsFileInMemoryTextures(player->customTextureUrl))

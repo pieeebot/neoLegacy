@@ -187,6 +187,7 @@ CMinecraftApp::CMinecraftApp()
 #endif
 
 	ZeroMemory(m_playerColours,MINECRAFT_NET_MAX_PLAYERS);
+	ZeroMemory(m_playerMapIcons,MINECRAFT_NET_MAX_PLAYERS);
 
 	m_iDLCOfferC=0;
 	m_bAllDLCContentRetrieved=true;
@@ -8531,6 +8532,39 @@ short CMinecraftApp::GetPlayerColour(BYTE networkSmallId)
 		}
 	}
 	return index;
+}
+
+void CMinecraftApp::SetPlayerMapIcon(const wchar_t* name, char icon)
+{
+	if (name == nullptr) return;
+	// Update existing entry or use first empty slot
+	int emptySlot = -1;
+	for (int i = 0; i < MINECRAFT_NET_MAX_PLAYERS; ++i)
+	{
+		if (m_playerMapIcons[i].name[0] != 0 && _wcsicmp(m_playerMapIcons[i].name, name) == 0)
+		{
+			m_playerMapIcons[i].icon = icon;
+			return;
+		}
+		if (emptySlot < 0 && m_playerMapIcons[i].name[0] == 0)
+			emptySlot = i;
+	}
+	if (emptySlot >= 0)
+	{
+		wcsncpy_s(m_playerMapIcons[emptySlot].name, 32, name, _TRUNCATE);
+		m_playerMapIcons[emptySlot].icon = icon;
+	}
+}
+
+char CMinecraftApp::GetPlayerMapIconByName(const wchar_t* name)
+{
+	if (name == nullptr) return 0;
+	for (int i = 0; i < MINECRAFT_NET_MAX_PLAYERS; ++i)
+	{
+		if (m_playerMapIcons[i].name[0] != 0 && _wcsicmp(m_playerMapIcons[i].name, name) == 0)
+			return m_playerMapIcons[i].icon;
+	}
+	return 0;
 }
 
 

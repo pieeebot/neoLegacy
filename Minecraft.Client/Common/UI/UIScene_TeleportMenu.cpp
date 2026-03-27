@@ -193,12 +193,12 @@ void UIScene_TeleportMenu::tick()
 		{
 			m_players[i] = player->GetSmallId();
 
-			short icon = app.GetPlayerColour( m_players[i] );
+			short icon = static_cast<short>(app.GetPlayerMapIconByName(player->GetOnlineName()));
 
 			if(icon != m_playersColourState[i])
 			{
 				m_playersColourState[i] = icon;
-				m_playerList.setPlayerIcon( i, (int)app.GetPlayerColour( m_players[i] ) );
+				m_playerList.setPlayerIcon( i, (int)icon );
 			}
 
 			wstring playerName = L"";
