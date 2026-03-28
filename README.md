@@ -30,3 +30,10 @@ Huge thanks to the following projects:
 2. Clone the repository.
 3. Open the project folder from Visual Studio.
 4. Set the build configuration to **Windows64 - Debug** (Release is also ok but missing some debug features), then build and run.
+
+### GNU/Linux
+
+We provide both a generic build script and a Nix flake.
+
+- Nix: `nix run .#client`
+- Generic: `./build-linux.sh`

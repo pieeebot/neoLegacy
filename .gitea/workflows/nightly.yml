@@ -25,34 +25,40 @@ jobs:
       - name: Checkout
         uses: https://code.forgejo.org/actions/checkout@v4
 
-      - name: Install Nix
-        uses: https://github.com/cachix/install-nix-action@v27
-        with:
-          extra_nix_config: |
-            experimental-features = nix-command flakes
-            accept-flake-config = true
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            cmake ninja-build rsync zip \
+            clang lld llvm
 
-      - name: Cache Nix store
+      - name: Install xwin
+        run: |
+          cargo install xwin --locked
+
+      - name: Cache Windows SDK
         uses: https://code.forgejo.org/actions/cache@v4
         with:
-          path: |
-            ~/.cache/nix
-            /nix/store
-            /nix/var/nix/db
-            /nix/var/nix/gcroots
-          key: nix-${{ runner.os }}-${{ hashFiles('flake.lock') }}
+          path: ~/.cache/xwin
+          key: xwin-${{ runner.os }}-v1
           restore-keys: |
-            nix-${{ runner.os }}-
+            xwin-${{ runner.os }}-
 
       - name: Build
-        run: nix build .#unwrapped --out-link result-unwrapped --max-jobs 1 --cores 1
+        run: |
+          chmod +x build-linux.sh
+          INSTALL_PREFIX=$PWD/result ./build-linux.sh . Release
 
       - name: Package artifacts
         run: |
           mkdir -p staging
-          cd result-unwrapped/client
+          cd result/client
           zip -r ../../staging/LCEWindows64.zip .
           cp Minecraft.Client.exe ../../staging/
+          cd ../..
+          cd result/server
+          zip -r ../../staging/LCEWindows64Server.zip .
+          cp Minecraft.Server.exe ../../staging/
           cd ../..
 
       - name: Upload build artifacts
@@ -96,7 +102,7 @@ jobs:
               -H "$AUTH" -H "Content-Type: application/json" \
               "$API/repos/$REPO/releases/$RELEASE_ID" \
               -d '{
-                "name": "Nightly Client Release",
+                "name": "Nightly Release",
                 "prerelease": true,
                 "body": "Requires at least Windows 7 and a DirectX 11 compatible GPU.\n\n# 🚨 First time here? 🚨\nDownload `LCEWindows64.zip` and extract it."
               }'
@@ -107,7 +113,7 @@ jobs:
               "$API/repos/$REPO/releases" \
               -d '{
                 "tag_name": "'"$TAG"'",
-                "name": "Nightly Client Release",
+                "name": "Nightly Release",
                 "prerelease": true,
                 "body": "Requires at least Windows 7 and a DirectX 11 compatible GPU.\n\n# 🚨 First time here? 🚨\nDownload `LCEWindows64.zip` and extract it."
               }')
