@@ -32,23 +32,12 @@ jobs:
             cmake ninja-build rsync zip \
             clang lld llvm clang-tools
 
-      - name: Install Rust toolchain
-        uses: https://codeberg.org/wackbyte/rust-toolchain@trunk
-        with:
-          toolchain: stable
-
-      - name: Install xwin
+      - name: Install xwin (Binary)
         run: |
-          cargo install xwin --locked
-
-      - name: Cache Windows SDK
-        uses: https://code.forgejo.org/actions/cache@v4
-        with:
-          path: .xwin
-          key: xwin-${{ runner.os }}-v1
-          restore-keys: |
-            xwin-${{ runner.os }}-
-
+          curl -L https://github.com/zeromake/xwin/releases/latest/download/xwin-x86_64-unknown-linux-musl.tar.gz | tar xz
+          sudo mv xwin /usr/bin/
+          xwin --version
+          
       - name: Create Tool Symlinks
         run: |
           CLANG_CL_PATH=$(ls /usr/bin/clang-cl-[0-9]* | head -n 1)
