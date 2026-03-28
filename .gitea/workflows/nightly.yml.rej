@@ -1,0 +1,20 @@
+diff a/.gitea/workflows/nightly.yml b/.gitea/workflows/nightly.yml	(rejected hunks)
+@@ -4,15 +4,12 @@
+   workflow_dispatch:
+   push:
+     branches:
+-      - 'main'
++      - main
+     paths-ignore:
+       - '.gitignore'
+       - '*.md'
+-      - '.gitea/**'
+-      - '!.gitea/workflows/nightly.yml'
+-
+-permissions:
+-  contents: write
++      - '.forgejo/**'
++      - '!.forgejo/workflows/nightly.yml'
+ 
+ concurrency:
+   group: nightly

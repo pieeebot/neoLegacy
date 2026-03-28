@@ -4,12 +4,15 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - main
+      - 'main'
     paths-ignore:
       - '.gitignore'
       - '*.md'
-      - '.forgejo/**'
-      - '!.forgejo/workflows/nightly.yml'
+      - '.gitea/**'
+      - '!.gitea/workflows/nightly.yml'
+
+permissions:
+  contents: write
 
 concurrency:
   group: nightly
@@ -32,7 +35,11 @@ jobs:
       - name: Cache Nix store
         uses: https://code.forgejo.org/actions/cache@v4
         with:
-          path: ~/.cache/nix
+          path: |
+            ~/.cache/nix
+            /nix/store
+            /nix/var/nix/db
+            /nix/var/nix/gcroots
           key: nix-${{ runner.os }}-${{ hashFiles('flake.lock') }}
           restore-keys: |
             nix-${{ runner.os }}-
