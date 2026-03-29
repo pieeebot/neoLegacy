@@ -18,7 +18,7 @@ public:
 	static const wstring SET_ITEM_NAME_PACKET;
 
 	// Security: stream cipher handshake channels
-	static const wstring CIPHER_KEY_CHANNEL;   // server->client: carries 16-byte key
+	static const wstring CIPHER_KEY_CHANNEL;   // server->client: carries 32-byte key (16 AES key + 16 IV)
 	static const wstring CIPHER_ACK_CHANNEL;   // client->server: ack (empty payload)
 	static const wstring CIPHER_ON_CHANNEL;    // server->client: activation signal (empty payload)
 

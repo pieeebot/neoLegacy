@@ -30,7 +30,7 @@ The dedicated server now includes a comprehensive security system to protect aga
 
 | Key | Default | Description |
 |-----|---------|-------------|
-| `enable-stream-cipher` | `true` | Encrypt all game traffic with a per-session stream cipher |
+| `enable-stream-cipher` | `true` | Encrypt all game traffic with AES-128-CTR |
 | `require-secure-client` | `true` | Kick clients that don't complete the cipher handshake (blocks old clients) |
 | `require-challenge-token` | `false` | Require identity token verification to prevent XUID impersonation |
 | `proxy-protocol` | `false` | Parse PROXY protocol v1 headers for real client IPs behind a tunnel |

@@ -2,9 +2,8 @@
 #include "StreamCipher.h"
 
 #ifdef _WINDOWS64
-#include <Windows.h>
-#include <wincrypt.h>
-#pragma comment(lib, "Advapi32.lib")
+#include <bcrypt.h>
+#pragma comment(lib, "bcrypt.lib")
 #endif
 
 #include <cstring>
@@ -14,27 +13,142 @@ namespace ServerRuntime
 	namespace Security
 	{
 		StreamCipher::StreamCipher()
-			: m_sendPos(0)
-			, m_recvPos(0)
+			: m_sendKeystreamPos(AES_BLOCK)
+			, m_recvKeystreamPos(AES_BLOCK)
 			, m_active(false)
 		{
-			memset(m_key, 0, sizeof(m_key));
+#ifdef _WINDOWS64
+			m_hAlg = nullptr;
+			m_hKey = nullptr;
+#endif
+			memset(m_sendCounter, 0, sizeof(m_sendCounter));
+			memset(m_recvCounter, 0, sizeof(m_recvCounter));
+			memset(m_sendKeystream, 0, sizeof(m_sendKeystream));
+			memset(m_recvKeystream, 0, sizeof(m_recvKeystream));
 		}
 
-		void StreamCipher::Initialize(const uint8_t key[KEY_SIZE])
+		StreamCipher::~StreamCipher()
 		{
-			memcpy(m_key, key, KEY_SIZE);
-			m_sendPos = 0;
-			m_recvPos = 0;
+			Reset();
+		}
+
+		void StreamCipher::Initialize(const uint8_t key[KEY_SIZE], Role role)
+		{
+			if (m_active)
+			{
+				Reset();
+			}
+
+#ifdef _WINDOWS64
+			NTSTATUS status;
+
+			status = BCryptOpenAlgorithmProvider(&m_hAlg, BCRYPT_AES_ALGORITHM, nullptr, 0);
+			if (!BCRYPT_SUCCESS(status))
+			{
+				m_hAlg = nullptr;
+				return;
+			}
+
+			// Set ECB mode -- we manage CTR ourselves for streaming support
+			status = BCryptSetProperty(m_hAlg, BCRYPT_CHAINING_MODE,
+				(PUCHAR)BCRYPT_CHAIN_MODE_ECB, sizeof(BCRYPT_CHAIN_MODE_ECB), 0);
+			if (!BCRYPT_SUCCESS(status))
+			{
+				BCryptCloseAlgorithmProvider(m_hAlg, 0);
+				m_hAlg = nullptr;
+				return;
+			}
+
+			// Create symmetric key from first 16 bytes
+			status = BCryptGenerateSymmetricKey(m_hAlg, &m_hKey, nullptr, 0,
+				(PUCHAR)key, AES_BLOCK, 0);
+			if (!BCRYPT_SUCCESS(status))
+			{
+				BCryptCloseAlgorithmProvider(m_hAlg, 0);
+				m_hAlg = nullptr;
+				m_hKey = nullptr;
+				return;
+			}
+
+			// Derive separate counters for send and recv to prevent CTR nonce reuse.
+			// Flipping the top bit of byte 0 guarantees the two counter spaces never
+			// overlap (one in 0x00-0x7F range, the other in 0x80-0xFF for byte 0).
+			// Server send = IV,        Server recv = IV^0x80
+			// Client send = IV^0x80,   Client recv = IV
+			// This ensures: server-send matches client-recv, client-send matches server-recv.
+			uint8_t ivBase[AES_BLOCK];
+			uint8_t ivFlipped[AES_BLOCK];
+			memcpy(ivBase, key + AES_BLOCK, AES_BLOCK);
+			memcpy(ivFlipped, key + AES_BLOCK, AES_BLOCK);
+			ivFlipped[0] ^= 0x80;
+
+			if (role == Server)
+			{
+				memcpy(m_sendCounter, ivBase, AES_BLOCK);
+				memcpy(m_recvCounter, ivFlipped, AES_BLOCK);
+			}
+			else
+			{
+				memcpy(m_sendCounter, ivFlipped, AES_BLOCK);
+				memcpy(m_recvCounter, ivBase, AES_BLOCK);
+			}
+
+			SecureZeroMemory(ivBase, sizeof(ivBase));
+			SecureZeroMemory(ivFlipped, sizeof(ivFlipped));
+
+			m_sendKeystreamPos = AES_BLOCK;  // force generation on first use
+			m_recvKeystreamPos = AES_BLOCK;
 			m_active = true;
+#endif
 		}
 
 		void StreamCipher::Reset()
 		{
-			SecureZeroMemory(m_key, sizeof(m_key));
-			m_sendPos = 0;
-			m_recvPos = 0;
+#ifdef _WINDOWS64
+			if (m_hKey != nullptr)
+			{
+				BCryptDestroyKey(m_hKey);
+				m_hKey = nullptr;
+			}
+			if (m_hAlg != nullptr)
+			{
+				BCryptCloseAlgorithmProvider(m_hAlg, 0);
+				m_hAlg = nullptr;
+			}
+#endif
+			SecureZeroMemory(m_sendCounter, sizeof(m_sendCounter));
+			SecureZeroMemory(m_recvCounter, sizeof(m_recvCounter));
+			SecureZeroMemory(m_sendKeystream, sizeof(m_sendKeystream));
+			SecureZeroMemory(m_recvKeystream, sizeof(m_recvKeystream));
+			m_sendKeystreamPos = AES_BLOCK;
+			m_recvKeystreamPos = AES_BLOCK;
 			m_active = false;
+		}
+
+		void StreamCipher::IncrementCounter(uint8_t counter[AES_BLOCK])
+		{
+			// Big-endian 128-bit increment (standard NIST CTR convention)
+			for (int i = AES_BLOCK - 1; i >= 0; --i)
+			{
+				if (++counter[i] != 0)
+					break;
+			}
+		}
+
+		void StreamCipher::GenerateKeystream(uint8_t counter[AES_BLOCK], uint8_t keystream[AES_BLOCK])
+		{
+#ifdef _WINDOWS64
+			ULONG cbResult = 0;
+			NTSTATUS status = BCryptEncrypt(m_hKey, counter, AES_BLOCK, nullptr,
+				nullptr, 0, keystream, AES_BLOCK, &cbResult, 0);  // flags=0: exact block, no padding
+			if (!BCRYPT_SUCCESS(status))
+			{
+				SecureZeroMemory(keystream, AES_BLOCK);
+				m_active = false;
+				return;
+			}
+			IncrementCounter(counter);
+#endif
 		}
 
 		void StreamCipher::Encrypt(uint8_t *data, int length)
@@ -46,8 +160,12 @@ namespace ServerRuntime
 
 			for (int i = 0; i < length; ++i)
 			{
-				data[i] ^= m_key[m_sendPos];
-				m_sendPos = (m_sendPos + 1) % KEY_SIZE;
+				if (m_sendKeystreamPos >= AES_BLOCK)
+				{
+					GenerateKeystream(m_sendCounter, m_sendKeystream);
+					m_sendKeystreamPos = 0;
+				}
+				data[i] ^= m_sendKeystream[m_sendKeystreamPos++];
 			}
 		}
 
@@ -60,25 +178,23 @@ namespace ServerRuntime
 
 			for (int i = 0; i < length; ++i)
 			{
-				data[i] ^= m_key[m_recvPos];
-				m_recvPos = (m_recvPos + 1) % KEY_SIZE;
+				if (m_recvKeystreamPos >= AES_BLOCK)
+				{
+					GenerateKeystream(m_recvCounter, m_recvKeystream);
+					m_recvKeystreamPos = 0;
+				}
+				data[i] ^= m_recvKeystream[m_recvKeystreamPos++];
 			}
 		}
 
 		bool StreamCipher::GenerateKey(uint8_t outKey[KEY_SIZE])
 		{
 #ifdef _WINDOWS64
-			HCRYPTPROV hProv = 0;
-			if (!CryptAcquireContext(&hProv, nullptr, nullptr, PROV_RSA_AES, CRYPT_VERIFYCONTEXT))
-			{
-				return false;
-			}
-
-			BOOL result = CryptGenRandom(hProv, KEY_SIZE, outKey);
-			CryptReleaseContext(hProv, 0);
-			return result != FALSE;
+			NTSTATUS status = BCryptGenRandom(nullptr, outKey, KEY_SIZE,
+				BCRYPT_USE_SYSTEM_PREFERRED_RNG);
+			return BCRYPT_SUCCESS(status);
 #else
-			// Fallback: not cryptographically random, but better than nothing
+			// Fallback: not cryptographically random
 			for (int i = 0; i < KEY_SIZE; ++i)
 			{
 				outKey[i] = static_cast<uint8_t>(rand() & 0xFF);

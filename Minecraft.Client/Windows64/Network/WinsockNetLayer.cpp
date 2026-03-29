@@ -310,7 +310,7 @@ bool WinsockNetLayer::SendAckAndActivateClientSendCipher()
 	{
 		// Activate send cipher immediately after the ack is on the wire
 		EnterCriticalSection(&s_clientCipherLock);
-		s_clientSendCipher.Initialize(s_clientPendingKey);
+		s_clientSendCipher.Initialize(s_clientPendingKey, ServerRuntime::Security::StreamCipher::Client);
 		LeaveCriticalSection(&s_clientCipherLock);
 		app.DebugPrintf("Client: Send cipher activated (MC|CAck sent)\n");
 	}
@@ -329,7 +329,7 @@ bool WinsockNetLayer::SendAckAndActivateClientSendCipher()
 void WinsockNetLayer::ActivateClientRecvCipher()
 {
 	EnterCriticalSection(&s_clientCipherLock);
-	s_clientRecvCipher.Initialize(s_clientPendingKey);
+	s_clientRecvCipher.Initialize(s_clientPendingKey, ServerRuntime::Security::StreamCipher::Client);
 	SecureZeroMemory(s_clientPendingKey, sizeof(s_clientPendingKey));
 	s_clientKeyStored = false;
 	LeaveCriticalSection(&s_clientCipherLock);

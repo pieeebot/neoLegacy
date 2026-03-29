@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "IdentityTokenManager.h"
-#include "StreamCipher.h"
+
+#ifdef _WINDOWS64
+#include <bcrypt.h>
+#endif
 
 #include "..\Common\FileUtils.h"
 #include "..\Common\StringUtils.h"
@@ -136,15 +139,20 @@ namespace ServerRuntime
 
 		bool IdentityTokenManager::IssueToken(PlayerUID xuid, uint8_t outToken[TOKEN_SIZE])
 		{
-			// Generate a random 32-byte token using two 16-byte CryptGenRandom calls
+			// Generate a random 32-byte identity token
 			uint8_t token[TOKEN_SIZE];
-			bool ok1 = StreamCipher::GenerateKey(token);
-			bool ok2 = StreamCipher::GenerateKey(token + StreamCipher::KEY_SIZE);
-			if (!ok1 || !ok2)
+#ifdef _WINDOWS64
+			NTSTATUS status = BCryptGenRandom(nullptr, token, TOKEN_SIZE,
+				BCRYPT_USE_SYSTEM_PREFERRED_RNG);
+			if (!BCRYPT_SUCCESS(status))
 			{
 				SecureZeroMemory(token, sizeof(token));
 				return false;
 			}
+#else
+			for (int i = 0; i < TOKEN_SIZE; ++i)
+				token[i] = static_cast<uint8_t>(rand() & 0xFF);
+#endif
 
 			EnterCriticalSection(&m_lock);
 			m_tokens[xuid] = std::vector<uint8_t>(token, token + TOKEN_SIZE);
