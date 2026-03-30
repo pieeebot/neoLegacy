@@ -21,7 +21,7 @@ This project is based on source code of Minecraft Legacy Console Edition v1.6.05
 
 ### Graphics Settings Fixes
 
-- The graphics menu layout has been fixed: the render distance slider is now no longer occluded by the gamma slider. Also, resolved spacing erro for the checkbox options due to an incomplete removal of the Bedrock Fog toggle option (the setting has been reinstated).
+- The graphics menu layout has been fixed: the render distance slider is now no longer occluded by the gamma slider. Also, resolved spacing error for the checkbox options due to an incomplete removal of the Bedrock Fog toggle option (the setting has been reinstated).
 
 ### Hardcore Hearts
 
