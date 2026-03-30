@@ -92,9 +92,6 @@ void IUIScene_CreativeMenu::staticCtor()
 		ITEM_AUX(Tile::prismarine_Id,	PrismarineTile::TYPE_DARK)
 		ITEM(Tile::fence_Id)
 
-		ITEM_AUX(Tile::dirt_Id, DirtTile::COARSE_DIRT)
-		ITEM_AUX(Tile::dirt_Id, DirtTile::PODZOL)
-
 		// TU25
 		ITEM(Tile::spruceFence_Id)
 		ITEM(Tile::birchFence_Id)
@@ -114,6 +111,8 @@ void IUIScene_CreativeMenu::staticCtor()
 		ITEM_AUX(Tile::monsterStoneEgg_Id,StoneMonsterTile::HOST_COBBLE)
 		ITEM_AUX(Tile::monsterStoneEgg_Id,StoneMonsterTile::HOST_STONEBRICK)
 		ITEM(Tile::mycel_Id)
+		ITEM_AUX(Tile::dirt_Id, DirtTile::COARSE_DIRT)
+		ITEM_AUX(Tile::dirt_Id, DirtTile::PODZOL)
 		ITEM(Tile::netherBrick_Id)
 		ITEM(Tile::endStone_Id)
 		ITEM_AUX(Tile::quartzBlock_Id,QuartzBlockTile::TYPE_CHISELED)
