@@ -14,6 +14,12 @@ This project is based on source code of Minecraft Legacy Console Edition v1.6.05
 
 ## Latest:
 
+### Render-Distance-Independent Player List
+
+- The Tab player list now shows all players on the server regardless of render distance. Previously, the player list was tied to entity tracking -- players only appeared in Tab when their entity was within render distance, and disappeared when they moved out of range
+- The fix uses custom payload channels (`MC|ForkHello`, `MC|ForkPLeave`) to signal server identity and player disconnects, so the client can distinguish "player went out of range" from "player left the server." Entity despawns no longer clear the IQNet slot; only an explicit disconnect signal does
+- Fully backwards-compatible: no existing packet wire formats are changed. Upstream clients ignore the unknown channels, and fork clients connecting to upstream servers fall back to the old entity-tracking-based behavior
+
 ### Graphics Settings Menu Fixes
 
 - Fixed keyboard/gamepad navigation skipping VSync, Fullscreen, and Render Distance options. The SWF focus chain only linked the original console controls; added C++ post-init rewiring of `m_objNavDown`/`m_objNavUp` via Iggy so all controls are reachable
@@ -120,7 +126,7 @@ proxy-protocol=true
 
 - The Tab player list now correctly shows all connected players on dedicated servers. Previously only the local player was visible because remote players were never registered in the client's network player tracking when their `AddPlayerPacket` arrived
 - The dedicated server's phantom host entry (slot 0, empty name) is now filtered from the list
-- Players are properly removed from the list when they disconnect, using gamertag matching since dedicated server XUIDs are not available on the client
+- ~~Players are properly removed from the list when they disconnect, using gamertag matching since dedicated server XUIDs are not available on the client~~ This initial implementation incorrectly tied IQNet cleanup to entity removal (`RemoveEntitiesPacket`), which is sent both when a player goes out of render distance and when they disconnect. This caused players to disappear from the Tab list whenever they moved out of tracking range. Fixed in the "Render-Distance-Independent Player List" update above
 
 ### SRV Record Support and Async Join Refactor
 

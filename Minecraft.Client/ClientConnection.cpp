@@ -135,6 +135,7 @@ ClientConnection::ClientConnection(Minecraft *minecraft, Socket *socket, int iUs
 	started = false;
 	savedDataStorage = new SavedDataStorage(nullptr);
 	maxPlayers = 20;
+	m_isForkServer = false;
 
 	this->minecraft = minecraft;
 
@@ -1141,7 +1142,11 @@ void ClientConnection::handleMoveEntitySmall(shared_ptr<MoveEntityPacketSmall> p
 void ClientConnection::handleRemoveEntity(shared_ptr<RemoveEntitiesPacket> packet)
 {
 #ifdef _WINDOWS64
-	if (!g_NetworkManager.IsHost())
+	// On fork servers, IQNet cleanup is handled by the MC|ForkPLeave custom
+	// payload so players stay in Tab regardless of render distance.  On
+	// upstream servers (no MC|ForkHello received), fall back to the old
+	// behaviour of cleaning up IQNet here.
+	if (!m_isForkServer && !g_NetworkManager.IsHost())
 	{
 		for (int i = 0; i < packet->ids.length; i++)
 		{
@@ -1151,7 +1156,6 @@ void ClientConnection::handleRemoveEntity(shared_ptr<RemoveEntitiesPacket> packe
 				shared_ptr<Player> player = dynamic_pointer_cast<Player>(entity);
 				if (player != nullptr)
 				{
-					// Match by gamertag in the IQNet array (XUID may be 0 on dedicated servers)
 					for (int s = 1; s < MINECRAFT_NET_MAX_PLAYERS; ++s)
 					{
 						IQNetPlayer* qp = &IQNet::m_player[s];
@@ -3897,6 +3901,44 @@ void ClientConnection::handleCustomPayload(shared_ptr<CustomPayloadPacket> custo
 		else
 		{
 			app.DebugPrintf("Client: Received malformed MC|CKey (length=%d)\n", customPayloadPacket->length);
+		}
+		return;
+	}
+
+	// Fork server identification: enables render-distance-independent player list
+	if (CustomPayloadPacket::FORK_HELLO_CHANNEL.compare(customPayloadPacket->identifier) == 0)
+	{
+		m_isForkServer = true;
+		app.DebugPrintf("Client: Connected to fork server\n");
+		return;
+	}
+
+	// Fork server player leave: clean up IQNet slot so player leaves Tab list
+	if (CustomPayloadPacket::FORK_PLAYER_LEAVE_CHANNEL.compare(customPayloadPacket->identifier) == 0)
+	{
+		if (customPayloadPacket->data.data != nullptr && customPayloadPacket->length > 0)
+		{
+			int nameLen = customPayloadPacket->length / static_cast<int>(sizeof(wchar_t));
+			wstring leavingName(reinterpret_cast<const wchar_t*>(customPayloadPacket->data.data), nameLen);
+
+			for (int s = 1; s < MINECRAFT_NET_MAX_PLAYERS; ++s)
+			{
+				IQNetPlayer* qp = &IQNet::m_player[s];
+				if (qp->GetCustomDataValue() != 0 &&
+					_wcsicmp(qp->m_gamertag, leavingName.c_str()) == 0)
+				{
+					extern CPlatformNetworkManagerStub* g_pPlatformNetworkManager;
+					g_pPlatformNetworkManager->NotifyPlayerLeaving(qp);
+					qp->m_smallId = 0;
+					qp->m_isRemote = false;
+					qp->m_isHostPlayer = false;
+					qp->m_resolvedXuid = INVALID_XUID;
+					qp->m_gamertag[0] = 0;
+					qp->SetCustomDataValue(0);
+					app.DebugPrintf("Client: Player \"%ls\" left fork server, cleared IQNet slot %d\n", leavingName.c_str(), s);
+					break;
+				}
+			}
 		}
 		return;
 	}

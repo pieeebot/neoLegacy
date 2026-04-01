@@ -27,6 +27,10 @@ public:
 	static const wstring IDENTITY_TOKEN_CHALLENGE;   // server->client: request stored token
 	static const wstring IDENTITY_TOKEN_RESPONSE;    // client->server: present stored token
 
+	// Fork extensions: server capability and player lifecycle
+	static const wstring FORK_HELLO_CHANNEL;         // server->client: identifies fork server (empty payload)
+	static const wstring FORK_PLAYER_LEAVE_CHANNEL;  // server->client: player disconnected (payload: UTF gamertag)
+
 	wstring identifier;
 	int length;
 	byteArray data;

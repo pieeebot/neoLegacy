@@ -22,6 +22,9 @@ const wstring CustomPayloadPacket::IDENTITY_TOKEN_ISSUE = L"MC|CTIssue";
 const wstring CustomPayloadPacket::IDENTITY_TOKEN_CHALLENGE = L"MC|CTChallenge";
 const wstring CustomPayloadPacket::IDENTITY_TOKEN_RESPONSE = L"MC|CTResponse";
 
+const wstring CustomPayloadPacket::FORK_HELLO_CHANNEL = L"MC|ForkHello";
+const wstring CustomPayloadPacket::FORK_PLAYER_LEAVE_CHANNEL = L"MC|ForkPLeave";
+
 CustomPayloadPacket::CustomPayloadPacket()
 	: length(0)
 {

@@ -48,6 +48,7 @@ private:
 
 	std::unordered_set<int> m_trackedEntityIds;
 	std::unordered_set<int64_t> m_visibleChunks;
+	bool m_isForkServer;  // true when connected to a fork server (received MC|ForkHello)
 
 	static int64_t chunkKey(int x, int z) { return ((int64_t)x << 32) | ((int64_t)z & 0xFFFFFFFF); }
 

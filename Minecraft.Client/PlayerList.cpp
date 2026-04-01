@@ -290,6 +290,12 @@ bool PlayerList::placeNewPlayer(Connection *connection, shared_ptr<ServerPlayer>
 	playerConnection->send(std::make_shared<SetCarriedItemPacket>(player->inventory->selected));
 	delete spawnPos;
 
+	// Identify this server as a fork so the client can enable extended
+	// features (e.g. render-distance-independent player list).  Upstream
+	// clients will silently ignore the unknown channel.
+	playerConnection->send(std::make_shared<CustomPayloadPacket>(
+		CustomPayloadPacket::FORK_HELLO_CHANNEL, byteArray()));
+
 	updateEntireScoreboard(reinterpret_cast<ServerScoreboard *>(level->getScoreboard()), player);
 
 	sendLevelInfo(player, level);
@@ -654,7 +660,17 @@ if (player->riding != nullptr)
 	{
 		players.erase(it);
 	}
-	//broadcastAll(shared_ptr<PlayerInfoPacket>( new PlayerInfoPacket(player->name, false, 9999) ) );
+	// Notify fork clients that this player has left the server so they can
+	// clean up IQNet/Tab list entries.  Uses a custom payload channel so the
+	// wire format of existing packets is unchanged (upstream clients simply
+	// ignore the unknown channel).
+	{
+		const wstring& name = player->getName();
+		byteArray payload(static_cast<int>(name.size() * sizeof(wchar_t)));
+		memcpy(payload.data, name.c_str(), payload.length);
+		broadcastAll(std::make_shared<CustomPayloadPacket>(
+			CustomPayloadPacket::FORK_PLAYER_LEAVE_CHANNEL, payload));
+	}
 
 	removePlayerFromReceiving(player);
 	player->connection = nullptr;		// Must remove reference to connection, or else there is a circular dependency
