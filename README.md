@@ -21,7 +21,7 @@ Users can download our [Nightly Build](https://codeberg.org/piebot/LegacyEvolved
 
 Huge thanks to the following projects:
 
-- [Legacy Minigame Restoration Project](https://discord.gg/bg2kmbzFzv) - for their immense help with our project's deep decompilation work
+- [Legacy Minigame Restoration Project](https://discord.gg/bg2kmbzFzv) - for immensely helping us with the deep decompilation our project required
 - [Patoke/LCERenewed](https://github.com/Patoke/LCERenewed) - for some of the patches that required deep decompilation
 - [smartcmd/MinecraftConsoles](https://github.com/smartcmd/MinecraftConsoles) - for creating such a great repo
 
