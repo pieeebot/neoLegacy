@@ -199,9 +199,24 @@ void PlayerRenderer::render(shared_ptr<Entity> _mob, double x, double y, double 
     armorParts1->sneaking = armorParts2->sneaking = humanoidModel->sneaking = mob->isSneaking();
 
     double yp = y - mob->heightOffset;
-    if (mob->isSneaking() && !mob->instanceof(eTYPE_LOCALPLAYER))
+    if (mob->isSneaking())
 	{
         yp -= 2 / 16.0f;
+    }
+
+    if (mob->getAnimOverrideBitmask() & (1 << HumanoidModel::eAnim_SmallModel))
+    {
+        if (mob->isRiding())
+        {
+            std::shared_ptr<Entity> ridingEntity = mob->riding;
+            if (ridingEntity != nullptr) // Safety check;
+            {
+                if (ridingEntity->instanceof(eTYPE_BOAT))
+                {
+                    yp += 0.25f; // reverts the change in Boat.cpp for smaller models.
+                }
+            }
+        }
     }
 
 	// Check if an idle animation is needed

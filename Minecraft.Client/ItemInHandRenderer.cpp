@@ -286,6 +286,20 @@ void ItemInHandRenderer::renderItem(shared_ptr<LivingEntity> mob, shared_ptr<Ite
 
         float xo = 0.0f;
         float yo = 0.3f;
+		
+
+		// Re position height of held item if skin is small
+        if (mob->getAnimOverrideBitmask() & (1 << HumanoidModel::eAnim_SmallModel))
+        {
+            if (mob->isRiding())
+            {
+                std::shared_ptr<Entity> ridingEntity = mob->riding;
+                if (ridingEntity != nullptr) // Safety check;
+                {
+                    yo += 0.3f; // reverts the change in Boat.cpp for smaller models.
+                }
+            }
+        }
 
         glEnable(GL_RESCALE_NORMAL);
         glTranslatef(-xo, -yo, 0);

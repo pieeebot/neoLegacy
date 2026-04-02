@@ -87,7 +87,7 @@ Boat::Boat(Level *level, double x, double y, double z) : Entity( level )
 
 double Boat::getRideHeight()
 {
-	return heightOffset;
+	return heightOffset - 0.4f;
 }
 
 bool Boat::hurt(DamageSource *source, float hurtDamage)
