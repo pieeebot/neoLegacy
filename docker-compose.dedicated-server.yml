@@ -10,7 +10,7 @@ services:
     tty: true
     stdin_open: true
     environment:
-      TZ: ${TZ:-Asia/Tokyo}
+      TZ: ${TZ:-Etc/UTC}
       WINEARCH: win64
       WINEPREFIX: /var/opt/wineprefix64
       WINEDEBUG: -all
@@ -18,7 +18,10 @@ services:
       SERVER_CLI_INPUT_MODE: ${SERVER_CLI_INPUT_MODE:-stream}
       # minimum required virtual screen
       XVFB_DISPLAY: ${XVFB_DISPLAY:-:99}
-      XVFB_SCREEN: ${XVFB_SCREEN:-64x64x16}
+      XVFB_SCREEN: ${XVFB_SCREEN:-720x1280x16}
+      # ip & port the server will run on
+      SERVER_BIND_IP: ${SERVER_BIND_IP:-0.0.0.0}
+      SERVER_PORT: ${SERVER_PORT:-25565}
     volumes:
       # - wineprefix64:/var/opt/wineprefix64
       - ./server-data:/srv/persist

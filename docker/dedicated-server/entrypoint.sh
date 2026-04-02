@@ -3,9 +3,8 @@ set -euo pipefail
 
 SERVER_DIR="/srv/mc"
 SERVER_EXE="Minecraft.Server.exe"
-# ip & port are fixed since they run inside the container
-SERVER_PORT="25565"
-SERVER_BIND_IP="0.0.0.0"
+SERVER_PORT="${SERVER_PORT:-25565}"
+SERVER_BIND_IP="${SERVER_BIND_IP:-0.0.0.0}"
 
 PERSIST_DIR="/srv/persist"
 WINE_CMD=""
