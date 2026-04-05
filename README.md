@@ -14,6 +14,19 @@ This project is based on source code of Minecraft Legacy Console Edition v1.6.05
 
 ## Latest:
 
+### Chunk Loading Optimization (Dedicated Server)
+
+- The dedicated server now processes up to 16 chunk add requests per player per tick (up from 1), improving tick recovery time after player join
+- Chunks are still loaded nearest-first to prioritize the area around the player
+
+### Upstream Merges
+
+- fix: boat player height and sneak height (#1459)
+- fix: nether portal validation when obsidian exists on both axes (#1337)
+- fix: wither and ender dragon custom names now show in boss bar (#1472)
+- optimization: remove redundant lastTime setter in tick loop (#1479)
+- Docker: configurable SERVER_PORT/SERVER_BIND_IP, timezone and image fixes (#1454, #1457)
+
 ### Render-Distance-Independent Player List
 
 - The Tab player list now shows all players on the server regardless of render distance. Previously, the player list was tied to entity tracking -- players only appeared in Tab when their entity was within render distance, and disappeared when they moved out of range
@@ -29,10 +42,9 @@ This project is based on source code of Minecraft Legacy Console Edition v1.6.05
 ### Async Autosave (Dedicated Server)
 
 - Autosave no longer freezes the server. Previously, every autosave compressed the entire world save file with zlib synchronously on the main thread, blocking all game ticks for 2-6 seconds depending on world size
-- The save buffer is now snapshotted (memcpy) while holding the save lock (~18ms), then compression runs on a detached background thread. Once compression finishes, the compressed data is committed back to StorageManager on the next game tick. If a previous async save is still in flight, it falls back to the original synchronous path to prevent unbounded queuing
-- Autosave on the dedicated server now only flushes entity data instead of re-saving all dirty chunks, matching the Xbox/Orbis behavior. Chunks are already saved continuously by the per-tick trickle save process
-- The async save commit (`StorageManager.SaveSaveData`) runs exclusively on the ServerMain thread (via `TickCoreSystems`), keeping the blocking disk write off the game thread entirely
-- Autosave timing breakdown is now logged to `server.log` for diagnostics (e.g. `autosave breakdown: players=0ms levels=0ms rules=0ms flush=18ms total=18ms`)
+- The save buffer is now snapshotted (memcpy) while holding the save lock, then compression runs on a detached background thread. Once compression finishes, the result is committed back to StorageManager on the next main-thread tick via `flushPendingBackgroundSave()`. StorageManager is not thread-safe, so the actual write is always dispatched from the main thread
+- Pending background saves are drained during server shutdown so no save data is lost
+- From upstream PR #1473
 
 ### Dedicated Server Entity Tracking Optimization
 
