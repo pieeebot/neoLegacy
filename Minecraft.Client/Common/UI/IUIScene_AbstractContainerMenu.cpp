@@ -1518,8 +1518,12 @@ bool IUIScene_AbstractContainerMenu::handleKeyDown(int iPad, int iAction, bool b
 					{
 						Tutorial::PopupMessageDetails *message = new Tutorial::PopupMessageDetails;
 						message->m_messageId = item->getUseDescriptionId();
+						
 
 						if(Item::items[item->id] != nullptr) message->m_titleString = Item::items[item->id]->getHoverName(item);
+						if (item->id == 387) {
+							message->m_titleString = item->getHoverName();
+						}
 						message->m_titleId = item->getDescriptionId();
 
 						message->m_icon = item->id;
@@ -1689,7 +1693,7 @@ vector<HtmlString> *IUIScene_AbstractContainerMenu::GetItemDescription(Slot *slo
 	{
 		lines->at(0).color = slot->getItem()->getRarity()->color;
 
-		if(slot->getItem()->hasCustomHoverName())
+		if (slot->getItem()->hasCustomHoverName() && slot->getItem()->id != 387)
 		{
 			lines->at(0).color = eTextColor_RenamedItemTitle;
 		}

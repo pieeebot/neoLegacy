@@ -383,8 +383,8 @@ public:
 	static Item *frame;
 
 	// TU14
-	//static Item *writingBook;
-	//static Item *writtenBook;
+	static Item *writingBook;
+	static Item *writtenBook;
 
 	static Item *emerald;
 
@@ -606,8 +606,8 @@ public:
 	static const int itemFrame_Id			 = 389;
 
 	// TU14
-	//static const int writingBook_Id			 = 386;
-	//static const int writtenBook_Id			 = 387;
+	static const int writingBook_Id			 = 386;
+	static const int writtenBook_Id			 = 387;
 
 	static const int emerald_Id				 = 388;
 

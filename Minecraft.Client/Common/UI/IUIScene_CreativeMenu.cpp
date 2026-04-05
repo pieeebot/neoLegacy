@@ -139,6 +139,8 @@ void IUIScene_CreativeMenu::staticCtor()
 		ITEM(Item::door_acacia_Id)
 		ITEM(Item::door_dark_Id)
 
+		
+
 		ITEM_AUX(Tile::stoneSlabHalf_Id,StoneSlabTile::STONE_SLAB)
 		ITEM_AUX(Tile::stoneSlabHalf_Id,StoneSlabTile::SAND_SLAB)
 		// AP - changed oak slab to be wood because it wouldn't burn
@@ -402,6 +404,10 @@ void IUIScene_CreativeMenu::staticCtor()
 		ITEM(Item::snowBall_Id)
 		ITEM(Item::paper_Id)
 		ITEM(Item::book_Id)
+
+		//TU25
+		ITEM(Item::writingBook_Id)
+
 		ITEM(Item::enderPearl_Id)
 		ITEM(Item::eyeOfEnder_Id)
 		ITEM(Item::nameTag_Id)

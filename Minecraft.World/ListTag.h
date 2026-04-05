@@ -12,6 +12,11 @@ public:
 	ListTag() : Tag(L"") {}
 	ListTag(const wstring &name) : Tag(name) {}
 
+	//Needed type for some things
+	byte getType() const { return type; }
+	void setType(byte newType) { type = newType; }
+	vector<Tag*> &getList() { return list; }
+
 	void write(DataOutput *dos)
 	{
 		if (list.size() > 0) type = (list[0])->getId();

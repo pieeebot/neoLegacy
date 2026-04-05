@@ -1595,14 +1595,20 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 				InputManager.GetJoypadStick_RX(0, false) != 0.0f ||
 				InputManager.GetJoypadStick_RY(0, false) != 0.0f;
 
-			if (controllerUsed)
+			if (controllerUsed) {
 				g_KBMInput.SetKBMActive(false);
-			else if (g_KBMInput.HasAnyInput())
+				if (ui.FindScene(eUIScene_BookMenu) != nullptr) ui.FindScene(eUIScene_BookMenu)->KBMUpdate(false);
+			}
+			else if (g_KBMInput.HasAnyInput()) {
 				g_KBMInput.SetKBMActive(true);
+				if (ui.FindScene(eUIScene_BookMenu) != nullptr) ui.FindScene(eUIScene_BookMenu)->KBMUpdate(true);
+			}
+				
 		}
 		else
 		{
 			g_KBMInput.SetKBMActive(true);
+			if (ui.FindScene(eUIScene_BookMenu) != nullptr) ui.FindScene(eUIScene_BookMenu)->KBMUpdate(true);
 		}
 
 		if (!g_KBMInput.IsMouseGrabbed())

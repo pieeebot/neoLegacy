@@ -31,6 +31,8 @@ public:
 		eTexturePackList,
 		eBitmapIcon,
 		eTouchControl,
+		eBook,
+		ePageFlip,
 	};
 protected:
 	eUIControlType m_eControlType;

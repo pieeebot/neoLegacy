@@ -31,6 +31,7 @@
 #include "../Minecraft.World/GenericStats.h"
 #include "../Minecraft.World/JavaMath.h"
 
+#include "..\Minecraft.World\ListTag.h"
 // 4J Added
 #include "../Minecraft.World/net.minecraft.world.item.crafting.h"
 #include "Options.h"
@@ -1495,131 +1496,129 @@ void PlayerConnection::handlePlayerAbilities(shared_ptr<PlayerAbilitiesPacket> p
 
 void PlayerConnection::handleCustomPayload(shared_ptr<CustomPayloadPacket> customPayloadPacket)
 {
-#if 0
-	if (CustomPayloadPacket.CUSTOM_BOOK_PACKET.equals(customPayloadPacket.identifier))
+	if (CustomPayloadPacket::CUSTOM_BOOK_PACKET.compare(customPayloadPacket->identifier) == 0)
 	{
 		ByteArrayInputStream bais(customPayloadPacket->data);
 		DataInputStream input(&bais);
-		shared_ptr<ItemInstance> sentItem = Packet::readItem(input);
+		shared_ptr<ItemInstance> sentItem = Packet::readItem(&input);
 
-		if (!WritingBookItem.makeSureTagIsValid(sentItem.getTag()))
+		if (sentItem->tag == nullptr)
 		{
-			throw new IOException("Invalid book tag!");
+			throw new IOException(L"Invalid book tag!");
 		}
 
 		// make sure the sent item is the currently carried item
-		ItemInstance carried = player.inventory.getSelected();
-		if (sentItem != null && sentItem.id == Item.writingBook.id && sentItem.id == carried.id)
+		shared_ptr<ItemInstance> carried = player->inventory->getSelected();
+		if (sentItem != nullptr && sentItem->id == Item::writingBook_Id && sentItem->id == carried->id)
 		{
-			carried.addTagElement(WrittenBookItem.TAG_PAGES, sentItem.getTag().getList(WrittenBookItem.TAG_PAGES));
+			player->inventory->setItem(player->inventory->selected, sentItem);
 		}
 	}
-	else if (CustomPayloadPacket.CUSTOM_BOOK_SIGN_PACKET.equals(customPayloadPacket.identifier))
+	else if (CustomPayloadPacket::CUSTOM_BOOK_SIGN_PACKET.compare(customPayloadPacket->identifier) == 0)
 	{
-		DataInputStream input = new DataInputStream(new ByteArrayInputStream(customPayloadPacket.data));
-		ItemInstance sentItem = Packet.readItem(input);
+		ByteArrayInputStream bais(customPayloadPacket->data);
+		DataInputStream input(&bais);
+		shared_ptr<ItemInstance> sentItem = Packet::readItem(&input);
 
-		if (!WrittenBookItem.makeSureTagIsValid(sentItem.getTag()))
+		if (sentItem->tag == nullptr)
 		{
-			throw new IOException("Invalid book tag!");
+			throw new IOException(L"Invalid book tag!");
 		}
 
 		// make sure the sent item is the currently carried item
-		ItemInstance carried = player.inventory.getSelected();
-		if (sentItem != null && sentItem.id == Item.writtenBook.id && carried.id == Item.writingBook.id)
+		shared_ptr<ItemInstance> carried = player->inventory->getSelected();
+
+		if (sentItem != nullptr && sentItem->id == Item::writingBook_Id && sentItem->id == carried->id)
 		{
-			carried.addTagElement(WrittenBookItem.TAG_AUTHOR, new StringTag(WrittenBookItem.TAG_AUTHOR, player.getName()));
-			carried.addTagElement(WrittenBookItem.TAG_TITLE, new StringTag(WrittenBookItem.TAG_TITLE, sentItem.getTag().getString(WrittenBookItem.TAG_TITLE)));
-			carried.addTagElement(WrittenBookItem.TAG_PAGES, sentItem.getTag().getList(WrittenBookItem.TAG_PAGES));
-			carried.id = Item.writtenBook.id;
+			sentItem->setHoverName(sentItem->tag->getString(L"title"));
+			sentItem->id = 387;
+			player->inventory->setItem(player->inventory->selected, sentItem);
 		}
 	}
-	else
-#endif
-		if (CustomPayloadPacket::TRADER_SELECTION_PACKET.compare(customPayloadPacket->identifier) == 0)
+	else if (CustomPayloadPacket::TRADER_SELECTION_PACKET.compare(customPayloadPacket->identifier) == 0)
+	{
+		ByteArrayInputStream bais(customPayloadPacket->data);
+		DataInputStream input(&bais);
+		int selection = input.readInt();
+
+		AbstractContainerMenu *menu = player->containerMenu;
+		if (dynamic_cast<MerchantMenu *>(menu))
+		{
+			static_cast<MerchantMenu *>(menu)->setSelectionHint(selection);
+		}
+	}
+	else if (CustomPayloadPacket::SET_ADVENTURE_COMMAND_PACKET.compare(customPayloadPacket->identifier) == 0)
+	{
+		if (!server->isCommandBlockEnabled())
+		{
+			app.DebugPrintf("Command blocks not enabled");
+			//player->sendMessage(ChatMessageComponent.forTranslation("advMode.notEnabled"));
+		}
+		else if (player->hasPermission(eGameCommand_Effect) && player->abilities.instabuild)
 		{
 			ByteArrayInputStream bais(customPayloadPacket->data);
 			DataInputStream input(&bais);
-			int selection = input.readInt();
+			int x = input.readInt();
+			int y = input.readInt();
+			int z = input.readInt();
+			wstring command = Packet::readUtf(&input, 256);
 
-			AbstractContainerMenu *menu = player->containerMenu;
-			if (dynamic_cast<MerchantMenu *>(menu))
+			shared_ptr<TileEntity> tileEntity = player->level->getTileEntity(x, y, z);
+			shared_ptr<CommandBlockEntity> cbe = dynamic_pointer_cast<CommandBlockEntity>(tileEntity);
+			if (tileEntity != nullptr && cbe != nullptr)
 			{
-				static_cast<MerchantMenu *>(menu)->setSelectionHint(selection);
+				cbe->setCommand(command);
+				player->level->sendTileUpdated(x, y, z);
+				//player->sendMessage(ChatMessageComponent.forTranslation("advMode.setCommand.success", command));
 			}
 		}
-		else if (CustomPayloadPacket::SET_ADVENTURE_COMMAND_PACKET.compare(customPayloadPacket->identifier) == 0)
+		else
 		{
-			if (!server->isCommandBlockEnabled())
-			{
-				app.DebugPrintf("Command blocks not enabled");
-				//player->sendMessage(ChatMessageComponent.forTranslation("advMode.notEnabled"));
-			}
-			else if (player->hasPermission(eGameCommand_Effect) && player->abilities.instabuild)
-			{
-				ByteArrayInputStream bais(customPayloadPacket->data);
-				DataInputStream input(&bais);
-				int x = input.readInt();
-				int y = input.readInt();
-				int z = input.readInt();
-				wstring command = Packet::readUtf(&input, 256);
+			//player.sendMessage(ChatMessageComponent.forTranslation("advMode.notAllowed"));
+		}
+	}
+	else if (CustomPayloadPacket::SET_BEACON_PACKET.compare(customPayloadPacket->identifier) == 0)
+	{
+		if ( dynamic_cast<BeaconMenu *>( player->containerMenu) != nullptr)
+		{
+			ByteArrayInputStream bais(customPayloadPacket->data);
+			DataInputStream input(&bais);
+			int primary = input.readInt();
+			int secondary = input.readInt();
 
-				shared_ptr<TileEntity> tileEntity = player->level->getTileEntity(x, y, z);
-				shared_ptr<CommandBlockEntity> cbe = dynamic_pointer_cast<CommandBlockEntity>(tileEntity);
-				if (tileEntity != nullptr && cbe != nullptr)
-				{
-					cbe->setCommand(command);
-					player->level->sendTileUpdated(x, y, z);
-					//player->sendMessage(ChatMessageComponent.forTranslation("advMode.setCommand.success", command));
-				}
+			BeaconMenu *beaconMenu = static_cast<BeaconMenu *>(player->containerMenu);
+			Slot *slot = beaconMenu->getSlot(0);
+			if (slot->hasItem())
+			{
+				slot->remove(1);
+				shared_ptr<BeaconTileEntity> beacon = beaconMenu->getBeacon();
+				beacon->setPrimaryPower(primary);
+				beacon->setSecondaryPower(secondary);
+				beacon->setChanged();
+			}
+		}
+	}
+	else if (CustomPayloadPacket::SET_ITEM_NAME_PACKET.compare(customPayloadPacket->identifier) == 0)
+	{
+		AnvilMenu *menu = dynamic_cast<AnvilMenu *>( player->containerMenu);
+		if (menu)
+		{
+			if (customPayloadPacket->data.data == nullptr || customPayloadPacket->data.length < 1)
+			{
+				menu->setItemName(L"");
 			}
 			else
 			{
-				//player.sendMessage(ChatMessageComponent.forTranslation("advMode.notAllowed"));
-			}
-		}
-		else if (CustomPayloadPacket::SET_BEACON_PACKET.compare(customPayloadPacket->identifier) == 0)
-		{
-			if ( dynamic_cast<BeaconMenu *>( player->containerMenu) != nullptr)
-			{
 				ByteArrayInputStream bais(customPayloadPacket->data);
-				DataInputStream input(&bais);
-				int primary = input.readInt();
-				int secondary = input.readInt();
-
-				BeaconMenu *beaconMenu = static_cast<BeaconMenu *>(player->containerMenu);
-				Slot *slot = beaconMenu->getSlot(0);
-				if (slot->hasItem())
+				DataInputStream dis(&bais);
+				wstring name = dis.readUTF();
+				if (name.length() <= 30)
 				{
-					slot->remove(1);
-					shared_ptr<BeaconTileEntity> beacon = beaconMenu->getBeacon();
-					beacon->setPrimaryPower(primary);
-					beacon->setSecondaryPower(secondary);
-					beacon->setChanged();
+					menu->setItemName(name);
 				}
 			}
 		}
-		else if (CustomPayloadPacket::SET_ITEM_NAME_PACKET.compare(customPayloadPacket->identifier) == 0)
-		{
-			AnvilMenu *menu = dynamic_cast<AnvilMenu *>( player->containerMenu);
-			if (menu)
-			{
-				if (customPayloadPacket->data.data == nullptr || customPayloadPacket->data.length < 1)
-				{
-					menu->setItemName(L"");
-				}
-				else
-				{
-					ByteArrayInputStream bais(customPayloadPacket->data);
-					DataInputStream dis(&bais);
-					wstring name = dis.readUTF();
-					if (name.length() <= 30)
-					{
-						menu->setItemName(name);
-					}
-				}
-			}
-		}
+	}
 }
 
 bool PlayerConnection::isDisconnected()

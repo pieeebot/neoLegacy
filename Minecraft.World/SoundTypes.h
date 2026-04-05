@@ -232,6 +232,9 @@ enum ESoundEffect
 	eSFX_Focus,
 	eSFX_Press,
 	eSFX_Scroll,
+	eSFX_BookTurn1,
+	eSFX_BookTurn2,
+	eSFX_BookTurn3,
 	eSFX_MAX
 };
 

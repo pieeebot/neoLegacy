@@ -631,6 +631,32 @@ bool LocalPlayer::openHorseInventory(shared_ptr<EntityHorse> horse, shared_ptr<C
 	return success;
 }
 
+void LocalPlayer::openItemInstanceGui(shared_ptr<ItemInstance> itemInstance, shared_ptr<Player> player)
+{
+	//minecraft->setScreen(new HorseInventoryScreen(inventory, container, horse));
+	/*bool success = app.LoadHorseMenu(GetXboxPad(), inventory, container, horse);
+	if( success ) ui.PlayUISFX(eSFX_Press);
+	return success;*/
+	int itemId = itemInstance->getItem()->id;
+
+	if (itemId == 386)
+	{
+		ui.PlayUISFX(eSFX_Press);
+		app.LoadWritingBookMenu(GetXboxPad(), itemInstance, player, true);
+		return;
+	}
+	else if (itemId == 387)
+	{
+		ui.PlayUISFX(eSFX_Press);
+		app.LoadWritingBookMenu(GetXboxPad(), itemInstance, player, true);
+		return;
+	}
+
+
+	//bool success = app.LoadBookMenu(GetXboxPad(), inventory);
+	//return success;
+}
+
 bool LocalPlayer::startCrafting(int x, int y, int z)
 {
 	bool success = app.LoadCrafting3x3Menu(GetXboxPad(), dynamic_pointer_cast<LocalPlayer>( shared_from_this() ), x, y, z );

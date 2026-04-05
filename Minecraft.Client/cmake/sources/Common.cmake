@@ -315,6 +315,10 @@ set(_MINECRAFT_CLIENT_COMMON_COMMON_UI_ALL_PLATFORMS
   "${BASE_DIR}/UI/IUIScene_PauseMenu.h"
   "${BASE_DIR}/UI/IUIScene_TradingMenu.cpp"
   "${BASE_DIR}/UI/IUIScene_TradingMenu.h"
+
+  "${BASE_DIR}/UI/IUIScene_WritingBookMenu.cpp"
+  "${BASE_DIR}/UI/IUIScene_WritingBookMenu.h"
+
   "${BASE_DIR}/UI/UIEnums.h"
   "${BASE_DIR}/UI/UIStructs.h"
 )

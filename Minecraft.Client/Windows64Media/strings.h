@@ -2416,4 +2416,13 @@
 #define IDS_DESC_LARGE_FERN                                    2410
 #define IDS_DESC_ROSE_BUSH                                     2411
 #define IDS_DESC_PEONY                                         2412
-#define IDS_ENDERMITE                                      	2413
+#define IDS_ENDERMITE                                      	   2413
+#define IDS_ITEM_WRITTENBOOK								   2414
+#define IDS_DESC_WRITTENBOOK								   2415
+#define IDS_ITEM_WRITINGBOOK								   2416
+#define IDS_DESC_WRITINGBOOK								   2417
+#define IDS_TOOLTIPS_NEXTPAGE                                  2418
+#define IDS_TOOLTIPS_BACKPAGE                                  2419
+#define IDS_TOOLTIPS_ADDPAGE                                   2420
+#define IDS_TITLE_EXITBOOK                                     2421
+#define IDS_DESC_EXITBOOK                                      2422

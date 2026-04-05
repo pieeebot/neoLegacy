@@ -12,6 +12,8 @@
 #include "net.minecraft.world.effect.h"
 #include "net.minecraft.stats.h"
 #include "MapItem.h"
+#include "WrittenBook.h"
+#include "WritingBookItem.h"
 #include "Item.h"
 #include "HangingEntityItem.h"
 #include "HtmlString.h"
@@ -215,8 +217,8 @@ Item *Item::skull = nullptr;
 
 
 // TU14
-//Item *Item::writingBook = nullptr;
-//Item *Item::writtenBook = nullptr;
+Item *Item::writingBook = nullptr;
+Item *Item::writtenBook = nullptr;
 
 Item *Item::emerald = nullptr;
 
@@ -482,6 +484,8 @@ void Item::staticCtor()
 	// TU14
 	//Item::writingBook = (new WritingBookItem(130))->setIcon(11, 11)->setDescriptionId("writingBook");
 	//Item::writtenBook = (new WrittenBookItem(131))->setIcon(12, 11)->setDescriptionId("writtenBook");
+	Item::writingBook = (new WritingBookItem(130))->setIconName(L"writingBook")->setDescriptionId(IDS_ITEM_WRITINGBOOK)->setUseDescriptionId(IDS_DESC_WRITINGBOOK)->setMaxStackSize(1);
+	Item::writtenBook = (new WrittenBookItem(131))->setIconName(L"writtenBook")->setDescriptionId(IDS_ITEM_WRITTENBOOK)->setUseDescriptionId(IDS_DESC_WRITTENBOOK)->setMaxStackSize(1);
 
 	Item::emerald =				(new Item(132))														->setBaseItemTypeAndMaterial(eBaseItemType_treasure, eMaterial_emerald)->setIconName(L"emerald")->setDescriptionId(IDS_ITEM_EMERALD)->setUseDescriptionId(IDS_DESC_EMERALD);
 

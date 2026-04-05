@@ -10,6 +10,7 @@ protected:
 	IggyName m_initFunc;
 	IggyName m_setLabelFunc;
 	IggyName m_funcGetLabel;
+	IggyName m_funcGetH;
 	IggyName m_funcCheckLabelWidths;
 
 	bool m_bLabelChanged;
@@ -21,6 +22,7 @@ public:
 	virtual bool setupControl(UIScene *scene, IggyValuePath *parent, const string &controlName);
 
 	virtual void tick();
+	int height();
 
 	virtual void setLabel(UIString label, bool instant = false, bool force = false);
 	//virtual void setLabel(wstring label, bool instant = false, bool force = false) { this->setLabel(UIString::CONSTANT(label), instant, force); }

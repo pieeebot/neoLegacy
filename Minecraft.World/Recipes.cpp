@@ -1111,6 +1111,13 @@ Recipes::Recipes()
 		Item::leather,
 		L'D');
 
+	addShapelessRecipy(new ItemInstance(Item::writingBook, 1),
+		L"iiig",
+		Item::book,
+		Item::feather,
+		ItemInstance(Item::dye_powder, 1, DyePowderItem::BLACK),
+		L'D');
+
 	//addShapelessRecipy(new ItemInstance(Item.writingBook, 1), //
 	//            Item.book, new ItemInstance(Item.dye_powder, 1, DyePowderItem.BLACK), Item.feather);
 

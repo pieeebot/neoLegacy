@@ -923,7 +923,7 @@ void UIController::tickInput()
 								UIControl::eUIControlType type = ctrl->getControlType();
 								if (type != UIControl::eButton && type != UIControl::eTextInput &&
 									type != UIControl::eCheckBox && type != UIControl::eSlider &&
-									type != UIControl::eButtonList && type != UIControl::eTexturePackList)
+									type != UIControl::eButtonList && type != UIControl::eTexturePackList && type != UIControl::ePageFlip)
 									continue;
 
 								// If the scene has an active panel (e.g. tab menus),

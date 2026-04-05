@@ -59,6 +59,13 @@ body:
     validations:
       required: true
 
+  - type: input
+    id: smartcmd
+    attributes:
+      label: Is this reproducable in smartcmd/MinecraftConsoles? (https://github.com/smartcmd/MinecraftConsoles)
+    validations:
+      required: true
+
   - type: checkboxes
     id: build
     attributes:

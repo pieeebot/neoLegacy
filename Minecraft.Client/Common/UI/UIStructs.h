@@ -91,6 +91,16 @@ typedef struct _FurnaceScreenInput
 	bool bSplitscreen;
 } FurnaceScreenInput;
 
+// Book and Quill
+typedef struct _WritingBookMenuParams
+{
+	shared_ptr<ItemInstance> itemInstance;
+	shared_ptr<Player> player;
+	int iPad;
+	bool isEditable;
+}
+WritingBookMenuParams;
+
 // Crafting
 typedef struct _CraftingPanelScreenInput
 {

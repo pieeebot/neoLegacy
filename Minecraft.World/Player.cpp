@@ -1518,8 +1518,9 @@ bool Player::openTrading(shared_ptr<Merchant> traderTarget, const wstring &name)
 *
 * @param itemInstance
 */
-void Player::openItemInstanceGui(shared_ptr<ItemInstance> itemInstance)
+void Player::openItemInstanceGui(shared_ptr<ItemInstance> itemInstance, shared_ptr<Player> player)
 {
+	return;
 }
 
 bool Player::interact(shared_ptr<Entity> entity)

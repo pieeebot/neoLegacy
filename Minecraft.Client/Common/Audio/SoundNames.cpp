@@ -243,4 +243,7 @@ const WCHAR *ConsoleSoundEngine::wchUISoundNames[eSFX_MAX]=
 	L"focus",
 	L"press",
 	L"scroll",
+	L"open_flip1",
+	L"open_flip2",
+	L"open_flip3"
 };

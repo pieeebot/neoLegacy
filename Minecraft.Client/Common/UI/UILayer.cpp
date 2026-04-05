@@ -2,6 +2,8 @@
 #include "UI.h"
 #include "UILayer.h"
 #include "UIScene.h"
+#include "IUIScene_WritingBookMenu.h"
+#include "UIScene_BookAndQuillMenu.h"
 
 UILayer::UILayer(UIGroup *parent)
 {
@@ -265,6 +267,10 @@ bool UILayer::NavigateToScene(int iPad, EUIScene scene, void *initData)
 		// Help and Options
 	case eUIScene_HelpAndOptionsMenu:
 		newScene = new UIScene_HelpAndOptionsMenu(iPad, initData, this);
+		break;
+		// Book
+	case eUIScene_BookMenu:
+		newScene = new UIScene_BookAndQuillMenu(iPad, initData, this);
 		break;
 	case eUIScene_SettingsMenu:
 		newScene = new UIScene_SettingsMenu(iPad, initData, this);

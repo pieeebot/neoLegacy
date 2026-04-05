@@ -7,6 +7,7 @@
 #include "../../LocalPlayer.h"
 #include "../../ItemRenderer.h"
 #include "../../../Minecraft.World/net.minecraft.world.item.h"
+#include "UIScene_BookAndQuillMenu.h"
 
 UIScene::UIScene(int iPad, UILayer *parentLayer)
 {
@@ -482,6 +483,17 @@ void UIScene::tick()
 			if (result != UIControl_TextInput::eDirectEdit_Continue)
 				onDirectEditFinished(inputs[i], result);
 		}
+		//Attempt at matching input code for textinputs for labels
+		vector<UIControl_Label*> labels;
+		getDirectEditLabels(labels);
+		for (size_t i = 0; i < labels.size(); i++)
+		{
+			//app.DebugPrintf(("label; " + std::to_string(i) + "\n").c_str());
+			UIControl_Label::EDirectEditResult result1 = labels[i]->tickDirectEdit();
+			//app.DebugPrintf(("result; " + std::to_string(result1) + "\n").c_str());
+			if (result1 != UIControl_Label::eDirectEdit_Continue)
+				onDirectEditLabelFinished(labels[i], result1);
+		}
 	}
 #endif
 }
@@ -554,7 +566,7 @@ bool UIScene::handleMouseClick(F32 x, F32 y)
 
 		UIControl::eUIControlType type = ctrl->getControlType();
 		if (type != UIControl::eButton && type != UIControl::eTextInput &&
-			type != UIControl::eCheckBox)
+			type != UIControl::eCheckBox && type != UIControl::eBook && type != UIControl::ePageFlip)
 			continue;
 
 		if (pMainPanel && ctrl->getParentPanel() != pMainPanel)

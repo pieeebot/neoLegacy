@@ -7,6 +7,7 @@ using namespace std;
 #include "UIEnums.h"
 #include "UIControl_Base.h"
 #include "UIControl_TextInput.h"
+#include "UIControl_Label.h"
 
 class ItemRenderer;
 class UILayer;
@@ -170,6 +171,8 @@ public:
 	void gainFocus();
 	void loseFocus();
 
+	virtual void KBMUpdate(bool bVal) {};
+
 	virtual void updateTooltips();
 	virtual void updateComponents() {}
 	virtual void handleGainFocus(bool navBack);
@@ -189,7 +192,9 @@ public:
 	// Base class handles tickDirectEdit in tick(), click-outside-to-deselect
 	// in handleMouseClick(), and provides isDirectEditBlocking() for guards.
 	virtual void getDirectEditInputs(vector<UIControl_TextInput*> &inputs) {}
+	virtual void getDirectEditLabels(vector<UIControl_Label*>& inputs) {}
 	virtual void onDirectEditFinished(UIControl_TextInput *input, UIControl_TextInput::EDirectEditResult result) {}
+	virtual void onDirectEditLabelFinished(UIControl_Label* input, UIControl_Label::EDirectEditResult result) {}
 	bool isDirectEditBlocking();
 
 	// Mouse click dispatch. Hit-tests C++ controls and picks the smallest-area

@@ -252,7 +252,7 @@ public:
 	virtual bool openBrewingStand(shared_ptr<BrewingStandTileEntity> brewingStand); // 4J - added bool return
 	virtual bool openBeacon(shared_ptr<BeaconTileEntity> beacon);
 	virtual bool openTrading(shared_ptr<Merchant> traderTarget, const wstring &name); // 4J - added bool return
-	virtual void openItemInstanceGui(shared_ptr<ItemInstance> itemInstance);
+	virtual void openItemInstanceGui(shared_ptr<ItemInstance> itemInstance, shared_ptr<Player> player);
 	virtual bool interact(shared_ptr<Entity> entity);
 	virtual shared_ptr<ItemInstance> getSelectedItem();
 	void removeSelectedItem();

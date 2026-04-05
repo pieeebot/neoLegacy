@@ -109,6 +109,7 @@ public:
 	virtual bool openHopper(shared_ptr<HopperTileEntity> container); // 4J added bool return
 	virtual bool openHopper(shared_ptr<MinecartHopper> container); // 4J added bool return
 	virtual bool openHorseInventory(shared_ptr<EntityHorse> horse, shared_ptr<Container> container); // 4J added bool return
+	virtual void openItemInstanceGui(shared_ptr<ItemInstance> itemInstance, shared_ptr<Player> player); // 4J added bool return
 	virtual bool startCrafting(int x, int y, int z);					// 4J added bool return
 	virtual bool openFireworks(int x, int y, int z);					// 4J added
 	virtual bool startEnchanting(int x, int y, int z, const wstring &name);					// 4J added bool return

@@ -109,6 +109,8 @@
 #include "UIScene_BeaconMenu.h"
 #include "UIScene_FireworksMenu.h"
 
+#include "UIScene_BookAndQuillMenu.h"
+
 #include "UIScene_CraftingMenu.h"
 #include "UIScene_SignEntryMenu.h"
 

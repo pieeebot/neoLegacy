@@ -17,10 +17,25 @@ bool UIControl_Base::setupControl(UIScene *scene, IggyValuePath *parent, const s
 
 	m_setLabelFunc = registerFastName(L"SetLabel");
 	m_initFunc = registerFastName(L"Init");
+	m_funcGetH = registerFastName(L"height");
 	m_funcGetLabel = registerFastName(L"GetLabel");
 	m_funcCheckLabelWidths = registerFastName(L"CheckLabelWidths");
 
 	return success;
+}
+
+int UIControl_Base::height() {
+	//IggyDataValue result;
+	//IggyResult out = IggyPlayerCallMethodRS(m_parentScene->getMovie(), &result, getIggyValuePath(), m_funcGetH, 0, nullptr);
+	F64 t;
+	IggyValueGetF64RS(getIggyValuePath(), m_funcGetH, nullptr, &t);
+
+	if (t)
+	{
+		//m_label = wstring((wchar_t*)result.string16.string, result.string16.length);
+		return static_cast<S32>(t);
+	}
+	return -1;
 }
 
 void UIControl_Base::tick()

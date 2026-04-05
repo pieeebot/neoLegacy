@@ -1988,6 +1988,11 @@ set(_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_WORLD_LEVEL_TILE
   "${CMAKE_CURRENT_SOURCE_DIR}/DoublePlantFeature.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/MutatedBiome.cpp"
 
+  "${CMAKE_CURRENT_SOURCE_DIR}/WritingBookItem.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/WritingBookItem.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/WrittenBookItem.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/WrittenBook.h"
+
 )
 source_group("net/minecraft/world/level/tile" FILES ${_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_WORLD_LEVEL_TILE})
 

@@ -149,6 +149,7 @@ public:
 	bool			LoadHopperMenu(int iPad ,shared_ptr<Inventory> inventory, shared_ptr<MinecartHopper> hopper);
 	bool			LoadHorseMenu(int iPad ,shared_ptr<Inventory> inventory, shared_ptr<Container> container, shared_ptr<EntityHorse> horse);
 	bool			LoadBeaconMenu(int iPad ,shared_ptr<Inventory> inventory, shared_ptr<BeaconTileEntity> beacon);
+	bool			LoadWritingBookMenu(int iPad, shared_ptr<ItemInstance> instance, shared_ptr<Player> player, bool editable);
 
 	bool			GetTutorialMode()																									{ return m_bTutorialMode;}
 	void			SetTutorialMode(bool bSet)																							{m_bTutorialMode=bSet;}
