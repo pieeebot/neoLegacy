@@ -4,12 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - 'main'
-    paths-ignore:
-      - '.gitignore'
-      - '*.md'
-      - '.gitea/**'
-      - '!.gitea/workflows/nightly.yml'
+      - main
 
 permissions:
   contents: write
@@ -20,6 +15,9 @@ concurrency:
 
 jobs:
   build:
+    if: >
+      !github.event.head_commit ||
+      !contains(github.event.head_commit.message, '[skip ci]')
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
@@ -77,6 +75,9 @@ jobs:
 
   release:
     needs: build
+    if: >
+      !github.event.head_commit ||
+      !contains(github.event.head_commit.message, '[skip ci]')
     runs-on: ubuntu-24.04
     steps:
       - name: Download build artifacts
