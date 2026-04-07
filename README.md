@@ -1,5 +1,5 @@
 ![Legacy Edition Banner](.github/LCRE-banner.png)
-# MinecraftConsoles (Legacy Console Revelations Edition)
+# Minecraft Legacy Revelations
 
 If you have any questions regarding this fork, this is my Fluxer server (similar to a Discord server):
 <p align="center">
