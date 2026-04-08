@@ -37,3 +37,5 @@ We provide both a generic build script and a Nix flake.
 
 - Nix: `nix run .#client`
 - Generic: `./build-linux.sh`
+
+GEORGE ILY<3
