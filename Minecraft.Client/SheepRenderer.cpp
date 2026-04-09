@@ -32,20 +32,30 @@ int SheepRenderer::prepareArmor(shared_ptr<LivingEntity> _sheep, int layer, floa
 			int c2 = (value + 1) % Sheep::COLOR_LENGTH;
 			float subStep = ((sheep->tickCount % colorDuration) + a) / static_cast<float>(colorDuration);
 
-			glColor3f(Sheep::COLOR[c1][0] * (1.0f - subStep) + Sheep::COLOR[c2][0] * subStep, Sheep::COLOR[c1][1] * (1.0f - subStep) + Sheep::COLOR[c2][1] * subStep, Sheep::COLOR[c1][2]
-			* (1.0f - subStep) + Sheep::COLOR[c2][2] * subStep);
+			glColor3f(
+				Sheep::COLOR[c1][0] * (1.0f - subStep) + Sheep::COLOR[c2][0] * subStep, 
+				Sheep::COLOR[c1][1] * (1.0f - subStep) + Sheep::COLOR[c2][1] * subStep, 
+				Sheep::COLOR[c1][2] * (1.0f - subStep) + Sheep::COLOR[c2][2] * subStep);
 		}
 		else
 		{
-			int color = sheep->getColor();
-			glColor3f(Sheep::COLOR[color][0], Sheep::COLOR[color][1], Sheep::COLOR[color][2]);
+        float brightness = SharedConstants::TEXTURE_LIGHTING ? 1.0f : sheep->getBrightness(a);
+        int color = sheep->getColor();
+        glColor3f(brightness * Sheep::COLOR[color][0], brightness * Sheep::COLOR[color][1], brightness * Sheep::COLOR[color][2]);
+
 		}
 
 
 		// 4J - change brought forward from 1.8.2
-        float brightness = SharedConstants::TEXTURE_LIGHTING ? 1.0f : sheep->getBrightness(a);
-        int color = sheep->getColor();
-        glColor3f(brightness * Sheep::COLOR[color][0], brightness * Sheep::COLOR[color][1], brightness * Sheep::COLOR[color][2]);
+
+
+      /* Fix; this code originally completely overrided the _jeb and normal textures so i just commented it out and updated the part that should have worked.
+	  
+	  float brightness = SharedConstants::TEXTURE_LIGHTING ? 1.0f : sheep->getBrightness(a);
+       int color = sheep->getColor();
+       glColor3f(brightness * Sheep::COLOR[color][0], brightness * Sheep::COLOR[color][1], brightness * Sheep::COLOR[color][2]); */
+
+
         return 1;
     }
     return -1;
