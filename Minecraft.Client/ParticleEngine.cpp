@@ -50,7 +50,6 @@ void ParticleEngine::add(shared_ptr<Particle> p)
 			break;
 	}
     int list = p->getAlpha() != 1.0f ? TRANSLUCENT_LIST : OPAQUE_LIST;		// 4J - Brought forward from Java 1.8
-	app.DebugPrintf("total particles: %d\n", particles[l][t][list].size());
 	if(	particles[l][t][list].size() >= maxParticles)
 	{
 		particles[l][t][list].pop_front();

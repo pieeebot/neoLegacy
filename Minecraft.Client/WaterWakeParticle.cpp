@@ -5,6 +5,7 @@
 #include "../Minecraft.World/JavaMath.h"
 #include "../Minecraft.World/net.minecraft.world.level.h"
 #include "../Minecraft.World/net.minecraft.world.level.material.h"
+#include "../Minecraft.World/net.minecraft.world.level.tile.h"
 
 WaterWakeParticle::WaterWakeParticle(Level *level, double x, double y, double z, double xa, double ya, double za) : Particle(level, x, y, z, 0, 0, 0)
 {
@@ -21,7 +22,6 @@ WaterWakeParticle::WaterWakeParticle(Level *level, double x, double y, double z,
     xd = xa;
     yd = ya;
     zd = za;
-    // Moved to end
 }
 
 void WaterWakeParticle::tick()

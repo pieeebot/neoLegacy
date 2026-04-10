@@ -30,11 +30,17 @@ private:
 	int luckLevel;
 	shared_ptr<ItemInstance> previousItem;
 
+	int wakeTimer;
+	int nibbleTimer;
+	int nibble;
+	float fishApproachAngle;
+
 private:
-	static const int DATA_NIBBLE_TIMER;
-	static const int DATA_NIBBLE;
-	static const int DATA_WAKE_TIMER;
+	static const int DATA_FLAG_RENDER_CLIENT_FX;
 	static const int DATA_FISH_APPROACH_ANGLE;
+	static const int DATA_WAKE_TIMER;
+	static const int DATA_NIBBLE_TIMER;
+	static const int DATA_FLAG_NIBBLE;
 
 public:
 	shared_ptr<Entity> hookedIn;
@@ -64,6 +70,9 @@ public:
 	virtual void lerpMotion(double xd, double yd, double zd);
 	virtual void tick();
 	virtual void addAdditonalSaveData(CompoundTag *tag);
+	void catchingFish();
+	void updateSynchedData();
+	void applyClientFX();
 	virtual void readAdditionalSaveData(CompoundTag *tag);
 	virtual float getShadowHeightOffs();
 	virtual void getEnchantLevels();
