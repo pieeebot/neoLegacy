@@ -407,6 +407,10 @@ void FishingHook::addAdditonalSaveData(CompoundTag *tag)
 	tag->putByte(L"inTile", static_cast<byte>(lastTile));
 	tag->putByte(L"shake", static_cast<byte>(shakeTime));
 	tag->putByte(L"inGround", static_cast<byte>(inGround ? 1 : 0));
+	tag->putFloat(L"fishApproachAngle", fishApproachAngle);
+	tag->putShort(L"wakeTimer",  static_cast<short>(wakeTimer));
+	tag->putShort(L"nibbleTimer", static_cast<short>(nibbleTimer));
+	tag->putShort(L"nibble", static_cast<short>(nibble));
 }
 
 void FishingHook::catchingFish() {
@@ -584,6 +588,11 @@ void FishingHook::readAdditionalSaveData(CompoundTag *tag)
 	lastTile = tag->getByte(L"inTile") & 0xff;
 	shakeTime = tag->getByte(L"shake") & 0xff;
 	inGround = tag->getByte(L"inGround") == 1;
+	fishApproachAngle = tag->getFloat(L"fishApproachAngle");
+	wakeTimer = tag->getShort(L"wakeTimer");
+	nibbleTimer = tag->getShort(L"nibbleTimer");
+	nibble = tag->getShort(L"nibble");
+	entityData->set(FishingHook::DATA_FLAG_NIBBLE, (nibble > 0) ? 1 : 0);
 }
 
 float FishingHook::getShadowHeightOffs()
