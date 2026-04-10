@@ -124,8 +124,9 @@ void UIScene_HUD::tick()
 			return;
 		}
 
+	    int idx = BossMobGuiInfo::getIndexFromDimension(pMinecraft->localplayers[m_iPad]->dimension);
 		// Is boss present?
-		bool noBoss = BossMobGuiInfo::name.empty() || BossMobGuiInfo::displayTicks <= 0;
+	    bool noBoss = BossMobGuiInfo::name[idx].empty() || BossMobGuiInfo::displayTicks[idx] <= 0;
 		if (noBoss) 
 		{
 			if (m_showDragonHealth)
@@ -143,14 +144,14 @@ void UIScene_HUD::tick()
 		}
 		else
 		{
-			BossMobGuiInfo::displayTicks--;
+		    BossMobGuiInfo::displayTicks[idx]--;
 
 			m_ticksWithNoBoss = 0;			
-			SetDragonHealth(BossMobGuiInfo::healthProgress);
+		    SetDragonHealth(BossMobGuiInfo::healthProgress[idx]);
 
 			if (!m_showDragonHealth)
 			{
-				SetDragonLabel(BossMobGuiInfo::name);
+			    SetDragonLabel(BossMobGuiInfo::name[idx]);
 				ShowDragonHealth(true);
 			}
 		}
@@ -248,7 +249,15 @@ void UIScene_HUD::handleReload()
 
 	m_labelDisplayName.setVisible(m_lastShowDisplayName);
 
-	SetDragonLabel(BossMobGuiInfo::name);
+    Minecraft* pMinecraft = Minecraft::GetInstance();
+
+    int idx = 0;
+    if(pMinecraft->localplayers[m_iPad] != nullptr)
+    {
+        idx = BossMobGuiInfo::getIndexFromDimension(pMinecraft->localplayers[m_iPad]->dimension);
+    }
+
+    SetDragonLabel(BossMobGuiInfo::name[idx]);
 	SetSelectedLabel(L"");
 
 	for(unsigned int i = 0; i < CHAT_LINES_COUNT; ++i)
@@ -258,7 +267,7 @@ void UIScene_HUD::handleReload()
 	m_labelJukebox.init(L"");
 
 	int iGuiScale;	
-	Minecraft *pMinecraft = Minecraft::GetInstance();
+
 	if(pMinecraft->localplayers[m_iPad] == nullptr || pMinecraft->localplayers[m_iPad]->m_iScreenSection == C4JRender::VIEWPORT_TYPE_FULLSCREEN)
 	{
 		iGuiScale=app.GetGameSettings(m_iPad,eGameSetting_UISize);

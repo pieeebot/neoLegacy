@@ -13,6 +13,7 @@ class StrongholdFeature;
 class VillageFeature;
 class MineShaftFeature;
 class RandomScatteredLargeFeature;
+class OceanMonumentFeature;
 
 class CustomLevelSource : public ChunkSource
 {
@@ -34,6 +35,7 @@ private:
  	VillageFeature *villageFeature;
  	MineShaftFeature *mineShaftFeature;
 	RandomScatteredLargeFeature *scatteredFeature;
+    OceanMonumentFeature* oceanMonument;
  	LargeFeature *canyonFeature;
 	Level *level;
 #endif

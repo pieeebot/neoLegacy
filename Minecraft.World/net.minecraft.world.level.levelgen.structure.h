@@ -12,6 +12,8 @@
 #include "StructureFeature.h"
 #include "StructureFeatureIO.h"
 #include "StructureFeatureSavedData.h"
+#include "OceanMonumentFeature.h"
+#include "OceanMonumentPieces.h"
 #include "StructurePiece.h"
 #include "StructureStart.h"
 #include "VillageFeature.h"

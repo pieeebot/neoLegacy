@@ -12,7 +12,9 @@ MutatedBiome::MutatedBiome(int id,  Biome* baseBiome)
 
     color = baseBiome->color;
     topMaterial = baseBiome->topMaterial;
+    topMaterialData = baseBiome->topMaterialData;
     material = baseBiome->material;
+    materialData = baseBiome->materialData;
     leafColor = baseBiome->leafColor;
     depth = baseBiome->depth + 0.1f;
     scale = baseBiome->scale + 0.2f;
@@ -59,8 +61,8 @@ int MutatedBiome::getGrassColor() const {
     return m_baseBiome ? m_baseBiome->getGrassColor() : Biome::getGrassColor();
 }
 
-int MutatedBiome::getFoliageColor() const {
-    return m_baseBiome ? m_baseBiome->getFoliageColor() : Biome::getFoliageColor();
+int MutatedBiome::getFolageColor() const {
+    return m_baseBiome ? m_baseBiome->getFolageColor() : Biome::getFolageColor();
 }
 
 float MutatedBiome::getCreatureProbability() const

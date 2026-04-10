@@ -12,7 +12,7 @@ constexpr float SFX_3D_ROLLOFF = 0.5f;
 constexpr float SFX_VOLUME_MULTIPLIER = 1.5f;
 constexpr float SFX_MAX_GAIN = 1.5f;
 
-enum eMUSICFILES
+enum eMusicFiles
 {
 	eStream_Overworld_Calm1 = 0,
 	eStream_Overworld_Calm2,
@@ -67,35 +67,20 @@ enum eMUSICFILES
 	eStream_Max,
 };
 
-// @3UR: This may not even be an enum—this is mostly guesswork.
-// Why? Previously it used LevelData::DIMENSION_XXX enum, and it's unlikely they
-// would have extended that with all this additional data.
-// It also does not match up in IDA: LevelData::DIMENSION_END is 1,
-// but now we see getMusicId(v5, 4); instead of 1.
-//
-// This suggests they likely introduced an entirely new enum.
-//
-// Additionally, there was never a case for 3, so it's skipped.
-// That might indicate they extended an existing enum, but it's unclear.
-enum eMUSICDOMAIN
+enum eMusicType
 {
-    eMusicDomain_Nether = 0,
-    eMusicDomain_Overworld = 1,
-    eMusicDomain_Menu = 2,
-    eMusicDomain_End = 4,
-    eMusicDomain_Creative = 5,
-    eMusicDomain_Battle = 6,
-};
-
-enum eMUSICTYPE
-{
-	eMusicType_None,
-	eMusicType_Game,
-	eMusicType_CD,
+    eMusicType_Nether = 0,
+    // ???
+    eMusicType_Menu = 2,
+    // ???
+    eMusicType_End = 4,
+    eMusicType_Creative = 5,
+    eMusicType_Battle = 6,
+    eMusicType_Overworld = 7,
 };
 
 
-enum MUSIC_STREAMSTATE
+enum eMusicStreamState
 {
 	eMusicStreamState_Idle=0,
 	eMusicStreamState_Stop,
@@ -157,10 +142,11 @@ public:
     void addStreaming(const wstring& name, File *file) override;
     char *ConvertSoundPathToName(const wstring& name, bool bConvertSpaces=false) override;
 	bool isStreamingWavebankReady();		// 4J Added
-	int getMusicID(int iDomain);
+	int getMusicID(eMusicType iDomain);
 	int getMusicID(const wstring& name);
     void SetStreamingSounds(int iOverworldMin, int iOverWorldMax, int iNetherMin, int iNetherMax, int iEndMin, int iEndMax, int iCreativeMin, int iCreativeMax, int iMenuMin, int iMenuMax, int iBattleMin, int iBattleMax, int iCD1);
 	void updateMiniAudio();
+    inline void getGameModeMusicID(Minecraft* pMinecraft, unsigned int i);
 	void playMusicUpdate();
 
 private:
@@ -193,7 +179,6 @@ private:
 	int m_musicID;
 	int m_iMusicDelay;
 	int m_StreamState;
-	int m_MusicType;
 	AUDIO_INFO m_StreamingAudioInfo;
 	wstring m_CDMusic;
 	BOOL m_bSystemMusicPlaying;

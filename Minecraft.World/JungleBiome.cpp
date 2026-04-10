@@ -5,6 +5,7 @@
 	#include "net.minecraft.world.level.h"
 	#include "net.minecraft.world.entity.animal.h"
 	#include "JungleBiome.h"
+	#include "MelonFeature.h"
 
 	JungleBiome::JungleBiome(int id, bool isEdge) : Biome(id)
 	{
@@ -69,5 +70,17 @@
 			vines->place(level, random, x, y2, z);
 		}
 		delete vines;
+		PIXEndNamedEvent();
+
+		PIXBeginNamedEvent(0, "Adding melons");
+		if (random->nextInt(4) == 0) // Common: 1 in 4 chunks
+		{
+			int x = xo + random->nextInt(16) + 8;
+			int z = zo + random->nextInt(16) + 8;
+			int y = random->nextInt(Level::genDepth);
+			MelonFeature *melonFeature = new MelonFeature();
+			melonFeature->place(level, random, x, y, z);
+			delete melonFeature;
+		}
 		PIXEndNamedEvent();
 	}

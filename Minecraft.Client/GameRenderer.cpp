@@ -228,14 +228,15 @@ void GameRenderer::tick(bool first)		// 4J - add bFirst
 	PIXEndNamedEvent();
 
 	darkenWorldAmountO = darkenWorldAmount;
-	if (BossMobGuiInfo::darkenWorld)
+    int idx = BossMobGuiInfo::getIndexFromDimension((int)mc->level->dimension);
+    if (BossMobGuiInfo::darkenWorld[idx])
 	{
 		darkenWorldAmount += 1.0f / (static_cast<float>(SharedConstants::TICKS_PER_SECOND) * 1);
 		if (darkenWorldAmount > 1)
 		{
 			darkenWorldAmount = 1;
 		}
-		BossMobGuiInfo::darkenWorld = false;
+		BossMobGuiInfo::darkenWorld[idx] = false;
 	}
 	else if (darkenWorldAmount > 0)
 	{

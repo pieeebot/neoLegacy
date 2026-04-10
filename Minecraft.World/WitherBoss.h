@@ -106,4 +106,5 @@ public:
 	virtual float getMaxHealth() { return Monster::getMaxHealth(); };
 	virtual float getHealth() { return Monster::getHealth(); };
 	virtual wstring getAName() { return app.GetString(IDS_WITHER); };
+    virtual int getDimension() { return Entity::dimension; }
 };

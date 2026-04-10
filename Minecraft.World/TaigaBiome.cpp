@@ -82,14 +82,17 @@ void TaigaBiome::buildSurfaceAtDefault(Level *level, Random *random, byte* chunk
     if (type == 1 || type == 2)
     {
         topMaterial = static_cast<byte>(Tile::grass_Id);
+        topMaterialData = 0;
         material = static_cast<byte>(Tile::dirt_Id);
         if (noiseVal > 1.75)
         {
             topMaterial = static_cast<byte>(Tile::dirt_Id); 
+            topMaterialData = 1;
         }
         else if (noiseVal > -0.95)
         {
             topMaterial = static_cast<byte>(Tile::dirt_Id); 
+            topMaterialData = 2;
         }
     }
     Biome::buildSurfaceAtDefault(level, random, chunkBlocks, x, z, noiseVal);

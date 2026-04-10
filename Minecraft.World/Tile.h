@@ -188,6 +188,7 @@ public:
 	static  bool	propagate[TILE_NUM_COUNT];
 
 	// 4J - this array of simple constants made so the compiler can optimise references to Ids that were previous of the form Tile::<whatever>->id, and are now simply Tile::whatever_Id
+	static const int air_Id = 0;
 	static const int stone_Id = 1;
 	static const int grass_Id = 2;
 	static const int dirt_Id = 3;

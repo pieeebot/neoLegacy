@@ -27,7 +27,9 @@ void StructureFeatureIO::staticCtor()
 	setStartId(eStructureStart_NetherBridgeStart, NetherBridgeFeature::NetherBridgeStart::Create, L"Fortress");
 	setStartId(eStructureStart_StrongholdStart, StrongholdFeature::StrongholdStart::Create, L"Stronghold");
 	setStartId(eStructureStart_ScatteredFeatureStart, RandomScatteredLargeFeature::ScatteredFeatureStart::Create, L"Temple");
+	setStartId(eStructureStart_Monument, OceanMonumentFeature::MonumentStart::Create, L"Monument");
 
+	OceanMonumentPieces::loadStatic();
 	MineShaftPieces::loadStatic();
 	VillagePieces::loadStatic();
 	NetherBridgePieces::loadStatic();

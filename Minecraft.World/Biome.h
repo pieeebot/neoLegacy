@@ -101,7 +101,9 @@ public:
     wstring m_name;
     int color;
     byte topMaterial;
+    byte topMaterialData;
     byte material;
+    byte materialData;
     int leafColor;
     float depth;
     float scale;
@@ -197,13 +199,13 @@ public:
     virtual void decorate(Level *level, Random *random, int xo, int zo);
     
     virtual void buildSurfaceAtDefault(Level *level, Random *random, byte* chunkBlocks, int x, int z, double noiseVal);
-    
+
     
     virtual void buildSurfaceAtDefault(Level *level, Random *random, byte* chunkBlocks, const BlockPos& pos, double noiseVal);
     
-    
+    virtual void buildSurfaceAtDefault(Level *level, Random *random, byte* chunkBlocks, byte* chunkData, int x, int z, double noiseVal);
    
-    virtual int getWaterColor(); 
+    virtual int getWaterColor();
 
     public:
     
@@ -212,11 +214,10 @@ public:
         m_skyColor = (eMinecraftColour)skyRGB;
     }
     void setDebugName(const wstring& name) { m_name = name; }
-    int getWaterColor() const { return m_waterColor; }   
     int getSkyColor() const { return m_skyColor; }
     
     virtual int getBaseBiomeId() const { return id; }   
-    virtual int getFoliageColor() const;               // rename from getFolageColor
+    virtual int getFolageColor() const;               
     virtual bool isSame(const Biome* other) const;
     virtual int getTemperatureCategory() const;
     virtual void buildSurfaceAt(Level* level, Random* random, ChunkPrimer* primer, int x, int z, double noiseVal);
@@ -224,8 +225,6 @@ public:
     
     virtual float getCreatureProbability() const;
     virtual int getGrassColor() const;
-    virtual int Biome::getFolageColor()const{
-    return getFoliageColor(); }
     virtual Feature *getFlowerFeature(Random *random, int x, int y, int z);
     virtual int getRandomDoublePlantType(Random *random);
     

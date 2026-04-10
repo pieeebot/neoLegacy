@@ -23,7 +23,7 @@ intArray RiverMixerLayer::getArea(int xo, int yo, int w, int h)
 	intArray result = IntCache::allocate(w * h);
 	for (int i = 0; i < w * h; i++)
 	{
-		if (b[i] == Biome::ocean->id)
+		if (b[i] == Biome::ocean->id || b[i] == Biome::deepOcean->id)
 		{
 			result[i] = b[i];
 

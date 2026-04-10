@@ -9,6 +9,8 @@
 #include "net.minecraft.world.level.storage.h"
 #include "net.minecraft.world.entity.h"
 #include "RandomLevelSource.h"
+#include "OceanMonumentFeature.h"
+
 
 #ifdef __PS3__
 #include "../Minecraft.Client/PS3/SPU_Tasks/PerlinNoise/PerlinNoiseJob.h"
@@ -38,8 +40,12 @@ RandomLevelSource::RandomLevelSource(Level *level, int64_t seed, bool generateSt
 	mineShaftFeature = new MineShaftFeature();
 	scatteredFeature = new RandomScatteredLargeFeature();
 	canyonFeature = new CanyonFeature();
+	oceanMonument = new OceanMonumentFeature();
 
 	this->level = level;
+
+	oceanMonument->setLevel(level);
+	oceanMonument->prescanNearby(24);
 
 	random = new Random(seed);
 	pprandom = new Random(seed);	// 4J - added, so that we can have a separate random for doing post-processing in parallel with creation
@@ -73,6 +79,7 @@ RandomLevelSource::~RandomLevelSource()
 	delete mineShaftFeature;
 	delete scatteredFeature;
 	delete canyonFeature;
+	delete oceanMonument;
 
 	this->level = level;
 
@@ -361,14 +368,11 @@ void RandomLevelSource::prepareHeights(int xOffs, int zOffs, byteArray blocks)
 }
 
 
-void RandomLevelSource::buildSurfaces(int xOffs, int zOffs, byteArray blocks, BiomeArray biomes)
+void RandomLevelSource::buildSurfaces(int xOffs, int zOffs, byteArray blocks, byteArray blockData, BiomeArray biomes)
 {
-	int waterHeight = level->seaLevel;
-
 	double s = 1 / 32.0;
 
 	doubleArray depthBuffer(16*16); // 4J - used to be declared with class level scope but moved here for thread safety
-
 	depthBuffer = perlinNoise3->getRegion(depthBuffer, xOffs * 16, zOffs * 16, 0, 16, 16, 1, s * 2, s * 2, s * 2);
 
 	for (int x = 0; x < 16; x++)
@@ -376,87 +380,19 @@ void RandomLevelSource::buildSurfaces(int xOffs, int zOffs, byteArray blocks, Bi
 		for (int z = 0; z < 16; z++)
 		{
 			Biome *b = biomes[z + x * 16];
-			float temp = b->getTemperature();
-			int runDepth = static_cast<int>(depthBuffer[x + z * 16] / 3 + 3 + random->nextDouble() * 0.25);
 
-			int run = -1;
-
-			byte top = b->topMaterial;
-			byte material = b->material;
-
-			LevelGenerationOptions *lgo = app.getLevelGenerationOptions();
-			if(lgo != nullptr)
-			{
-				lgo->getBiomeOverride(b->id,material,top);
-			}
-
-			for (int y = Level::genDepthMinusOne; y >= 0; y--)
-			{
-				int offs = (z * 16 + x) * Level::genDepth + y;
-
-				if (y <= 1 + random->nextInt(2))	// 4J - changed to make the bedrock not have bits you can get stuck in
-					//                if (y <= 0 + random->nextInt(5))
-				{
-					blocks[offs] = static_cast<byte>(Tile::unbreakable_Id);
-				}
-				else
-				{
-					int old = blocks[offs];
-
-					if (old == 0)
-					{
-						run = -1;
-					}
-					else if (old == Tile::stone_Id)
-					{
-						if (run == -1)
-						{
-							if (runDepth <= 0)
-							{
-								top = 0;
-								material = static_cast<byte>(Tile::stone_Id);
-							}
-							else if (y >= waterHeight - 4 && y <= waterHeight + 1)
-							{
-								top = b->topMaterial;
-								material = b->material;
-								if(lgo != nullptr)
-								{
-									lgo->getBiomeOverride(b->id,material,top);
-								}
-							}
-
-							if (y < waterHeight && top == 0)
-							{
-								if (temp < 0.15f) top = static_cast<byte>(Tile::ice_Id);
-								else top = static_cast<byte>(Tile::calmWater_Id);
-							}
-
-							run = runDepth;
-							if (y >= waterHeight - 1) blocks[offs] = top;
-							else blocks[offs] = material;
-						}
-						else if (run > 0)
-						{
-							run--;
-							blocks[offs] = material;
-
-							// place a few sandstone blocks beneath sand runs
-							if (run == 0 && material == Tile::sand_Id)
-							{
-								run = random->nextInt(4);
-								material = static_cast<byte>(Tile::sandStone_Id);
-							}
-						}
-					}
-				}
-			}
+			
+			// This is equivalent to Java's biome.genTerrainBlocks(world, rand, primer, x, z, noise).
+			b->buildSurfaceAtDefault(level, random, blocks.data, blockData.data,
+								   xOffs * 16 + x, zOffs * 16 + z,
+								   depthBuffer[x + z * 16]);
 		}
 	}
 
 	delete [] depthBuffer.data;
-
 }
+
+
 
 LevelChunk *RandomLevelSource::create(int x, int z)
 {
@@ -482,14 +418,16 @@ LevelChunk *RandomLevelSource::getChunk(int xOffs, int zOffs)
 	BiomeArray biomes;
 	level->getBiomeSource()->getBiomeBlock(biomes, xOffs * 16, zOffs * 16, 16, 16, true);
 
-	buildSurfaces(xOffs, zOffs, blocks, biomes);
+	// equivalent to Java's ChunkPrimer data.
+
+	byteArray blockData(blocksSize);
+	memset(blockData.data, 0, blocksSize);
+
+	buildSurfaces(xOffs, zOffs, blocks, blockData, biomes);
 
 	delete [] biomes.data;
 
 	caveFeature->apply(this, level, xOffs, zOffs, blocks);
-	// 4J Stu Design Change - 1.8 gen goes stronghold, mineshaft, village, canyon
-	// this changed in 1.2 to canyon, mineshaft, village, stronghold
-	// This change makes sense as it stops canyons running through other structures
 	canyonFeature->apply(this, level, xOffs, zOffs, blocks);
 	if (generateStructures)
 	{
@@ -497,18 +435,39 @@ LevelChunk *RandomLevelSource::getChunk(int xOffs, int zOffs)
 		villageFeature->apply(this, level, xOffs, zOffs, blocks);
 		strongholdFeature->apply(this, level, xOffs, zOffs, blocks);
 		scatteredFeature->apply(this, level, xOffs, zOffs, blocks);
+		oceanMonument->apply(this, level, xOffs, zOffs, blocks);
 	}
-	//        canyonFeature.apply(this, level, xOffs, zOffs, blocks);
-	// townFeature.apply(this, level, xOffs, zOffs, blocks);
-	// addCaves(xOffs, zOffs, blocks);
-	// addTowns(xOffs, zOffs, blocks);
 
-	//    levelChunk->recalcHeightmap();		// 4J - removed & moved into its own method
+	
+	byteArray nibbleData(blocksSize); 
+	memset(nibbleData.data, 0, blocksSize);
+	for (int z = 0; z < 16; ++z)
+	{
+		for (int x = 0; x < 16; ++x)
+		{
+			for (int y = 0; y < Level::genDepth; ++y)
+			{
+				int srcIdx = (x * 16 + z) * Level::genDepth + y; 
+				byte val   = blockData.data[srcIdx] & 0x0F;
+				if (val == 0) continue;
+
+				int rawIdx  = (x << 11) | (z << 7) | y; 
+				int byteIdx = rawIdx >> 1;
+				if (rawIdx & 1)
+					nibbleData.data[byteIdx] = static_cast<byte>((nibbleData.data[byteIdx] & 0x0F) | (val << 4));
+				else
+					nibbleData.data[byteIdx] = static_cast<byte>((nibbleData.data[byteIdx] & 0xF0) | val);
+			}
+		}
+	}
 
 	// 4J - this now creates compressed block data from the blocks array passed in, so moved it until after the blocks are actually finalised. We also
 	// now need to free the passed in blocks as the LevelChunk doesn't use the passed in allocation anymore.
 	LevelChunk *levelChunk = new LevelChunk(level, blocks, xOffs, zOffs);
+	levelChunk->setDataData(nibbleData);	
 	XPhysicalFree(tileData);
+	delete [] nibbleData.data;
+	delete [] blockData.data;
 
 	return levelChunk;
 }
@@ -779,6 +738,7 @@ void RandomLevelSource::postProcess(ChunkSource *parent, int xt, int zt)
 		hasVillage = villageFeature->postProcess(level, pprandom, xt, zt);
 		strongholdFeature->postProcess(level, pprandom, xt, zt);
 		scatteredFeature->postProcess(level, random, xt, zt);
+		oceanMonument->postProcess(level, pprandom, xt, zt);
 	}
 	PIXEndNamedEvent();
 

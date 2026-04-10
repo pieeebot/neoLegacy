@@ -37,6 +37,7 @@ const wchar_t *ColourTable::ColourTableElements[eMinecraftColour_COUNT] =
 	L"Foliage_JungleHills",
 	L"Foliage_Savanna",
 	L"Foliage_RoofedForest",
+	L"Foliage_Mesa",
 	
 	L"Grass_Common",
 	L"Grass_Ocean",
@@ -64,6 +65,7 @@ const wchar_t *ColourTable::ColourTableElements[eMinecraftColour_COUNT] =
 	L"Grass_JungleHills",
 	L"Grass_Savanna",
 	L"Grass_RoofedForest",
+	L"Grass_Mesa",
 
 	L"Water_Ocean",
 	L"Water_Plains",
@@ -88,6 +90,7 @@ const wchar_t *ColourTable::ColourTableElements[eMinecraftColour_COUNT] =
 	L"Water_ExtremeHillsEdge",
 	L"Water_Jungle",
 	L"Water_JungleHills",
+	L"Water_Mesa",
 
 	L"Sky_Ocean",
 	L"Sky_Plains",
@@ -265,16 +268,22 @@ const wchar_t *ColourTable::ColourTableElements[eMinecraftColour_COUNT] =
 	L"Mob_Endermite_Colour1",
 	L"Mob_Endermite_Colour2",
 
+	
+
 
 
 	L"Armour_Default_Leather_Colour",
+
+
 	L"Under_Water_Clear_Colour",
 	L"Under_Lava_Clear_Colour",
 	L"In_Cloud_Base_Colour",
 
+
 	L"Under_Water_Fog_Colour",
 	L"Under_Lava_Fog_Colour",
 	L"In_Cloud_Fog_Colour",
+
 
 	L"Default_Fog_Colour",
 	L"Nether_Fog_Colour",
@@ -333,14 +342,19 @@ const wchar_t *ColourTable::ColourTableElements[eMinecraftColour_COUNT] =
 
 void ColourTable::staticCtor()
 {
-	for(unsigned int i = eMinecraftColour_NOT_SET; i < eMinecraftColour_COUNT; ++i)
+	for(unsigned int i = 0; i < eMinecraftColour_COUNT; ++i)
 	{
+		// Critical check: Stop if we hit a NULL pointer or reach the end of the defined array
+		if (i >= _countof(ColourTableElements) || ColourTableElements[i] == nullptr)
+			break;
+
 		s_colourNamesMap.insert( unordered_map<wstring,eMinecraftColour>::value_type( ColourTableElements[i], static_cast<eMinecraftColour>(i)) );
 	}
 }
 
 ColourTable::ColourTable(PBYTE pbData, DWORD dwLength)
 {
+	XMemSet(m_colourValues, 0, sizeof(m_colourValues));
 	loadColoursFromData(pbData, dwLength);
 }
 
@@ -376,7 +390,11 @@ void ColourTable::setColour(const wstring &colourName, int value)
 	auto it = s_colourNamesMap.find(colourName);
 	if(it != s_colourNamesMap.end())
 	{
-		m_colourValues[static_cast<int>(it->second)] = value;
+		int id = static_cast<int>(it->second);
+		if (id >= 0 && id < eMinecraftColour_COUNT)
+		{
+			m_colourValues[id] = value;
+		}
 	}
 }
 
@@ -387,5 +405,10 @@ void ColourTable::setColour(const wstring &colourName, const wstring &value)
 
 unsigned int ColourTable::getColour(eMinecraftColour id)
 {
-	return m_colourValues[static_cast<int>(id)];
+	int idx = static_cast<int>(id);
+	if (idx >= 0 && idx < eMinecraftColour_COUNT)
+	{
+		return m_colourValues[idx];
+	}
+	return 0; // Return black for invalid IDs
 }

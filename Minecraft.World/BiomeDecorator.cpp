@@ -55,7 +55,11 @@ void BiomeDecorator::_init()
     redStoneOreFeature = new OreFeature(Tile::redStoneOre_Id, 7);
     diamondOreFeature = new OreFeature(Tile::diamondOre_Id, 7);
     lapisOreFeature = new OreFeature(Tile::lapisOre_Id, 6);
-    
+
+    graniteOreFeature = new OreFeature(Tile::stone_Id, StoneTile::GRANITE, 33);
+    dioriteOreFeature = new OreFeature(Tile::stone_Id, StoneTile::DIORITE, 33);
+    andesiteOreFeature = new OreFeature(Tile::stone_Id, StoneTile::ANDESITE, 33);
+
     yellowFlowerFeature = new FlowerFeature(Tile::flower_Id);
     roseFlowerFeature = new FlowerFeature(Tile::rose_Id);
     brownMushroomFeature = new FlowerFeature(Tile::mushroom_brown_Id);
@@ -214,11 +218,11 @@ void BiomeDecorator::decorate()
         }
     }
 
-    //int doublePlantsToGen = doublePlantCount; // <-- Usa una variabile specifica per bioma!
+    //int doublePlantsToGen = doublePlantCount; // 
 
     //for (int i = 0; i < doublePlantsToGen; i++) 
     //{
-    //    // Genera il punto centrale del cluster
+    //    
     //    int x = xo + random->nextInt(16) + 8;
     //    int z = zo + random->nextInt(16) + 8;
     //    int y = random->nextInt(Level::genDepth); 
@@ -228,7 +232,7 @@ void BiomeDecorator::decorate()
     //    DoublePlantFeature* dpf = static_cast<DoublePlantFeature*>(doublePlantFeature);
     //    dpf->setPlantType(plantType);
     //    
-    //    // La chiamata place() ora genererà il grappolo grazie al ciclo da 64 inserito nel Passo 1
+    //    
     //    dpf->place(level, random, x, y, z);
     //}
 
@@ -392,5 +396,10 @@ void BiomeDecorator::decorateOres()
     decorateDepthSpan(8, redStoneOreFeature, 0, Level::genDepth / 8);
     decorateDepthSpan(1, diamondOreFeature, 0, Level::genDepth / 8);
     decorateDepthAverage(1, lapisOreFeature, Level::genDepth / 8, Level::genDepth / 8);
+
+    decorateDepthSpan(10, graniteOreFeature, 0, 80);
+    decorateDepthSpan(10, dioriteOreFeature, 0, 80);
+    decorateDepthSpan(10, andesiteOreFeature, 0, 80);
+
     level->setInstaTick(false);
 }

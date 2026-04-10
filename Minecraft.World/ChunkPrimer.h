@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "stdafx.h"   
 
@@ -30,6 +30,7 @@ public:
 
     
     void setBlockAndData(int x, int y, int z, int blockId, int data);
+    int getBlockId(int x, int y, int z) const;
     int getState(int x, int y, int z) const;
 
 private:

@@ -673,15 +673,15 @@ bool ScatteredFeaturePieces::SwamplandHut::postProcess(Level *level, Random *ran
 	}
 
 	// floor and ceiling
-	generateBox(level, chunkBB, 1, 1, 1, 5, 1, 7, Tile::wood_Id, TreeTile::DARK_TRUNK, Tile::wood_Id, TreeTile::DARK_TRUNK, false);
-	generateBox(level, chunkBB, 1, 4, 2, 5, 4, 7, Tile::wood_Id, TreeTile::DARK_TRUNK, Tile::wood_Id, TreeTile::DARK_TRUNK, false);
-	generateBox(level, chunkBB, 2, 1, 0, 4, 1, 0, Tile::wood_Id, TreeTile::DARK_TRUNK, Tile::wood_Id, TreeTile::DARK_TRUNK, false);
+	generateBox(level, chunkBB, 1, 1, 1, 5, 1, 7, Tile::wood_Id, TreeTile::SPRUCE_TRUNK, Tile::wood_Id, TreeTile::SPRUCE_TRUNK, false);
+	generateBox(level, chunkBB, 1, 4, 2, 5, 4, 7, Tile::wood_Id, TreeTile::SPRUCE_TRUNK, Tile::wood_Id, TreeTile::SPRUCE_TRUNK, false);
+	generateBox(level, chunkBB, 2, 1, 0, 4, 1, 0, Tile::wood_Id, TreeTile::SPRUCE_TRUNK, Tile::wood_Id, TreeTile::SPRUCE_TRUNK, false);
 
 	// walls
-	generateBox(level, chunkBB, 2, 2, 2, 3, 3, 2, Tile::wood_Id, TreeTile::DARK_TRUNK, Tile::wood_Id, TreeTile::DARK_TRUNK, false);
-	generateBox(level, chunkBB, 1, 2, 3, 1, 3, 6, Tile::wood_Id, TreeTile::DARK_TRUNK, Tile::wood_Id, TreeTile::DARK_TRUNK, false);
-	generateBox(level, chunkBB, 5, 2, 3, 5, 3, 6, Tile::wood_Id, TreeTile::DARK_TRUNK, Tile::wood_Id, TreeTile::DARK_TRUNK, false);
-	generateBox(level, chunkBB, 2, 2, 7, 4, 3, 7, Tile::wood_Id, TreeTile::DARK_TRUNK, Tile::wood_Id, TreeTile::DARK_TRUNK, false);
+	generateBox(level, chunkBB, 2, 2, 2, 3, 3, 2, Tile::wood_Id, TreeTile::SPRUCE_TRUNK, Tile::wood_Id, TreeTile::SPRUCE_TRUNK, false);
+	generateBox(level, chunkBB, 1, 2, 3, 1, 3, 6, Tile::wood_Id, TreeTile::SPRUCE_TRUNK, Tile::wood_Id, TreeTile::SPRUCE_TRUNK, false);
+	generateBox(level, chunkBB, 5, 2, 3, 5, 3, 6, Tile::wood_Id, TreeTile::SPRUCE_TRUNK, Tile::wood_Id, TreeTile::SPRUCE_TRUNK, false);
+	generateBox(level, chunkBB, 2, 2, 7, 4, 3, 7, Tile::wood_Id, TreeTile::SPRUCE_TRUNK, Tile::wood_Id, TreeTile::SPRUCE_TRUNK, false);
 
 	// pillars
 	generateBox(level, chunkBB, 1, 0, 2, 1, 3, 2, Tile::treeTrunk_Id, Tile::treeTrunk_Id, false);

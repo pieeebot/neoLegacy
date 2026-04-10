@@ -11,6 +11,7 @@ public:
 	BoundingBox(intArray sourceData);
 	static BoundingBox *getUnknownBox();
 	static BoundingBox *orientBox(int footX, int footY, int footZ, int offX, int offY, int offZ, int width, int height, int depth, int orientation);
+	static BoundingBox *fromCorners(int x1, int y1, int z1, int x2, int y2, int z2);
 	BoundingBox(BoundingBox *other);
 	BoundingBox(int x0, int y0, int z0, int x1, int y1, int z1);
 	BoundingBox(int x0, int z0, int x1, int z1);

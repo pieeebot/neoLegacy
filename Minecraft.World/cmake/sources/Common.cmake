@@ -1352,6 +1352,8 @@ set(_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_WORLD_LEVEL_BIOME
   "${CMAKE_CURRENT_SOURCE_DIR}/TheEndBiomeDecorator.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/WaterlilyFeature.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/WaterlilyFeature.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/MesaBiome.cpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/MesaBiome.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/net.minecraft.world.level.biome.h"
 )
 source_group("net/minecraft/world/level/biome" FILES ${_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_WORLD_LEVEL_BIOME})
@@ -1374,6 +1376,8 @@ set(_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_WORLD_LEVEL_CHUNK
   "${CMAKE_CURRENT_SOURCE_DIR}/SparseLightStorage.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/WaterLevelChunk.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/WaterLevelChunk.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/ChunkPrimer.cpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/ChunkPrimer.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/net.minecraft.world.level.chunk.h"
 )
 source_group("net/minecraft/world/level/chunk" FILES ${_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_WORLD_LEVEL_CHUNK})
@@ -1494,6 +1498,8 @@ set(_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_WORLD_LEVEL_LEVELGEN_FEATURE
   "${CMAKE_CURRENT_SOURCE_DIR}/PineFeature.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/PumpkinFeature.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/PumpkinFeature.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/MelonFeature.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/MelonFeature.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/ReedsFeature.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/ReedsFeature.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/SandFeature.cpp"
@@ -1563,6 +1569,10 @@ set(_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_WORLD_LEVEL_LEVELGEN_STRUCTURE
   "${CMAKE_CURRENT_SOURCE_DIR}/VillagePieces.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/VillagePieces.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/net.minecraft.world.level.levelgen.structure.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/OceanMonumentFeature.cpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/OceanMonumentFeature.h"
+"${CMAKE_CURRENT_SOURCE_DIR}/OceanMonumentPieces.cpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/OceanMonumentPieces.h"
 )
 source_group("net/minecraft/world/level/levelgen/structure" FILES ${_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_WORLD_LEVEL_LEVELGEN_STRUCTURE})
 
@@ -1656,6 +1666,12 @@ set(_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_WORLD_LEVEL_NEWBIOME_LAYER
   "${CMAKE_CURRENT_SOURCE_DIR}/VoronoiZoom.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/ZoomLayer.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/ZoomLayer.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/DeepOceanLayer.cpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/DeepOceanLayer.h"
+"${CMAKE_CURRENT_SOURCE_DIR}/RemoveTooMuchOceanLayer.cpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/RemoveTooMuchOceanLayer.h"
+"${CMAKE_CURRENT_SOURCE_DIR}/RareBiomeLayer.cpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/RareBiomeLayer.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/net.minecraft.world.level.newbiome.layer.h"
 )
 source_group("net/minecraft/world/level/newbiome/layer" FILES ${_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_WORLD_LEVEL_NEWBIOME_LAYER})

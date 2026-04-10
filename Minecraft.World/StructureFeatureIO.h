@@ -13,6 +13,7 @@ enum EStructureStart
 	eStructureStart_NetherBridgeStart,
 	eStructureStart_StrongholdStart,
 	eStructureStart_ScatteredFeatureStart,
+	eStructureStart_Monument,
 };
 
 enum EStructurePiece
@@ -41,6 +42,20 @@ enum EStructurePiece
 	eStructurePiece_DesertPyramidPiece,
 	eStructurePiece_JunglePyramidPiece,
 	eStructurePiece_SwamplandHut,
+
+	eStructurePiece_OceanMonumentBuilding,
+	eStructurePiece_OceanMonumentCore,
+	eStructurePiece_OceanMonumentDoubleX,
+	eStructurePiece_OceanMonumentDoubleXY,
+	eStructurePiece_OceanMonumentDoubleY,
+	eStructurePiece_OceanMonumentDoubleYZ,
+	eStructurePiece_OceanMonumentDoubleZ,
+	eStructurePiece_OceanMonumentEntry,
+	eStructurePiece_OceanMonumentPenthouse,
+	eStructurePiece_OceanMonumentSimple,
+	eStructurePiece_OceanMonumentSimpleTop,
+	eStructurePiece_OceanMonumentWing,
+
 
 	eStructurePiece_FillerCorridor,
 	eStructurePiece_StairsDown,

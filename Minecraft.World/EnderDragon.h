@@ -186,4 +186,5 @@ public:
 	virtual wstring getAName() { return app.GetString(IDS_ENDERDRAGON); };
 	virtual float getHealth() { return LivingEntity::getHealth(); };
 	virtual float getMaxHealth() { return LivingEntity::getMaxHealth(); };
+    virtual int getDimension() { return Entity::dimension; }
 };

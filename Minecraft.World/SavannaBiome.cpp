@@ -39,7 +39,7 @@ int SavannaBiome::getGrassColor() const
     return 0xBFB755; 
 }
 
-int SavannaBiome::getFoliageColor() const
+int SavannaBiome::getFolageColor() const
 {
     return 0xAEA42A; 
 }
@@ -85,12 +85,23 @@ void MutatedSavannaBiome::buildSurfaceAtDefault(Level *level, Random *random, by
     if (noiseVal > 1.75)
     {
         topMaterial = static_cast<byte>(Tile::stone_Id);
+        topMaterialData = 0;
         material = static_cast<byte>(Tile::stone_Id);
+        materialData = 0;
     }
     else if (noiseVal > -0.5)
     {
         topMaterial = static_cast<byte>(Tile::dirt_Id);
+        topMaterialData = 0;
         material = static_cast<byte>(Tile::dirt_Id);
+        materialData = 0;
+    }
+    else
+    {
+        topMaterial = static_cast<byte>(Tile::grass_Id);
+        topMaterialData = 0;
+        material = static_cast<byte>(Tile::dirt_Id);
+        materialData = 0;
     }
 
     Biome::buildSurfaceAtDefault(level, random, chunkBlocks, x, z, noiseVal);

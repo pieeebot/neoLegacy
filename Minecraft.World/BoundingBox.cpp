@@ -53,6 +53,19 @@ BoundingBox *BoundingBox::orientBox(int footX, int footY, int footZ, int offX, i
 	}
 }
 
+BoundingBox* BoundingBox::fromCorners(int x1, int y1, int z1, int x2, int y2, int z2)
+{
+    
+    return new BoundingBox(
+        x1 < x2 ? x1 : x2, 
+        y1 < y2 ? y1 : y2, 
+        z1 < z2 ? z1 : z2,
+        x1 > x2 ? x1 : x2, 
+        y1 > y2 ? y1 : y2, 
+        z1 > z2 ? z1 : z2
+    );
+}
+
 BoundingBox::BoundingBox(BoundingBox *other)
 {
 	x0 = other->x0;

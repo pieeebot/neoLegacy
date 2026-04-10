@@ -10,6 +10,7 @@ class VillageFeature;
 class MineShaftFeature;
 class PerlinNoise;
 class RandomScatteredLargeFeature;
+class OceanMonumentFeature;
 
 class RandomLevelSource : public ChunkSource
 {
@@ -59,7 +60,7 @@ public:
 	void prepareHeights(int xOffs, int zOffs, byteArray blocks);
 
 public:
-	void buildSurfaces(int xOffs, int zOffs, byteArray blocks, BiomeArray biomes);
+	void buildSurfaces(int xOffs, int zOffs, byteArray blocks, byteArray blockData, BiomeArray biomes);
 
 private:
 	LargeFeature *caveFeature;
@@ -68,6 +69,7 @@ private:
 	MineShaftFeature *mineShaftFeature;
 	RandomScatteredLargeFeature *scatteredFeature;
 	LargeFeature *canyonFeature;
+	OceanMonumentFeature *oceanMonument;
 private:
 	virtual LevelChunk *create(int x, int z);
 

@@ -41,6 +41,9 @@ public:
 	Feature *redStoneOreFeature;
 	Feature *diamondOreFeature;
 	Feature *lapisOreFeature;
+	Feature *graniteOreFeature;
+	Feature *dioriteOreFeature;
+	Feature *andesiteOreFeature;
 	Feature *yellowFlowerFeature;
 	Feature *roseFlowerFeature;
 	Feature *brownMushroomFeature;

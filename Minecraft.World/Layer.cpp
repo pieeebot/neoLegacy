@@ -26,18 +26,21 @@ LayerArray Layer::getDefaultLayers(int64_t seed, LevelType *levelType)
 	islandLayer = std::make_shared<AddIslandLayer>(1, islandLayer);
 	islandLayer = std::make_shared<ZoomLayer>(2001, islandLayer);
 	islandLayer = std::make_shared<AddIslandLayer>(2, islandLayer);
+	islandLayer = std::make_shared<RemoveTooMuchOceanLayer>(2, islandLayer);
 	islandLayer = std::make_shared<AddSnowLayer>(2, islandLayer);
 	islandLayer = std::make_shared<ZoomLayer>(2002, islandLayer);
 	islandLayer = std::make_shared<AddIslandLayer>(3, islandLayer);
 	islandLayer = std::make_shared<ZoomLayer>(2003, islandLayer);
 	islandLayer = std::make_shared<AddIslandLayer>(4, islandLayer);
+
 //	islandLayer = shared_ptr<Layer>(new AddMushroomIslandLayer(5, islandLayer));		// 4J - old position of mushroom island layer
 
-	int zoomLevel = 4;
+	int zoomLevel = 4; 
 	if (levelType == LevelType::lvl_largeBiomes)
 	{
-		zoomLevel = 6;
+		zoomLevel = 6; 
 	}
+	
 
 	shared_ptr<Layer> riverLayer = islandLayer;
 	riverLayer = ZoomLayer::zoom(1000, riverLayer, 0);
@@ -48,10 +51,20 @@ LayerArray Layer::getDefaultLayers(int64_t seed, LevelType *levelType)
 
 	shared_ptr<Layer> biomeLayer = islandLayer;
 	biomeLayer = ZoomLayer::zoom(1000, biomeLayer, 0);
+
 	biomeLayer = std::make_shared<BiomeInitLayer>(200, biomeLayer, levelType);
 
+
 	biomeLayer = ZoomLayer::zoom(1000, biomeLayer, 2);
-	biomeLayer = std::make_shared<RegionHillsLayer>(1000, biomeLayer);
+
+	
+	shared_ptr<Layer> hillsNoise = islandLayer;
+	hillsNoise = ZoomLayer::zoom(1000, hillsNoise, 0);
+	hillsNoise = std::make_shared<RiverInitLayer>(100, hillsNoise);
+	hillsNoise = ZoomLayer::zoom(1000, hillsNoise, 2);
+
+	biomeLayer = std::make_shared<RegionHillsLayer>(1000, biomeLayer, hillsNoise);
+	biomeLayer = std::make_shared<RareBiomeLayer>(1001, biomeLayer);
 
 	for (int i = 0; i < zoomLevel; i++)
 	{
@@ -65,6 +78,8 @@ LayerArray Layer::getDefaultLayers(int64_t seed, LevelType *levelType)
 			// them at this scale actually lets us place them near enough other land, if we add them at the same scale as java then they have to be too far out to see for
 			// the scale of our maps
 			biomeLayer = std::make_shared<AddMushroomIslandLayer>(5, biomeLayer);
+			//Adding Deep Ocean here as well, now that we are at a suitable scale for LCE maps.
+			biomeLayer = std::make_shared<DeepOceanLayer>(4, biomeLayer);
 		}
 
 		if (i == 1 )

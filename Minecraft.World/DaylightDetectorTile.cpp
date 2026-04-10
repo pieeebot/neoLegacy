@@ -82,16 +82,26 @@ void DaylightDetectorTile::updateSignalStrength(Level *level, int x, int y, int 
 	}
 }
 
-bool DaylightDetectorTile::use(Level* level, int x, int y, int z, shared_ptr<Player> player, int clickedFace, float clickX, float clickY, float clickZ, bool soundOnly/*=false*/) 
+bool DaylightDetectorTile::use(Level *level, int x, int y, int z, shared_ptr<Player> player, int clickedFace, float clickX, float clickY, float clickZ, bool soundOnly/*=false*/) // 4J added soundOnly param
 {
-	if (inverted)
+	if (player->abilities.mayBuild)
 	{
-		level->setTileAndData(x, y, z, Tile::daylightDetector_Id, 0, UPDATE_CLIENTS);
-	} else {
-		level->setTileAndData(x, y, z, Tile::invertedDaylightDetector_Id, 0, UPDATE_CLIENTS);
-	}
+		if (!level->isClientSide)
+		{
+			int data = level->getData(x, y, z);
+			if (inverted)
+				level->setTileAndData(x, y, z, Tile::daylightDetector_Id, data, Tile::UPDATE_INVISIBLE);
+			else
+				level->setTileAndData(x, y, z, Tile::invertedDaylightDetector_Id, data, Tile::UPDATE_INVISIBLE);
 
-	return true;
+			updateSignalStrength(level, x, y, z);
+		}
+		return true;
+	}
+	else
+	{
+		return Tile::use(level, x, y, z, player, clickedFace, clickX, clickY, clickZ, soundOnly);
+	}
 }
 
 bool DaylightDetectorTile::isCubeShaped()

@@ -35,9 +35,9 @@ void SwampBiome::buildSurfaceAtDefault(Level *level, Random *random, byte* chunk
         int localX = x & 15;
         int localZ = z & 15;
 
-        for (int y = 255; y >= 0; --y)
+        for (int y = Level::genDepthMinusOne; y >= 0; --y)
         {
-            int index = (localX * 16 + localZ) * 256 + y;
+            int index = (localZ * 16 + localX) * Level::genDepth + y;
             if (chunkBlocks[index] != 0) 
             {
                 if (y == 62 && chunkBlocks[index] != static_cast<byte>(Tile::water_Id))

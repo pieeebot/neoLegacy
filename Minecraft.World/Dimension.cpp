@@ -170,7 +170,12 @@ Vec3 *Dimension::getFogColor(float td, float a) const
 	if (br < 0.0f) br = 0.0f;
 	if (br > 1.0f) br = 1.0f;
 
-	unsigned int baseFogColour = Minecraft::GetInstance()->getColourTable()->getColor( eMinecraftColour_Default_Fog_Colour );
+	unsigned int baseFogColour = 0x808080; // Gray default
+	Minecraft* pMc = Minecraft::GetInstance();
+	if (pMc && pMc->getColourTable())
+	{
+		baseFogColour = pMc->getColourTable()->getColor(eMinecraftColour_Default_Fog_Colour);
+	}
 	float r = ((baseFogColour >> 16) & 0xff) / 255.0f;
 	float g = ((baseFogColour >> 8) & 0xff) / 255.0f;
 	float b = ((baseFogColour) & 0xff) / 255.0f;

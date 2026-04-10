@@ -77,7 +77,9 @@ void ExtremeHillsBiome::buildSurfaceAtDefault(Level *level, Random *random, byte
     else if (noiseVal > 1.0 && type != 1)
     {
         topMaterial = static_cast<byte>(Tile::stone_Id);
+        topMaterialData = 0;
         material = static_cast<byte>(Tile::stone_Id);
+        materialData = 0;
     }
 
     Biome::buildSurfaceAtDefault(level, random, chunkBlocks, x, z, noiseVal);

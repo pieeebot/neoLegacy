@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "ChunkPrimer.h"
 #include "Tile.h"          // for Tile::air (or your air tile)
 
@@ -97,6 +97,11 @@ int ChunkPrimer::getHighestNonAirPos(int x, int z) const
 void ChunkPrimer::setBlockAndData(int x, int y, int z, int blockId, int data)
 {
     setBlockAndData(getIndex(x, y, z), blockId, data);
+}
+
+int ChunkPrimer::getBlockId(int x, int y, int z) const
+{
+    return getBlockId(getIndex(x, y, z));
 }
 
 int ChunkPrimer::getState(int x, int y, int z) const

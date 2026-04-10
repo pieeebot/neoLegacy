@@ -30,6 +30,7 @@
   <colour name="Foliage_JungleHills" value="29bc05"/>
   <colour name="Foliage_Savanna" value="9eb34e"/>
   <colour name="Foliage_RoofedForest" value="59ae30"/>
+  <colour name="Foliage_Mesa" value="9e814d"/>
   
 
   <!-- Grass colours -->
@@ -60,6 +61,7 @@
   <colour name="Grass_JungleHills" value="53ca37"/>
   <colour name="Grass_Savanna" value="bfb755"/>
   <colour name="Grass_RoofedForest" value="507a32"/>
+  <colour name="Grass_Mesa" value="90814d"/>
 
   <!-- Water colours -->
   <colour name="Water_Ocean" value="ffffff"/>
@@ -85,6 +87,7 @@
   <colour name="Water_ExtremeHillsEdge" value="ffffff"/>
   <colour name="Water_Jungle" value="ffffff"/>
   <colour name="Water_JungleHills" value="ffffff"/>
+  <colour name="Water_Mesa" value="3f76e4"/>
 
   <!-- Sky colours -->  
   <colour name="Sky_Ocean" value="7BA5FF"/>

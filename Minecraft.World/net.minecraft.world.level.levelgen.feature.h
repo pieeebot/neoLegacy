@@ -18,6 +18,7 @@
 #include "OreFeature.h"
 #include "PineFeature.h"
 #include "PumpkinFeature.h"
+#include "MelonFeature.h"
 #include "ReedsFeature.h"
 #include "SpringFeature.h"
 #include "SpruceFeature.h"

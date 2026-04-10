@@ -31,7 +31,7 @@ void BiomeSource::_init()
 	playerSpawnBiomes.push_back(Biome::iceSpikes);
 }
 
-void BiomeSource::_init(int64_t seed, LevelType *generator)
+void BiomeSource::_init(int64_t seed, LevelType *generator, int xzSize)
 {
 	_init();
 
@@ -48,15 +48,15 @@ BiomeSource::BiomeSource()
 }
 
 // 4J added
-BiomeSource::BiomeSource(int64_t seed, LevelType *generator)
+BiomeSource::BiomeSource(int64_t seed, LevelType *generator, int xzSize)
 {
-	_init(seed, generator);
+	_init(seed, generator, xzSize);
 }
 
 // 4J - removal of separate temperature & downfall layers brought forward from 1.2.3
 BiomeSource::BiomeSource(Level *level)
 {
-	_init(level->getSeed(), level->getLevelData()->getGenerator());
+	_init(level->getSeed(), level->getLevelData()->getGenerator(), level->getLevelData()->getXZSize());
 }
 
 BiomeSource::~BiomeSource()
@@ -595,11 +595,15 @@ bool BiomeSource::getIsMatch(float *frac)
 	};
 
 
-	// Don't want more than 15% ocean
-	if( frac[0] > 0.15f )
+	// Don't want more than 15% ocean (normal + deep)
+	if (frac[0] + frac[24] > 0.15f)
 	{
 		return false;
 	}
+
+	// But we need some ocean to be present (critical[0])
+	frac[0] += frac[24]; 
+
 
 	// Consider mushroom shore & islands as the same by finding max
 	frac[14] = ( ( frac[15] > frac[14] ) ? frac[15] : frac[14] );

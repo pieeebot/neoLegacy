@@ -8,7 +8,7 @@ public:
     SavannaBiome(int id);
 
     virtual Feature *getTreeFeature(Random *random);
-    virtual int getFoliageColor() const override;
+    virtual int getFolageColor() const override;
     virtual int getGrassColor() const override;
     //virtual int getWaterColor() override;
     virtual Feature *getFlowerFeature(Random *random, int x, int y, int z) override;

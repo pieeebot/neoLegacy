@@ -1164,6 +1164,7 @@ void Gui::render(float a, bool mouseFree, int xMouse, int yMouse)
                 wfeature[eTerrainFeature_Mineshaft] = L"Mineshaft: ";
                 wfeature[eTerrainFeature_Village] = L"Village: ";
                 wfeature[eTerrainFeature_Ravine] = L"Ravine: ";
+                wfeature[eTerrainFeature_OceanMonument] = L"Monument: ";
 
                 // maxW in font units: physical width divided by font scale
                 float maxW = (static_cast<float>(g_rScreenWidth) - debugLeft - 8) / fontScale;
@@ -1174,7 +1175,7 @@ void Gui::render(float a, bool mouseFree, int xMouse, int yMouse)
                 {
                     FEATURE_DATA *pFeatureData = app.m_vTerrainFeatures[i];
                     int type = pFeatureData->eTerrainFeature;
-                    if (type < eTerrainFeature_Stronghold || type > eTerrainFeature_Ravine) continue;
+                    if (type < eTerrainFeature_Stronghold || type > eTerrainFeature_OceanMonument) continue;
                     if (truncated[type]) continue;
 
                     wstring itemInfo = L"[" + std::to_wstring(pFeatureData->x * 16) + L", " + std::to_wstring(pFeatureData->z * 16) + L"] ";
@@ -1190,7 +1191,7 @@ void Gui::render(float a, bool mouseFree, int xMouse, int yMouse)
                 }
 
                 lines.push_back(L""); // Spacer
-                for (int i = eTerrainFeature_Stronghold; i <= static_cast<int>(eTerrainFeature_Ravine); i++)
+                for (int i = eTerrainFeature_Stronghold; i <= static_cast<int>(eTerrainFeature_OceanMonument); i++)
                 {
                     lines.push_back(wfeature[i]);
                 }

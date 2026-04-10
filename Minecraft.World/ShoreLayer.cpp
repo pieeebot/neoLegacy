@@ -24,7 +24,7 @@ intArray ShoreLayer::getArea(int xo, int yo, int w, int h)
                 int _e = b[(x + 1 + 1) + (y + 1) * (w + 2)];
                 int _w = b[(x + 1 - 1) + (y + 1) * (w + 2)];
                 int _s = b[(x + 1) + (y + 1 + 1) * (w + 2)];
-                if (_n == Biome::ocean->id || _e == Biome::ocean->id || _w == Biome::ocean->id || _s == Biome::ocean->id)
+                if (_n == Biome::ocean->id || _e == Biome::ocean->id || _w == Biome::ocean->id || _s == Biome::ocean->id || _n == Biome::deepOcean->id || _e == Biome::deepOcean->id || _w == Biome::deepOcean->id || _s == Biome::deepOcean->id)
 				{
                     result[x + y * w] = Biome::mushroomIslandShore->id;
                 }
@@ -33,15 +33,22 @@ intArray ShoreLayer::getArea(int xo, int yo, int w, int h)
                     result[x + y * w] = old;
                 }
 			}
-			else if (old != Biome::ocean->id && old != Biome::river->id && old != Biome::swampland->id && old != Biome::extremeHills->id)
+			else if (old != Biome::ocean->id && old != Biome::deepOcean->id && old != Biome::river->id && old != Biome::swampland->id && old != Biome::extremeHills->id)
 			{
 				int _n = b[(x + 1) + (y + 1 - 1) * (w + 2)];
 				int _e = b[(x + 1 + 1) + (y + 1) * (w + 2)];
 				int _w = b[(x + 1 - 1) + (y + 1) * (w + 2)];
 				int _s = b[(x + 1) + (y + 1 + 1) * (w + 2)];
-				if (_n == Biome::ocean->id || _e == Biome::ocean->id || _w == Biome::ocean->id || _s == Biome::ocean->id)
+				if (_n == Biome::ocean->id || _e == Biome::ocean->id || _w == Biome::ocean->id || _s == Biome::ocean->id || _n == Biome::deepOcean->id || _e == Biome::deepOcean->id || _w == Biome::deepOcean->id || _s == Biome::deepOcean->id)
 				{
-					result[x + y * w] = Biome::beaches->id;
+					if (old == Biome::taiga->id || old == Biome::taigaHills->id || old == Biome::megaTaiga->id || old == Biome::megaTaigaHills->id || old == Biome::coldTaiga->id || old == Biome::coldTaigaHills->id)
+					{
+						result[x + y * w] = Biome::coldBeach->id;
+					}
+					else
+					{
+						result[x + y * w] = Biome::beaches->id;
+					}
 				}
 				else
 				{

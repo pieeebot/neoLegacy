@@ -223,6 +223,7 @@ enum eMinecraftColour
 	eMinecraftColour_Foliage_JungleHills,
 	eMinecraftColour_Foliage_Savanna,
 	eMinecraftColour_Foliage_RoofedForest,
+	eMinecraftColour_Foliage_Mesa,
 	
 	eMinecraftColour_Grass_Common,
 	eMinecraftColour_Grass_Ocean,
@@ -250,6 +251,7 @@ enum eMinecraftColour
 	eMinecraftColour_Grass_JungleHills,
 	eMinecraftColour_Grass_Savanna,
 	eMinecraftColour_Grass_RoofedForest,
+	eMinecraftColour_Grass_Mesa,
 
 	eMinecraftColour_Water_Ocean,
 	eMinecraftColour_Water_Plains,
@@ -274,6 +276,7 @@ enum eMinecraftColour
 	eMinecraftColour_Water_ExtremeHillsEdge,
 	eMinecraftColour_Water_Jungle,
 	eMinecraftColour_Water_JungleHills,
+	eMinecraftColour_Water_Mesa,
 
 	eMinecraftColour_Sky_Ocean,
 	eMinecraftColour_Sky_Plains,
@@ -615,6 +618,7 @@ enum _eTerrainFeatureType
 	eTerrainFeature_Ravine,
 	eTerrainFeature_NetherFortress,
 	eTerrainFeature_StrongholdEndPortal,
+	eTerrainFeature_OceanMonument,
 	eTerrainFeature_Count
 };
 
