@@ -846,9 +846,16 @@ vector<Biome::MobSpawnerData *> *RandomLevelSource::getMobsAt(MobCategory *mobCa
 	{
 		return nullptr;
 	}
-	if (mobCategory == MobCategory::monster && scatteredFeature->isSwamphut(x, y, z))
+	if (mobCategory == MobCategory::monster)
 	{
-		return scatteredFeature->getSwamphutEnemies();
+		if (scatteredFeature->isSwamphut(x, y, z))
+		{
+			return scatteredFeature->getSwamphutEnemies();
+		}
+		if (oceanMonument->isInsideFeature(x, y, z))
+        {
+            return oceanMonument->getMonumentEnemies();
+        }
 	}
 	return biome->getMobs(mobCategory);
 }

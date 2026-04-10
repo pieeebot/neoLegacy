@@ -229,9 +229,47 @@ const WCHAR *ConsoleSoundEngine::wchSoundNames[eSoundType_MAX]=
 	L"mob.rabbit.bunnymurder",
 	L"mob.rabbit.hop",
 
-	
+	L"item.armor.equip_leather1",
+	L"item.armor.equip_leather2",
+	L"item.armor.equip_leather3",
+	L"item.armor.equip_leather4",
+	L"item.armor.equip_leather5",
+	L"item.armor.equip_leather6",
 
+	L"item.armor.equip_chain1",
+	L"item.armor.equip_chain2",
+	L"item.armor.equip_chain3",
+	L"item.armor.equip_chain4",
+	L"item.armor.equip_chain5",
+	L"item.armor.equip_chain6",
 
+	L"item.armor.equip_iron1",
+	L"item.armor.equip_iron2",
+	L"item.armor.equip_iron3",
+	L"item.armor.equip_iron4",
+	L"item.armor.equip_iron5",
+	L"item.armor.equip_iron6",
+
+	L"item.armor.equip_gold1",
+	L"item.armor.equip_gold2",
+	L"item.armor.equip_gold3",
+	L"item.armor.equip_gold4",
+	L"item.armor.equip_gold5",
+	L"item.armor.equip_gold6",
+
+	L"item.armor.equip_diamond1",
+	L"item.armor.equip_diamond2",
+	L"item.armor.equip_diamond3",
+	L"item.armor.equip_diamond4",
+	L"item.armor.equip_diamond5",
+	L"item.armor.equip_diamond6",
+
+	L"item.armor.equip_generic1",
+	L"item.armor.equip_generic2",
+	L"item.armor.equip_generic3",
+	L"item.armor.equip_generic4",
+	L"item.armor.equip_generic5",
+	L"item.armor.equip_generic6"
 };
 
 

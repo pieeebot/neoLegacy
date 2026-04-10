@@ -781,6 +781,8 @@ set(_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_WORLD_ENTITY_ANIMAL
   "${CMAKE_CURRENT_SOURCE_DIR}/WaterAnimal.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/Wolf.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/Wolf.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/Rabbit.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/Rabbit.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/net.minecraft.world.entity.animal.h"
 )
 source_group("net/minecraft/world/entity/animal" FILES ${_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_WORLD_ENTITY_ANIMAL})
@@ -845,6 +847,9 @@ set(_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_WORLD_ENTITY_ITEM
   "${CMAKE_CURRENT_SOURCE_DIR}/MinecartTNT.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/PrimedTnt.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/PrimedTnt.h"
+
+   "${CMAKE_CURRENT_SOURCE_DIR}/ArmorStand.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/ArmorStand.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/net.minecraft.world.entity.item.h"
 )
 source_group("net/minecraft/world/entity/item" FILES ${_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_WORLD_ENTITY_ITEM})
@@ -885,6 +890,12 @@ set(_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_WORLD_ENTITY_MONSTER
   "${CMAKE_CURRENT_SOURCE_DIR}/Witch.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/Zombie.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/Zombie.h"
+ 
+  "${CMAKE_CURRENT_SOURCE_DIR}/Endermite.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/Endermite.h"
+ 
+  "${CMAKE_CURRENT_SOURCE_DIR}/Guardian.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/Guardian.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/net.minecraft.world.entity.monster.h"
 )
 source_group("net/minecraft/world/entity/monster" FILES ${_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_WORLD_ENTITY_MONSTER})
@@ -1997,10 +2008,7 @@ set(_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_WORLD_LEVEL_TILE
   "${CMAKE_CURRENT_SOURCE_DIR}/SeaLanternTile.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/PrismarineTile.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/TallGrass2.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/Rabbit.cpp"
- 
-  "${CMAKE_CURRENT_SOURCE_DIR}/Endermite.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/ArmorStand.cpp"
+  
   "${CMAKE_CURRENT_SOURCE_DIR}/FishFoodItem.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/ArmorStandItem.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/SavannaTreeFeature.cpp"

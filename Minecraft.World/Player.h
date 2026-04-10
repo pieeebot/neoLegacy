@@ -66,6 +66,7 @@ private:
 public:
 	AbstractContainerMenu *inventoryMenu;
 	AbstractContainerMenu *containerMenu;
+	int enchantmentSeed = 0;
 
 protected:
 	FoodData foodData;

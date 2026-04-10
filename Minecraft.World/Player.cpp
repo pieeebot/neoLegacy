@@ -1270,6 +1270,7 @@ void Player::readAdditionalSaveData(CompoundTag *entityTag)
 	sleepCounter = entityTag->getShort(L"SleepTimer");
 
 	experienceProgress = entityTag->getFloat(L"XpP");
+	enchantmentSeed = entityTag->getInt(L"enchSeed");
 	experienceLevel = entityTag->getInt(L"XpLevel");
 	totalExperience = entityTag->getInt(L"XpTotal");
 	setScore(entityTag->getInt(L"Score"));
@@ -1308,6 +1309,7 @@ void Player::addAdditonalSaveData(CompoundTag *entityTag)
 	entityTag->putShort(L"SleepTimer", static_cast<short>(sleepCounter));
 
 	entityTag->putFloat(L"XpP", experienceProgress);
+	entityTag->putInt(L"enchSeed", enchantmentSeed);
 	entityTag->putInt(L"XpLevel", experienceLevel);
 	entityTag->putInt(L"XpTotal", totalExperience);
 	entityTag->putInt(L"Score", getScore());

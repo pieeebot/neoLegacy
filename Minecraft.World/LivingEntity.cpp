@@ -2033,3 +2033,34 @@ bool LivingEntity::isAlliedTo(Team *other)
 	}
 	return false;
 }
+
+float LivingEntity::getEyeHeight()
+{
+    
+    return getHeadHeight(); 
+}
+
+Vec3 *LivingEntity::getPositionEyes(float partialTicks)
+{
+    if (partialTicks == 1.0f)
+    {
+        return Vec3::newTemp(x, y + (double)getEyeHeight(), z);
+    }
+    else
+    {
+        double d0 = xo + (x - xo) * (double)partialTicks;
+        double d1 = yo + (y - yo) * (double)partialTicks + (double)getEyeHeight();
+        double d2 = zo + (z - zo) * (double)partialTicks;
+        return Vec3::newTemp(d0, d1, d2);
+    }
+}
+
+HitResult *LivingEntity::rayTrace(double blockReachDistance, float partialTicks)
+{
+    Vec3 *vec3 = this->getPositionEyes(partialTicks);
+    Vec3 *vec31 = this->getViewVector(partialTicks); 
+    Vec3 *vec32 = vec3->add(vec31->x * blockReachDistance, vec31->y * blockReachDistance, vec31->z * blockReachDistance);
+    
+    
+    return this->level->clip(vec3, vec32, false, false);
+}

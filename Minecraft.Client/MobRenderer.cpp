@@ -31,6 +31,17 @@ void MobRenderer::render(shared_ptr<Entity> _mob, double x, double y, double z, 
 	renderLeash(mob, x, y, z, rot, a);
 }
 
+
+bool MobRenderer::shouldRender(shared_ptr<Entity> entity, float camX, float camY, float camZ)
+{
+    
+    double dx = entity->x - camX;
+    double dy = entity->y - camY;
+    double dz = entity->z - camZ;
+    double distSq = dx*dx + dy*dy + dz*dz;
+    return entity->shouldRenderAtSqrDistance(distSq);
+}
+
 bool MobRenderer::shouldShowName(shared_ptr<LivingEntity> mob)
 {
     return LivingEntityRenderer::shouldShowName(mob) && (mob->shouldShowName() || dynamic_pointer_cast<Mob>(mob)->hasCustomName());

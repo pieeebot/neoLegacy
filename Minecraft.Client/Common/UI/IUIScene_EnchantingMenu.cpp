@@ -2,7 +2,10 @@
 #include "../../../Minecraft.World/net.minecraft.world.inventory.h"
 #include "../../Minecraft.h"
 #include "../../MultiPlayerLocalPlayer.h"
+#include "../../PlayerList.h"
+#include "../../ServerPlayer.h"
 #include "IUIScene_EnchantingMenu.h"
+#include <MinecraftServer.h>
 
 IUIScene_AbstractContainerMenu::ESceneSection IUIScene_EnchantingMenu::GetSectionAndSlotInDirection( IUIScene_AbstractContainerMenu::ESceneSection eSection, ETapState eTapDirection, int *piTargetX, int *piTargetY )
 {
@@ -140,9 +143,10 @@ void IUIScene_EnchantingMenu::handleOtherClicked(int iPad, ESceneSection eSectio
 		break;
 	};
 	Minecraft *pMinecraft = Minecraft::GetInstance();
-	if (index >= 0 && m_menu->clickMenuButton(dynamic_pointer_cast<Player>(pMinecraft->localplayers[iPad]), index))
+	MinecraftServer *aMinecraft = MinecraftServer::getInstance();
+	if (index >= 0 && dynamic_cast<EnchantmentMenu*>(aMinecraft->getPlayers()->players[iPad]->containerMenu)->clickMenuButton(dynamic_pointer_cast<Player>(aMinecraft->getPlayers()->players[iPad]), index))
 	{
-		pMinecraft->localgameModes[iPad]->handleInventoryButtonClick(m_menu->containerId, index);
+		pMinecraft->localgameModes[iPad]->handleInventoryButtonClick(dynamic_cast<EnchantmentMenu*>(aMinecraft->getPlayers()->players[iPad]->containerMenu)->containerId, index);
 	}
 }
 
@@ -154,11 +158,14 @@ int IUIScene_EnchantingMenu::getSectionStartOffset(ESceneSection eSection)
 	case eSectionEnchantSlot:
 		offset = 0;
 		break;
-	case eSectionEnchantInventory:
+	case eSectionLapisSlot:
 		offset = 1;
 		break;
+	case eSectionEnchantInventory:
+		offset = 2;
+		break;
 	case eSectionEnchantUsing:
-		offset = 1 + 27;
+		offset = 2 + 27;
 		break;
 	default:
 		assert( false );
@@ -174,6 +181,7 @@ bool IUIScene_EnchantingMenu::IsSectionSlotList( ESceneSection eSection )
 		case eSectionEnchantInventory:
 		case eSectionEnchantUsing:
 		case eSectionEnchantSlot:
+		case eSectionLapisSlot:
 			return true;
 	}
 	return false;

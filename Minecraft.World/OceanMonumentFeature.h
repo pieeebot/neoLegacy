@@ -14,7 +14,7 @@ class OceanMonumentFeature : public StructureFeature
 {
 public:
     // static void staticCtor(); // Removed, merged into _init
-
+    std::vector<Biome::MobSpawnerData*> monumentEnemies;
 private:
     int spacing;
     int separation;
@@ -22,6 +22,7 @@ private:
     void _init();
 
 public:
+    vector<Biome::MobSpawnerData*>* getMonumentEnemies();
     OceanMonumentFeature();
     OceanMonumentFeature(std::unordered_map<std::wstring, std::wstring> options);
     ~OceanMonumentFeature();
@@ -49,4 +50,5 @@ public:
         
        
     };
+
 };

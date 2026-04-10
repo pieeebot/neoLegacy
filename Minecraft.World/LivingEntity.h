@@ -320,4 +320,9 @@ public:
 	virtual Team *getTeam();
 	virtual bool isAlliedTo(shared_ptr<LivingEntity> other);
 	virtual bool isAlliedTo(Team *other);
+
+public:
+    virtual float getEyeHeight();
+    virtual Vec3 *getPositionEyes(float partialTicks);
+    virtual HitResult *rayTrace(double blockReachDistance, float partialTicks);
 };

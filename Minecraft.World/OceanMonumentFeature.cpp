@@ -6,10 +6,16 @@
 #include "Mth.h"
 #include "LevelData.h"
 
+
 void OceanMonumentFeature::_init()
 {
     spacing   = 32; 
     separation = 5;
+     monumentEnemies.push_back(new Biome::MobSpawnerData(eTYPE_GUARDIAN, 1, 2, 4));
+}
+std::vector<Biome::MobSpawnerData*>* OceanMonumentFeature::getMonumentEnemies()
+{
+    return &monumentEnemies;
 }
 
 OceanMonumentFeature::OceanMonumentFeature() : StructureFeature() { _init(); }

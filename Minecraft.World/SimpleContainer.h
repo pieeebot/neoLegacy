@@ -20,6 +20,7 @@ public:
 	virtual void addListener(net_minecraft_world::ContainerListener *listener);
 	virtual void removeListener(net_minecraft_world::ContainerListener *listener);
 	virtual shared_ptr<ItemInstance> getItem(unsigned int slot);
+	virtual ItemInstanceArray* getItems() { return items; }
 	virtual shared_ptr<ItemInstance> removeItem(unsigned int slot, int count);
 	virtual shared_ptr<ItemInstance> removeItemNoUpdate(int slot);
 	virtual void setItem(unsigned int slot, shared_ptr<ItemInstance> item);

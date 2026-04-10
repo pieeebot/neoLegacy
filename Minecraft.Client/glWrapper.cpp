@@ -390,3 +390,8 @@ void glCullFace(int dir)
 {
 	RenderManager.StateSetFaceCullCW( dir == GL_BACK);
 }
+
+void glTexParameterf(int target, int param, float value)
+{
+    RenderManager.TextureSetParam(param, (int)value);
+}

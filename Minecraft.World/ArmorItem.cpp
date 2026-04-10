@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <random>
 #include "../Minecraft.Client/Minecraft.h"
 #include "net.minecraft.world.h"
 #include "net.minecraft.world.level.tile.h"
@@ -126,6 +127,54 @@ ArmorItem::ArmorItem(int id, const ArmorMaterial *armorType, int icon, int slot)
 	setMaxDamage(armorType->getHealthForSlot(slot));
 	maxStackSize = 1;
 	DispenserTile::REGISTRY.add(this, new ArmorDispenseItemBehavior());
+}
+
+shared_ptr<ItemInstance> ArmorItem::use(shared_ptr<ItemInstance> instance, Level* level, shared_ptr<Player> player) {
+	int slot = Mob::getEquipmentSlotForItem(instance) - 1;
+
+	// If player is in survival mode (not creative)
+	if (!player->abilities.instabuild) { //
+		// Equip the armor to the appropriate slot
+		ItemInstance copy = *instance->copy_not_shared();
+		if (player->inventory->armor[slot] == nullptr) {
+			player->inventory->armor[slot] = make_shared<ItemInstance>(copy);
+			player->inventory->removeItemNoUpdate(player->inventory->selected);
+			// Remove the item from hand (set count to 0)
+			instance->count = 0;
+		}
+		else {
+			player->inventory->setItem(player->inventory->selected, player->inventory->armor[slot]);
+			player->inventory->armor[slot] = make_shared<ItemInstance>(copy);
+		}
+	}
+	else {
+		ItemInstance copy = *instance->copy_not_shared();
+		if (player->inventory->armor[slot] == nullptr) {
+			player->inventory->armor[slot] = make_shared<ItemInstance>(copy);
+		}
+		else {
+			player->inventory->setItem(player->inventory->selected, player->inventory->armor[slot]);
+			player->inventory->armor[slot] = make_shared<ItemInstance>(copy);
+		}
+	}
+
+	int material = Item::items[instance->id]->getMaterial();
+	int lo, hi;
+	switch (material) {
+	case Item::eMaterial_cloth:   lo = 194; hi = 199; break;
+	case Item::eMaterial_chain:   lo = 200; hi = 205; break;
+	case Item::eMaterial_iron:    lo = 206; hi = 211; break;
+	case Item::eMaterial_gold:    lo = 212; hi = 217; break;
+	case Item::eMaterial_diamond: lo = 218; hi = 223; break;
+	default:                      lo = 224; hi = 229; break;
+	}
+
+	std::mt19937 rng(std::random_device{}());
+	std::uniform_int_distribution<int> dist(lo, hi);
+	player->playSound(dist(rng), 0.5f, 1.0f);
+
+	// Return the (now empty) instance
+	return instance;
 }
 
 int ArmorItem::getColor(shared_ptr<ItemInstance> item, int spriteLayer)

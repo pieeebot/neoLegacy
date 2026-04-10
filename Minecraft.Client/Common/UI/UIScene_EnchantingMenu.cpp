@@ -10,9 +10,17 @@ UIScene_EnchantingMenu::UIScene_EnchantingMenu(int iPad, void *_initData, UILaye
 	// Setup all the Iggy references we need for this scene
 	initialiseMovie();
 
+	m_enchantButton[0].m_BValue = 1.0f;
+	m_enchantButton[1].m_BValue = 2.0f;
+	m_enchantButton[2].m_BValue = 3.0f;
+
 	m_enchantButton[0].init(0);
 	m_enchantButton[1].init(1);
 	m_enchantButton[2].init(2);
+
+	
+
+	
 
 	EnchantingScreenInput *initData = static_cast<EnchantingScreenInput *>(_initData);
 	
@@ -26,15 +34,21 @@ UIScene_EnchantingMenu::UIScene_EnchantingMenu(int iPad, void *_initData, UILaye
 		gameMode->getTutorial()->changeTutorialState(e_Tutorial_State_Enchanting_Menu, this);
 	}
 	
-	EnchantmentMenu *menu = new EnchantmentMenu(initData->inventory, initData->level, initData->x, initData->y, initData->z);
+	menu = new EnchantmentMenu(initData->inventory, initData->level, initData->x, initData->y, initData->z);
+	//menu->iPad = initData->iPad;
 
 	Initialize( initData->iPad, menu, true, EnchantmentMenu::INV_SLOT_START, eSectionEnchantUsing, eSectionEnchantMax );
 
 	m_slotListIngredient.addSlots(EnchantmentMenu::INGREDIENT_SLOT, 1);
+	m_slotListLapis.addSlots(EnchantmentMenu::LAPIS_SLOT, 1);
 
 	app.SetRichPresenceContext(m_iPad,CONTEXT_GAME_STATE_ENCHANTING);
 
 	delete initData;
+
+	m_enchantButton[0].setLevel();
+	m_enchantButton[1].setLevel();
+	m_enchantButton[2].setLevel();
 }
 
 wstring UIScene_EnchantingMenu::getMoviePath()
@@ -54,6 +68,7 @@ void UIScene_EnchantingMenu::handleReload()
 	Initialize( m_iPad, m_menu, true, EnchantmentMenu::INV_SLOT_START, eSectionEnchantUsing, eSectionEnchantMax );
 
 	m_slotListIngredient.addSlots(EnchantmentMenu::INGREDIENT_SLOT, 1);
+	m_slotListLapis.addSlots(EnchantmentMenu::LAPIS_SLOT, 1);
 }
 
 int UIScene_EnchantingMenu::getSectionColumns(ESceneSection eSection)
@@ -62,6 +77,9 @@ int UIScene_EnchantingMenu::getSectionColumns(ESceneSection eSection)
 	switch( eSection )
 	{
 	case eSectionEnchantSlot:
+		cols = 1;
+		break;
+	case eSectionLapisSlot:
 		cols = 1;
 		break;
 	case eSectionEnchantInventory:
@@ -85,6 +103,9 @@ int UIScene_EnchantingMenu::getSectionRows(ESceneSection eSection)
 	case eSectionEnchantSlot:
 		rows = 1;
 		break;
+	case eSectionLapisSlot:
+		rows = 1;
+		break;
 	case eSectionEnchantInventory:
 		rows = 3;
 		break;
@@ -105,6 +126,10 @@ void UIScene_EnchantingMenu::GetPositionOfSection( ESceneSection eSection, UIVec
 	case eSectionEnchantSlot:
 		pPosition->x = m_slotListIngredient.getXPos();
 		pPosition->y = m_slotListIngredient.getYPos();
+		break;
+	case eSectionLapisSlot:
+		pPosition->x = m_slotListLapis.getXPos();
+		pPosition->y = m_slotListLapis.getYPos();
 		break;
 	case eSectionEnchantInventory:
 		pPosition->x = m_slotListInventory.getXPos();
@@ -140,6 +165,10 @@ void UIScene_EnchantingMenu::GetItemScreenData( ESceneSection eSection, int iIte
 	case eSectionEnchantSlot:
 		sectionSize.x = m_slotListIngredient.getWidth();
 		sectionSize.y = m_slotListIngredient.getHeight();
+		break;
+	case eSectionLapisSlot:
+		sectionSize.x = m_slotListLapis.getWidth();
+		sectionSize.y = m_slotListLapis.getHeight();
 		break;
 	case eSectionEnchantInventory:
 		sectionSize.x = m_slotListInventory.getWidth();
@@ -200,6 +229,9 @@ void UIScene_EnchantingMenu::setSectionSelectedSlot(ESceneSection eSection, int 
 	case eSectionEnchantSlot:
 		slotList = &m_slotListIngredient;
 		break;
+	case eSectionLapisSlot:
+		slotList = &m_slotListLapis;
+		break;
 	case eSectionEnchantInventory:
 		slotList = &m_slotListInventory;
 		break;
@@ -221,6 +253,9 @@ UIControl *UIScene_EnchantingMenu::getSection(ESceneSection eSection)
 	{
 	case eSectionEnchantSlot:
 		control = &m_slotListIngredient;
+		break;
+	case eSectionLapisSlot:
+		control = &m_slotListLapis;
 		break;
 	case eSectionEnchantInventory:
 		control = &m_slotListInventory;

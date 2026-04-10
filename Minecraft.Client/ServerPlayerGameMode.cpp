@@ -324,6 +324,7 @@ bool ServerPlayerGameMode::useItem(shared_ptr<Player> player, Level *level, shar
 		player->inventory->items[player->inventory->selected] = itemInstance;
 		if (isCreative())
 		{
+			//if  (!(Item::items[itemInstance->id]->getBaseItemType() == 7 || Item::items[itemInstance->id]->getBaseItemType() == 8 || Item::items[itemInstance->id]->getBaseItemType() == 9 || Item::items[itemInstance->id]->getBaseItemType() == 10)) 
 			itemInstance->count = oldCount;
 			if (itemInstance->isDamageableItem()) itemInstance->setAuxValue(oldAux);
 		}

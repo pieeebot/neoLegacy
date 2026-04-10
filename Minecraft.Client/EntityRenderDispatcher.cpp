@@ -85,6 +85,8 @@
 
 #include "ArmorStandRenderer.h"
 #include "EndermiteRenderer.h"
+#include "GuardianRenderer.h"
+#include "GuardianModel.h"
 #include "MobRenderer.h"
 
 double EntityRenderDispatcher::xOff = 0.0;
@@ -128,6 +130,9 @@ EntityRenderDispatcher::EntityRenderDispatcher()
 	renderers[eTYPE_VILLAGER] = new VillagerRenderer();
 	renderers[eTYPE_VILLAGERGOLEM] = new VillagerGolemRenderer();
 	renderers[eTYPE_BAT] = new BatRenderer();
+	renderers[eTYPE_GUARDIAN] = new GuardianRenderer(new GuardianModel(), 0.5f);
+	renderers[eTYPE_ELDER_GUARDIAN] = new GuardianRenderer(new GuardianModel(), 0.5f);
+	
 
 	renderers[eTYPE_MOB] = new MobRenderer(new HumanoidModel(), 0.5f);
 

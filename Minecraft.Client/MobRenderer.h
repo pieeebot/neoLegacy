@@ -14,6 +14,7 @@ class MobRenderer : public LivingEntityRenderer
 public:
 	MobRenderer(Model *model, float shadow);
     virtual void render(shared_ptr<Entity> mob, double x, double y, double z, float rot, float a);
+	virtual bool shouldRender(shared_ptr<Entity> entity, float camX, float camY, float camZ) override;
 
 protected:	
 	virtual bool shouldShowName(shared_ptr<LivingEntity> mob);

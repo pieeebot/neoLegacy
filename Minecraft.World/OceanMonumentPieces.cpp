@@ -8,7 +8,8 @@
 #include <algorithm>
 #include <random>
 #include <vector>
-#include "Squid.h"
+
+#include "Guardian.h"
 
 
 
@@ -176,18 +177,16 @@ bool OceanMonumentPieces::Piece::intersectsXZ(BoundingBox* chunkBB, int x0, int 
 
 bool OceanMonumentPieces::Piece::spawnElderGuardian(Level* level, BoundingBox* bb, int x, int y, int z)
 {
-    
     int wx = getWorldX(x, z);
     int wy = getWorldY(y);
     int wz = getWorldZ(x, z);
     if (bb->isInside(wx, wy, wz))
     {
-        Squid *guardian = new Squid(level);
-        //guardian->setElder(true);
+        Guardian* guardian = new Guardian(level);
+        guardian->setElder(true);
         guardian->heal(guardian->getMaxHealth());
-        /*entityguardian.setLocationAndAngles((double)i + 0.5D, (double)j, (double)k + 0.5D, 0.0F, 0.0F);
-        entityguardian.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entityguardian)), (IEntityLivingData)null);
-        worldIn.spawnEntityInWorld(entityguardian);*/
+        guardian->setPos((double)wx + 0.5, (double)wy, (double)wz + 0.5);
+        level->addEntity(shared_ptr<Entity>(guardian));
         return true;
     }
     return false;
@@ -1080,7 +1079,7 @@ bool OceanMonumentPieces::SimpleTopRoom::postProcess(Level* level, Random* rando
         if (random->nextInt(3) != 0)
         {
             int k = 2 + (random->nextInt(4) == 0 ? 0 : 1);
-            generateBox(level, chunkBB, i, k, j, i, 3, j, Tile::sponge_Id, 1, false);
+            generateBox(level, chunkBB, i, k, j, i, 3, j, Tile::sponge_Id, 1, Tile::sponge_Id, 1, false);
         }
     }
 

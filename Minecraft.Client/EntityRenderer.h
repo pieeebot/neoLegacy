@@ -75,4 +75,6 @@ public:
 	virtual Model *getNewModel() { return newModel; }
 	virtual Model *getNewModelSlim() { return newModelSlim; }
 	virtual void SetItemFrame(bool bSet) {}
+	virtual bool shouldRender(shared_ptr<Entity> entity, float camX, float camY, float camZ) { return true; }
+
 };

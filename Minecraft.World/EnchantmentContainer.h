@@ -12,7 +12,9 @@ class EnchantmentContainer : public SimpleContainer
 private:
 	EnchantmentMenu *m_menu;
 public:
-	EnchantmentContainer(EnchantmentMenu *menu);
+	int MAX_STACK_SIZE;
+
+	EnchantmentContainer(EnchantmentMenu *menu, int size = 1);
 	virtual int getMaxStackSize() const;
 	virtual void setChanged();
 	virtual bool canPlaceItem(int slot, shared_ptr<ItemInstance> item);

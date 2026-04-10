@@ -218,7 +218,47 @@ enum eSOUND_TYPE
 	eSoundType_MOB_RABBIT_DEATH,
 	eSoundType_MOB_RABBIT_HOP,
 
+	eSoundType_ITEM_ARMOR_equipLeather1,
+	eSoundType_ITEM_ARMOR_equipLeather2,
+	eSoundType_ITEM_ARMOR_equipLeather3,
+	eSoundType_ITEM_ARMOR_equipLeather4,
+	eSoundType_ITEM_ARMOR_equipLeather5,
+	eSoundType_ITEM_ARMOR_equipLeather6,
 
+	eSoundType_ITEM_ARMOR_equipChain1,
+	eSoundType_ITEM_ARMOR_equipChain2,
+	eSoundType_ITEM_ARMOR_equipChain3,
+	eSoundType_ITEM_ARMOR_equipChain4,
+	eSoundType_ITEM_ARMOR_equipChain5,
+	eSoundType_ITEM_ARMOR_equipChain6,
+
+	eSoundType_ITEM_ARMOR_equipIron1,
+	eSoundType_ITEM_ARMOR_equipIron2,
+	eSoundType_ITEM_ARMOR_equipIron3,
+	eSoundType_ITEM_ARMOR_equipIron4,
+	eSoundType_ITEM_ARMOR_equipIron5,
+	eSoundType_ITEM_ARMOR_equipIron6,
+
+	eSoundType_ITEM_ARMOR_equipGold1,
+	eSoundType_ITEM_ARMOR_equipGold2,
+	eSoundType_ITEM_ARMOR_equipGold3,
+	eSoundType_ITEM_ARMOR_equipGold4,
+	eSoundType_ITEM_ARMOR_equipGold5,
+	eSoundType_ITEM_ARMOR_equipGold6,
+
+	eSoundType_ITEM_ARMOR_equipDiamond1,
+	eSoundType_ITEM_ARMOR_equipDiamond2,
+	eSoundType_ITEM_ARMOR_equipDiamond3,
+	eSoundType_ITEM_ARMOR_equipDiamond4,
+	eSoundType_ITEM_ARMOR_equipDiamond5,
+	eSoundType_ITEM_ARMOR_equipDiamond6,
+
+	eSoundType_ITEM_ARMOR_equipGeneric1,
+	eSoundType_ITEM_ARMOR_equipGeneric2,
+	eSoundType_ITEM_ARMOR_equipGeneric3,
+	eSoundType_ITEM_ARMOR_equipGeneric4,
+	eSoundType_ITEM_ARMOR_equipGeneric5,
+	eSoundType_ITEM_ARMOR_equipGeneric6,
 
 	eSoundType_MAX
 };

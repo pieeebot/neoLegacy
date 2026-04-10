@@ -87,5 +87,7 @@ public:
 	virtual bool isValidRepairItem(shared_ptr<ItemInstance> source, shared_ptr<ItemInstance> repairItem);
 	virtual void registerIcons(IconRegister *iconRegister);
 
+	virtual shared_ptr<ItemInstance> use(shared_ptr<ItemInstance> instance, Level* level, shared_ptr<Player> player);
+
 	static Icon *getEmptyIcon(int slot);
 };

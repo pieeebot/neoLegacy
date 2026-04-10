@@ -26,6 +26,8 @@ bool UIControl_EnchantmentButton::setupControl(UIScene *scene, IggyValuePath *pa
 
 	//Button specific initialisers
 	m_funcChangeState = registerFastName(L"ChangeState");
+	m_CLevel = registerFastName(L"m_iCurrentLevel");
+	m_CLevelU = registerFastName(L"SetEnchantmentLevel");
 
 	return success;
 }
@@ -33,6 +35,18 @@ bool UIControl_EnchantmentButton::setupControl(UIScene *scene, IggyValuePath *pa
 void UIControl_EnchantmentButton::init(int index)
 {
 	m_index = index;
+	//IggyValueSetF64RS(getIggyValuePath(), m_CLevel, nullptr, index + 1);
+}
+
+void UIControl_EnchantmentButton::setLevel()
+{
+	IggyValueSetF64RS(getIggyValuePath(), m_CLevel, nullptr, m_index + 1);
+
+	IggyDataValue value[1];
+	value[0].type = IGGY_DATATYPE_number;
+	value[0].number = m_index + 1;
+	IggyDataValue result;
+	IggyResult out = IggyPlayerCallMethodRS(m_parentScene->getMovie(), &result, getIggyValuePath(), m_CLevelU, 1, value);
 }
 
 
@@ -175,6 +189,8 @@ void UIControl_EnchantmentButton::updateState()
 		state = eState_Inactive;
 		setLabel(L"");
 	}
+
+	IggyValueSetF64RS(getIggyValuePath(), m_CLevel, nullptr, m_BValue);
 
 	if(state != m_lastState)
 	{

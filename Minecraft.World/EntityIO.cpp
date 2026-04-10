@@ -46,7 +46,7 @@ void EntityIO::staticCtor()
 {
 	setId(ItemEntity::create, eTYPE_ITEMENTITY,  L"Item", 1);
 	setId(ExperienceOrb::create, eTYPE_EXPERIENCEORB, L"XPOrb", 2);
-
+	setId(Guardian::create, eTYPE_ELDER_GUARDIAN, L"ElderGuardian", 4, eMinecraftColour_Armour_Default_Leather_Colour, eMinecraftColour_Sky_IceMountains, IDS_PIGZOMBIE);
 	setId(LeashFenceKnotEntity::create, eTYPE_LEASHFENCEKNOT, L"LeashKnot", 8);
 	setId(Painting::create, eTYPE_PAINTING, L"Painting", 9);
 	setId(Arrow::create, eTYPE_ARROW, L"Arrow", 10);
@@ -95,6 +95,12 @@ void EntityIO::staticCtor()
 	setId(WitherBoss::create, eTYPE_WITHERBOSS, L"WitherBoss", 64);
 	setId(Bat::create, eTYPE_BAT, L"Bat", 65, eMinecraftColour_Mob_Bat_Colour1, eMinecraftColour_Mob_Bat_Colour2, IDS_BAT);
 	setId(Witch::create, eTYPE_WITCH, L"Witch", 66, eMinecraftColour_Mob_Witch_Colour1, eMinecraftColour_Mob_Witch_Colour2, IDS_WITCH);
+
+	setId(Endermite::create, eTYPE_ENDERMITE, L"Endermite", 67,
+      eMinecraftColour_Mob_Endermite_Colour1,
+      eMinecraftColour_Mob_Endermite_Colour2, IDS_ENDERMITE);
+
+	setId(Guardian::create, eTYPE_GUARDIAN, L"Guardian", 68, eMinecraftColour_Mob_Witch_Colour1, eMinecraftColour_Mob_Witch_Colour2, IDS_WITCH);
 	
 
 	setId(Pig::create, eTYPE_PIG, L"Pig", 90, eMinecraftColour_Mob_Pig_Colour1, eMinecraftColour_Mob_Pig_Colour2, IDS_PIG);
@@ -114,9 +120,7 @@ void EntityIO::staticCtor()
 
 	setId(ArmorStand::create, eTYPE_ARMORSTAND, L"ArmorStand", 102);
 
-	setId(Endermite::create, eTYPE_ENDERMITE, L"Endermite", 67,
-      eMinecraftColour_Mob_Endermite_Colour1,
-      eMinecraftColour_Mob_Endermite_Colour2, IDS_ENDERMITE);//change IDS_Endermite later
+	//change IDS_Endermite later
 
 	setId(Villager::create, eTYPE_VILLAGER, L"Villager", 120, eMinecraftColour_Mob_Villager_Colour1, eMinecraftColour_Mob_Villager_Colour2, IDS_VILLAGER);
 

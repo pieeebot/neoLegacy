@@ -34,6 +34,7 @@ UIScene_MainMenu::UIScene_MainMenu(int iPad, void *initData, UILayer *parentLaye
 
 
 	m_buttons[static_cast<int>(eControl_PlayGame)].init(IDS_PLAY_GAME,eControl_PlayGame);
+	m_buttons[(int)eControl_MiniGames].init(L"Mini Games",eControl_MiniGames);
 
 #ifdef _XBOX_ONE
 	if(!ProfileManager.IsFullVersion()) m_buttons[(int)eControl_PlayGame].setLabel(IDS_PLAY_TRIAL_GAME);
@@ -312,6 +313,24 @@ void UIScene_MainMenu::handlePress(F64 controlId, F64 childId)
 	{
 	case eControl_PlayGame:
 #ifdef __ORBIS__
+		{
+			m_bIgnorePress=true;
+
+			//CD - Added for audio
+			ui.PlayUISFX(eSFX_Press);
+
+			ProfileManager.RefreshChatAndContentRestrictions(RefreshChatAndContentRestrictionsReturned_PlayGame, this);
+		}
+#else
+		m_eAction=eAction_RunGame;
+		//CD - Added for audio
+		ui.PlayUISFX(eSFX_Press);
+
+		signInReturnedFunc = &UIScene_MainMenu::CreateLoad_SignInReturned;
+#endif		
+		break;
+    case eControl_MiniGames:
+	#ifdef __ORBIS__
 		{
 			m_bIgnorePress=true;
 

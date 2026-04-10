@@ -426,6 +426,10 @@ void IUIScene_CreativeMenu::staticCtor()
 		ITEM_AUX(Item::spawnEgg_Id, 62); // Magma Cube
 		ITEM_AUX(Item::spawnEgg_Id, 65); // Bat
 		ITEM_AUX(Item::spawnEgg_Id, 66); // Witch
+		
+		ITEM_AUX(Item::spawnEgg_Id, 67); // Endermite
+		ITEM_AUX(Item::spawnEgg_Id, 68); // Guardian
+		ITEM_AUX(Item::spawnEgg_Id, 4); // Elder Guardian 
 		ITEM_AUX(Item::spawnEgg_Id, 90); // Pig
 		ITEM_AUX(Item::spawnEgg_Id, 91); // Sheep
 		ITEM_AUX(Item::spawnEgg_Id, 92); // Cow
@@ -435,7 +439,6 @@ void IUIScene_CreativeMenu::staticCtor()
 		ITEM_AUX(Item::spawnEgg_Id, 96); // Mooshroom
 		ITEM_AUX(Item::spawnEgg_Id, 98); // Ozelot
 		ITEM_AUX(Item::spawnEgg_Id, 100); // Horse
-		ITEM_AUX(Item::spawnEgg_Id, 67); // Endermite
 		
 		ITEM_AUX(Item::spawnEgg_Id, 100 | ((EntityHorse::TYPE_DONKEY + 1) << 12) ); // Donkey
 		ITEM_AUX(Item::spawnEgg_Id, 100 | ((EntityHorse::TYPE_MULE + 1) << 12)); // Mule

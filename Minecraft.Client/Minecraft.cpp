@@ -2646,6 +2646,28 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 				case Item::writtenBook_Id:
 					*piUse = IDS_TOOLTIPS_READ;
 					break;
+				case Item::helmet_leather_Id:
+				case Item::helmet_chain_Id:
+				case Item::helmet_iron_Id:
+				case Item::helmet_gold_Id:
+				case Item::helmet_diamond_Id:
+				case Item::chestplate_leather_Id:
+				case Item::chestplate_chain_Id:
+				case Item::chestplate_iron_Id:
+				case Item::chestplate_gold_Id:
+				case Item::chestplate_diamond_Id:
+				case Item::leggings_leather_Id:
+				case Item::leggings_chain_Id:
+				case Item::leggings_iron_Id:
+				case Item::leggings_gold_Id:
+				case Item::leggings_diamond_Id:
+				case Item::boots_leather_Id:
+				case Item::boots_chain_Id:
+				case Item::boots_iron_Id:
+				case Item::boots_gold_Id:
+				case Item::boots_diamond_Id:
+					*piUse = IDS_TOOLTIPS_EQUIP;
+					break;
 				}
 			}
 

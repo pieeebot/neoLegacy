@@ -66,6 +66,7 @@ protected:
 		eSectionEnchantUsing,
 		eSectionEnchantInventory,
 		eSectionEnchantSlot,
+		eSectionLapisSlot,
 		eSectionEnchantButton1,
 		eSectionEnchantButton2,
 		eSectionEnchantButton3,
@@ -216,6 +217,7 @@ protected:
 	virtual void PlatformInitialize(int iPad, int startIndex) = 0;
 	virtual void InitDataAssociations(int iPad, AbstractContainerMenu *menu, int startIndex = 0) = 0;
 
+	void handleEnchantButton(int slot, int iPad);
 	void onMouseTick();
 	bool handleKeyDown(int iPad, int iAction, bool bRepeat);
 	virtual bool handleValidKeyPress(int iUserIndex, int buttonNum, BOOL quickKeyHeld);

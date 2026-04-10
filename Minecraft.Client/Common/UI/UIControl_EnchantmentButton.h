@@ -20,6 +20,8 @@ private:
 	bool m_bHasFocus;
 
 	IggyName m_funcChangeState;
+	IggyName m_CLevel;
+	IggyName m_CLevelU;
 
 	unsigned int m_textColour, m_textFocusColour, m_textDisabledColour;
 
@@ -27,6 +29,7 @@ private:
 	{
 	public:
 		static EnchantmentNames instance;
+		
 
 	private:
 		Random random;
@@ -40,12 +43,13 @@ private:
 
 public:
 	UIControl_EnchantmentButton();
-
+	int m_BValue = 1;
 	virtual bool setupControl(UIScene *scene, IggyValuePath *parent, const string &controlName);
 
 	virtual void tick();
 
 	void init(int index);
+	void setLevel();
 	virtual void ReInit();
 	void render(IggyCustomDrawCallbackRegion *region);
 

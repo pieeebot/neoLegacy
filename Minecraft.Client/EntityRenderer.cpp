@@ -407,6 +407,7 @@ void EntityRenderer::registerTerrainTextures(IconRegister *iconRegister)
 {
 }
 
+
 ResourceLocation *EntityRenderer::getTextureLocation(shared_ptr<Entity> mob)
 {
 	return nullptr;

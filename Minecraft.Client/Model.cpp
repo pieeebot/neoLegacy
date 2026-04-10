@@ -6,7 +6,7 @@
 Model::Model() 
 { 
 	riding = false; 
-	young=true; 
+	young=false; //andi change
 	texWidth=64; 
 	texHeight=32;
 }	

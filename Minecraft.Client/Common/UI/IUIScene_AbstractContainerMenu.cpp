@@ -5,9 +5,13 @@
 #include "UI.h"
 #include "../../../Minecraft.World/net.minecraft.world.inventory.h"
 #include "../../../Minecraft.World/net.minecraft.world.item.h"
+#include "../../../Minecraft.World/net.minecraft.world.item.enchantment.h"
 #include "../../../Minecraft.World/net.minecraft.world.item.crafting.h"
 #include "../../../Minecraft.World/net.minecraft.world.level.tile.entity.h"
 #include "../../MultiPlayerLocalPlayer.h"
+#include "../../ServerPlayer.h"
+#include "../../MinecraftServer.h"
+#include "../../PlayerList.h"
 #include "../../Minecraft.h"
 #include "../../Options.h"
 
@@ -263,6 +267,47 @@ void IUIScene_AbstractContainerMenu::UpdateTooltips()
 		}
 	}
 }
+
+void IUIScene_AbstractContainerMenu::handleEnchantButton(int slot, int iPad) {
+	UIScene* t = ui.FindScene(eUIScene_EnchantingMenu);
+	MinecraftServer* aMinecraft = MinecraftServer::getInstance();
+	EnchantmentMenu* menu = dynamic_cast<EnchantmentMenu*>(aMinecraft->getPlayers()->players[iPad]->containerMenu);
+
+	if (menu->en == false && menu->cachedEnchantments[slot] != nullptr) {
+		EnchantmentInstance* a = menu->cachedEnchantments[slot]->at(0);
+		if (a != nullptr) {
+			int lapisCost = slot + 1; // slot 0 = 1 lapis, slot 1 = 2, slot 2 = 3
+
+			HtmlString title = HtmlString(
+				wstring(app.GetString(a->enchantment->enchantments[a->enchantment->id]->getDescriptionId())) +
+				L" " +
+				a->enchantment->enchantments[a->enchantment->id]->getLevelString(a->level) +
+				L"...?",
+				eHTMLColor_White
+			);
+
+			bool costEnough = aMinecraft->getPlayers()->players[iPad]->experienceLevel >= menu->costs[slot];
+			bool enough = menu->getLapisCount() >= lapisCost;
+			eMinecraftColour col = enough ? eHTMLColor_7 : eHTMLColor_c;
+			eMinecraftColour colCost = costEnough ? eHTMLColor_7 : eHTMLColor_c;
+
+			std::wstring message = costEnough
+				? std::to_wstring(menu->costs[slot]) + L" Enchantment Levels"
+				: L"Level Requirement: " + std::to_wstring(menu->costs[slot]);
+
+			vector<HtmlString>* lines = new vector<HtmlString>();
+			lines->push_back(title);
+			if (!aMinecraft->getPlayers()->players[iPad]->abilities.instabuild) {
+				lines->push_back(HtmlString(L"")); // title1 blank line
+				if (costEnough) {
+					lines->push_back(HtmlString(std::to_wstring(lapisCost) + L" Lapis Lazuli", col));
+				}
+				lines->push_back(HtmlString(message, colCost));
+			}
+			SetPointerText(lines, false);
+		}
+	}
+	};
 
 void IUIScene_AbstractContainerMenu::onMouseTick()
 {
@@ -826,6 +871,9 @@ void IUIScene_AbstractContainerMenu::onMouseTick()
 		SetPointerText(nullptr, false);
 		m_lastPointerLabelSlot = nullptr;
 	}
+	if (eSectionUnderPointer == eSectionEnchantButton1) handleEnchantButton(0, iPad);
+	else if (eSectionUnderPointer == eSectionEnchantButton2) handleEnchantButton(1, iPad);
+	else if (eSectionUnderPointer == eSectionEnchantButton3) handleEnchantButton(2, iPad);
 
 	EToolTipItem buttonA, buttonX, buttonY, buttonRT, buttonBack;
 	buttonA = buttonX = buttonY = buttonRT = buttonBack = eToolTipNone;

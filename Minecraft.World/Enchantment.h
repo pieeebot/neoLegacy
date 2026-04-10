@@ -84,8 +84,9 @@ public:
 	virtual int getDescriptionId();
 	virtual HtmlString getFullname(int level);
 	virtual bool canEnchant(shared_ptr<ItemInstance> item);
-
-private:
 	// 4J Added
 	wstring getLevelString(int level);
+
+private:
+	
 };

@@ -1,0 +1,324 @@
+﻿name: Nightly Release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+concurrency:
+  group: nightly
+  cancel-in-progress: true
+
+jobs:
+  build-client:
+    name: Build Client
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Setup CMake
+        uses: lukka/get-cmake@latest
+
+      - name: Run CMake
+        uses: lukka/run-cmake@v10
+        env:
+          VCPKG_ROOT: ""
+        with:
+          configurePreset: windows64
+          buildPreset: windows64-release
+          buildPresetAdditionalArgs: "['--target', 'Minecraft.Client']"
+
+      - name: Zip Build
+        shell: pwsh
+        run: |
+          $source = "./build/windows64/Minecraft.Client/Release"
+          $zip = "LCREWindows64.zip"
+          $topLevel = "LCREWindows64"
+          
+          # Collect files, excluding unwanted extensions
+          $files = Get-ChildItem -Path $source -Recurse -File |
+            Where-Object { $_.Extension -notin '.pch', '.zip', '.ipdb', '.iobj' }
+          
+          Add-Type -AssemblyName System.IO.Compression
+          Add-Type -AssemblyName System.IO.Compression.FileSystem
+          
+          $basePath = (Resolve-Path $source).Path
+          $fs = [System.IO.File]::Open($zip, [System.IO.FileMode]::Create)
+          try {
+            $archive = New-Object System.IO.Compression.ZipArchive($fs, [System.IO.Compression.ZipArchiveMode]::Create)
+            try {
+              # Add directories
+              Get-ChildItem -Path $basePath -Recurse -Directory | ForEach-Object {
+                $rel = $_.FullName.Substring($basePath.Length).TrimStart('\', '/')
+                $archive.CreateEntry("$topLevel/$($rel -replace '\\','/')/") | Out-Null
+              }
+              # Add files
+              foreach ($file in $files) {
+                $rel = $file.FullName.Substring($basePath.Length).TrimStart('\', '/')
+                $entryName = "$topLevel/$($rel -replace '\\','/')"
+                [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile(
+                  $archive, $file.FullName, $entryName,
+                  [System.IO.Compression.CompressionLevel]::Optimal
+                ) | Out-Null
+              }
+            } finally { $archive.Dispose() }
+          } finally { $fs.Dispose() }
+          
+          Write-Host "Created $zip"
+
+      - name: Stage artifacts
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path staging
+          Copy-Item LCREWindows64.zip staging/
+          Copy-Item ./build/windows64/Minecraft.Client/Release/Minecraft.Client.exe staging/
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: client-build
+          path: staging/*
+
+  build-server:
+    name: Build Server
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Setup CMake
+        uses: lukka/get-cmake@latest
+
+      - name: Run CMake
+        uses: lukka/run-cmake@v10
+        env:
+          VCPKG_ROOT: ""
+        with:
+          configurePreset: windows64
+          buildPreset: windows64-release
+          buildPresetAdditionalArgs: "['--target', 'Minecraft.Server']"
+
+      - name: Zip Build
+        shell: pwsh
+        run: |
+          $source = "./build/windows64/Minecraft.Server/Release"
+          $zip = "LCREServerWindows64.zip"
+          $topLevel = "LCREServerWindows64"
+          
+          $files = Get-ChildItem -Path $source -Recurse -File |
+            Where-Object { $_.Extension -notin '.pch', '.zip', '.ipdb', '.iobj' }
+          
+          Add-Type -AssemblyName System.IO.Compression
+          Add-Type -AssemblyName System.IO.Compression.FileSystem
+          
+          $basePath = (Resolve-Path $source).Path
+          $fs = [System.IO.File]::Open($zip, [System.IO.FileMode]::Create)
+          try {
+            $archive = New-Object System.IO.Compression.ZipArchive($fs, [System.IO.Compression.ZipArchiveMode]::Create)
+            try {
+              Get-ChildItem -Path $basePath -Recurse -Directory | ForEach-Object {
+                $rel = $_.FullName.Substring($basePath.Length).TrimStart('\', '/')
+                $archive.CreateEntry("$topLevel/$($rel -replace '\\','/')/") | Out-Null
+              }
+              foreach ($file in $files) {
+                $rel = $file.FullName.Substring($basePath.Length).TrimStart('\', '/')
+                $entryName = "$topLevel/$($rel -replace '\\','/')"
+                [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile(
+                  $archive, $file.FullName, $entryName,
+                  [System.IO.Compression.CompressionLevel]::Optimal
+                ) | Out-Null
+              }
+            } finally { $archive.Dispose() }
+          } finally { $fs.Dispose() }
+          
+          Write-Host "Created $zip"
+
+      - name: Stage artifacts
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path staging
+          Copy-Item LCREServerWindows64.zip staging/
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: server-build
+          path: staging/*
+
+  release-server:
+    name: Release Server
+    needs: build-server
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Download server artifacts
+        uses: actions/download-artifact@v7
+        with:
+          name: server-build
+          path: artifacts
+
+      - name: Attest artifacts
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            artifacts/LCREServerWindows64.zip
+
+      - name: Get short SHA
+        id: sha
+        run: echo "short=$(echo '${{ github.sha }}' | cut -c1-7)" >> "$GITHUB_OUTPUT"
+
+      - name: Delete old release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release delete Nightly-Dedicated-Server --yes || true
+
+      - name: Delete old tag
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh api repos/${{ github.repository }}/git/refs/tags/Nightly-Dedicated-Server --method DELETE || true
+
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          git_user_signingkey: true
+          git_tag_gpgsign: true
+
+      - name: Create signed tag
+        run: |
+          git tag -s -f Nightly-Dedicated-Server -m "Nightly server release ${{ steps.sha.outputs.short }}"
+          git push origin Nightly-Dedicated-Server --force
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create Nightly-Dedicated-Server artifacts/* \
+            --title "Server: ${{ steps.sha.outputs.short }}" \
+            --notes "Dedicated Server runtime for Windows64.
+          
+          Download \`LCREServerWindows64.zip\` and extract it to a folder where you'd like to keep the server runtime." \
+            --latest=false
+
+  release-client:
+    name: Release Client
+    needs: [build-client, release-server]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Download client artifacts
+        uses: actions/download-artifact@v7
+        with:
+          name: client-build
+          path: artifacts
+
+      - name: Attest artifacts
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            artifacts/LCREWindows64.zip
+            artifacts/Minecraft.Client.exe
+
+      - name: Get short SHA
+        id: sha
+        run: echo "short=$(echo '${{ github.sha }}' | cut -c1-7)" >> "$GITHUB_OUTPUT"
+
+      - name: Delete old release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release delete Nightly --yes || true
+
+      - name: Delete old tag
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh api repos/${{ github.repository }}/git/refs/tags/Nightly --method DELETE || true
+
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          git_user_signingkey: true
+          git_tag_gpgsign: true
+
+      - name: Create signed tag
+        run: |
+          git tag -s -f Nightly -m "Nightly release ${{ steps.sha.outputs.short }}"
+          git push origin Nightly --force
+
+      - name: Write release notes
+        run: |
+          cat > notes.md <<'NOTES'
+          # Instructions:
+          **Newcomers:**
+          - If this is your first time, download `LCREWindows64.zip` and extract it wherever you would like to keep it.
+          - I would recommend to set your username prior to launch (create a file called `username.txt`, put your desired username into the file, and save).
+          - To play, simply run `Minecraft.Client.exe`.
+          
+          **For those that wish to update their existing installation with the latest build:**
+          - Download `Minecraft.Client.exe` and `Minecraft.Client.pdb` and copy them over to your existing LCREWindows64 build (overwrite your old version of Minecraft.Client.exe and Minecraft.Client.pdb).
+          
+          **Steam Deck & Linux:**
+          - Y'all know the drill. Download the `LCREWindows64.zip`, extract it, add the `Minecraft.Client.exe` as a "Non-Steam Game" within the Steam library, turn on compatibility mode with Proton Experimental, and then run it!
+          
+          # Multiplayer instructions:
+          LAN games are natively supported, and any LAN games will appear automatically on the right. However, if you'd like to play with your friends online (and if you don't want to require them to setup a vpn, and/or if you don't want to port forward), I would recommend the following setup. Please keep in mind, you do NOT need to do this to enjoy the game. This is just how I have it setup for me so my friends can join without any hassle:
+          
+          Prerequisites:
+          - Premium playit.gg account, costs about $3 USD per month. This is for setting up the tunnel.
+          - playit.gg agent installed on host PC.
+          
+          How-to:
+          - Ensure your playit.gg agent is connected to your playit.gg account
+          - On the playit.gg website, setup a new tunnel (choose TCP). Ensure the configurable settings are set to the below values, assuming your agent is installed on the same computer as your online LCREMinecraft game is hosted from.
+          - Configurable settings:
+            - Local IP: `127.0.0.1`
+            - Local Port: `25565`
+            - Proxy Protocol: `None`
+          - After creating your tunnel, navigate to the "Tunnels" main page. You'll see the IP address and port for your tunnel. This is what your friends will input when adding your server in order to join your online game!
+          
+          
+          # Why this fork exists:
+          Changes/additions that stray from the upstream repo (`smartcmd/MinecraftConsoles`:
+          - See: https://github.com/itsRevela/MinecraftConsoles?tab=readme-ov-file#latest
+          - I can tweak this fork while staying compatible with the upstream repo without needing to wait on my pull requests to get accepted upstream (while keeping this fork updated with the latest and greatest from upstream)
+          NOTES
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create Nightly artifacts/* \
+            --title "Client: ${{ steps.sha.outputs.short }}" \
+            --notes-file notes.md
+
+  cleanup:
+    needs: [release-client, release-server]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cleanup artifacts
+        uses: geekyeggo/delete-artifact@v5
+        with:
+          name: |
+            client-build
+            server-build

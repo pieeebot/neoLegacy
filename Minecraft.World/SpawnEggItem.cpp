@@ -10,7 +10,8 @@
 #include "HitResult.h"
 #include "SpawnEggItem.h"
 #include "Difficulty.h"
-
+#include <Guardian.h>
+#include "AABB.h"
 
 SpawnEggItem::SpawnEggItem(int id) : Item(id)
 {
@@ -335,7 +336,19 @@ shared_ptr<Entity> SpawnEggItem::spawnMobAt(Level *level, int auxVal, double x, 
 			mob->yBodyRot = mob->yRot;
 
 			mob->finalizeMobSpawn(nullptr, extraData);
+
+			
+
 			level->addEntity(newEntity);
+
+			if (mobId == 4)
+			{
+				shared_ptr<Guardian> g = dynamic_pointer_cast<Guardian>(newEntity);
+				if (g) 
+					g->setElder(true);
+					
+
+			}
 			mob->playAmbientSound();
 		}
 	}

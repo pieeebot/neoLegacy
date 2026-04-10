@@ -20,8 +20,10 @@ public:
 
 	virtual EUIScene getSceneType() { return eUIScene_EnchantingMenu;}
 
+	EnchantmentMenu* menu;
+
 protected:
-	UIControl_SlotList m_slotListIngredient;
+	UIControl_SlotList m_slotListIngredient, m_slotListLapis;
 	UIControl_Label m_labelEnchant;
 	UIControl_EnchantmentButton m_enchantButton[3];
 	UIControl_EnchantmentBook m_enchantBook;
@@ -29,6 +31,7 @@ protected:
 	UI_BEGIN_MAP_ELEMENTS_AND_NAMES(UIScene_AbstractContainerMenu)
 		UI_BEGIN_MAP_CHILD_ELEMENTS( m_controlMainPanel )
 			UI_MAP_ELEMENT( m_slotListIngredient, "ingredient")
+			UI_MAP_ELEMENT(m_slotListLapis, "lapis")
 			UI_MAP_ELEMENT( m_enchantButton[0], "Button1")
 			UI_MAP_ELEMENT( m_enchantButton[1], "Button2")
 			UI_MAP_ELEMENT( m_enchantButton[2], "Button3")

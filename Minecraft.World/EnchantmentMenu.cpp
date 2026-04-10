@@ -6,11 +6,15 @@
 #include "net.minecraft.world.item.h"
 #include "net.minecraft.world.item.enchantment.h"
 #include "EnchantmentMenu.h"
+#include "../../../Minecraft.Client/ServerPlayer.h"
+#include "../../../Minecraft.Client/MinecraftServer.h"
+#include "../../../Minecraft.Client/PlayerList.h"
 
 EnchantmentMenu::EnchantmentMenu(shared_ptr<Inventory> inventory, Level *level, int xt, int yt, int zt)
 {
 	enchantSlots = std::make_shared<EnchantmentContainer>(this);
-
+	lapisSlot = std::make_shared<EnchantmentContainer>(this, 64);
+	playerT = inventory->player;
 	for(int i = 0; i < 3; ++i)
 	{
 		costs[i] = 0;
@@ -21,6 +25,7 @@ EnchantmentMenu::EnchantmentMenu(shared_ptr<Inventory> inventory, Level *level, 
 	y = yt;
 	z = zt;
 	addSlot(new EnchantmentSlot(enchantSlots, 0, 21 + 4, 43 + 4));
+	addSlot(new EnchantmentSlot(lapisSlot, 1, 40 + 4, 43 + 4));
 
 	for (int y = 0; y < 3; y++)
 	{
@@ -53,6 +58,9 @@ void EnchantmentMenu::broadcastChanges()
 	// 4J Added m_costsChanged to stop continually sending update packets even when no changes have been made
 	if(m_costsChanged)
 	{
+		/*if (EnchantmentMenu::lapisSlot->getItem(1) == nullptr) {
+			return;
+		}*/
 		for (size_t i = 0; i < containerListeners.size(); i++)
 		{
 			ContainerListener *listener = containerListeners.at(i);
@@ -77,22 +85,31 @@ void EnchantmentMenu::setData(int id, int value)
 	}
 }
 
-void EnchantmentMenu::slotsChanged() // 4J used to take a shared_ptr<Container> container but wasn't using it, so removed to simplify things
+vector<EnchantmentInstance*> EnchantmentMenu::getEnchantment() {
+	random.setSeed(playerT->enchantmentSeed);
+	shared_ptr<ItemInstance> item = enchantSlots->getItem(0);
+	return *EnchantmentHelper::selectEnchantment(&random, item, costs[2]);
+}
+
+void EnchantmentMenu::slotsChanged(int a) // 4J used to take a shared_ptr<Container> container but wasn't using it, so removed to simplify things
 {
 	shared_ptr<ItemInstance> item = enchantSlots->getItem(0);
+
+	shared_ptr<ItemInstance> lapis = lapisSlot->getItem(1);
 
 	if (item == nullptr || !item->isEnchantable())
 	{
 		for (int i = 0; i < 3; i++)
 		{
+			tempCosts[i] = costs[i];
 			costs[i] = 0;
 		}
 		m_costsChanged = true;
+		alreadyRan = false;
+		
 	}
 	else
 	{
-		nameSeed = random.nextLong();
-
 		if (!level->isClientSide)
 		{
 			// find book cases
@@ -139,15 +156,30 @@ void EnchantmentMenu::slotsChanged() // 4J used to take a shared_ptr<Container> 
 					}
 				}
 			}
+			bookcasesC = bookcases;
+			random.setSeed(playerT->enchantmentSeed);
 
 			for (int i = 0; i < 3; i++)
 			{
 				costs[i] = EnchantmentHelper::getEnchantmentCost(&random, i, bookcases, item);
 			}
+			if (!alreadyRan) {
+				en = false;
+				for (int i = 0; i < 3; i++)
+				{
+					//delete cachedEnchantments[i]; // clean up old one first <- doing it elsewhere
+					cachedEnchantments[i] = EnchantmentHelper::selectEnchantment(&random, item, costs[i]);
+				}
+				
+			}
+			
+			alreadyRan = true;
 			m_costsChanged = true;
 			broadcastChanges();
 		}
 	}
+
+	wasLapis = lapis != nullptr;
 }
 
 bool EnchantmentMenu::clickMenuButton(shared_ptr<Player> player, int i)
@@ -155,42 +187,84 @@ bool EnchantmentMenu::clickMenuButton(shared_ptr<Player> player, int i)
 	shared_ptr<ItemInstance> item = enchantSlots->getItem(0);
 	if (costs[i] > 0 && item != nullptr && (player->experienceLevel >= costs[i] || player->abilities.instabuild) )
 	{
+		bool enough = getLapisCount() >= i+1;
+		if (!enough && !player->abilities.instabuild) return false;
 		if (!level->isClientSide)
 		{
 			bool isBook = item->id == Item::book_Id;
 
-			vector<EnchantmentInstance *> *newEnchantment = EnchantmentHelper::selectEnchantment(&random, item, costs[i]);
+			vector<EnchantmentInstance *> *newEnchantment = cachedEnchantments[i];
 			if (newEnchantment != nullptr)
 			{
+				
 				player->giveExperienceLevels(-costs[i]);
 				if (isBook) item->id = Item::enchantedBook_Id;
 				int randomIndex = isBook ? random.nextInt(newEnchantment->size()) : -1;
-				//for (EnchantmentInstance e : newEnchantment)
+				
 				for (int index = 0; index < newEnchantment->size(); index++)
 				{
-					EnchantmentInstance *e = newEnchantment->at(index);
-					if (isBook && index != randomIndex)
-					{}
+					EnchantmentInstance* e = newEnchantment->at(index);
+					if (isBook)
+					{
+						Item::enchantedBook->addEnchantment(item, e);
+						en = true;
+					}
 					else
 					{
-						if (isBook)
-						{
-							Item::enchantedBook->addEnchantment(item, e);
-						}
-						else
-						{
-							item->enchant(e->enchantment, e->level);
-						}
+						item->enchant(e->enchantment, e->level);
+						en = true;
 					}
 					delete e;
 				}
 				delete newEnchantment;
-				slotsChanged();// Removed enchantSlots parameter as the function can reference it directly
+				slotsChanged(1);// Removed enchantSlots parameter as the function can reference it directly
 			}
 		}
+		if (!player->abilities.instabuild) lapisSlot->removeItem(1, i+1);
+		nameSeed = (long)nameSeed + random.nextInt(10000);
+		player->enchantmentSeed = random.nextInt(1000000);
+		alreadyRan = false;
 		return true;
 	}
 	return false;
+}
+
+EnchantmentInstance* EnchantmentMenu::predictEnchantment(shared_ptr<Player> player, int i)
+{
+	shared_ptr<ItemInstance> item = enchantSlots->getItem(0);
+	if (costs[i] > 0 && item != nullptr && (player->experienceLevel >= costs[i] || player->abilities.instabuild))
+	{
+		if (0 == 0)
+		{
+			bool isBook = item->id == Item::book_Id;
+			Random tempRandom = random;
+			vector<EnchantmentInstance*>* newEnchantment = cachedEnchantments[i];
+			if (newEnchantment != nullptr)
+			{
+				int randomIndex = isBook ? tempRandom.nextInt(newEnchantment->size()) : -1;
+				for (int index = 0; index < newEnchantment->size(); index++)
+				{
+					EnchantmentInstance* e = newEnchantment->at(index);
+					if (isBook)
+					{
+						return e;
+						//en = true;
+					}
+					else
+					{
+						//item->enchant(e->enchantment, e->level);
+						return e;
+						//en = true;
+					}
+					//delete e;
+				}
+				//delete newEnchantment;
+				//slotsChanged(1);// Removed enchantSlots parameter as the function can reference it directly
+			}
+		}
+		return nullptr;
+	}
+	return nullptr;
 }
 
 
@@ -204,6 +278,11 @@ void EnchantmentMenu::removed(shared_ptr<Player> player)
 	{
 		player->drop(item);
 	}
+	item = lapisSlot->removeItemNoUpdate(1);
+	if (item != nullptr)
+	{
+		player->drop(item);
+	}
 }
 
 bool EnchantmentMenu::stillValid(shared_ptr<Player> player) 
@@ -211,6 +290,11 @@ bool EnchantmentMenu::stillValid(shared_ptr<Player> player)
 	if (level->getTile(x, y, z) != Tile::enchantTable_Id) return false;
 	if (player->distanceToSqr(x + 0.5, y + 0.5, z + 0.5) > 8 * 8) return false;
 	return true;
+}
+
+int EnchantmentMenu::getLapisCount() {
+	if (lapisSlot->getItem(1) == nullptr) return 0;
+	return lapisSlot->getItem(1)->count;
 }
 
 shared_ptr<ItemInstance> EnchantmentMenu::quickMoveStack(shared_ptr<Player> player, int slotIndex)
@@ -223,9 +307,14 @@ shared_ptr<ItemInstance> EnchantmentMenu::quickMoveStack(shared_ptr<Player> play
 	shared_ptr<ItemInstance> clicked = nullptr;
 	Slot *slot = slots.at(slotIndex);
 	Slot *IngredientSlot = nullptr;
+	Slot *LapisSlot = nullptr;
 	if (INGREDIENT_SLOT >= 0 && INGREDIENT_SLOT < static_cast<int>(slots.size()))
 	{
 		IngredientSlot = slots.at(INGREDIENT_SLOT);
+	}
+	if (LAPIS_SLOT >= 0 && LAPIS_SLOT < static_cast<int>(slots.size()))
+	{
+		LapisSlot = slots.at(LAPIS_SLOT);
 	}
 
 	if (slot != nullptr && slot->hasItem())
@@ -235,6 +324,16 @@ shared_ptr<ItemInstance> EnchantmentMenu::quickMoveStack(shared_ptr<Player> play
 
 		if (slotIndex == INGREDIENT_SLOT)
 		{
+			if (!moveItemStackTo(stack, INV_SLOT_START, INV_SLOT_END, true))
+			{
+				if (!moveItemStackTo(stack, USE_ROW_SLOT_START, USE_ROW_SLOT_END, false))
+				{
+					return nullptr;
+				}
+
+			}
+		}
+		else if (slotIndex == LAPIS_SLOT) {
 			if (!moveItemStackTo(stack, INV_SLOT_START, INV_SLOT_END, true))
 			{
 				if (!moveItemStackTo(stack, USE_ROW_SLOT_START, USE_ROW_SLOT_END, false))
@@ -255,6 +354,14 @@ shared_ptr<ItemInstance> EnchantmentMenu::quickMoveStack(shared_ptr<Player> play
 					return nullptr;
 				}
 			}
+			//DyePowderItem::BLACK
+			else if (stack->getItem()->id == 351 && stack->getItem()->getMaterial() == 11)
+			{
+				if(!moveItemStackTo(stack, LAPIS_SLOT, LAPIS_SLOT+1, false))
+				{
+					return nullptr;
+				}
+			}
 			else
 			{
 				if(!moveItemStackTo(stack, USE_ROW_SLOT_START, USE_ROW_SLOT_END, false))
@@ -270,6 +377,13 @@ shared_ptr<ItemInstance> EnchantmentMenu::quickMoveStack(shared_ptr<Player> play
 			if(stack->isEnchantable() && (!IngredientSlot->hasItem() )  ) 
 			{
 				if(!moveItemStackTo(stack, INGREDIENT_SLOT, INGREDIENT_SLOT+1, false))
+				{
+					return nullptr;
+				}
+			}
+			else if (stack->getItem()->id == 351 && stack->getItem()->getMaterial() == 11)
+			{
+				if (!moveItemStackTo(stack, LAPIS_SLOT, LAPIS_SLOT + 1, false))
 				{
 					return nullptr;
 				}
