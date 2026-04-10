@@ -25,13 +25,16 @@ public:
 private:
 	int life;
 	int flightTime;
-	int nibble;
-	int nibbleTimer;
-	int lureTime;
 
 	int lureLevel;
 	int luckLevel;
 	shared_ptr<ItemInstance> previousItem;
+
+private:
+	static const int DATA_NIBBLE_TIMER;
+	static const int DATA_NIBBLE;
+	static const int DATA_WAKE_TIMER;
+	static const int DATA_FISH_APPROACH_ANGLE;
 
 public:
 	shared_ptr<Entity> hookedIn;

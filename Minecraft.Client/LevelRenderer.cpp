@@ -21,6 +21,7 @@
 #include "LavaParticle.h"
 #include "FootstepParticle.h"
 #include "SplashParticle.h"
+#include "WaterWakeParticle.h"
 #include "SmokeParticle.h"
 #include "RedDustParticle.h"
 #include "BreakingItemParticle.h"
@@ -2709,7 +2710,7 @@ shared_ptr<Particle> LevelRenderer::addParticleInternal(ePARTICLE_TYPE eParticle
 	// 4J - the java code doesn't distance cull these two particle types, we need to implement this behaviour differently as our distance check is
 	// mixed up with other things
 	bool distCull = true;
-	if ( (eParticleType == eParticleType_hugeexplosion) || (eParticleType == eParticleType_largeexplode) || (eParticleType == eParticleType_dragonbreath) )
+	if ( (eParticleType == eParticleType_hugeexplosion) || (eParticleType == eParticleType_largeexplode) || (eParticleType == eParticleType_dragonbreath) || (eParticleType == eParticleType_wake))
 	{
 		distCull = false;
 	}
@@ -2881,6 +2882,9 @@ shared_ptr<Particle> LevelRenderer::addParticleInternal(ePARTICLE_TYPE eParticle
 		break;
 	case eParticleType_splash:
 		particle = std::make_shared<SplashParticle>(lev, x, y, z, xa, ya, za);
+		break;
+	case eParticleType_wake:
+		particle = std::make_shared<WaterWakeParticle>(lev, x, y, z, xa, ya, za);
 		break;
 	case eParticleType_largesmoke:
 		particle = std::make_shared<SmokeParticle>(lev, x, y, z, xa, ya, za, 2.5f);

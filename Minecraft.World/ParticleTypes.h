@@ -13,6 +13,7 @@ enum ePARTICLE_TYPE
 	eParticleType_lava,
 	eParticleType_footstep,
 	eParticleType_splash,
+	eParticleType_wake,
 	eParticleType_largesmoke,
 	eParticleType_reddust,
 	eParticleType_snowballpoof,

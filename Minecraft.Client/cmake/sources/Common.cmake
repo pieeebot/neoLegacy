@@ -713,6 +713,8 @@ set(_MINECRAFT_CLIENT_COMMON_NET_MINECRAFT_CLIENT_PARTICLE
   "${CMAKE_CURRENT_SOURCE_DIR}/SpellParticle.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/SplashParticle.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/SplashParticle.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/WaterWakeParticle.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/WaterWakeParticle.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/SuspendedParticle.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/SuspendedParticle.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/SuspendedTownParticle.cpp"

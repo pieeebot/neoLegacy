@@ -290,6 +290,9 @@ enum eINSTANCEOF
 	eType_FIREWORKSSPARKPARTICLE,
 	eType_FIREWORKSOVERLAYPARTICLE,
 
+	//TU 31
+	eType_WAKEPARTICLE,
+
 	// === Tile Entities === //
 	
 	eTYPE_TILEENTITY						= BIT_TILE_ENTITY,
@@ -501,6 +504,7 @@ public:
 		classes->push_back( SUBCLASS(eType_SMOKEPARTICLE)->addParent(eTYPE_ENTITY) );
 		classes->push_back( SUBCLASS(eType_SNOWSHOVELPARTICLE)->addParent(eTYPE_ENTITY) );
 		classes->push_back( SUBCLASS(eType_SPLASHPARTICLE)->addParent(eTYPE_ENTITY) );
+		classes->push_back( SUBCLASS(eType_WAKEPARTICLE)->addParent(eTYPE_ENTITY) );
 		classes->push_back( SUBCLASS(eType_TAKEANIMATIONPARTICLE)->addParent(eTYPE_ENTITY) );
 		classes->push_back( SUBCLASS(eType_TERRAINPARTICLE)->addParent(eTYPE_ENTITY) );
 		classes->push_back( SUBCLASS(eType_WATERDROPPARTICLE)->addParent(eTYPE_ENTITY) );
