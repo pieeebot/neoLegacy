@@ -36,6 +36,7 @@ function(configure_lce_server_target target)
   )
   set(_asset_files_pairs
     "${CMAKE_SOURCE_DIR}/Minecraft.Client/Common/Media/MediaWindows64.arc" "Common/Media/"
+    "${CMAKE_SOURCE_DIR}/Minecraft.Client/Common/Media/MediaWindows64" "Common/Media/MediaWindows64"
   )
 
   target_include_directories(${target} PRIVATE
