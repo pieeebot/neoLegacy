@@ -17,16 +17,16 @@ private:
 	};
 
 	static int m_iDifficultyTitleSettingA[4];
-
+	static int m_iGamemodes[3];
 
 	wstring m_worldName;
 	wstring m_seed;
 
 	UIControl m_controlMainPanel;
 	UIControl_Label m_labelWorldName;
-	UIControl_Button m_buttonGamemode, m_buttonMoreOptions, m_buttonCreateWorld;
+	UIControl_Button m_buttonMoreOptions, m_buttonCreateWorld;
 	UIControl_TextInput m_editWorldName;
-	UIControl_Slider m_sliderDifficulty;
+	UIControl_Slider m_sliderDifficulty, m_sliderGamemode;
 	UIControl_CheckBox m_checkboxOnline;
 
 	UIControl_BitmapIcon m_bitmapIcon, m_bitmapComparison;
@@ -37,7 +37,7 @@ private:
 			UI_MAP_ELEMENT( m_labelWorldName, "WorldName")
 			UI_MAP_ELEMENT( m_editWorldName, "EditWorldName")
 			UI_MAP_ELEMENT( m_texturePackList, "TexturePackSelector")
-			UI_MAP_ELEMENT( m_buttonGamemode, "GameModeToggle")
+			UI_MAP_ELEMENT( m_sliderGamemode, "GameModeToggle")
 			UI_MAP_ELEMENT( m_checkboxOnline, "CheckboxOnline")
 			UI_MAP_ELEMENT( m_buttonMoreOptions, "MoreOptions")
 			UI_MAP_ELEMENT( m_buttonCreateWorld, "NewWorld")

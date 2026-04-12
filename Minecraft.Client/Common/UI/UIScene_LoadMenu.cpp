@@ -31,6 +31,12 @@ int UIScene_LoadMenu::m_iDifficultyTitleSettingA[4]=
 	IDS_DIFFICULTY_TITLE_NORMAL,
 	IDS_DIFFICULTY_TITLE_HARD
 };
+int UIScene_LoadMenu::m_iGamemodes[3] =
+{
+	IDS_GAMEMODE_SURVIVAL,
+	IDS_GAMEMODE_CREATIVE,
+	IDS_GAMEMODE_ADVENTURE
+};
 
 int UIScene_LoadMenu::LoadSaveDataThumbnailReturned(LPVOID lpParam,PBYTE pbThumbnail,DWORD dwThumbnailBytes)
 {
@@ -70,7 +76,7 @@ UIScene_LoadMenu::UIScene_LoadMenu(int iPad, void *initData, UILayer *parentLaye
 	m_labelSeed.init(L"");
 	m_labelCreatedMode.init(app.GetString(IDS_CREATED_IN_SURVIVAL));
 
-	m_buttonGamemode.init(app.GetString(IDS_GAMEMODE_SURVIVAL),eControl_GameMode);
+	m_sliderGamemode.init(app.GetString(IDS_GAMEMODE_SURVIVAL),eControl_GameMode,0,2,0);
 	m_buttonMoreOptions.init(app.GetString(IDS_MORE_OPTIONS),eControl_MoreOptions);
 	m_buttonLoadWorld.init(app.GetString(IDS_LOAD),eControl_LoadWorld);
 	m_texturePackList.init(app.GetString(IDS_DLC_MENU_TEXTUREPACKS), eControl_TexturePackList);
@@ -522,20 +528,23 @@ void UIScene_LoadMenu::tick()
 			switch(app.GetGameHostOption(uiHostOptions,eGameHostOption_GameType))
 			{
 			case 1: // Creative
-				m_buttonGamemode.setLabel(app.GetString(IDS_GAMEMODE_CREATIVE));
+				m_sliderGamemode.setLabel(app.GetString(IDS_GAMEMODE_CREATIVE));
+				m_sliderGamemode.handleSliderMove(1);
 				m_bGameModeCreative=true;
 				m_iGameModeId = GameType::CREATIVE->getId();
 				break;
 #ifdef _ADVENTURE_MODE_ENABLED
 			case 2: // Adventure
-				m_buttonGamemode.setLabel(app.GetString(IDS_GAMEMODE_ADVENTURE));
+				m_sliderGamemode.setLabel(app.GetString(IDS_GAMEMODE_ADVENTURE));
+				m_sliderGamemode.handleSliderMove(2);
 				m_bGameModeCreative=false;
 				m_iGameModeId = GameType::ADVENTURE->getId();
 				break;
 #endif
 			case 0: // Survival
 			default:
-				m_buttonGamemode.setLabel(app.GetString(IDS_GAMEMODE_SURVIVAL));
+				m_sliderGamemode.setLabel(app.GetString(IDS_GAMEMODE_SURVIVAL));
+				m_sliderGamemode.handleSliderMove(0);
 				m_bGameModeCreative=false;
 				m_iGameModeId = GameType::SURVIVAL->getId();
 				break;
@@ -698,28 +707,29 @@ void UIScene_LoadMenu::handlePress(F64 controlId, F64 childId)
 
 	switch(static_cast<int>(controlId))
 	{
-	case eControl_GameMode:
-		switch(m_iGameModeId)
-		{
-		case 0: // Survival
-			m_buttonGamemode.setLabel(app.GetString(IDS_GAMEMODE_CREATIVE));
-			m_iGameModeId = GameType::CREATIVE->getId();
-			m_bGameModeCreative = true;
-			break;
-		case 1: // Creative
-#ifdef _ADVENTURE_MODE_ENABLED
-			m_buttonGamemode.setLabel(app.GetString(IDS_GAMEMODE_ADVENTURE));
-			m_iGameModeId = GameType::ADVENTURE->getId();
-			m_bGameModeCreative = false;
-			break;
-		case 2: // Adventure
-#endif
-			m_buttonGamemode.setLabel(app.GetString(IDS_GAMEMODE_SURVIVAL));
-			m_iGameModeId = GameType::SURVIVAL->getId();
-			m_bGameModeCreative = false;
-			break;
-		};
-		break;
+//	case eControl_GameMode:
+//		switch(m_iGameModeId)
+//		{
+//		case 0: // Survival
+//			m_buttonGamemode.setLabel(app.GetString(IDS_GAMEMODE_CREATIVE));
+//			m_iGameModeId = GameType::CREATIVE->getId();
+//			m_bGameModeCreative = true;
+//			break;
+//		case 1: // Creative
+//#ifdef _ADVENTURE_MODE_ENABLED
+//			m_buttonGamemode.setLabel(app.GetString(IDS_GAMEMODE_ADVENTURE));
+//			m_iGameModeId = GameType::ADVENTURE->getId();
+//			m_bGameModeCreative = false;
+//			break;
+//		case 2: // Adventure
+//#endif
+//			m_buttonGamemode.setLabel(app.GetString(IDS_GAMEMODE_SURVIVAL));
+//			m_iGameModeId = GameType::SURVIVAL->getId();
+//			m_bGameModeCreative = false;
+//			break;
+//		};
+//		break;
+
 	case eControl_MoreOptions:
 		ui.NavigateToScene(m_iPad, eUIScene_LaunchMoreOptionsMenu, &m_MoreOptionsParams);
 		break;
@@ -955,6 +965,29 @@ void UIScene_LoadMenu::handleSliderMove(F64 sliderId, F64 currentValue)
 		app.SetGameSettings(m_iPad,eGameSetting_Difficulty,value);
 		swprintf( (WCHAR *)TempString, 256, L"%ls: %ls", app.GetString( IDS_SLIDER_DIFFICULTY ),app.GetString(m_iDifficultyTitleSettingA[value]));		
 		m_sliderDifficulty.setLabel(TempString);
+		break;
+	case eControl_GameMode:
+		m_sliderGamemode.handleSliderMove(value);
+		switch (value)
+		{
+		case 0: // Survival
+			m_iGameModeId = GameType::SURVIVAL->getId();
+			m_bGameModeCreative = false;
+			break;
+		case 1: // Creative
+			m_iGameModeId = GameType::CREATIVE->getId();
+			m_bGameModeCreative = true;
+			break;
+#ifdef _ADVENTURE_MODE_ENABLED
+		case 2: // Adventure
+			m_iGameModeId = GameType::ADVENTURE->getId();
+			m_bGameModeCreative = false;
+			break;
+#endif
+		};
+		//app.SetGameSettings(m_iPad, eGameSetting_GameMode, value);
+		swprintf((WCHAR*)TempString, 256, L"%ls", app.GetString(m_iGamemodes[value]));
+		m_sliderGamemode.setLabel(TempString);
 		break;
 	}
 }
