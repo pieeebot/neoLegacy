@@ -20,8 +20,9 @@ Users can download our [Nightly Build](https://codeberg.org/piebot/LegacyEvolved
 
 Huge thanks to the following projects:
 
-- [Legacy Minigame Restoration Project](https://discord.gg/bg2kmbzFzv) - for their immense help with our project's deep decompilation work
 - [Patoke/LCERenewed](https://github.com/Patoke/LCERenewed) - for some of the patches that required deep decompilation
+- [itsRevela/LCE-Revelations](https://github.com/itsRevela/LCE-Revelations) - for providing a stable project for neoLegacy to continue on
+- [Legacy Minigame Restoration Project](https://discord.gg/bg2kmbzFzv) - for their immense help with our project's deep decompilation work
 
 # Build & Run
 
