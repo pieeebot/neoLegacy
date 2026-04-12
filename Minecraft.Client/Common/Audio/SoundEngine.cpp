@@ -770,14 +770,14 @@ int SoundEngine::GetRandomishTrack(int iStart,int iEnd)
 		if(m_bHeardTrackA[i]==false) 
 		{
 			bAllTracksHeard=false;
-			app.DebugPrintf("Not heard all tracks yet\n");
+			//app.DebugPrintf("Not heard all tracks yet\n");
 			break;
 		}
 	}
 
 	if(bAllTracksHeard)
 	{
-		app.DebugPrintf("Heard all tracks - resetting the tracking array\n");
+		//app.DebugPrintf("Heard all tracks - resetting the tracking array\n");
 
 		for(size_t i=iStart;i<=iEnd;i++)
 		{
@@ -793,17 +793,17 @@ int SoundEngine::GetRandomishTrack(int iStart,int iEnd)
 		if(m_bHeardTrackA[iVal]==false)
 		{
 			// not heard this
-			app.DebugPrintf("(%d) Not heard track %d yet, so playing it now\n",i,iVal);
+			//app.DebugPrintf("(%d) Not heard track %d yet, so playing it now\n",i,iVal);
 			m_bHeardTrackA[iVal]=true;
 			break;
 		}
 		else
 		{
-			app.DebugPrintf("(%d) Skipping track %d already heard it recently\n",i,iVal);
+			//app.DebugPrintf("(%d) Skipping track %d already heard it recently\n",i,iVal);
 		}
 	}
 
-	app.DebugPrintf("Select track %d\n",iVal);
+	//app.DebugPrintf("Select track %d\n",iVal);
 	return iVal;
 }
 /////////////////////////////////////////////
