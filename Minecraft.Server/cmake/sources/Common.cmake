@@ -500,6 +500,8 @@ set(_MINECRAFT_SERVER_COMMON_ROOT
   "${CMAKE_CURRENT_SOURCE_DIR}/../Minecraft.Client/Xbox/Network/NetworkPlayerXbox.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/../Minecraft.Client/ZombieModel.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/../Minecraft.Client/ZombieRenderer.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/../Minecraft.Client/GuardianModel.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/../Minecraft.Client/GuardianRenderer.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/../Minecraft.Client/compat_shims.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/../Minecraft.Client/glWrapper.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/../Minecraft.Client/iob_shim.asm"
