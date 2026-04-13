@@ -33,10 +33,10 @@ function(configure_lce_server_target target)
   # not visible to function bodies invoked from other files.)
   set(_asset_folder_pairs
     "${CMAKE_SOURCE_DIR}/Minecraft.Client/Common/res"         "Common/res"
+    "${CMAKE_SOURCE_DIR}/Minecraft.Client/Common/Media/MediaWindows64" "Common/Media/MediaWindows64"
   )
   set(_asset_files_pairs
     "${CMAKE_SOURCE_DIR}/Minecraft.Client/Common/Media/MediaWindows64.arc" "Common/Media/"
-    "${CMAKE_SOURCE_DIR}/Minecraft.Client/Common/Media/MediaWindows64" "Common/Media/MediaWindows64"
   )
 
   set(_use_debug_4j_libs TRUE)
