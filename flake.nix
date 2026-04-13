@@ -1,5 +1,5 @@
 {
-  description = "MinecraftConsoles - Minecraft Legacy Console Edition recreation";
+  description = "LCE-Revelations - Minecraft Legacy Console Edition recreation";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -503,7 +503,7 @@
           XWIN_CACHE = "$HOME/.cache/xwin";
 
           shellHook = ''
-            echo "MinecraftConsoles development shell"
+            echo "LCE-Revelations development shell"
             echo ""
             echo "Quick build (uses cached SDK):"
             echo "  nix build .#client   # Build client package"

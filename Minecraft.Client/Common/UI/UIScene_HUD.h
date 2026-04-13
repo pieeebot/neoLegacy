@@ -11,7 +11,7 @@ private:
 	bool m_bSplitscreen;
 
 protected:
-	UIControl_Label m_labelChatText[CHAT_LINES_COUNT];
+	UIControl_HTMLLabel m_labelChatText[CHAT_LINES_COUNT];
 	UIControl_Label m_labelJukebox;
 	UIControl m_controlLabelBackground[CHAT_LINES_COUNT];
 	UIControl_Label m_labelDisplayName;

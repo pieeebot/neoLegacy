@@ -6786,6 +6786,87 @@ wstring CMinecraftApp::FormatHTMLString(int iPad, const wstring &desc, int shado
 	return text;
 }
 
+//found list of html escapes at https://stackoverflow.com/questions/7381974/which-characters-need-to-be-escaped-in-html
+wstring CMinecraftApp::EscapeHTMLString(const wstring& desc)
+{
+	static std::unordered_map<wchar_t, wchar_t*> replacementMap = {
+		{L'&', L"&amp;"},
+		{L'<', L"&lt;"},
+		{L'>', L"&gt;"},
+		{L'\"', L"&quot;"},
+		{L'\'', L"&#39;"},
+	};
+
+	wstring finalString = L"";
+	for (int i = 0; i < desc.size(); i++) {
+		wchar_t _char = desc[i];
+		auto it = replacementMap.find(_char);
+
+		if (it != replacementMap.end()) finalString += it->second;
+		else finalString += _char;
+	}
+
+	return finalString;
+}
+
+wstring CMinecraftApp::FormatChatMessage(const wstring& desc, bool applyColor)
+{
+	static std::wstring_view colorFormatString = L"<font color=\"#%08x\" shadowcolor=\"#%08x\">";
+
+	wstring results = desc;
+	wchar_t replacements[64];
+
+	swprintf(replacements, 64, (applyColor ? colorFormatString.data() : L""), GetHTMLColour(eHTMLColor_0), 0xFFFFFFFF);
+	results = replaceAll(results, L"§0", replacements);
+
+	swprintf(replacements, 64, (applyColor ? colorFormatString.data() : L""), GetHTMLColour(eHTMLColor_1), 0xFFFFFFFF);
+	results = replaceAll(results, L"§1", replacements);
+
+	swprintf(replacements, 64, (applyColor ? colorFormatString.data() : L""), GetHTMLColour(eHTMLColor_2), 0xFFFFFFFF);
+	results = replaceAll(results, L"§2", replacements);
+
+	swprintf(replacements, 64, (applyColor ? colorFormatString.data() : L""), GetHTMLColour(eHTMLColor_3), 0xFFFFFFFF);
+	results = replaceAll(results, L"§3", replacements);
+
+	swprintf(replacements, 64, (applyColor ? colorFormatString.data() : L""), GetHTMLColour(eHTMLColor_4), 0xFFFFFFFF);
+	results = replaceAll(results, L"§4", replacements);
+
+	swprintf(replacements, 64, (applyColor ? colorFormatString.data() : L""), GetHTMLColour(eHTMLColor_5), 0xFFFFFFFF);
+	results = replaceAll(results, L"§5", replacements);
+
+	swprintf(replacements, 64, (applyColor ? colorFormatString.data() : L""), GetHTMLColour(eHTMLColor_6), 0xFFFFFFFF);
+	results = replaceAll(results, L"§6", replacements);
+
+	swprintf(replacements, 64, (applyColor ? colorFormatString.data() : L""), GetHTMLColour(eHTMLColor_7), 0xFFFFFFFF);
+	results = replaceAll(results, L"§7", replacements);
+
+	swprintf(replacements, 64, (applyColor ? colorFormatString.data() : L""), GetHTMLColour(eHTMLColor_8), 0xFFFFFFFF);
+	results = replaceAll(results, L"§8", replacements);
+
+	swprintf(replacements, 64, (applyColor ? colorFormatString.data() : L""), GetHTMLColour(eHTMLColor_9), 0xFFFFFFFF);
+	results = replaceAll(results, L"§9", replacements);
+
+	swprintf(replacements, 64, (applyColor ? colorFormatString.data() : L""), GetHTMLColour(eHTMLColor_a), 0xFFFFFFFF);
+	results = replaceAll(results, L"§a", replacements);
+
+	swprintf(replacements, 64, (applyColor ? colorFormatString.data() : L""), GetHTMLColour(eHTMLColor_b), 0xFFFFFFFF);
+	results = replaceAll(results, L"§b", replacements);
+
+	swprintf(replacements, 64, (applyColor ? colorFormatString.data() : L""), GetHTMLColour(eHTMLColor_c), 0xFFFFFFFF);
+	results = replaceAll(results, L"§c", replacements);
+
+	swprintf(replacements, 64, (applyColor ? colorFormatString.data() : L""), GetHTMLColour(eHTMLColor_d), 0xFFFFFFFF);
+	results = replaceAll(results, L"§d", replacements);
+
+	swprintf(replacements, 64, (applyColor ? colorFormatString.data() : L""), GetHTMLColour(eHTMLColor_e), 0xFFFFFFFF);
+	results = replaceAll(results, L"§e", replacements);
+
+	swprintf(replacements, 64, (applyColor ? colorFormatString.data() : L""), GetHTMLColour(eHTMLColor_f), 0xFFFFFFFF);
+	results = replaceAll(results, L"§f", replacements);
+
+	return results;
+}
+
 wstring CMinecraftApp::GetActionReplacement(int iPad, unsigned char ucAction)
 {
 	unsigned int input = InputManager.GetGameJoypadMaps(InputManager.GetJoypadMapVal(iPad) ,ucAction);

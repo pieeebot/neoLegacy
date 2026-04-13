@@ -493,6 +493,10 @@ void Socket::SocketOutputStreamNetwork::writeWithFlags(byteArray b, unsigned int
 	}
 	else
 	{
+		// Don't write on a closing socket: an orphan whose smallId has been
+		// recycled would otherwise leak a packet onto the new client.
+		if( m_socket->isClosing() ) return;
+
 		XRNM_SEND_BUFFER buffer;
 		buffer.pbyData = &b[offset];
 		buffer.dwDataSize = length;

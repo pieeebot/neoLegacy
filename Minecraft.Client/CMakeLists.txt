@@ -128,8 +128,6 @@ set(ASSET_FOLDER_PAIRS
   "${CMAKE_CURRENT_SOURCE_DIR}/music"                  "music"
   "${CMAKE_CURRENT_SOURCE_DIR}/Common/Media"           "Common/Media"
   "${CMAKE_CURRENT_SOURCE_DIR}/Common/res"             "Common/res"
-  "${CMAKE_CURRENT_SOURCE_DIR}/Common/Trial"           "Common/Trial"
-  "${CMAKE_CURRENT_SOURCE_DIR}/Common/Tutorial"        "Common/Tutorial"
   "${CMAKE_CURRENT_SOURCE_DIR}/${PLATFORM_NAME}Media"  "${PLATFORM_NAME}Media"
 )
 setup_asset_folder_copy(Minecraft.Client "${ASSET_FOLDER_PAIRS}")

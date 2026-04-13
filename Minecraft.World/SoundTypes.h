@@ -260,6 +260,8 @@ enum eSOUND_TYPE
 	eSoundType_ITEM_ARMOR_equipGeneric5,
 	eSoundType_ITEM_ARMOR_equipGeneric6,
 
+	eSoundType_DAMAGE_CRITICAL,
+
 	eSoundType_MAX
 };
 

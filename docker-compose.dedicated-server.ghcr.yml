@@ -1,6 +1,6 @@
 services:
   lce-revelations-dedicated-server:
-    image: ghcr.io/lce-hub/lce-revelations-dedicated-server:nightly
+    image: ghcr.io/itsrevela/lce-revelations-dedicated-server:nightly
     container_name: lce-revelations-dedicated-server
     restart: unless-stopped
     tty: true

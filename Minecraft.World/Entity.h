@@ -382,9 +382,12 @@ private:
 
 	int getSmallId();
 	void freeSmallId(int index);
-	static unsigned int entityIdUsedFlags[2048/32];
-	static unsigned int entityIdWanderFlags[2048/32];
-	static unsigned int entityIdRemovingFlags[2048/32];
+	//static unsigned int entityIdUsedFlags[2048/32];
+	//static unsigned int entityIdWanderFlags[2048/32];
+	//static unsigned int entityIdRemovingFlags[2048/32];
+	static unsigned int entityIdUsedFlags[16384/32];
+	static unsigned int entityIdWanderFlags[16384/32];
+	static unsigned int entityIdRemovingFlags[16384/32];
 	static int extraWanderIds[EXTRA_WANDER_MAX];
 	static int extraWanderCount;
 	static int extraWanderTicks;

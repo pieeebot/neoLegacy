@@ -35,7 +35,7 @@ void MoveEntityPacket::read(DataInputStream *dis) //throws IOException
 
 void MoveEntityPacket::write(DataOutputStream *dos) //throws IOException
 {
-	if( (id < 0 ) || (id >= 2048 ) )
+	if( (id < 0 ) || (id >= 16384 ) )
 	{
 		// We shouln't be tracking an entity that doesn't have a short type of id
 		__debugbreak();

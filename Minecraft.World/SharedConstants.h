@@ -20,7 +20,8 @@ class SharedConstants
 		static wstring readAcceptableChars();
 
 	public:
-		static const int maxChatLength = 100;
+		static const int maxChatLength = 255;
+		static const int maxVisibleLength = 100; //to be changed
 		static wstring acceptableLetters;
 
 		static const int ILLEGAL_FILE_CHARACTERS_LENGTH = 15;

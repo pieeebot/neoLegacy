@@ -16,6 +16,7 @@ private:
 	static std::vector<wstring> s_chatHistory;
 	static int s_historyIndex;
 	static wstring s_historyDraft;
+	static int s_chatIndex;
 	static const wstring allowedChars;
 	static bool isAllowedChatChar(wchar_t c);
 
@@ -28,6 +29,9 @@ public:
 	virtual void handleHistoryUp();
 	virtual void handleHistoryDown();
 
+	static int getChatIndex();
+	static void correctChatIndex(int newChatIndex);
+	static void setWheelValue(int wheel);
 protected:
 	void keyPressed(wchar_t ch, int eventKey);
 public:

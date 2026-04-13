@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "UIController.h"
+#include <ChatScreen.h>
 #include "UI.h"
 #include "UIScene.h"
 #include "UIControl_Slider.h"
@@ -1458,6 +1459,9 @@ void UIController::handleKeyPress(unsigned int iPad, unsigned int key)
 		}
 	}
 #endif
+
+	if (key == 4) ChatScreen::setWheelValue(1);
+	if (key == 5) ChatScreen::setWheelValue(-1);
 
 	if(pressed) app.DebugPrintf("Pressed %d\n",key);
 	if(released) app.DebugPrintf("Released %d\n",key);

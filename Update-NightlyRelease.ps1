@@ -16,7 +16,7 @@ $ErrorActionPreference = "Stop"
 
 # --- Configuration ---
 $RepoOwner       = "itsRevela"
-$RepoName        = "MinecraftConsoles"
+$RepoName        = "LCE-Revelations"
 $ReleaseTag      = "Nightly"
 $ReleaseDir      = Join-Path $PSScriptRoot "build\Minecraft.Client\Release"
 $ZipName         = "LCREWindows64.zip"

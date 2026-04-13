@@ -66,6 +66,7 @@
 #include "../Minecraft.World/DurangoStats.h"
 #include "../Minecraft.World/GenericStats.h"
 #endif
+#include <regex>
 
 namespace
 {
@@ -1607,17 +1608,35 @@ void ClientConnection::handleChat(shared_ptr<ChatPacket> packet)
 	bool replaceEntitySource = false;
 	bool replaceItem = false;
 
+	static std::wregex IDS_Pattern(LR"(\{\*IDS_(\d+)\*\})"); //maybe theres a better way to do translateable IDS
+
+	int stringArgsSize = packet->m_stringArgs.size();
+
 	wstring playerDisplayName = L"";
 	wstring sourceDisplayName = L"";
 
 	// On platforms other than Xbox One this just sets display name to gamertag
-	if (packet->m_stringArgs.size() >= 1) playerDisplayName = GetDisplayNameByGamertag(packet->m_stringArgs[0]);
-	if (packet->m_stringArgs.size() >= 2) sourceDisplayName = GetDisplayNameByGamertag(packet->m_stringArgs[1]);
+	if (stringArgsSize >= 1) playerDisplayName = GetDisplayNameByGamertag(packet->m_stringArgs[0]);
+	if (stringArgsSize >= 2) sourceDisplayName = GetDisplayNameByGamertag(packet->m_stringArgs[1]);
 
 	switch(packet->m_messageType)
 	{
 	case ChatPacket::e_ChatCustom:
-		message = (packet->m_stringArgs.size() >= 1) ? packet->m_stringArgs[0] : L"";
+	case ChatPacket::e_ChatActionBar:
+		if (stringArgsSize >= 1) {
+			message = packet->m_stringArgs[0];
+
+			std::wsmatch match;
+			while (std::regex_search(message, match, IDS_Pattern)) {
+				message = replaceAll(message, match[0], app.GetString(std::stoi(match[1].str())));
+			}
+
+			message = app.EscapeHTMLString(message); //do this to enforce escaped string
+			message = app.FormatChatMessage(message); //this needs to be last cause it converts colors to html colors that would have been escaped
+		} else {
+			message = L"empty message";
+		}
+		displayOnGui = (packet->m_messageType == ChatPacket::e_ChatCustom);
 		break;
 	case ChatPacket::e_ChatBedOccupied:
 		message = app.GetString(IDS_TILE_BED_OCCUPIED);
@@ -1967,7 +1986,7 @@ void ClientConnection::handleChat(shared_ptr<ChatPacket> packet)
 
 	if(replacePlayer)
 	{
-		message = replaceAll(message,L"{*PLAYER*}",playerDisplayName);
+		message = replaceAll(message,L"{*PLAYER*}", playerDisplayName);
 	}
 
 	if(replaceEntitySource)
@@ -2002,7 +2021,9 @@ void ClientConnection::handleChat(shared_ptr<ChatPacket> packet)
 	// flag that a message is a death message
 	bool bIsDeathMessage = (packet->m_messageType>=ChatPacket::e_ChatDeathInFire) && (packet->m_messageType<=ChatPacket::e_ChatDeathIndirectMagicItem);
 
-	if( displayOnGui ) minecraft->gui->addMessage(message,m_userIndex, bIsDeathMessage);
+	if( displayOnGui ) minecraft->gui->addMessage(message, m_userIndex, bIsDeathMessage);
+
+	if (!displayOnGui && !message.empty()) minecraft->gui->setActionBarMessage(message);
 }
 
 void ClientConnection::handleAnimate(shared_ptr<AnimatePacket> packet)

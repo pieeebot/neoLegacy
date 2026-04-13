@@ -78,7 +78,7 @@ void Settings::saveProperties()
 	if (!stream.is_open())
 		return;
 
-	stream << "# MinecraftConsoles dedicated server properties\r\n";
+	stream << "# LCE-Revelations dedicated server properties\r\n";
 	for (unordered_map<wstring, wstring>::const_iterator it = properties.begin(); it != properties.end(); ++it)
 	{
 		string key = string(wstringtochararray(it->first));

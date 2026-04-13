@@ -515,6 +515,7 @@ set(_MINECRAFT_SERVER_COMMON_ROOT
   "${_MS_SRC}/../Minecraft.Client/iob_shim.asm"
   "${_MS_SRC}/../Minecraft.Client/stdafx.cpp"
   "${_MS_SRC}/../Minecraft.Client/stubs.cpp"
+  "${_MS_SRC}/../Minecraft.World/Entity.cpp"
   "${_MS_SRC}/../Minecraft.World/AbstractContainerMenu.cpp"
   "${_MS_SRC}/../Minecraft.World/CompoundContainer.h"
   "${_MS_SRC}/../Minecraft.World/ItemEntity.cpp"

@@ -972,7 +972,7 @@ void PlayerConnection::handleChat(shared_ptr<ChatPacket> packet)
 	}
 #else
 	wstring formatted = L"<" + player->name + L"> " + message;
-	server->getPlayers()->broadcastAll(shared_ptr<ChatPacket>(new ChatPacket(formatted)));
+	server->getPlayers()->broadcastAll(shared_ptr<ChatPacket>(new ChatPacket(app.FormatChatMessage(formatted, false))));
 #endif
 	chatSpamTickCount += SharedConstants::TICKS_PER_SECOND;
 	if (chatSpamTickCount > SharedConstants::TICKS_PER_SECOND * 10)

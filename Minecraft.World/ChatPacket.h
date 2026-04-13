@@ -98,6 +98,7 @@ public:
 		e_ChatCommandTeleportMe,
 		e_ChatCommandTeleportToMe,
 
+		e_ChatActionBar,
 	};
 
 public:

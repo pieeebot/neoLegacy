@@ -27,13 +27,17 @@
 
 const wstring Entity::RIDING_TAG = L"Riding";
 
-int Entity::entityCounter = 2048;		// 4J - changed initialiser to 2048, as we are using range 0 - 2047 as special unique smaller ids for things that need network tracked
+//int Entity::entityCounter = 2048;		// 4J - changed initialiser to 2048, as we are using range 0 - 2047 as special unique smaller ids for things that need network tracked
+int Entity::entityCounter = 16384; //now using full range of 0 - 16383, limit is 32k but we shouldnt need that yet
 DWORD Entity::tlsIdx = TlsAlloc();
 
 // 4J - added getSmallId & freeSmallId methods
-unsigned int Entity::entityIdUsedFlags[2048/32] = {0};
-unsigned int Entity::entityIdWanderFlags[2048/32] = {0};
-unsigned int Entity::entityIdRemovingFlags[2048/32] = {0};
+//unsigned int Entity::entityIdUsedFlags[2048/32] = {0};
+//unsigned int Entity::entityIdWanderFlags[2048/32] = {0};
+//unsigned int Entity::entityIdRemovingFlags[2048/32] = {0};
+unsigned int Entity::entityIdUsedFlags[16384/32] = {0};
+unsigned int Entity::entityIdWanderFlags[16384/32] = {0};
+unsigned int Entity::entityIdRemovingFlags[16384/32] = {0};
 int Entity::extraWanderIds[EXTRA_WANDER_MAX] = {0};
 int Entity::extraWanderTicks = 0;
 int Entity::extraWanderCount = 0;
@@ -65,7 +69,7 @@ int Entity::getSmallId()
 		}
 	}
 
-	for( int i = 0; i < (2048 / 32 ); i++ )
+	for( int i = 0; i < (16384 / 32 ); i++ )
 	{
 		unsigned int uiFlags = *puiUsedFlags;
 		if( uiFlags != 0xffffffff )
@@ -102,7 +106,7 @@ int Entity::getSmallId()
 
     if (entityCounter == 0x7ffffff)
     {
-        entityCounter = 2048;
+        entityCounter = 16384;
     }
     return fallbackId;
 #else
@@ -116,7 +120,7 @@ void Entity::countFlagsForPIX()
 {
 	int freecount = 0;
 	unsigned int *puiUsedFlags = entityIdUsedFlags;
-	for( int i = 0; i < (2048 / 32 ); i++ )
+	for( int i = 0; i < (16384 / 32 ); i++ )
 	{
 		unsigned int uiFlags = *puiUsedFlags;
 		if( uiFlags != 0xffffffff )
@@ -134,7 +138,7 @@ void Entity::countFlagsForPIX()
 		puiUsedFlags++;
 	}
 	PIXAddNamedCounter(freecount,"Small Ids free");
-	PIXAddNamedCounter(2048 - freecount,"Small Ids used");
+	PIXAddNamedCounter(16384 - freecount,"Small Ids used");
 }
 
 void Entity::resetSmallId()
@@ -149,7 +153,7 @@ void Entity::resetSmallId()
 void Entity::freeSmallId(int index)
 {
 	if( ( (size_t)TlsGetValue(tlsIdx) ) == 0 ) return;		// Don't do anything with small ids if this isn't the server thread
-	if( index >= 2048 ) return;							// Don't do anything if this isn't a short id
+	if( index >= 16384 ) return;							// Don't do anything if this isn't a short id
 
 	unsigned int i = index / 32;
 	unsigned int j = index % 32;
@@ -172,7 +176,7 @@ void Entity::useSmallIds()
 void Entity::considerForExtraWandering(bool enable)
 {
 	if( ( (size_t)TlsGetValue(tlsIdx) ) == 0 ) return;		// Don't do anything with small ids if this isn't the server thread
-	if( entityId >= 2048 ) return;							// Don't do anything if this isn't a short id
+	if( entityId >= 16384 ) return;							// Don't do anything if this isn't a short id
 
 	unsigned int i = entityId / 32;
 	unsigned int j = entityId % 32;
@@ -192,7 +196,7 @@ void Entity::considerForExtraWandering(bool enable)
 bool Entity::isExtraWanderingEnabled()
 {
 	if( ( (size_t)TlsGetValue(tlsIdx) ) == 0 ) return false;		// Don't do anything with small ids if this isn't the server thread
-	if( entityId >= 2048 ) return false;						// Don't do anything if this isn't a short id
+	if( entityId >= 16384 ) return false;						// Don't do anything if this isn't a short id
 
 	for( int i = 0; i < extraWanderCount; i++ )
 	{
@@ -224,12 +228,12 @@ void Entity::tickExtraWandering()
 		int entityId = 0;
 		if( extraWanderCount )
 		{
-			entityId = ( extraWanderIds[ extraWanderCount - 1 ] + 1 ) % 2048;
+			entityId = ( extraWanderIds[ extraWanderCount - 1 ] + 1 ) % 16384;
 		}
 
 		extraWanderCount = 0;
 
-		for( int k = 0; ( k < 2048 ) && ( extraWanderCount < EXTRA_WANDER_MAX); k++ )
+		for( int k = 0; ( k < 16384 ) && ( extraWanderCount < EXTRA_WANDER_MAX); k++ )
 		{
 			unsigned int i = entityId / 32;
 			unsigned int j = entityId % 32;
@@ -241,7 +245,7 @@ void Entity::tickExtraWandering()
 				//				printf("%d, ", entityId);
 			}
 
-			entityId = ( entityId + 1 ) % 2048;
+			entityId = ( entityId + 1 ) % 16384;
 		}
 		//		printf("\n");
 	}
@@ -261,7 +265,7 @@ void Entity::_init(bool useSmallId, Level *level)
 	else
 	{
 		entityId = Entity::entityCounter++;
-		if(entityCounter == 0x7ffffff ) entityCounter = 2048;
+		if(entityCounter == 0x7ffffff ) entityCounter = 16384;
 	}
 
 	viewScale = 1.0;

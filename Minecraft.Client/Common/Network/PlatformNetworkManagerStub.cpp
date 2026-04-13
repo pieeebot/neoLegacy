@@ -134,7 +134,14 @@ void CPlatformNetworkManagerStub::NotifyPlayerLeaving(IQNetPlayer* pQNetPlayer)
 	if (socket != nullptr)
 	{
 		if (m_pIQNet->IsHost())
+		{
 			g_NetworkManager.CloseConnection(networkPlayer);
+
+			// Propagate the TCP drop to the game Socket so any orphaned
+			// PendingConnection at this smallId cleans up before its login
+			// timer fires and leaks a DisconnectPacket to the reused slot.
+			socket->close(true);
+		}
 	}
 
 	if (m_pIQNet->IsHost())

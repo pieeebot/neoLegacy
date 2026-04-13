@@ -146,6 +146,8 @@ protected:
 
 	int		m_iConsectiveInputTicks;
 
+	int64_t	m_iLastMouseTickTimeNs;
+
 	// Used for detecting quick "taps" in a direction, should jump cursor to next slot.
 	enum ETapState
 	{

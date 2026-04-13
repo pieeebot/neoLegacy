@@ -735,7 +735,7 @@ int main(int argc, char **argv)
 			break;
 		}
 
-		if (autosaveRequested && app.GetXuiServerAction(kServerActionPad) == eXuiServerAction_Idle)
+		if (autosaveRequested && app.GetXuiServerAction(kServerActionPad) == eXuiServerAction_Idle && !ConsoleSaveFileOriginal::hasPendingBackgroundSave())
 		{
 			LogWorldIO("autosave completed");
 			autosaveRequested = false;
@@ -749,7 +749,7 @@ int main(int argc, char **argv)
 		DWORD now = GetTickCount();
 		if ((LONG)(now - nextAutosaveTick) >= 0)
 		{
-			if (app.GetXuiServerAction(kServerActionPad) == eXuiServerAction_Idle)
+            if (app.GetXuiServerAction(kServerActionPad) == eXuiServerAction_Idle && !ConsoleSaveFileOriginal::hasPendingBackgroundSave())
 			{
 				LogWorldIO("requesting autosave");
 				app.SetXuiServerAction(kServerActionPad, eXuiServerAction_AutoSaveGame);
@@ -768,14 +768,16 @@ int main(int argc, char **argv)
 
 	LogInfof("shutdown", "Dedicated server stopped");
 	MinecraftServer *server = MinecraftServer::getInstance();
-	if (server != NULL)
+    if (server != NULL && !ConsoleSaveFileOriginal::hasPendingBackgroundSave())
 	{
-		server->setSaveOnExit(true);
-	}
-	if (server != NULL)
-	{
+        server->setSaveOnExit(true);
 		LogWorldIO("requesting save before shutdown");
 		LogWorldIO("using saveOnExit for shutdown");
+	}
+
+	if (ConsoleSaveFileOriginal::hasPendingBackgroundSave())
+    {
+        LogWorldIO("Waiting for autosave to complete...");
 	}
 
 	MinecraftServer::HaltServer();

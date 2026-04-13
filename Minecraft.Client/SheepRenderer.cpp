@@ -13,11 +13,10 @@ SheepRenderer::SheepRenderer(Model *model, Model *armor, float shadow) : MobRend
 
 int SheepRenderer::prepareArmor(shared_ptr<LivingEntity> _sheep, int layer, float a)
 {
-	// 4J - dynamic cast required because we aren't using templates/generics in our version
 	shared_ptr<Sheep> sheep = dynamic_pointer_cast<Sheep>(_sheep);
 
     if (layer == 0 && !sheep->isSheared() &&
-		!sheep->isInvisibleTo(Minecraft::GetInstance()->player)) // 4J-JEV: Todo, merge with java fix (for invisible sheep armour) in '1.7.5'.
+		!sheep->isInvisibleTo(Minecraft::GetInstance()->player))
 	{
 		MemSect(31);
 		bindTexture(&SHEEP_FUR_LOCATION);
@@ -25,9 +24,8 @@ int SheepRenderer::prepareArmor(shared_ptr<LivingEntity> _sheep, int layer, floa
 
 		if (sheep->hasCustomName() && sheep->getCustomName().compare(L"jeb_") == 0)
 		{
-			// easter egg...
 			int colorDuration = 25;
-			int value = (sheep->tickCount / colorDuration);
+			int value = (sheep->tickCount / colorDuration) + sheep->entityId;
 			int c1 = value % Sheep::COLOR_LENGTH;
 			int c2 = (value + 1) % Sheep::COLOR_LENGTH;
 			float subStep = ((sheep->tickCount % colorDuration) + a) / static_cast<float>(colorDuration);

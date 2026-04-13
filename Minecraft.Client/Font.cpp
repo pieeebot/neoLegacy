@@ -404,6 +404,8 @@ void Font::draw(const wstring &str, bool dropShadow, int initialColor)
 	t->begin();
 	t->color(currentColor & 0x00ffffff, (currentColor >> 24) & 255);
 
+	bool prev = t->setMipmapEnable(false); // Disable mipmapping for fonts, and save previous enabled value to be restored later - Botch
+
 	for (int i = 0; i < static_cast<int>(cleanStr.length()); ++i)
 	{
 		// Map character
@@ -481,6 +483,8 @@ void Font::draw(const wstring &str, bool dropShadow, int initialColor)
 		}
 	}
 
+	t->setMipmapEnable(prev); //Reinstates previously used enabled value - Botch
+	
 	t->end();
 }
 

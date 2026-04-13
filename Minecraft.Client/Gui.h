@@ -17,6 +17,7 @@ private:
 	static const int m_iMaxMessageWidth = 280;
 	static ItemRenderer *itemRenderer;
 	vector<GuiMessage> guiMessages[XUSER_MAX_COUNT];
+	int chatIndex = 0;
 	Random *random;
 
 	Minecraft *minecraft;
@@ -62,6 +63,8 @@ public:
 	DWORD getMessagesCount(int iPad) { return static_cast<int>(guiMessages[iPad].size()); }
 	wstring getMessage(int iPad, DWORD index) { return guiMessages[iPad].at(index).string; }
 	float getOpacity(int iPad, DWORD index);
+
+	void setActionBarMessage(wstring message); //uses jukebox label
 
 	wstring getJukeboxMessage(int iPad) { return overlayMessageString; }
 	float getJukeboxOpacity(int iPad);

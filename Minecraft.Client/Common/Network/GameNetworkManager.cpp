@@ -204,6 +204,12 @@ bool	CGameNetworkManager::StartNetworkGame(Minecraft *minecraft, LPVOID lpParame
 	ProfileManager.SetDeferredSignoutEnabled(true);
 #endif
 
+	// Clear any stale cancel flag latched by the previous join's progress
+	// UI teardown, otherwise the next join's first tick insta-closes.
+	EnterCriticalSection(&bCancelRequestedCS);
+	g_NetworkManager.m_bCancelRequested = false;
+	LeaveCriticalSection(&bCancelRequestedCS);
+
     int64_t seed = 0;
 	bool dedicatedNoLocalHostPlayer = false;
     if (lpParameter != nullptr)
