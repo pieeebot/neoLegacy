@@ -17,6 +17,7 @@ bool UIControl_Slider::setupControl(UIScene *scene, IggyValuePath *parent, const
 
 	//Slider specific initialisers
 	m_funcSetRelativeSliderPos = registerFastName(L"SetRelativeSliderPos");
+	m_funcSetSliderValue = registerFastName(L"MoveSlider");
 	m_funcGetRealWidth = registerFastName(L"GetRealWidth");
 
 	return success;
@@ -110,6 +111,15 @@ void UIControl_Slider::handleSliderMove(int newValue)
 			setLabel(m_allPossibleLabels[newValue]);
 		}
 	}
+}
+
+void UIControl_Slider::SetSliderValue(int valueA)
+{
+	IggyDataValue result;
+	IggyDataValue value[1];
+	value[0].type = IGGY_DATATYPE_number;
+	value[0].number = valueA;
+	IggyResult out = IggyPlayerCallMethodRS(m_parentScene->getMovie(), &result, getIggyValuePath(), m_funcSetSliderValue, 1, value);
 }
 
 void UIControl_Slider::SetSliderTouchPos(float fTouchPos)

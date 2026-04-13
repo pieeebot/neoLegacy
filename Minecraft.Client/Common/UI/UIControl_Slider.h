@@ -14,6 +14,7 @@ private:
 
 	// 4J-TomK - function for setting slider position on touch
 	IggyName m_funcSetRelativeSliderPos;
+	IggyName m_funcSetSliderValue;
 	IggyName m_funcGetRealWidth;
 
 public:
@@ -25,6 +26,7 @@ public:
 
 	void handleSliderMove(int newValue);
 	void SetSliderTouchPos(float fTouchPos);
+	void SetSliderValue(int value);
 	virtual void setAllPossibleLabels(int labelCount, wchar_t labels[][256]);
 
 	S32 GetRealWidth();
