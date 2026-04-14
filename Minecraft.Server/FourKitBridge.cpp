@@ -103,6 +103,11 @@ typedef int(__stdcall *fn_fire_piston_extend)(int dimId, int x, int y, int z, in
 typedef int(__stdcall *fn_fire_piston_retract)(int dimId, int x, int y, int z, int direction);
 typedef int(__stdcall *fn_fire_command_preprocess)(int entityId, const char *cmdUtf8, int cmdByteLen, char *outBuf, int outBufSize, int *outLen);
 typedef int(__stdcall *fn_fire_block_from_to)(int dimId, int fromX, int fromY, int fromZ, int toX, int toY, int toZ, int face);
+typedef void(__stdcall *fn_set_chunk_callbacks)(void *isChunkLoaded, void *loadChunk, void *unloadChunk, void *getLoadedChunks, void *isChunkInUse, void *getChunkSnapshot, void *unloadChunkRequest, void *regenerateChunk, void *refreshChunk);
+typedef void(__stdcall *fn_set_block_info_callbacks)(void *getSkyLight, void *getBlockLight, void *getBiomeId, void *setBiomeId);
+typedef void(__stdcall *fn_set_world_entity_callbacks)(void *getWorldEntities);
+typedef void(__stdcall *fn_fire_chunk_load)(int dimId, int chunkX, int chunkZ, int isNewChunk);
+typedef int(__stdcall *fn_fire_chunk_unload)(int dimId, int chunkX, int chunkZ);
 
 struct OpenContainerInfo
 {
@@ -160,6 +165,11 @@ static fn_fire_piston_extend s_managedFirePistonExtend = nullptr;
 static fn_fire_piston_retract s_managedFirePistonRetract = nullptr;
 static fn_fire_command_preprocess s_managedFireCommandPreprocess = nullptr;
 static fn_fire_block_from_to s_managedFireBlockFromTo = nullptr;
+static fn_set_chunk_callbacks s_managedSetChunkCallbacks = nullptr;
+static fn_set_block_info_callbacks s_managedSetBlockInfoCallbacks = nullptr;
+static fn_set_world_entity_callbacks s_managedSetWorldEntityCallbacks = nullptr;
+static fn_fire_chunk_load s_managedFireChunkLoad = nullptr;
+static fn_fire_chunk_unload s_managedFireChunkUnload = nullptr;
 
 static bool s_initialized = false;
 
@@ -242,6 +252,11 @@ void Initialize()
         {L"FirePistonRetract", (void **)&s_managedFirePistonRetract},
         {L"FireCommandPreprocess", (void **)&s_managedFireCommandPreprocess},
         {L"FireBlockFromTo", (void **)&s_managedFireBlockFromTo},
+        {L"SetChunkCallbacks", (void **)&s_managedSetChunkCallbacks},
+        {L"SetBlockInfoCallbacks", (void **)&s_managedSetBlockInfoCallbacks},
+        {L"SetWorldEntityCallbacks", (void **)&s_managedSetWorldEntityCallbacks},
+        {L"FireChunkLoad", (void **)&s_managedFireChunkLoad},
+        {L"FireChunkUnload", (void **)&s_managedFireChunkUnload},
     };
 
     bool ok = true;
@@ -335,6 +350,26 @@ void Initialize()
         (void *)&NativeGetVehicleId,
         (void *)&NativeGetPassengerId,
         (void *)&NativeGetEntityInfo);
+
+    s_managedSetChunkCallbacks(
+        (void *)&NativeIsChunkLoaded,
+        (void *)&NativeLoadChunk,
+        (void *)&NativeUnloadChunk,
+        (void *)&NativeGetLoadedChunks,
+        (void *)&NativeIsChunkInUse,
+        (void *)&NativeGetChunkSnapshot,
+        (void *)&NativeUnloadChunkRequest,
+        (void *)&NativeRegenerateChunk,
+        (void *)&NativeRefreshChunk);
+
+    s_managedSetBlockInfoCallbacks(
+        (void *)&NativeGetSkyLight,
+        (void *)&NativeGetBlockLight,
+        (void *)&NativeGetBiomeId,
+        (void *)&NativeSetBiomeId);
+
+    s_managedSetWorldEntityCallbacks(
+        (void *)&NativeGetWorldEntities);
 
     LogInfo("fourkit", "FourKit initialized successfully.");
 }
@@ -1013,5 +1048,19 @@ bool FireBlockFromTo(int dimId, int fromX, int fromY, int fromZ, int toX, int to
     if (!s_initialized || !s_managedFireBlockFromTo)
         return false;
     return s_managedFireBlockFromTo(dimId, fromX, fromY, fromZ, toX, toY, toZ, face) != 0;
+}
+
+void FireChunkLoad(int dimId, int chunkX, int chunkZ, bool isNewChunk)
+{
+    if (!s_initialized || !s_managedFireChunkLoad)
+        return;
+    s_managedFireChunkLoad(dimId, chunkX, chunkZ, isNewChunk ? 1 : 0);
+}
+
+bool FireChunkUnload(int dimId, int chunkX, int chunkZ)
+{
+    if (!s_initialized || !s_managedFireChunkUnload)
+        return false;
+    return s_managedFireChunkUnload(dimId, chunkX, chunkZ) != 0;
 }
 } // namespace FourKitBridge

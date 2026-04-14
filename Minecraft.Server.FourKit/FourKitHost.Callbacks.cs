@@ -121,4 +121,43 @@ public static partial class FourKitHost
             ServerLog.Error("fourkit", $"SetVehicleCallbacks error: {ex}");
         }
     }
+
+    [UnmanagedCallersOnly]
+    public static void SetChunkCallbacks(IntPtr isChunkLoaded, IntPtr loadChunk, IntPtr unloadChunk, IntPtr getLoadedChunks, IntPtr isChunkInUse, IntPtr getChunkSnapshot, IntPtr unloadChunkRequest, IntPtr regenerateChunk, IntPtr refreshChunk)
+    {
+        try
+        {
+            NativeBridge.SetChunkCallbacks(isChunkLoaded, loadChunk, unloadChunk, getLoadedChunks, isChunkInUse, getChunkSnapshot, unloadChunkRequest, regenerateChunk, refreshChunk);
+        }
+        catch (Exception ex)
+        {
+            ServerLog.Error("fourkit", $"SetChunkCallbacks error: {ex}");
+        }
+    }
+
+    [UnmanagedCallersOnly]
+    public static void SetBlockInfoCallbacks(IntPtr getSkyLight, IntPtr getBlockLight, IntPtr getBiomeId, IntPtr setBiomeId)
+    {
+        try
+        {
+            NativeBridge.SetBlockInfoCallbacks(getSkyLight, getBlockLight, getBiomeId, setBiomeId);
+        }
+        catch (Exception ex)
+        {
+            ServerLog.Error("fourkit", $"SetBlockInfoCallbacks error: {ex}");
+        }
+    }
+
+    [UnmanagedCallersOnly]
+    public static void SetWorldEntityCallbacks(IntPtr getWorldEntities)
+    {
+        try
+        {
+            NativeBridge.SetWorldEntityCallbacks(getWorldEntities);
+        }
+        catch (Exception ex)
+        {
+            ServerLog.Error("fourkit", $"SetWorldEntityCallbacks error: {ex}");
+        }
+    }
 }

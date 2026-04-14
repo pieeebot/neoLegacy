@@ -78,4 +78,24 @@ namespace FourKitBridge
     int __cdecl NativeGetVehicleId(int entityId);
     int __cdecl NativeGetPassengerId(int entityId);
     void __cdecl NativeGetEntityInfo(int entityId, double *outData);
+
+    // chunk
+    int __cdecl NativeIsChunkLoaded(int dimId, int chunkX, int chunkZ);
+    int __cdecl NativeLoadChunk(int dimId, int chunkX, int chunkZ, int generate);
+    int __cdecl NativeUnloadChunk(int dimId, int chunkX, int chunkZ, int save, int safe);
+    int __cdecl NativeGetLoadedChunks(int dimId, int **coordBuf);
+    int __cdecl NativeIsChunkInUse(int dimId, int chunkX, int chunkZ);
+    void __cdecl NativeGetChunkSnapshot(int dimId, int chunkX, int chunkZ, int *blockIds, int *blockData, int *maxBlockY);
+    int __cdecl NativeUnloadChunkRequest(int dimId, int chunkX, int chunkZ, int safe);
+    int __cdecl NativeRegenerateChunk(int dimId, int chunkX, int chunkZ);
+    int __cdecl NativeRefreshChunk(int dimId, int chunkX, int chunkZ);
+
+    // world entity bs
+    int __cdecl NativeGetWorldEntities(int dimId, int **outBuf);
+
+    // block info (light, biome)
+    int __cdecl NativeGetSkyLight(int dimId, int x, int y, int z);
+    int __cdecl NativeGetBlockLight(int dimId, int x, int y, int z);
+    int __cdecl NativeGetBiomeId(int dimId, int x, int z);
+    void __cdecl NativeSetBiomeId(int dimId, int x, int z, int biomeId);
 }

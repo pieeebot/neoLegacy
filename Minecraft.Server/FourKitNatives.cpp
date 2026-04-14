@@ -13,6 +13,10 @@
 #include "../Minecraft.Client/ServerLevel.h"
 #include "../Minecraft.Client/ServerPlayer.h"
 #include "../Minecraft.Client/ServerPlayerGameMode.h"
+#include "../Minecraft.Client/ServerChunkCache.h"
+#include "../Minecraft.World/LevelChunk.h"
+#include "../Minecraft.World/Biome.h"
+#include "../Minecraft.World/LightLayer.h"
 #include "../Minecraft.Client/Windows64/Network/WinsockNetLayer.h"
 #include "../Minecraft.World/AbstractContainerMenu.h"
 #include "../Minecraft.World/AddGlobalEntityPacket.h"
@@ -1266,6 +1270,234 @@ void __cdecl NativeGetEntityInfo(int entityId, double *outData)
     outData[2] = entity->y;
     outData[3] = entity->z;
     outData[4] = (double)entity->dimension;
+}
+
+int __cdecl NativeGetWorldEntities(int dimId, int **outBuf)
+{
+    *outBuf = nullptr;
+    ServerLevel *level = GetLevel(dimId);
+    if (!level)
+        return 0;
+
+    EnterCriticalSection(&level->m_entitiesCS);
+    int total = (int)level->entities.size();
+    int *buf = (int *)CoTaskMemAlloc(total * 3 * sizeof(int));
+    int count = 0;
+    if (buf)
+    {
+        for (auto &entity : level->entities)
+        {
+            if (!entity)
+                continue;
+            int idx = count * 3;
+            buf[idx] = entity->entityId;
+            buf[idx + 1] = MapEntityType((int)entity->GetType());
+            buf[idx + 2] = entity->instanceof(eTYPE_LIVINGENTITY) ? 1 : 0;
+            count++;
+        }
+    }
+    LeaveCriticalSection(&level->m_entitiesCS);
+    *outBuf = buf;
+    return count;
+}
+
+int __cdecl NativeIsChunkLoaded(int dimId, int chunkX, int chunkZ)
+{
+    ServerLevel *level = GetLevel(dimId);
+    if (!level || !level->cache)
+        return 0;
+    return level->cache->hasChunk(chunkX, chunkZ) ? 1 : 0;
+}
+
+int __cdecl NativeLoadChunk(int dimId, int chunkX, int chunkZ, int generate)
+{
+    ServerLevel *level = GetLevel(dimId);
+    if (!level || !level->cache)
+        return 0;
+    LevelChunk *chunk = level->cache->create(chunkX, chunkZ);
+    return (chunk != nullptr) ? 1 : 0;
+}
+
+int __cdecl NativeUnloadChunk(int dimId, int chunkX, int chunkZ, int save, int safe)
+{
+    ServerLevel *level = GetLevel(dimId);
+    if (!level || !level->cache)
+        return 0;
+    if (safe)
+    {
+        if (!level->cache->hasChunk(chunkX, chunkZ))
+            return 0;
+        LevelChunk *chunk = level->cache->getChunk(chunkX, chunkZ);
+        if (chunk && chunk->containsPlayer())
+            return 0;
+    }
+    level->cache->drop(chunkX, chunkZ);
+    return 1;
+}
+
+int __cdecl NativeGetLoadedChunks(int dimId, int **coordBuf)
+{
+    // wow gay
+    *coordBuf = nullptr;
+    ServerLevel *level = GetLevel(dimId);
+    if (!level || !level->cache)
+        return 0;
+
+    std::vector<LevelChunk *> *list = level->cache->getLoadedChunkList();
+
+    if (!list)
+        return 0;
+
+
+
+    int total = (int)list->size();
+    int *buf = (int *)CoTaskMemAlloc(total * 2 * sizeof(int));
+    int count = 0;
+
+    if (buf)
+    {
+        for (auto *chunk : *list)
+        {
+            if (chunk)
+            {
+                buf[count * 2] = chunk->x;
+                buf[count * 2 + 1] = chunk->z;
+                count++;
+            }
+        }
+    }
+
+    *coordBuf = buf;
+    return count;
+}
+
+int __cdecl NativeIsChunkInUse(int dimId, int chunkX, int chunkZ)
+{
+    PlayerList *list = MinecraftServer::getPlayerList();
+    if (!list)
+        return 0;
+    for (auto &p : list->players)
+    {
+        if (p && p->dimension == dimId)
+        {
+            int px = (int)floor(p->x) >> 4;
+            int pz = (int)floor(p->z) >> 4;
+            if (px == chunkX && pz == chunkZ)
+                return 1;
+        }
+    }
+    return 0;
+}
+
+void __cdecl NativeGetChunkSnapshot(int dimId, int chunkX, int chunkZ, int *blockIds, int *blockData, int *maxBlockY)
+{
+    ServerLevel *level = GetLevel(dimId);
+    if (!level || !level->cache)
+    {
+        memset(blockIds, 0, 16 * 128 * 16 * sizeof(int));
+        memset(blockData, 0, 16 * 128 * 16 * sizeof(int));
+        memset(maxBlockY, 0, 16 * 16 * sizeof(int));
+        return;
+    }
+    if (!level->cache->hasChunk(chunkX, chunkZ))
+    {
+        memset(blockIds, 0, 16 * 128 * 16 * sizeof(int));
+        memset(blockData, 0, 16 * 128 * 16 * sizeof(int));
+        memset(maxBlockY, 0, 16 * 16 * sizeof(int));
+        return;
+    }
+    LevelChunk *chunk = level->cache->getChunk(chunkX, chunkZ);
+    if (!chunk)
+    {
+        memset(blockIds, 0, 16 * 128 * 16 * sizeof(int));
+        memset(blockData, 0, 16 * 128 * 16 * sizeof(int));
+        memset(maxBlockY, 0, 16 * 16 * sizeof(int));
+        return;
+    }
+    for (int lx = 0; lx < 16; lx++)
+    {
+        for (int lz = 0; lz < 16; lz++)
+        {
+            int highest = 0;
+            for (int ly = 0; ly < 128; ly++)
+            {
+                int idx = (lx * 128 * 16) + (ly * 16) + lz;
+                blockIds[idx] = chunk->getTile(lx, ly, lz);
+                blockData[idx] = chunk->getData(lx, ly, lz);
+                if (blockIds[idx] != 0)
+                    highest = ly;
+            }
+            maxBlockY[lx * 16 + lz] = highest;
+        }
+    }
+}
+
+int __cdecl NativeUnloadChunkRequest(int dimId, int chunkX, int chunkZ, int safe)
+{
+    ServerLevel *level = GetLevel(dimId);
+    if (!level || !level->cache)
+        return 0;
+    if (safe)
+    {
+        if (!level->cache->hasChunk(chunkX, chunkZ))
+            return 0;
+        LevelChunk *chunk = level->cache->getChunk(chunkX, chunkZ);
+        if (chunk && chunk->containsPlayer())
+            return 0;
+    }
+    level->cache->drop(chunkX, chunkZ);
+    return 1;
+}
+
+int __cdecl NativeRegenerateChunk(int dimId, int chunkX, int chunkZ)
+{
+    return 0;
+}
+
+int __cdecl NativeRefreshChunk(int dimId, int chunkX, int chunkZ)
+{
+    return 0;
+}
+
+int __cdecl NativeGetSkyLight(int dimId, int x, int y, int z)
+{
+    ServerLevel *level = GetLevel(dimId);
+    if (!level)
+        return 0;
+    return level->getBrightness(LightLayer::Sky, x, y, z);
+}
+
+int __cdecl NativeGetBlockLight(int dimId, int x, int y, int z)
+{
+    ServerLevel *level = GetLevel(dimId);
+    if (!level)
+        return 0;
+    return level->getBrightness(LightLayer::Block, x, y, z);
+}
+
+int __cdecl NativeGetBiomeId(int dimId, int x, int z)
+{
+    ServerLevel *level = GetLevel(dimId);
+    if (!level)
+        return 1;
+    Biome *biome = level->getBiome(x, z);
+    return biome ? biome->id : 1;
+}
+
+void __cdecl NativeSetBiomeId(int dimId, int x, int z, int biomeId)
+{
+    ServerLevel *level = GetLevel(dimId);
+    if (!level)
+        return;
+    LevelChunk *chunk = level->getChunk(x >> 4, z >> 4);
+    if (!chunk)
+        return;
+    byteArray biomes = chunk->getBiomes();
+    if (biomes.data == nullptr)
+        return;
+    int lx = x & 0xf;
+    int lz = z & 0xf;
+    biomes.data[(lz << 4) | lx] = static_cast<unsigned char>(biomeId & 0xff);
 }
 
 } // namespace FourKitBridge

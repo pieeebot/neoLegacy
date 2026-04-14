@@ -135,6 +135,15 @@ public class Block
     }
 
     /// <summary>
+    /// Gets the chunk which contains this block.
+    /// </summary>
+    /// <returns>Containing Chunk.</returns>
+    public Chunk.Chunk getChunk()
+    {
+        return getWorld().getChunkAt(getX() >> 4, getZ() >> 4);
+    }
+
+    /// <summary>
     /// Gets the block at the given face
     /// <para>This method is equal to getRelative(face, 1)</para>
     /// </summary>
@@ -162,5 +171,93 @@ public class Block
     {
         return getRelative(face.getModX() * distance, face.getModY() * distance, face.getModZ() * distance);
     }
-    
+
+    /// <summary>
+    /// Returns the biome that this block resides in.
+    /// </summary>
+    /// <returns>Biome type containing this block.</returns>
+    public Biome getBiome()
+    {
+        if (NativeBridge.GetBiomeId != null)
+            return BiomeHelper.fromId(NativeBridge.GetBiomeId(_world.getDimensionId(), _x, _z));
+        return Biome.PLAINS;
+    }
+
+    /// <summary>
+    /// Sets the biome that this block resides in.
+    /// </summary>
+    /// <param name="bio">New Biome type for this block.</param>
+    public void setBiome(Biome bio)
+    {
+        NativeBridge.SetBiomeId?.Invoke(_world.getDimensionId(), _x, _z, (int)bio);
+    }
+
+    /// <summary>
+    /// Gets the humidity of the biome of this block.
+    /// </summary>
+    /// <returns>Humidity of this block.</returns>
+    public double getHumidity()
+    {
+        return getBiome().getRainfall();
+    }
+
+    /// <summary>
+    /// Gets the temperature of the biome of this block.
+    /// </summary>
+    /// <returns>Temperature of this block.</returns>
+    public double getTemperature()
+    {
+        return getBiome().getTemperature();
+    }
+
+    /// <summary>
+    /// Checks if this block is liquid.
+    /// <para>A block is considered liquid when <see cref="getType()"/> returns
+    /// <see cref="Material.WATER"/>, <see cref="Material.STATIONARY_WATER"/>,
+    /// <see cref="Material.LAVA"/> or <see cref="Material.STATIONARY_LAVA"/>.</para>
+    /// </summary>
+    /// <returns>true if this block is liquid.</returns>
+    public bool isLiquid()
+    {
+        Material type = getType();
+        return type == Material.WATER || type == Material.STATIONARY_WATER ||
+               type == Material.LAVA || type == Material.STATIONARY_LAVA;
+    }
+
+
+    /// <summary>
+    /// Gets the light level between 0-15.
+    /// </summary>
+    /// <returns>Light level.</returns>
+    public byte getLightLevel()
+    {
+        int sky = getLightFromSky();
+        int block = getLightFromBlocks();
+        return (byte)(sky > block ? sky : block);
+    }
+
+    /// <summary>
+    /// Get the amount of light at this block from the sky.
+    /// Any light given from other sources (such as blocks like torches) will be ignored.
+    /// </summary>
+    /// <returns>Sky light level.</returns>
+    public byte getLightFromSky()
+    {
+        if (NativeBridge.GetSkyLight != null)
+            return (byte)NativeBridge.GetSkyLight(_world.getDimensionId(), _x, _y, _z);
+        return 0;
+    }
+
+    /// <summary>
+    /// Get the amount of light at this block from nearby blocks.
+    /// Any light given from other sources (such as the sun) will be ignored.
+    /// </summary>
+    /// <returns>Block light level.</returns>
+    public byte getLightFromBlocks()
+    {
+        if (NativeBridge.GetBlockLight != null)
+            return (byte)NativeBridge.GetBlockLight(_world.getDimensionId(), _x, _y, _z);
+        return 0;
+    }
+
 }

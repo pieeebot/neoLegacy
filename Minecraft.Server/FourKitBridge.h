@@ -105,6 +105,8 @@ namespace FourKitBridge
     bool FirePistonRetract(int dimId, int x, int y, int z, int direction);
     bool FireCommandPreprocess(int entityId, const std::wstring &commandLine, std::wstring &outCommand);
     bool FireBlockFromTo(int dimId, int fromX, int fromY, int fromZ, int toX, int toY, int toZ, int face);
+    void FireChunkLoad(int dimId, int chunkX, int chunkZ, bool isNewChunk);
+    bool FireChunkUnload(int dimId, int chunkX, int chunkZ);
 #else
     // Standalone build: every hook is an inline no-op. Cancellable hooks
     // return false so vanilla code paths run unmodified, AND every out
@@ -211,5 +213,7 @@ namespace FourKitBridge
     inline bool FirePistonRetract(int, int, int, int, int) { return false; }
     inline bool FireCommandPreprocess(int, const std::wstring &commandLine, std::wstring &outCommand) { outCommand = commandLine; return false; }
     inline bool FireBlockFromTo(int, int, int, int, int, int, int, int) { return false; }
+    inline void FireChunkLoad(int, int, int, bool) {}
+    inline bool FireChunkUnload(int, int, int) { return false; }
 #endif
 }

@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using Minecraft.Server.FourKit.Chunk;
 using Minecraft.Server.FourKit.Entity;
 using Minecraft.Server.FourKit.Inventory;
 
@@ -246,6 +247,115 @@ public class World
     }
 
     /// <summary>
+    /// Get a list of all entities in this World.
+    /// </summary>
+    /// <returns>A list of all Entities currently residing in this world.</returns>
+    public List<Entity.Entity> getEntities()
+    {
+        var result = new List<Entity.Entity>();
+        if (NativeBridge.GetWorldEntities == null) return result;
+
+        int count = NativeBridge.GetWorldEntities(_dimensionId, out IntPtr buf);
+        if (count <= 0 || buf == IntPtr.Zero) return result;
+
+        try
+        {
+            int[] data = new int[count * 3];
+            Marshal.Copy(buf, data, 0, count * 3);
+
+            for (int i = 0; i < count; i++)
+            {
+                int entityId = data[i * 3];
+                int mappedType = data[i * 3 + 1];
+                int isLiving = data[i * 3 + 2];
+
+                var entityType = Enum.IsDefined(typeof(Entity.EntityType), mappedType)
+                    ? (Entity.EntityType)mappedType
+                    : Entity.EntityType.UNKNOWN;
+
+                if (entityType == Entity.EntityType.PLAYER)
+                {
+                    var player = FourKit.GetPlayerByEntityId(entityId);
+                    if (player != null)
+                    {
+                        result.Add(player);
+                        continue;
+                    }
+                }
+
+                if (isLiving == 1)
+                {
+                    result.Add(new Entity.LivingEntity(entityId, entityType, _dimensionId, 0, 0, 0));
+                }
+                else
+                {
+                    var entity = new Entity.Entity();
+                    entity.SetEntityIdInternal(entityId);
+                    entity.SetEntityTypeInternal(entityType);
+                    entity.SetDimensionInternal(_dimensionId);
+                    result.Add(entity);
+                }
+            }
+        }
+        finally
+        {
+            Marshal.FreeCoTaskMem(buf);
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Get a list of all living entities in this World.
+    /// </summary>
+    /// <returns>A list of all LivingEntities currently residing in this world.</returns>
+    public List<Entity.LivingEntity> getLivingEntities()
+    {
+        var result = new List<Entity.LivingEntity>();
+        if (NativeBridge.GetWorldEntities == null) return result;
+
+        int count = NativeBridge.GetWorldEntities(_dimensionId, out IntPtr buf);
+        if (count <= 0 || buf == IntPtr.Zero) return result;
+
+        try
+        {
+            int[] data = new int[count * 3];
+            Marshal.Copy(buf, data, 0, count * 3);
+
+            for (int i = 0; i < count; i++)
+            {
+                int entityId = data[i * 3];
+                int mappedType = data[i * 3 + 1];
+                int isLiving = data[i * 3 + 2];
+
+                if (isLiving != 1) continue;
+
+                var entityType = Enum.IsDefined(typeof(Entity.EntityType), mappedType)
+                    ? (Entity.EntityType)mappedType
+                    : Entity.EntityType.UNKNOWN;
+
+                if (entityType == Entity.EntityType.PLAYER)
+                {
+                    var player = FourKit.GetPlayerByEntityId(entityId);
+                    if (player != null)
+                    {
+                        result.Add(player);
+                        continue;
+                    }
+                }
+
+                result.Add(new Entity.LivingEntity(entityId, entityType, _dimensionId, 0, 0, 0));
+            }
+        }
+        finally
+        {
+            Marshal.FreeCoTaskMem(buf);
+        }
+
+        return result;
+    }
+
+    /// <summary>
     /// Creates explosion at given coordinates with given power.
     /// </summary>
     /// <param name="x">X-coordinate.</param>
@@ -373,5 +483,241 @@ public class World
     public void dropItemNaturally(Location location, ItemStack item)
     {
         NativeBridge.DropItem?.Invoke(_dimensionId, location.X, location.Y, location.Z, item.getTypeId(), item.getAmount(), item.getDurability(), 1);
+    }
+
+    /// <summary>
+    /// Gets the Chunk at the given coordinates.
+    /// </summary>
+    /// <param name="x">X-coordinate of the chunk.</param>
+    /// <param name="z">Z-coordinate of the chunk.</param>
+    /// <returns>Chunk at the given coordinates.</returns>
+    public Chunk.Chunk getChunkAt(int x, int z)
+    {
+        return new Chunk.Chunk(this, x, z);
+    }
+
+    /// <summary>
+    /// Gets the Chunk at the given Location.
+    /// </summary>
+    /// <param name="location">Location of the chunk.</param>
+    /// <returns>Chunk at the given location.</returns>
+    public Chunk.Chunk getChunkAt(Location location)
+    {
+        return getChunkAt(location.getBlockX() >> 4, location.getBlockZ() >> 4);
+    }
+
+    /// <summary>
+    /// Gets the Chunk that contains the given Block.
+    /// </summary>
+    /// <param name="block">Block to get the containing chunk from.</param>
+    /// <returns>The chunk that contains the given block.</returns>
+    public Chunk.Chunk getChunkAt(Block.Block block)
+    {
+        return getChunkAt(block.getX() >> 4, block.getZ() >> 4);
+    }
+
+    /// <summary>
+    /// Checks if the specified Chunk is loaded.
+    /// </summary>
+    /// <param name="chunk">The chunk to check.</param>
+    /// <returns>true if the chunk is loaded, otherwise false.</returns>
+    public bool isChunkLoaded(Chunk.Chunk chunk)
+    {
+        return isChunkLoaded(chunk.getX(), chunk.getZ());
+    }
+
+    /// <summary>
+    /// Checks if the Chunk at the specified coordinates is loaded.
+    /// </summary>
+    /// <param name="x">X-coordinate of the chunk.</param>
+    /// <param name="z">Z-coordinate of the chunk.</param>
+    /// <returns>true if the chunk is loaded, otherwise false.</returns>
+    public bool isChunkLoaded(int x, int z)
+    {
+        if (NativeBridge.IsChunkLoaded != null)
+            return NativeBridge.IsChunkLoaded(_dimensionId, x, z) != 0;
+        return false;
+    }
+
+    /// <summary>
+    /// Gets an array of all loaded Chunks.
+    /// </summary>
+    /// <returns>Chunk[] containing all loaded chunks.</returns>
+    public Chunk.Chunk[] getLoadedChunks()
+    {
+        if (NativeBridge.GetLoadedChunks == null)
+            return Array.Empty<Chunk.Chunk>();
+
+        int count = NativeBridge.GetLoadedChunks(_dimensionId, out IntPtr buf);
+        if (count <= 0 || buf == IntPtr.Zero)
+            return Array.Empty<Chunk.Chunk>();
+
+        try
+        {
+            int[] coords = new int[count * 2];
+            Marshal.Copy(buf, coords, 0, count * 2);
+            var chunks = new Chunk.Chunk[count];
+            for (int i = 0; i < count; i++)
+                chunks[i] = new Chunk.Chunk(this, coords[i * 2], coords[i * 2 + 1]);
+            return chunks;
+        }
+        finally
+        {
+            Marshal.FreeCoTaskMem(buf);
+        }
+    }
+
+    /// <summary>
+    /// Loads the specified Chunk.
+    /// </summary>
+    /// <param name="chunk">The chunk to load.</param>
+    public void loadChunk(Chunk.Chunk chunk)
+    {
+        loadChunk(chunk.getX(), chunk.getZ());
+    }
+
+    /// <summary>
+    /// Loads the Chunk at the specified coordinates.
+    /// If the chunk does not exist, it will be generated. This method is
+    /// analogous to loadChunk(int, int, boolean) where generate is true.
+    /// </summary>
+    /// <param name="x">X-coordinate of the chunk.</param>
+    /// <param name="z">Z-coordinate of the chunk.</param>
+    public void loadChunk(int x, int z)
+    {
+        loadChunk(x, z, true);
+    }
+
+    /// <summary>
+    /// Loads the Chunk at the specified coordinates.
+    /// </summary>
+    /// <param name="x">X-coordinate of the chunk.</param>
+    /// <param name="z">Z-coordinate of the chunk.</param>
+    /// <param name="generate">Whether or not to generate a chunk if it doesn't already exist.</param>
+    /// <returns>true if the chunk has loaded successfully, otherwise false.</returns>
+    public bool loadChunk(int x, int z, bool generate)
+    {
+        if (NativeBridge.LoadChunk != null)
+            return NativeBridge.LoadChunk(_dimensionId, x, z, generate ? 1 : 0) != 0;
+        return false;
+    }
+
+    /// <summary>
+    /// Checks if the Chunk at the specified coordinates is loaded and in use
+    /// by one or more players.
+    /// </summary>
+    /// <param name="x">X-coordinate of the chunk.</param>
+    /// <param name="z">Z-coordinate of the chunk.</param>
+    /// <returns>true if the chunk is loaded and in use by one or more players, otherwise false.</returns>
+    public bool isChunkInUse(int x, int z)
+    {
+        if (NativeBridge.IsChunkInUse != null)
+            return NativeBridge.IsChunkInUse(_dimensionId, x, z) != 0;
+        return false;
+    }
+
+    /// <summary>
+    /// Safely unloads and saves the Chunk at the specified coordinates.
+    /// This method is analogous to unloadChunk(int, int, boolean, boolean)
+    /// where safe and save is true.
+    /// </summary>
+    /// <param name="chunk">The chunk to unload.</param>
+    /// <returns>true if the chunk has unloaded successfully, otherwise false.</returns>
+    public bool unloadChunk(Chunk.Chunk chunk)
+    {
+        return unloadChunk(chunk.getX(), chunk.getZ());
+    }
+
+    /// <summary>
+    /// Safely unloads and saves the Chunk at the specified coordinates.
+    /// This method is analogous to unloadChunk(int, int, boolean, boolean)
+    /// where safe and save is true.
+    /// </summary>
+    /// <param name="x">X-coordinate of the chunk.</param>
+    /// <param name="z">Z-coordinate of the chunk.</param>
+    /// <returns>true if the chunk has unloaded successfully, otherwise false.</returns>
+    public bool unloadChunk(int x, int z)
+    {
+        return unloadChunk(x, z, true, true);
+    }
+
+    /// <summary>
+    /// Safely unloads and optionally saves the Chunk at the specified coordinates.
+    /// </summary>
+    /// <param name="x">X-coordinate of the chunk.</param>
+    /// <param name="z">Z-coordinate of the chunk.</param>
+    /// <param name="save">Whether or not to save the chunk.</param>
+    /// <returns>true if the chunk has unloaded successfully, otherwise false.</returns>
+    public bool unloadChunk(int x, int z, bool save)
+    {
+        return unloadChunk(x, z, save, true);
+    }
+
+    /// <summary>
+    /// Unloads and optionally saves the Chunk at the specified coordinates.
+    /// </summary>
+    /// <param name="x">X-coordinate of the chunk.</param>
+    /// <param name="z">Z-coordinate of the chunk.</param>
+    /// <param name="save">Controls whether the chunk is saved.</param>
+    /// <param name="safe">Controls whether to unload the chunk when players are nearby.</param>
+    /// <returns>true if the chunk has unloaded successfully, otherwise false.</returns>
+    public bool unloadChunk(int x, int z, bool save, bool safe)
+    {
+        if (NativeBridge.UnloadChunk != null)
+            return NativeBridge.UnloadChunk(_dimensionId, x, z, save ? 1 : 0, safe ? 1 : 0) != 0;
+        return false;
+    }
+
+    /// <summary>
+    /// Safely queues the Chunk at the specified coordinates for unloading.
+    /// This method is analogous to unloadChunkRequest(int, int, boolean)
+    /// where safe is true.
+    /// </summary>
+    /// <param name="x">X-coordinate of the chunk.</param>
+    /// <param name="z">Z-coordinate of the chunk.</param>
+    /// <returns>true is the queue attempt was successful, otherwise false.</returns>
+    public bool unloadChunkRequest(int x, int z)
+    {
+        return unloadChunkRequest(x, z, true);
+    }
+
+    /// <summary>
+    /// Queues the Chunk at the specified coordinates for unloading.
+    /// </summary>
+    /// <param name="x">X-coordinate of the chunk.</param>
+    /// <param name="z">Z-coordinate of the chunk.</param>
+    /// <param name="safe">Controls whether to queue the chunk when players are nearby.</param>
+    /// <returns>Whether the chunk was actually queued.</returns>
+    public bool unloadChunkRequest(int x, int z, bool safe)
+    {
+        if (NativeBridge.UnloadChunkRequest != null)
+            return NativeBridge.UnloadChunkRequest(_dimensionId, x, z, safe ? 1 : 0) != 0;
+        return false;
+    }
+
+    /// <summary>
+    /// Regenerates the Chunk at the specified coordinates.
+    /// </summary>
+    /// <param name="x">X-coordinate of the chunk.</param>
+    /// <param name="z">Z-coordinate of the chunk.</param>
+    /// <returns>Whether the chunk was actually regenerated.</returns>
+    public bool regenerateChunk(int x, int z)
+    {
+        if (NativeBridge.RegenerateChunk != null)
+            return NativeBridge.RegenerateChunk(_dimensionId, x, z) != 0;
+        return false;
+    }
+
+    /// <summary>
+    /// Resends the Chunk to all clients.
+    /// </summary>
+    /// <param name="x">X-coordinate of the chunk.</param>
+    /// <param name="z">Z-coordinate of the chunk.</param>
+    /// <returns>Whether the chunk was actually refreshed.</returns>
+    public bool refreshChunk(int x, int z)
+    {
+        if (NativeBridge.RefreshChunk != null)
+            return NativeBridge.RefreshChunk(_dimensionId, x, z) != 0;
+        return false;
     }
 }
