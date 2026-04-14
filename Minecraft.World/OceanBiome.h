@@ -13,4 +13,8 @@ public:
 		topMaterial = Tile::gravel_Id;   // surfaceblock
         material    = Tile::gravel_Id;
 	}
+	int OceanBiome::getTemperatureCategory() const override
+{
+    return 0;
+}
 };

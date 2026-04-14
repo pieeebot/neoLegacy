@@ -1451,6 +1451,7 @@ set(_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_WORLD_LEVEL_LEVELGEN
   "${CMAKE_CURRENT_SOURCE_DIR}/TheEndLevelRandomLevelSource.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/TownFeature.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/net.minecraft.world.level.levelgen.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/SuperflatConfig.h"
 )
 source_group("net/minecraft/world/level/levelgen" FILES ${_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_WORLD_LEVEL_LEVELGEN})
 

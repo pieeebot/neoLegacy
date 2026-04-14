@@ -27,7 +27,7 @@ class Biome
 public:
     static void staticCtor();
 
-    static Biome *biomes[256];
+    static Biome *biomes[257];
 
     static Biome *ocean;
     static Biome *plains;

@@ -12,7 +12,7 @@
 #include "PerlinNoise.h"
 
 
-Biome *Biome::biomes[256];
+Biome *Biome::biomes[257];
 
 Biome *Biome::ocean = nullptr;//0
 Biome *Biome::plains = nullptr;//1
@@ -120,6 +120,8 @@ void Biome::staticCtor()
     Biome::coldTaigaHills = (new TaigaBiome(31))->setColor(0x163933)->setName(L"Cold Taiga Hills")->setLeafColor(0x4EBA31)->setSnowCovered()->setTemperatureAndDownfall(-0.5f, 0.4f)->setDepthAndScale(0.3f, 0.8f)->setLeafFoliageWaterSkyColor(eMinecraftColour_Grass_TaigaHills, eMinecraftColour_Foliage_TaigaHills, eMinecraftColour_Water_TaigaHills,eMinecraftColour_Sky_TaigaHills);
     Biome::megaTaiga = (new TaigaBiome(32,1))->setColor(0x0b6659)->setName(L"Mega Taiga")->setLeafColor(0x4EBA31)->setTemperatureAndDownfall(0.3f, 0.8f)->setDepthAndScale(0.1f, 0.4f)->setLeafFoliageWaterSkyColor(eMinecraftColour_Grass_Taiga, eMinecraftColour_Foliage_Taiga, eMinecraftColour_Water_Taiga,eMinecraftColour_Sky_Taiga);
     Biome::megaTaigaHills = (new TaigaBiome(33,2))->setColor(0x0b6659)->setName(L"Mega Taiga Hills")->setLeafColor(0x4EBA31)->setTemperatureAndDownfall(0.3f, 0.8f)->setDepthAndScale(0.3f, 0.8f)->setLeafFoliageWaterSkyColor(eMinecraftColour_Grass_TaigaHills, eMinecraftColour_Foliage_TaigaHills, eMinecraftColour_Water_TaigaHills,eMinecraftColour_Sky_TaigaHills);
+    Biome::extremeHills_plus = (new ExtremeHillsBiome(34, true))->setColor(0x507050)->setName(L"Extreme Hills+")->setDepthAndScale(0.3f, 1.5f)->setTemperatureAndDownfall(0.2f, 0.3f)->setLeafFoliageWaterSkyColor(eMinecraftColour_Grass_ExtremeHills,eMinecraftColour_Foliage_ExtremeHills,eMinecraftColour_Water_ExtremeHills, eMinecraftColour_Sky_ExtremeHills);
+    
     Biome::savanna = (new SavannaBiome(35))->setColor(0xbda235)->setName(L"Savanna")->setNoRain()->setTemperatureAndDownfall(1.2f, 0.0f) ->setLeafFoliageWaterSkyColor(eMinecraftColour_Grass_Savanna, eMinecraftColour_Foliage_Savanna, eMinecraftColour_Sky_Desert, eMinecraftColour_Sky_Desert);
     Biome::savannaPlateau = (new SavannaBiome(36))->setColor(0xa79d64)->setName(L"Savanna Plateau")->setNoRain()->setTemperatureAndDownfall(1.0f, 0.0f)->setDepthAndScale(1.5f, 0.025f)->setLeafFoliageWaterSkyColor(eMinecraftColour_Grass_Savanna, eMinecraftColour_Foliage_Savanna, eMinecraftColour_Sky_Desert, eMinecraftColour_Sky_Desert);
     
@@ -128,12 +130,13 @@ void Biome::staticCtor()
     Biome::mesaPlateau = (new MesaBiome(39, true, false))->setColor(0xca5936)->setName(L"Mesa Plateau")->setDepthAndScale(1.5f, 0.025f)->setLeafFoliageWaterSkyColor(eMinecraftColour_Grass_Mesa, eMinecraftColour_Foliage_Mesa, eMinecraftColour_Water_Mesa, eMinecraftColour_Sky_Desert);
 
     Biome::sunflowersPlains = (new PlainsBiome(129,true))->setColor(0x8db360)->setName(L"Sunflowers Plains")->setTemperatureAndDownfall(0.8f, 0.4f)->setLeafFoliageWaterSkyColor(eMinecraftColour_Grass_Plains, eMinecraftColour_Foliage_Plains, eMinecraftColour_Water_Plains,eMinecraftColour_Sky_Plains);
+    Biome::extremeHillsM = static_cast<ExtremeHillsBiome*>(Biome::biomes[3])->createMutatedBiome(131);
     Biome::flowerForest = (new ForestBiome(132, 1))->setColor(0x056621)->setName(L"Flower Forest")->setTemperatureAndDownfall(0.7f, 0.8f)->setLeafFoliageWaterSkyColor(eMinecraftColour_Grass_Forest, eMinecraftColour_Foliage_Forest, eMinecraftColour_Water_Forest,eMinecraftColour_Sky_Forest);
     Biome::iceSpikes = (new IceBiome(140,true))->setColor(0xffffff)->setName(L"Ice Spikes")->setSnowCovered()->setTemperatureAndDownfall(0, 0.5f)->setLeafFoliageWaterSkyColor(eMinecraftColour_Grass_IcePlains, eMinecraftColour_Foliage_IcePlains, eMinecraftColour_Water_IcePlains,eMinecraftColour_Sky_IcePlains);
     Biome::birchForestM=(new ForestBiome::MutatedBirchForestBiome(155, biomes[27]))->setColor(0x47875a)->setName(L"Birch Forest M")->setLeafFoliageWaterSkyColor(eMinecraftColour_Grass_Forest, eMinecraftColour_Foliage_Birch, eMinecraftColour_Water_Forest, eMinecraftColour_Sky_Forest);
     Biome::birchForestHillsM=(new ForestBiome::MutatedBirchForestBiome(156, biomes[28]))->setColor(0x47875a)->setName(L"Birch Forest Hills M")->setLeafFoliageWaterSkyColor(eMinecraftColour_Grass_ForestHills, eMinecraftColour_Foliage_Birch, eMinecraftColour_Water_Forest, eMinecraftColour_Sky_ForestHills);
     Biome::roofedForestM=(new ForestBiome::MutatedForestBiome(157, biomes[29]))->setColor(0x177a35)->setName(L"Roofed Forest M")->setLeafFoliageWaterSkyColor(eMinecraftColour_Grass_RoofedForest, eMinecraftColour_Foliage_RoofedForest, eMinecraftColour_Water_Forest, eMinecraftColour_Sky_Forest);
-
+    Biome::extremeHills_plusM = static_cast<ExtremeHillsBiome*>(Biome::biomes[34])->createMutatedBiome(162);
     Biome::savannaM = (new MutatedSavannaBiome(163, biomes[35]))->setColor(0xe5da87)->setName(L"Savanna M")->setNoRain()->setTemperatureAndDownfall(1.1f, 0.0f)->setDepthAndScale(0.35f, 1.3f)->setLeafFoliageWaterSkyColor(eMinecraftColour_Grass_Savanna, eMinecraftColour_Foliage_Savanna, eMinecraftColour_Sky_Desert, eMinecraftColour_Sky_Desert);
     Biome::savannaPlateauM = (new MutatedSavannaBiome(164, biomes[36]))->setColor(0xd1c890)->setName(L"Savanna Plateau M")->setNoRain()->setTemperatureAndDownfall(1.0f, 0.0f)->setDepthAndScale(1.05f, 1.2125f)->setLeafFoliageWaterSkyColor(eMinecraftColour_Grass_Savanna, eMinecraftColour_Foliage_Savanna, eMinecraftColour_Sky_Desert, eMinecraftColour_Sky_Desert);
 
@@ -382,28 +385,31 @@ float Biome::getTemperature(int x, int y, int z)
 void Biome::buildSurfaceAtDefault(Level *level, Random *random, byte* chunkBlocks, int x, int z, double noiseVal)
 {
     byte topState = this->topMaterial;
+    byte topStateData = this->topMaterialData;
     byte fillerState = this->material;
-    
+    byte fillerStateData = this->materialData;
+
     int runDepth = -1;
     int noiseDepth = (int)(noiseVal / 3.0 + 3.0 + random->nextDouble() * 0.25);
     int localX = x & 15;
     int localZ = z & 15;
-    int seaLevel = level->seaLevel;
 
-    for (int y = Level::genDepthMinusOne; y >= 0; --y)
+    
+    const int SEA_LEVEL = 63;
+
+    for (int y = 127; y >= 0; --y)
     {
-        
         int index = (localZ * 16 + localX) * Level::genDepth + y;
 
-        if (y <= 1 + random->nextInt(2))  
+        if (y <= 1 + random->nextInt(2))
         {
-            chunkBlocks[index] = static_cast<byte>(Tile::unbreakable_Id); 
+            chunkBlocks[index] = static_cast<byte>(Tile::unbreakable_Id);
             continue;
         }
 
         byte currentBlockId = chunkBlocks[index];
 
-        if (currentBlockId == 0) 
+        if (currentBlockId == 0)
         {
             runDepth = -1;
         }
@@ -413,34 +419,41 @@ void Biome::buildSurfaceAtDefault(Level *level, Random *random, byte* chunkBlock
             {
                 if (noiseDepth <= 0)
                 {
-                    topState = 0; 
+                    topState = 0;
+                    topStateData = 0;
                     fillerState = static_cast<byte>(Tile::stone_Id);
+                    fillerStateData = 0;
                 }
-                else if (y >= seaLevel - 4 && y <= seaLevel + 1) 
+                else if (y < 6)  
                 {
                     topState = this->topMaterial;
+                    topStateData = this->topMaterialData;
                     fillerState = this->material;
+                    fillerStateData = this->materialData;
                 }
 
-                if (y < seaLevel && topState == 0)
+                if (y < SEA_LEVEL && topState == 0)
                 {
-                    if (this->getTemperature(x, y, z) < 0.15f) {
+                    if (this->getTemperature(x, y, z) < 0.15f)
                         topState = static_cast<byte>(Tile::ice_Id);
-                    } else {
-                        topState = static_cast<byte>(Tile::calmWater_Id); 
-                    }
+                    else
+                        topState = static_cast<byte>(Tile::calmWater_Id);
+                    topStateData = 0;
                 }
 
                 runDepth = noiseDepth;
 
-                if (y >= seaLevel - 1)
+                if (y >= SEA_LEVEL - 1) 
                 {
                     chunkBlocks[index] = topState;
+                    
                 }
-                else if (y < seaLevel - 7 - noiseDepth)
+                else if (y < SEA_LEVEL - 7 - noiseDepth)  
                 {
                     topState = 0;
+                    topStateData = 0;
                     fillerState = static_cast<byte>(Tile::stone_Id);
+                    fillerStateData = 0;
                     chunkBlocks[index] = static_cast<byte>(Tile::gravel_Id);
                 }
                 else
@@ -455,8 +468,10 @@ void Biome::buildSurfaceAtDefault(Level *level, Random *random, byte* chunkBlock
 
                 if (runDepth == 0 && fillerState == static_cast<byte>(Tile::sand_Id))
                 {
-                    runDepth = random->nextInt(4) + (y - 63 > 0 ? y - 63 : 0);
+                    runDepth = random->nextInt(4) + (y > 0 ? y : 0);
+                    
                     fillerState = static_cast<byte>(Tile::sandStone_Id);
+                    fillerStateData = 0;
                 }
             }
         }

@@ -60,7 +60,7 @@ BiomeInitLayer::BiomeInitLayer(int64_t seed, shared_ptr<Layer> parent, int64_t s
 		icyBiomes[3] = Biome::coldTaiga;
 
 
-    if (levelType != LevelType::lvl_normal_1_1 && levelType == LevelType::lvl_flat)
+    if (levelType != LevelType::lvl_normal_1_1 && levelType == LevelType::lvl_customized)
     {
         this->customSettings = (CustomizableSourceSettings*)superflatConfig; 
     }

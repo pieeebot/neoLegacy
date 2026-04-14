@@ -20,7 +20,8 @@ MutatedBiome::MutatedBiome(int id,  Biome* baseBiome)
     scale = baseBiome->scale + 0.2f;
     temperature = baseBiome->temperature;
     downfall = baseBiome->downfall;
-
+    _hasRain = baseBiome->_hasRain;
+    snowCovered = baseBiome->snowCovered;
     
     friendlies = baseBiome->friendlies;
     enemies = baseBiome->enemies;
@@ -32,15 +33,17 @@ MutatedBiome::MutatedBiome(int id,  Biome* baseBiome)
 
     m_waterColor = baseBiome->m_waterColor;
     m_skyColor = baseBiome->m_skyColor;
+    m_grassColor = baseBiome->m_grassColor;
+    m_foliageColor = baseBiome->m_foliageColor;
     m_name = baseBiome->m_name + L" Mutated";
 
-    // Copia parametri del decorator
+    
     if (decorator && baseBiome->decorator) {
         decorator->treeCount = baseBiome->decorator->treeCount;
         decorator->grassCount = baseBiome->decorator->grassCount;
         decorator->flowerCount = baseBiome->decorator->flowerCount;
         decorator->hugeMushrooms = baseBiome->decorator->hugeMushrooms;
-        // ... altri campi se necessari
+        
     }
 }
 
