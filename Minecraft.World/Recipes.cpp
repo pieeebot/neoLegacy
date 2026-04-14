@@ -145,52 +145,58 @@ Recipes::Recipes()
 		L'#', Item::stick,
 		L'S');
 
-	addShapedRecipy(new ItemInstance(Tile::fence, 2), //
+	addShapedRecipy(new ItemInstance(Tile::fence, 3), //
 		L"ssciczg",
 		L"W#W", //
 		L"W#W", //
 
-		L'#', Item::stick, "W", new ItemInstance(Tile::wood, 1, 0),
+		L'#', Item::stick,
+		L'W', new ItemInstance(Tile::wood, 1, TreeTile::OAK_TRUNK),
 		L'S');
 
-	addShapedRecipy(new ItemInstance(Tile::fence, 2), //
+	addShapedRecipy(new ItemInstance(Tile::birchFence, 3), //
 		L"ssciczg",
 		L"W#W", //
 		L"W#W", //
 
-		L'#', Item::stick, "W", new ItemInstance(Tile::wood, 1, TreeTile::BIRCH_TRUNK),
+		L'#', Item::stick,
+		L'W', new ItemInstance(Tile::wood, 1, TreeTile::BIRCH_TRUNK),
 		L'S');
 
-	addShapedRecipy(new ItemInstance(Tile::spruceFence, 2), //
+	addShapedRecipy(new ItemInstance(Tile::spruceFence, 3), //
 		L"ssciczg",
 		L"W#W", //
 		L"W#W", //
 
-		L'#', Item::stick, "W", new ItemInstance(Tile::wood, 1, TreeTile::SPRUCE_TRUNK),
+		L'#', Item::stick,
+		L'W', new ItemInstance(Tile::wood, 1, TreeTile::DARK_TRUNK),
 		L'S');
 
-	addShapedRecipy(new ItemInstance(Tile::jungleFence, 2), //
+	addShapedRecipy(new ItemInstance(Tile::jungleFence, 3), //
 		L"ssciczg",
 		L"W#W", //
 		L"W#W", //
 
-		L'#', Item::stick, "W", new ItemInstance(Tile::wood, 1, TreeTile::JUNGLE_TRUNK),
+		L'#', Item::stick,
+		L'W', new ItemInstance(Tile::wood, 1, TreeTile::JUNGLE_TRUNK),
 		L'S');
 
-	addShapedRecipy(new ItemInstance(Tile::acaciaFence, 2), //
+	addShapedRecipy(new ItemInstance(Tile::acaciaFence, 3), //
 		L"ssciczg",
 		L"W#W", //
 		L"W#W", //
 
-		L'#', Item::stick, "W", new ItemInstance(Tile::wood, 1, TreeTile::ACACIA_TRUNK),
+		L'#', Item::stick, 
+		L'W', new ItemInstance(Tile::wood, 1, TreeTile::ACACIA_TRUNK),
 		L'S');
 
-	addShapedRecipy(new ItemInstance(Tile::darkFence, 2), //
+	addShapedRecipy(new ItemInstance(Tile::darkFence, 3), //
 		L"ssciczg",
 		L"W#W", //
 		L"W#W", //
 
-		L'#', Item::stick, "W", new ItemInstance(Tile::wood, 1, TreeTile::DARK_TRUNK),
+		L'#', Item::stick, 
+		L'W', new ItemInstance(Tile::wood, 1, TreeTile::DARK_TRUNK),
 		L'S');
 
 	addShapedRecipy(new ItemInstance(Tile::cobbleWall, 6, WallTile::TYPE_NORMAL), //
@@ -225,52 +231,52 @@ Recipes::Recipes()
 		L'#', Item::ironIngot,
 		L'S');
 
-	addShapedRecipy(new ItemInstance(Tile::fenceGate, 2), //
+	addShapedRecipy(new ItemInstance(Tile::fenceGate, 1), //
 		L"ssciczg",
 		L"#W#", //
 		L"#W#", //
 
-		L'#', Item::stick, "W", new ItemInstance(Tile::wood, 1, 0),
+		L'#', Item::stick, L'W', new ItemInstance(Tile::wood, 1, 0),
 		L'S');
 
-	addShapedRecipy(new ItemInstance(Tile::birchGate, 2), //
+	addShapedRecipy(new ItemInstance(Tile::birchGate, 1), //
 		L"ssciczg",
 		L"#W#", //
 		L"#W#", //
 
-		L'#', Item::stick, "W", new ItemInstance(Tile::wood, 1, TreeTile::BIRCH_TRUNK),
+		L'#', Item::stick, L'W', new ItemInstance(Tile::wood, 1, TreeTile::BIRCH_TRUNK),
 		L'S');
 
-	addShapedRecipy(new ItemInstance(Tile::spruceGate, 2), //
+	addShapedRecipy(new ItemInstance(Tile::spruceGate, 1), //
 		L"ssciczg",
 		L"#W#", //
 		L"#W#", //
 
-		L'#', Item::stick, "W", new ItemInstance(Tile::wood, 1, TreeTile::SPRUCE_TRUNK),
+		L'#', Item::stick, L'W', new ItemInstance(Tile::wood, 1, TreeTile::SPRUCE_TRUNK),
 		L'S');
 
-	addShapedRecipy(new ItemInstance(Tile::jungleGate, 2), //
+	addShapedRecipy(new ItemInstance(Tile::jungleGate, 1), //
 		L"ssciczg",
 		L"#W#", //
 		L"#W#", //
 
-		L'#', Item::stick, "W", new ItemInstance(Tile::wood, 1, TreeTile::JUNGLE_TRUNK),
+		L'#', Item::stick, L'W', new ItemInstance(Tile::wood, 1, TreeTile::JUNGLE_TRUNK),
 		L'S');
 
-	addShapedRecipy(new ItemInstance(Tile::acaciaGate, 2), //
+	addShapedRecipy(new ItemInstance(Tile::acaciaGate, 1), //
 		L"ssciczg",
 		L"#W#", //
 		L"#W#", //
 
-		L'#', Item::stick, "W", new ItemInstance(Tile::wood, 1, TreeTile::ACACIA_TRUNK),
+		L'#', Item::stick, L'W', new ItemInstance(Tile::wood, 1, TreeTile::ACACIA_TRUNK),
 		L'S');
 
-	addShapedRecipy(new ItemInstance(Tile::darkGate, 2), //
+	addShapedRecipy(new ItemInstance(Tile::darkGate, 1), //
 		L"ssciczg",
 		L"#W#", //
 		L"#W#", //
 
-		L'#', Item::stick, "W", new ItemInstance(Tile::wood, 1, TreeTile::DARK_TRUNK),
+		L'#', Item::stick, L'W', new ItemInstance(Tile::wood, 1, TreeTile::DARK_TRUNK),
 		L'S');
 
 	addShapedRecipy(new ItemInstance(Item::door_wood, 3), //
