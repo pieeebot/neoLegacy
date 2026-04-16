@@ -35,9 +35,9 @@ function(configure_lce_server_target target)
     "${CMAKE_SOURCE_DIR}/Minecraft.Client/Common/res"         "Common/res"
     "${CMAKE_SOURCE_DIR}/Minecraft.Client/Common/Media/MediaWindows64" "Common/Media/MediaWindows64"
   )
-  set(_asset_files_pairs
-    "${CMAKE_SOURCE_DIR}/Minecraft.Client/Common/Media/MediaWindows64.arc" "Common/Media/"
-  )
+#  set(_asset_files_pairs
+#    "${CMAKE_SOURCE_DIR}/Minecraft.Client/Common/Media/MediaWindows64.arc" "Common/Media/"
+#  )
 
   set(_use_debug_4j_libs TRUE)
   if(CMAKE_CROSSCOMPILING AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
@@ -118,7 +118,7 @@ function(configure_lce_server_target target)
   # named after the parent (e.g. AssetFileCopy_${target}) which is why each
   # server flavour has its own set in the VS Solution Explorer.
   setup_asset_folder_copy(${target} "${_asset_folder_pairs}")
-  setup_asset_file_copy(${target} "${_asset_files_pairs}")
+  #setup_asset_file_copy(${target} "${_asset_files_pairs}")
 
   if(PLATFORM_NAME STREQUAL "Windows64")
     add_custom_target(AssetLocalizationCopy_${target} ALL
