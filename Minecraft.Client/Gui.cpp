@@ -1073,6 +1073,7 @@ void Gui::render(float a, bool mouseFree, int xMouse, int yMouse)
 
         if (minecraft->options->renderDebug && minecraft->player != nullptr && minecraft->level != nullptr)
         {
+            lines.push_back(std::wstring(VER_BRANCHVERSION_STR_W) + L"/" + std::wstring(VER_PRODUCTVERSION_STR_W));
             lines.push_back(minecraft->fpsString);
             lines.push_back(L"E: " + std::to_wstring(minecraft->level->getAllEntities().size()));
             int renderDistance = app.GetGameSettings(iPad, eGameSetting_RenderDistance);

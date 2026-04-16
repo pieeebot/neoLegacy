@@ -89,76 +89,112 @@ jobs:
         with:
           name: client-build
           path: staging/*
-
   build-server:
     name: Build Server
     runs-on: windows-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
+    - name: Checkout
+      uses: actions/checkout@v6
 
-      - name: Setup MSVC
-        uses: ilammy/msvc-dev-cmd@v1
+    - name: Setup MSVC
+      uses: ilammy/msvc-dev-cmd@v1
 
-      - name: Setup CMake
-        uses: lukka/get-cmake@latest
+    - name: Setup CMake
+      uses: lukka/get-cmake@latest
 
-      - name: Run CMake
-        uses: lukka/run-cmake@v10
-        env:
-          VCPKG_ROOT: ""
-        with:
-          configurePreset: windows64
-          buildPreset: windows64-release
-          buildPresetAdditionalArgs: "['--target', 'Minecraft.Server']"
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        global-json-file: global.json
 
-      - name: Zip Build
-        shell: pwsh
-        run: |
-          $source = "./build/windows64/Minecraft.Server/Release"
-          $zip = "neoLegacyServerWindows64.zip"
-          $topLevel = "neoLegacyServerWindows64"
-          
-          $files = Get-ChildItem -Path $source -Recurse -File |
-            Where-Object { $_.Extension -notin '.pch', '.zip', '.ipdb', '.iobj' }
-          
-          Add-Type -AssemblyName System.IO.Compression
-          Add-Type -AssemblyName System.IO.Compression.FileSystem
-          
-          $basePath = (Resolve-Path $source).Path
-          $fs = [System.IO.File]::Open($zip, [System.IO.FileMode]::Create)
+    - name: Run CMake
+      uses: lukka/run-cmake@v10
+      env:
+        VCPKG_ROOT: ""
+      with:
+        configurePreset: windows64
+        buildPreset: windows64-release
+        buildPresetAdditionalArgs: "['--target', 'Minecraft.Server', '--target', 'Minecraft.Server.FourKit']"
+
+    - name: Zip Build (vanilla)
+      shell: pwsh
+      run: |
+        $source = "./build/windows64/Minecraft.Server/Release"
+        $zip = "neoLegacyServerWindows64.zip"
+        $topLevel = "neoLegacyServerWindows64"
+        $files = Get-ChildItem -Path $source -Recurse -File |
+          Where-Object { $_.Extension -notin '.pch', '.zip', '.ipdb', '.iobj' }
+
+        Add-Type -AssemblyName System.IO.Compression
+        Add-Type -AssemblyName System.IO.Compression.FileSystem
+        $basePath = (Resolve-Path $source).Path
+        $fs = [System.IO.File]::Open($zip, [System.IO.FileMode]::Create)
+        try {
+          $archive = New-Object System.IO.Compression.ZipArchive($fs, [System.IO.Compression.ZipArchiveMode]::Create)
           try {
-            $archive = New-Object System.IO.Compression.ZipArchive($fs, [System.IO.Compression.ZipArchiveMode]::Create)
-            try {
-              Get-ChildItem -Path $basePath -Recurse -Directory | ForEach-Object {
-                $rel = $_.FullName.Substring($basePath.Length).TrimStart('\', '/')
-                $archive.CreateEntry("$topLevel/$($rel -replace '\\','/')/") | Out-Null
-              }
-              foreach ($file in $files) {
-                $rel = $file.FullName.Substring($basePath.Length).TrimStart('\', '/')
-                $entryName = "$topLevel/$($rel -replace '\\','/')"
-                [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile(
-                  $archive, $file.FullName, $entryName,
-                  [System.IO.Compression.CompressionLevel]::Optimal
-                ) | Out-Null
-              }
-            } finally { $archive.Dispose() }
-          } finally { $fs.Dispose() }
-          
-          Write-Host "Created $zip"
+            Get-ChildItem -Path $basePath -Recurse -Directory | ForEach-Object {
+              $rel = $_.FullName.Substring($basePath.Length).TrimStart('\', '/')
+              $archive.CreateEntry("$topLevel/$($rel -replace '\\','/')/") | Out-Null
+            }
+            foreach ($file in $files) {
+              $rel = $file.FullName.Substring($basePath.Length).TrimStart('\', '/')
+              $entryName = "$topLevel/$($rel -replace '\\','/')"
+              [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile(
+                $archive, $file.FullName, $entryName,
+                [System.IO.Compression.CompressionLevel]::Optimal
+              ) | Out-Null
+            }
+          } finally { $archive.Dispose() }
+        } finally { $fs.Dispose() }
 
-      - name: Stage artifacts
-        shell: pwsh
-        run: |
-          New-Item -ItemType Directory -Force -Path staging
-          Copy-Item neoLegacyServerWindows64.zip staging/
+        Write-Host "Created $zip"
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v6
-        with:
-          name: server-build
-          path: staging/*
+    - name: Zip Build (FourKit)
+      shell: pwsh
+      run: |
+        $source = "./build/windows64/Minecraft.Server.FourKit/Release"
+        $zip = "neoLegacyServerWindows64-FourKit.zip"
+        $topLevel = "neoLegacyServerWindows64-FourKit"
+        $files = Get-ChildItem -Path $source -Recurse -File |
+          Where-Object { $_.Extension -notin '.pch', '.zip', '.ipdb', '.iobj' }
+
+        Add-Type -AssemblyName System.IO.Compression
+        Add-Type -AssemblyName System.IO.Compression.FileSystem
+        $basePath = (Resolve-Path $source).Path
+        $fs = [System.IO.File]::Open($zip, [System.IO.FileMode]::Create)
+        try {
+          $archive = New-Object System.IO.Compression.ZipArchive($fs, [System.IO.Compression.ZipArchiveMode]::Create)
+          try {
+            Get-ChildItem -Path $basePath -Recurse -Directory | ForEach-Object {
+              $rel = $_.FullName.Substring($basePath.Length).TrimStart('\', '/')
+              $archive.CreateEntry("$topLevel/$($rel -replace '\\','/')/") | Out-Null
+            }
+            foreach ($file in $files) {
+              $rel = $file.FullName.Substring($basePath.Length).TrimStart('\', '/')
+              $entryName = "$topLevel/$($rel -replace '\\','/')"
+              [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile(
+                $archive, $file.FullName, $entryName,
+                [System.IO.Compression.CompressionLevel]::Optimal
+              ) | Out-Null
+            }
+          } finally { $archive.Dispose() }
+        } finally { $fs.Dispose() }
+
+        Write-Host "Created $zip"
+
+    - name: Stage artifacts
+      shell: pwsh
+      run: |
+        New-Item -ItemType Directory -Force -Path staging
+        Copy-Item neoLegacyServerWindows64.zip staging/
+        Copy-Item neoLegacyServerWindows64-FourKit.zip staging/
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v6
+      with:
+        name: server-build
+        path: staging/*
 
   release-server:
     name: Release Server
@@ -166,52 +202,57 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
+    - name: Checkout
+      uses: actions/checkout@v6
 
-      - name: Download server artifacts
-        uses: actions/download-artifact@v7
-        with:
-          name: server-build
-          path: artifacts
+    - name: Download server artifacts
+      uses: actions/download-artifact@v7
+      with:
+        name: server-build
+        path: artifacts
 
-      - name: Attest artifacts
-        uses: actions/attest-build-provenance@v2
-        with:
-          subject-path: |
-            artifacts/neoLegacyServerWindows64.zip
+    - name: Attest artifacts
+      uses: actions/attest-build-provenance@v2
+      with:
+        subject-path: |
+          artifacts/neoLegacyServerWindows64.zip
+          artifacts/neoLegacyServerWindows64-FourKit.zip
 
-      - name: Get short SHA
-        id: sha
-        run: echo "short=$(echo '${{ github.sha }}' | cut -c1-7)" >> "$GITHUB_OUTPUT"
+    - name: Get short SHA
+      id: sha
+      run: echo "short=$(echo '${{ github.sha }}' | cut -c1-7)" >> "$GITHUB_OUTPUT"
 
-      - name: Delete old release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release delete Nightly-Dedicated-Server --yes || true
+    - name: Delete old release
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: gh release delete Nightly-Dedicated-Server --yes || true
 
-      - name: Delete old tag
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh api repos/${{ github.repository }}/git/refs/tags/Nightly-Dedicated-Server --method DELETE || true
+    - name: Delete old tag
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: gh api repos/${{ github.repository }}/git/refs/tags/Nightly-Dedicated-Server --method DELETE || true
 
-      - name: Create tag
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -f Nightly-Dedicated-Server -m "Nightly server release ${{ steps.sha.outputs.short }}"
-          git push origin Nightly-Dedicated-Server --force
+    - name: Create tag
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git tag -f Nightly-Dedicated-Server -m "Nightly server release ${{ steps.sha.outputs.short }}"
+        git push origin Nightly-Dedicated-Server --force
 
-      - name: Create release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release create Nightly-Dedicated-Server artifacts/* \
-            --title "Server: ${{ steps.sha.outputs.short }}" \
-            --notes "Dedicated Server runtime for Windows64.
-          
-          Download \`neoLegacyServerWindows64.zip\` and extract it to a folder where you'd like to keep the server runtime." \
-            --latest=false
+    - name: Create release
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        gh release create Nightly-Dedicated-Server artifacts/* \
+          --title "Server: ${{ steps.sha.outputs.short }}" \
+          --notes "Dedicated Server runtime for Windows64.
+
+        Two flavours are attached:
+        - \`neoLegacyServerWindows64.zip\`: vanilla server, no plugin support, smallest download.
+        - \`neoLegacyServerWindows64-FourKit.zip\`: server with the FourKit plugin host, bundled .NET 10 runtime, and an empty \`plugins/\` folder ready for plugin authors to drop DLLs into.
+
+        Pick the flavour you want and extract it to a folder where you'd like to keep the server runtime." \
+          --latest=false
 
   release-client:
     name: Release Client
@@ -249,7 +290,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh api repos/${{ github.repository }}/git/refs/tags/Nightly --method DELETE || true
 
-      - name: Create signed tag
+      - name: Create tag
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

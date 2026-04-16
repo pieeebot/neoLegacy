@@ -2053,6 +2053,16 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 						f3ComboUsed = true;
 					}
 					break;
+				case 'B':
+					std::wstring version = std::wstring(VER_BRANCHVERSION_STR_W) + L"/" + std::wstring(VER_PRODUCTVERSION_STR_W);
+					Screen::setClipboard(version);
+					if (pMinecraft->gui && app.GetGameStarted())
+					{
+						const int primaryPad = ProfileManager.GetPrimaryPad();
+						pMinecraft->gui->addMessage(L"Copied version to clipboard", primaryPad);
+					}
+					f3ComboUsed = true;
+					break;
 			}
 		}
 
