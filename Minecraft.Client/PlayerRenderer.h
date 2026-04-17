@@ -20,7 +20,13 @@ private:
 
     HumanoidModel *armorParts1;
     HumanoidModel *armorParts2;
+    HumanoidModel *armorParts3;
 	bool defaultSlimHands;
+
+	static ResourceLocation SKELETON_LOCATION;
+	static ResourceLocation WITHER_SKELETON_LOCATION;
+	static ResourceLocation ZOMBIE_LOCATION;
+	static ResourceLocation CREEPER_LOCATION;
 
 public:
 	PlayerRenderer();

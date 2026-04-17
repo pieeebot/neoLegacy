@@ -2,7 +2,7 @@
 #include "ModelPart.h"
 #include "SkeletonHeadModel.h"
 
-void SkeletonHeadModel::_init(int u, int v, int tw, int th)
+void SkeletonHeadModel::_init(int u, int v, int tw, int th, int g)
 {
 	texWidth = tw;
 	texHeight = th;
@@ -10,7 +10,7 @@ void SkeletonHeadModel::_init(int u, int v, int tw, int th)
 
 	// 4J Stu - Set "g" param to 0.1 to fix z-fighting issues (hair has this set to 0.5, so need to be less that that)
 	// Fix for #101501 - TU12: Content: Art: Z-Fighting occurs on the bottom side of a character's head when a Mob Head is equipped.
-	head->addBox(-4, -8, -4, 8, 8, 8, 0.1); // Head
+	head->addBox(-4, -8, -4, 8, 8, 8, g); // Head
 	head->setPos(0, 0, 0);
 
 	// 4J added - compile now to avoid random performance hit first time cubes are rendered
@@ -22,9 +22,9 @@ SkeletonHeadModel::SkeletonHeadModel()
 	_init(0, 35, 64, 64);
 }
 
-SkeletonHeadModel::SkeletonHeadModel(int u, int v, int tw, int th)
+SkeletonHeadModel::SkeletonHeadModel(int u, int v, int tw, int th, int g)
 {
-	_init(u,v,tw,th);
+	_init(u,v,tw,th,g);
 }
 
 void SkeletonHeadModel::render(shared_ptr<Entity> entity, float time, float r, float bob, float yRot, float xRot, float scale, bool usecompiled)
