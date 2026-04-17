@@ -32,6 +32,7 @@
 static wstring ReadLevelNameFromSaveFile(const wstring& filePath, bool *outHardcore = nullptr)
 {
     // Check for a worldname.txt sidecar written by the rename feature first
+    wstring sidecarName = L"";
     size_t slashPos = filePath.rfind(L'\\');
     if (slashPos != wstring::npos)
     {
@@ -50,7 +51,7 @@ static wstring ReadLevelNameFromSaveFile(const wstring& filePath, bool *outHardc
                 {
                     wchar_t wbuf[128] = {};
                     MultiByteToWideChar(CP_UTF8, 0, buf, -1, wbuf, 127);
-                    return wstring(wbuf);
+                    sidecarName = wbuf;
                 }
             }
             else fclose(fr);
@@ -58,10 +59,10 @@ static wstring ReadLevelNameFromSaveFile(const wstring& filePath, bool *outHardc
     }
 
     HANDLE hFile = CreateFileW(filePath.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN, nullptr);
-    if (hFile == INVALID_HANDLE_VALUE) return L"";
+    if (hFile == INVALID_HANDLE_VALUE) return sidecarName;
 
     DWORD fileSize = GetFileSize(hFile, nullptr);
-    if (fileSize < 12 || fileSize == INVALID_FILE_SIZE) { CloseHandle(hFile); return L""; }
+    if (fileSize < 12 || fileSize == INVALID_FILE_SIZE) { CloseHandle(hFile); return sidecarName; }
 
     unsigned char *rawData = new unsigned char[fileSize];
     DWORD bytesRead = 0;
@@ -69,7 +70,7 @@ static wstring ReadLevelNameFromSaveFile(const wstring& filePath, bool *outHardc
     {
         CloseHandle(hFile);
         delete[] rawData;
-        return L"";
+        return sidecarName;
     }
     CloseHandle(hFile);
 
@@ -84,7 +85,7 @@ static wstring ReadLevelNameFromSaveFile(const wstring& filePath, bool *outHardc
         if (decompSize == 0 || decompSize > 128 * 1024 * 1024)
         {
             delete[] rawData;
-            return L"";
+            return sidecarName;
         }
         saveData = new unsigned char[decompSize];
         Compression::getCompression()->Decompress(saveData, &decompSize, rawData + 8, fileSize - 8);
@@ -140,6 +141,10 @@ static wstring ReadLevelNameFromSaveFile(const wstring& filePath, bool *outHardc
 
     if (freeSaveData) delete[] saveData;
     delete[] rawData;
+
+    // Prefer the sidecar name (user-renamed) over the level.dat name
+    if (!sidecarName.empty()) return sidecarName;
+
     // "world" is the engine default - it means no real name was ever set,
     // so return empty to let the caller fall back to the save filename (timestamp).
     if (result == L"world") result = L"";
@@ -774,7 +779,16 @@ void UIScene_LoadOrJoinMenu::tick()
                     wchar_t wFilename[MAX_SAVEFILENAME_LENGTH];
                     ZeroMemory(wFilename, sizeof(wFilename));
                     mbstowcs(wFilename, m_pSaveDetails->SaveInfoA[origIdx].UTF8SaveFilename, MAX_SAVEFILENAME_LENGTH - 1);
-                    wstring filePath = wstring(L"Windows64\\GameHDD\\") + wstring(wFilename) + wstring(L"\\saveData.ms");
+                    wchar_t wTitle[MAX_DISPLAYNAME_LENGTH];
+                    ZeroMemory(wTitle, sizeof(wTitle));
+                    mbstowcs(wTitle, m_pSaveDetails->SaveInfoA[origIdx].UTF8SaveTitle, MAX_DISPLAYNAME_LENGTH - 1);
+                    wstring filePath = wstring(L"Windows64\\GameHDD\\") + wstring(wFilename) + wstring(L"\\") + wstring(wTitle) + wstring(L".ms");
+                    // Fallback to legacy saveData.ms if new-style filename doesn't exist
+                    {
+                        DWORD attrs = GetFileAttributesW(filePath.c_str());
+                        if (attrs == INVALID_FILE_ATTRIBUTES)
+                            filePath = wstring(L"Windows64\\GameHDD\\") + wstring(wFilename) + wstring(L"\\saveData.ms");
+                    }
 
                     HANDLE hFile = CreateFileW(filePath.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN, nullptr);
                     DWORD fileSize = 0;
