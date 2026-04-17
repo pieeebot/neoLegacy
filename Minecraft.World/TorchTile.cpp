@@ -75,7 +75,8 @@ bool TorchTile::isConnection(Level *level, int x, int y, int z)
 		return true;
 	}
 	int tile = level->getTile(x, y, z);
-	if  (tile == Tile::fence_Id || tile == Tile::netherFence_Id 
+    Tile *below = (tile >= 0 && tile < Tile::TILE_NUM_COUNT) ? Tile::tiles[tile] : nullptr;
+	if (below != nullptr && below->getRenderShape() == Tile::SHAPE_FENCE
 		|| tile == Tile::glass_Id || tile == Tile::cobbleWall_Id)
 	{
 		return true;

@@ -2,8 +2,11 @@
 #include "FishingHookRenderer.h"
 #include "EntityRenderDispatcher.h"
 #include "Options.h"
+#include "Camera.h"
+#include "Minecraft.h"
 #include "../Minecraft.World/net.minecraft.world.entity.projectile.h"
 #include "../Minecraft.World/net.minecraft.world.entity.player.h"
+#include "../Minecraft.World/net.minecraft.world.item.h"
 #include "../Minecraft.World/Vec3.h"
 #include "../Minecraft.World/Mth.h"
 #include "MultiPlayerLocalPlayer.h"
@@ -54,28 +57,79 @@ void FishingHookRenderer::render(shared_ptr<Entity> _hook, double x, double y, d
         float swing = hook->owner->getAttackAnim(a);
         float swing2 = (float) Mth::sin(sqrt(swing) * PI);
 
+		Minecraft *mc = Minecraft::GetInstance();
+		shared_ptr<LivingEntity> cameraTarget = mc != nullptr ? mc->cameraTargetPlayer : nullptr;
+		bool ownerIsCameraTarget = cameraTarget != nullptr && hook->owner.get() == cameraTarget.get();
+		bool cameraThirdPerson = false;
+		int handDir = 1;
 
-        Vec3 *vv = Vec3::newTemp(-0.5, 0.03, 0.8);
-        vv->xRot(-(hook->owner->xRotO + (hook->owner->xRot - hook->owner->xRotO) * a) * PI / 180);
-        vv->yRot(-(hook->owner->yRotO + (hook->owner->yRot - hook->owner->yRotO) * a) * PI / 180);
-        vv->yRot(swing2 * 0.5f);
-        vv->xRot(-swing2 * 0.7f);
+		shared_ptr<Player> ownerPlayer = dynamic_pointer_cast<Player>(hook->owner);
+		if (ownerPlayer != nullptr)
+		{
+			shared_ptr<ItemInstance> selected = ownerPlayer->inventory->getSelected();
+			if (selected == nullptr || selected->id != Item::fishingRod_Id)
+			{
+				handDir = -handDir;
+			}
+		}
 
-        double xp = hook->owner->xo + (hook->owner->x - hook->owner->xo) * a + vv->x;
-        double yp = hook->owner->yo + (hook->owner->y - hook->owner->yo) * a + vv->y;
-        double zp = hook->owner->zo + (hook->owner->z - hook->owner->zo) * a + vv->z;
-		double yOffset = hook->owner == dynamic_pointer_cast<Player>(Minecraft::GetInstance()->player) ? 0 : hook->owner->getHeadHeight();
+		if (ownerIsCameraTarget)
+		{
+			shared_ptr<LocalPlayer> localCamera = dynamic_pointer_cast<LocalPlayer>(cameraTarget);
+			cameraThirdPerson = localCamera != nullptr && localCamera->ThirdPersonView() > 0;
+		}
 
-		// 4J-PB - changing this to be per player
+		double xp = 0.0;
+		double yp = 0.0;
+		double zp = 0.0;
+        double yOffset = hook->owner == dynamic_pointer_cast<Player>(Minecraft::GetInstance()->player) ? 0 : hook->owner->getHeadHeight();
+        double lineYOffset = 0.0;
+
 		//if (this->entityRenderDispatcher->options->thirdPersonView)
-		if (hook->owner->ThirdPersonView() > 0)
+		if (ownerIsCameraTarget && !cameraThirdPerson)
+		{
+			float fov = 70.0f + mc->options->fov * 40.0f;
+			if (fov < 1.0f) fov = 1.0f;
+			double handScale = 960.0 / fov;
+
+			float aspect = (mc->height_phys > 0) ? (mc->width_phys / static_cast<float>(mc->height_phys))
+			                                     : (mc->width / static_cast<float>(mc->height));
+			double nearDist = 0.05;
+			double halfH = tan((fov * PI / 180.0) * 0.5) * nearDist;
+			double halfW = halfH * aspect;
+
+			float yaw = hook->owner->yRotO + (hook->owner->yRot - hook->owner->yRotO) * a;
+			float pitch = hook->owner->xRotO + (hook->owner->xRot - hook->owner->xRotO) * a;
+			double yawr = yaw * PI / 180.0;
+			double pitchr = pitch * PI / 180.0;
+
+			Vec3 *forward = Vec3::newTemp(-sin(yawr) * cos(pitchr), -sin(pitchr), cos(yawr) * cos(pitchr));
+			Vec3 *right = Vec3::newTemp(cos(yawr), 0.0, sin(yawr));
+			Vec3 *up = right->cross(forward)->normalize();
+
+			//first person calibration
+			double px = handDir * -0.5 * halfW;
+            double py = 0.15 * halfH;
+
+			Vec3 *vv = forward->scale(nearDist)->add(right->x * px + up->x * py, right->y * px + up->y * py, right->z * px + up->z * py)->scale(handScale);
+			vv = vv->yRot(swing2 * 0.5f);
+			vv = vv->xRot(-swing2 * 0.7f);
+
+			xp = hook->owner->xo + (hook->owner->x - hook->owner->xo) * a + vv->x;
+			yp = hook->owner->yo + (hook->owner->y - hook->owner->yo) * a + vv->y;
+			zp = hook->owner->zo + (hook->owner->z - hook->owner->zo) * a + vv->z;
+			lineYOffset = hook->owner->getHeadHeight();
+		}
+		else
  		{
             float rr = (float) (hook->owner->yBodyRotO + (hook->owner->yBodyRot - hook->owner->yBodyRotO) * a) * PI / 180;
             double ss = Mth::sin((float) rr);
             double cc = Mth::cos((float) rr);
-            xp = hook->owner->xo + (hook->owner->x - hook->owner->xo) * a - cc * 0.35 - ss * 0.85;
+			double d2 = handDir * 0.35;
+            xp = hook->owner->xo + (hook->owner->x - hook->owner->xo) * a - cc * d2 - ss * 0.8;
             yp = hook->owner->yo + yOffset + (hook->owner->y - hook->owner->yo) * a - 0.45;
-            zp = hook->owner->zo + (hook->owner->z - hook->owner->zo) * a - ss * 0.35 + cc * 0.85;
+            zp = hook->owner->zo + (hook->owner->z - hook->owner->zo) * a - ss * d2 + cc * 0.8;
+			lineYOffset = hook->owner->isSneaking() ? -0.1875 : 0.0;
         }
 
         double xh = hook->xo + (hook->x - hook->xo) * a;
@@ -83,7 +137,7 @@ void FishingHookRenderer::render(shared_ptr<Entity> _hook, double x, double y, d
         double zh = hook->zo + (hook->z - hook->zo) * a;
 
         double xa = static_cast<float>(xp - xh);
-        double ya = static_cast<float>(yp - yh);
+        double ya = static_cast<float>(yp - yh) + lineYOffset;
         double za = static_cast<float>(zp - zh);
 
         glDisable(GL_TEXTURE_2D);
