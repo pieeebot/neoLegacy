@@ -63,6 +63,14 @@ void PathfinderMob::serverAiStep()
 	{
 		if (attackTarget->isAlive())
 		{
+		    if (attackTarget->instanceof(eTYPE_PLAYER)) {
+		        shared_ptr<Player> player = dynamic_pointer_cast<Player>(attackTarget);
+		        if (player->abilities.invulnerable)
+		        {
+		            attackTarget = nullptr;
+		            return;
+		        }
+		    }
 			float d = attackTarget->distanceTo(shared_from_this());
 			if (canSee(attackTarget))
 			{

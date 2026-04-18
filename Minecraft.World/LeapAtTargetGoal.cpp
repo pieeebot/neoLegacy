@@ -2,6 +2,7 @@
 #include "net.minecraft.world.entity.ai.control.h"
 #include "net.minecraft.world.entity.h"
 #include "LeapAtTargetGoal.h"
+#include "Player.h"
 
 LeapAtTargetGoal::LeapAtTargetGoal(Mob *mob, float yd)
 {
@@ -25,7 +26,16 @@ bool LeapAtTargetGoal::canUse()
 
 bool LeapAtTargetGoal::canContinueToUse()
 {
-	return target.lock() != nullptr && !mob->onGround;
+    shared_ptr<LivingEntity> mobTarget = target.lock();
+    if (mobTarget == nullptr) return false;
+    if (!mobTarget->isAlive()) return false;
+    
+    if (mobTarget->instanceof(eTYPE_PLAYER)) {
+        shared_ptr<Player> player = dynamic_pointer_cast<Player>(mobTarget);
+        if (player->abilities.invulnerable) return false;
+    }
+    
+	return !mob->onGround;
 }
 
 void LeapAtTargetGoal::start()

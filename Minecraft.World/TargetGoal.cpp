@@ -37,6 +37,11 @@ bool TargetGoal::canContinueToUse()
 	if (target == nullptr) return false;
 	if (!target->isAlive()) return false;
 
+	if (target->instanceof(eTYPE_PLAYER)) {
+		shared_ptr<Player> player = dynamic_pointer_cast<Player>(target);
+		if (player->abilities.invulnerable) return false;
+	}
+
 	double within = getFollowDistance();
 	if (mob->distanceToSqr(target) > within * within) return false;
 	if (mustSee)
