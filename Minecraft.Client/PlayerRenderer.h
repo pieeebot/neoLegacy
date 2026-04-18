@@ -21,8 +21,9 @@ private:
     HumanoidModel *armorParts1;
     HumanoidModel *armorParts2;
     HumanoidModel *armorParts3;
+    HumanoidModel *armorParts4;
 	bool defaultSlimHands;
-public:
+
 	static ResourceLocation SKELETON_LOCATION;
 	static ResourceLocation WITHER_SKELETON_LOCATION;
 	static ResourceLocation ZOMBIE_LOCATION;

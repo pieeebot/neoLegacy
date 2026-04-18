@@ -70,7 +70,8 @@ void CustomHeadLayer::render(shared_ptr<LivingEntity> mob,
                 extra = helmet->getTag()->getString(L"SkullOwner");
 
             SkullTileRenderer::instance->renderSkull(
-                -0.5f, 0.0f, -0.5f,
+                //Skull on armor stand is slightly lowered
+                -0.5f, -0.05f, -0.5f,
                 Facing::UP,
                 180.0f,
                 skullType,
