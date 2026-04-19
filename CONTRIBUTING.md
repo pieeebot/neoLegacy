@@ -11,7 +11,6 @@ We are implementing LCE content as it existed at the time of each Title Update, 
 - Add placeholder or stub implementations of content that are non-functional or misleading
   - For example, a mob with no AI, drops, or behavior, or a block with no crafting recipe or broken interactions
 - Implement content in a way that is visually or behaviorally inconsistent with how it functioned in the original LCE build at that milestone
-- Add any gameplay content (block, item, mob) that has no existing point of reference in any official LCE Title Update
 
 However, we would accept changes that...
 - Faithfully implement content from the current target milestone in a complete, correct, and stable state
