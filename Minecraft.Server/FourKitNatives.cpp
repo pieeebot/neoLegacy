@@ -309,20 +309,20 @@ int __cdecl NativeGetTileData(int dimId, int x, int y, int z)
     return level->getData(x, y, z);
 }
 
-void __cdecl NativeSetTile(int dimId, int x, int y, int z, int tileId, int data)
+void __cdecl NativeSetTile(int dimId, int x, int y, int z, int tileId, int data, int flags)
 {
     ServerLevel *level = GetLevel(dimId);
     if (!level)
         return;
-    level->setTileAndData(x, y, z, tileId, data, Tile::UPDATE_ALL);
+    level->setTileAndData(x, y, z, tileId, data, flags);
 }
 
-void __cdecl NativeSetTileData(int dimId, int x, int y, int z, int data)
+void __cdecl NativeSetTileData(int dimId, int x, int y, int z, int data, int flags)
 {
     ServerLevel *level = GetLevel(dimId);
     if (!level)
         return;
-    level->setData(x, y, z, data, Tile::UPDATE_ALL);
+    level->setData(x, y, z, data, flags);
 }
 
 int __cdecl NativeBreakBlock(int dimId, int x, int y, int z)

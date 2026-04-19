@@ -89,7 +89,19 @@ public class Block
     /// <returns>Whether the change was successful.</returns>
     public bool setTypeId(int type)
     {
-        NativeBridge.SetTile?.Invoke(_world.getDimensionId(), _x, _y, _z, type, 0);
+        return setTypeId(type, true);
+    }
+
+    /// <summary>
+    /// Sets the type ID of this block.
+    /// </summary>
+    /// <param name="type">Type ID to change this block to.</param>
+    /// <param name="applyPhysics">False to cancel physics on the changed block.</param>
+    /// <returns>Whether the block was changed.</returns>
+    public bool setTypeId(int type, bool applyPhysics)
+    {
+        int flags = applyPhysics ? 3 : 2;
+        NativeBridge.SetTile?.Invoke(_world.getDimensionId(), _x, _y, _z, type, 0, flags);
         return true;
     }
 
@@ -108,7 +120,43 @@ public class Block
     /// <param name="data">New block specific metadata.</param>
     public void setData(byte data)
     {
-        NativeBridge.SetTileData?.Invoke(_world.getDimensionId(), _x, _y, _z, data);
+        setData(data, true);
+    }
+
+    /// <summary>
+    /// Sets the metadata for this block.
+    /// </summary>
+    /// <param name="data">New block specific metadata.</param>
+    /// <param name="applyPhysics">False to cancel physics from the changed block.</param>
+    public void setData(byte data, bool applyPhysics)
+    {
+        int flags = applyPhysics ? 3 : 2;
+        NativeBridge.SetTileData?.Invoke(_world.getDimensionId(), _x, _y, _z, data, flags);
+    }
+
+    /// <summary>
+    /// Sets the type ID and data of this block.
+    /// </summary>
+    /// <param name="type">Type ID to change this block to.</param>
+    /// <param name="data">The data value to change this block to.</param>
+    /// <returns>Whether the block was changed.</returns>
+    public bool setTypeIdAndData(int type, byte data)
+    {
+        return setTypeIdAndData(type, data, true);
+    }
+
+    /// <summary>
+    /// Sets the type ID and data of this block.
+    /// </summary>
+    /// <param name="type">Type ID to change this block to.</param>
+    /// <param name="data">The data value to change this block to.</param>
+    /// <param name="applyPhysics">False to cancel physics on the changed block.</param>
+    /// <returns>Whether the block was changed.</returns>
+    public bool setTypeIdAndData(int type, byte data, bool applyPhysics)
+    {
+        int flags = applyPhysics ? 3 : 2;
+        NativeBridge.SetTile?.Invoke(_world.getDimensionId(), _x, _y, _z, type, data, flags);
+        return true;
     }
 
     /// <summary>

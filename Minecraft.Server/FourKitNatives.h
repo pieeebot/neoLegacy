@@ -18,8 +18,8 @@ namespace FourKitBridge
     // World
     int __cdecl NativeGetTileId(int dimId, int x, int y, int z);
     int __cdecl NativeGetTileData(int dimId, int x, int y, int z);
-    void __cdecl NativeSetTile(int dimId, int x, int y, int z, int tileId, int data);
-    void __cdecl NativeSetTileData(int dimId, int x, int y, int z, int data);
+    void __cdecl NativeSetTile(int dimId, int x, int y, int z, int tileId, int data, int flags);
+    void __cdecl NativeSetTileData(int dimId, int x, int y, int z, int data, int flags);
     int __cdecl NativeBreakBlock(int dimId, int x, int y, int z);
     int __cdecl NativeGetHighestBlockY(int dimId, int x, int z);
     void __cdecl NativeGetWorldInfo(int dimId, double *outBuf);

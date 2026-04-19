@@ -43,10 +43,10 @@ internal static class NativeBridge
     internal delegate int NativeGetTileDataDelegate(int dimId, int x, int y, int z);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void NativeSetTileDelegate(int dimId, int x, int y, int z, int tileId, int data);
+    internal delegate void NativeSetTileDelegate(int dimId, int x, int y, int z, int tileId, int data, int flags);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void NativeSetTileDataDelegate(int dimId, int x, int y, int z, int data);
+    internal delegate void NativeSetTileDataDelegate(int dimId, int x, int y, int z, int data, int flags);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal delegate int NativeBreakBlockDelegate(int dimId, int x, int y, int z);

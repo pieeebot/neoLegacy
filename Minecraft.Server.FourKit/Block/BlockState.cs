@@ -200,7 +200,7 @@ public class BlockState
         if (!force && currentType != _typeId)
             return false;
 
-        NativeBridge.SetTile(_world.getDimensionId(), _x, _y, _z, _typeId, _data);
+        NativeBridge.SetTile(_world.getDimensionId(), _x, _y, _z, _typeId, _data, applyPhysics ? 3 : 2);
         return true;
     }
 
