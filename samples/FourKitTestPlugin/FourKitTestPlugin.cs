@@ -1,4 +1,5 @@
 using Minecraft.Server.FourKit;
+using Minecraft.Server.FourKit.Block;
 using Minecraft.Server.FourKit.Command;
 using Minecraft.Server.FourKit.Enchantments;
 using Minecraft.Server.FourKit.Entity;
@@ -39,7 +40,7 @@ public class FourKitTestPlugin : ServerPlugin
 
         var cmd = FourKit.getCommand("fktest");
         cmd.setDescription("FourKit API smoke tests.");
-        cmd.setUsage("/fktest <help|world|chunks|snapshot|entities|loadchunk|enderchest|disenchant|events>");
+        cmd.setUsage("/fktest <help|world|chunks|snapshot|entities|loadchunk|enderchest|disenchant|events|setblock|chatcolor>");
         cmd.setExecutor(new TestExecutor());
     }
 
@@ -135,7 +136,7 @@ internal sealed class TestExecutor : CommandExecutor
     {
         if (args.Length == 0)
         {
-            Reply(sender,"Usage: /fktest <help|world|chunks|snapshot|entities|loadchunk|enderchest|disenchant|events>");
+            Reply(sender,"Usage: /fktest <help|world|chunks|snapshot|entities|loadchunk|enderchest|disenchant|events|setblock|chatcolor>");
             return true;
         }
 
@@ -151,6 +152,8 @@ internal sealed class TestExecutor : CommandExecutor
                 case "loadchunk": return TestLoadUnloadChunk(sender, args);
                 case "enderchest": return TestEnderChest(sender);
                 case "disenchant": return TestDisenchant(sender);
+                case "setblock": return TestSetBlock(sender);
+                case "chatcolor": return TestChatColor(sender);
                 case "events":
                     Reply(sender,$"Chunk loads observed: {FourKitTestPlugin.ChunkLoadCount}");
                     Reply(sender,$"Chunk unloads observed: {FourKitTestPlugin.ChunkUnloadCount}");
@@ -179,6 +182,8 @@ internal sealed class TestExecutor : CommandExecutor
         Reply(sender,"/fktest enderchest  - Probe ender chest inventory");
         Reply(sender,"/fktest disenchant  - Verify setDurability preserves enchants");
         Reply(sender,"/fktest events      - Show observed chunk-event counters");
+        Reply(sender,"/fktest setblock    - Place wool 3 above head via setTypeIdAndData, read back");
+        Reply(sender,"/fktest chatcolor   - Verify ChatColor parsing/strip/translate");
     }
 
     private static Player? RequirePlayer(CommandSender sender)
@@ -377,6 +382,119 @@ internal sealed class TestExecutor : CommandExecutor
         Reply(sender,ok
             ? "PASS: setDurability preserved enchantments."
             : "FAIL: setDurability dropped enchantments.");
+        return true;
+    }
+
+    private static bool TestSetBlock(CommandSender sender)
+    {
+        var player = RequirePlayer(sender);
+        if (player == null) return true;
+
+        var loc = player.getLocation();
+        var world = loc?.getWorld();
+        if (world == null || loc == null) { Reply(sender, "No world."); return true; }
+
+        int bx = loc.getBlockX();
+        int by = loc.getBlockY() + 3;
+        int bz = loc.getBlockZ();
+
+        var block = world.getBlockAt(bx, by, bz);
+        int originalType = block.getTypeId();
+        byte originalData = block.getData();
+        Reply(sender, $"Target ({bx},{by},{bz}) before: typeId={originalType} data={originalData}");
+
+        const int WOOL_ID = 35;
+        const byte RED_WOOL_DATA = 14;
+        bool wrote = block.setTypeIdAndData(WOOL_ID, RED_WOOL_DATA, true);
+        Reply(sender, $"setTypeIdAndData(35, 14, true) -> {wrote}");
+
+        int afterType = block.getTypeId();
+        byte afterData = block.getData();
+        Reply(sender, $"After: typeId={afterType} data={afterData}");
+
+        bool typeOk = afterType == WOOL_ID;
+        bool dataOk = afterData == RED_WOOL_DATA;
+
+        bool restored = block.setTypeId(originalType, false);
+        Reply(sender, $"Restore setTypeId({originalType}, false) -> {restored}; typeId now={block.getTypeId()}");
+
+        Reply(sender, (typeOk && dataOk)
+            ? "PASS: setTypeIdAndData wrote correct type and data."
+            : $"FAIL: expected type={WOOL_ID} data={RED_WOOL_DATA}, got type={afterType} data={afterData}.");
+        return true;
+    }
+
+    private static bool TestChatColor(CommandSender sender)
+    {
+        int pass = 0, fail = 0;
+
+        void Check(string name, bool condition, string detail)
+        {
+            if (condition) { pass++; Reply(sender, $"  PASS {name}"); }
+            else { fail++; Reply(sender, $"  FAIL {name}: {detail}"); }
+        }
+
+        Check("COLOR_CHAR is section sign",
+            ChatColor.COLOR_CHAR == '\u00A7',
+            $"got U+{(int)ChatColor.COLOR_CHAR:X4}");
+
+        var red = ChatColor.getByChar('c');
+        Check("getByChar('c') -> RED",
+            red == ChatColor.RED,
+            $"got {red}");
+
+        var redUpper = ChatColor.getByChar('C');
+        Check("getByChar('C') case-insensitive -> RED",
+            redUpper == ChatColor.RED,
+            $"got {redUpper}");
+
+        var garbage = ChatColor.getByChar('z');
+        Check("getByChar('z') -> null",
+            garbage == null,
+            $"got {garbage}");
+
+        Check("RED.getChar() == 'c'",
+            ChatColor.RED.getChar() == 'c',
+            $"got '{ChatColor.RED.getChar()}'");
+
+        Check("RED.isColor() true",
+            ChatColor.RED.isColor(),
+            "isColor returned false");
+
+        Check("RESET.isColor() false",
+            !ChatColor.RESET.isColor(),
+            "isColor returned true on RESET");
+
+        string translated = ChatColor.translateAlternateColorCodes('&', "&chello&r world");
+        string expected = $"{ChatColor.COLOR_CHAR}chello{ChatColor.COLOR_CHAR}r world";
+        Check("translateAlternateColorCodes('&', ...)",
+            translated == expected,
+            $"got '{translated}' expected '{expected}'");
+
+        string coloredInput = $"{ChatColor.COLOR_CHAR}ahello{ChatColor.COLOR_CHAR}r world";
+        string? stripped = ChatColor.stripColor(coloredInput);
+        Check("stripColor removes color codes",
+            stripped == "hello world",
+            $"got '{stripped}'");
+
+        string? strippedNull = ChatColor.stripColor(null);
+        Check("stripColor(null) returns null",
+            strippedNull == null,
+            "got non-null");
+
+        string lastColors = ChatColor.getLastColors($"{ChatColor.COLOR_CHAR}ahello {ChatColor.COLOR_CHAR}bworld");
+        Check("getLastColors finds trailing color",
+            lastColors == ChatColor.AQUA.ToString(),
+            $"got '{lastColors}'");
+
+        string composed = ChatColor.GREEN + "hi";
+        Check("operator + builds prefix",
+            composed == $"{ChatColor.COLOR_CHAR}ahi",
+            $"got '{composed}'");
+
+        sender.sendMessage(ChatColor.GREEN + "green " + ChatColor.RED + "red " + ChatColor.RESET + "plain");
+
+        Reply(sender, $"ChatColor checks: {pass} passed, {fail} failed.");
         return true;
     }
 }
