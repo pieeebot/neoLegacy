@@ -1,9 +1,7 @@
 ![banner](.gitea/banner.png)
-# neoLegacy (Legacy Console Edition)
-This project aims to backport the newer title updates back to Legacy Console Edition (which is based on TU19).
-
-[![Discord](https://img.shields.io/badge/Discord-Join%20Server-5865F2?logo=discord&logoColor=white)](https://discord.gg/D6hEPNYeyn)
-[![Emerald Launcher](https://img.shields.io/badge/Get_it_on-LCE_Emerald_Launcher-3fc724)](https://github.com/LCE-Hub/LCE-Emerald-Launcher)
+# neoLegacy Renewed (Legacy Console Edition)
+This project aims to backport the newer title updates back to Legacy Console Edition (which is based on TU19).\
+Along with that, this project will also backport some newer java features considered QoL.
 
 # Our roadmap:
 ![Roadmap](.gitea/roadmap.png)
@@ -14,7 +12,7 @@ This project aims to backport the newer title updates back to Legacy Console Edi
 See our [Contributor's Guide](./CONTRIBUTING.md) for more information on the goals of this project.
 
 # Download
-Users can download our [Nightly Build](https://codeberg.org/piebot/LegacyEvolved/releases)! Simply download the `.zip` file and extract it!
+Users can download our [Nightly Build](./releases/latest)! Simply download the `.zip` file and extract it!
 
 # Acknowledgments
 
