@@ -139,7 +139,15 @@ public enum EnchantmentType
     /// <summary>
     /// Increases the speed at which a player may mine underwater
     /// </summary>
-    WATER_WORKER = 6
+    WATER_WORKER = 6,
+    /// <summary>
+    /// Increases the rate at which fish bite the hook while fishing
+    /// </summary>
+    LURE = 64,
+    /// <summary>
+    /// Increases the chance of catching valuable items while fishing
+    /// </summary>
+    LUCK_OF_THE_SEA = 65
 }
 
 public abstract class Enchantment
@@ -166,6 +174,8 @@ public abstract class Enchantment
     public static Enchantment SilkTouchEnchantment => _registry[EnchantmentType.SILK_TOUCH];
     public static Enchantment ThornsEnchantment => _registry[EnchantmentType.THORNS];
     public static Enchantment AquaAffinityEnchantment => _registry[EnchantmentType.WATER_WORKER];
+    public static Enchantment LureEnchantment => _registry[EnchantmentType.LURE];
+    public static Enchantment LuckOfTheSeaEnchantment => _registry[EnchantmentType.LUCK_OF_THE_SEA];
 
 
     private static Dictionary<EnchantmentType, Enchantment> _registry = new Dictionary<EnchantmentType, Enchantment>()
@@ -192,6 +202,8 @@ public abstract class Enchantment
         { EnchantmentType.SILK_TOUCH, new SilkTouchEnchantment() },
         { EnchantmentType.THORNS, new ThornsEnchantment() },
         { EnchantmentType.WATER_WORKER, new AquaAffinityEnchantment() },
+        { EnchantmentType.LURE, new LureEnchantment() },
+        { EnchantmentType.LUCK_OF_THE_SEA, new LuckOfTheSeaEnchantment() },
     };
 
     /// <summary>
