@@ -954,6 +954,13 @@ void CMinecraftApp::InitGameSettings()
 		SetDefaultOptions(pProfileSettings,i,false);
 
 #endif
+
+		Minecraft* minecraft = Minecraft::GetInstance();
+		if (minecraft != nullptr && minecraft->stats[i] != nullptr)
+		{
+			minecraft->stats[i]->clear();
+			minecraft->stats[i]->parse(GameSettingsA[i]);
+		}
 	}
 }
 
