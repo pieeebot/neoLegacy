@@ -432,6 +432,3 @@ result-*
 
 # macOS
 .DS_Store
-
-# ignore submodules
-**/4JLibs
