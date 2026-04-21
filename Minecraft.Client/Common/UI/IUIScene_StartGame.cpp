@@ -190,7 +190,8 @@ void IUIScene_StartGame::UpdateTexturePackDescription(int index)
 		//}
 
 		wchar_t imageName[64];
-		swprintf(imageName,64,L"tpack%08x",tp->getId());
+		swprintf(imageName,64,L"texturePackIcon%08x",tp->getId());
+		registerSubstitutionTexture(imageName, pbImageData, dwImageBytes);
 		m_bitmapTexturePackIcon.setTextureName(imageName);
 
 		pbImageData = tp->getPackComparison(dwImageBytes);

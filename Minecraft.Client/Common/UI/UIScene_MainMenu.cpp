@@ -801,7 +801,7 @@ int UIScene_MainMenu::CreateLoad_SignInReturned(void *pParam, bool bContinue, in
 #ifdef _XBOX_ONE
 							ui.ShowPlayerDisplayname(true);
 #endif
-							proceedToScene(ProfileManager.GetPrimaryPad(), eUIScene_LoadOrJoinMenu);
+							proceedToScene(ProfileManager.GetPrimaryPad(), eUIScene_LoadCreateJoinMenu);
 						}
 						else
 						{
@@ -864,7 +864,7 @@ int UIScene_MainMenu::CreateLoad_SignInReturned(void *pParam, bool bContinue, in
 #ifdef _XBOX_ONE
 						ui.ShowPlayerDisplayname(true);
 #endif
-						proceedToScene(ProfileManager.GetPrimaryPad(), eUIScene_LoadOrJoinMenu);
+						proceedToScene(ProfileManager.GetPrimaryPad(), eUIScene_LoadCreateJoinMenu);
 #endif
 					}
 				}
@@ -878,7 +878,7 @@ int UIScene_MainMenu::CreateLoad_SignInReturned(void *pParam, bool bContinue, in
 #ifdef _XBOX_ONE
 					ui.ShowPlayerDisplayname(true);
 #endif
-					proceedToScene(ProfileManager.GetPrimaryPad(), eUIScene_LoadOrJoinMenu);
+					proceedToScene(ProfileManager.GetPrimaryPad(), eUIScene_LoadCreateJoinMenu);
 #endif
 				}
 			}
@@ -1438,7 +1438,7 @@ void UIScene_MainMenu::RunPlayGame(int iPad)
 #ifdef _XBOX_ONE
 				ui.ShowPlayerDisplayname(true);
 #endif
-				proceedToScene(ProfileManager.GetPrimaryPad(), eUIScene_LoadOrJoinMenu);
+				proceedToScene(ProfileManager.GetPrimaryPad(), eUIScene_LoadCreateJoinMenu);
 #endif
 			}
 			else
@@ -1510,7 +1510,7 @@ void UIScene_MainMenu::RunPlayGame(int iPad)
 #ifdef _XBOX_ONE
 				ui.ShowPlayerDisplayname(true);
 #endif
-				proceedToScene(ProfileManager.GetPrimaryPad(), eUIScene_LoadOrJoinMenu);
+				proceedToScene(ProfileManager.GetPrimaryPad(), eUIScene_LoadCreateJoinMenu);
 #endif
 			}
 		}

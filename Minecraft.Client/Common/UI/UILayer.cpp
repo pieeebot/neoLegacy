@@ -376,6 +376,9 @@ bool UILayer::NavigateToScene(int iPad, EUIScene scene, void *initData)
 	case eUIScene_LoadOrJoinMenu:
 		newScene = new UIScene_LoadOrJoinMenu(iPad, initData, this);
 		break;
+	case eUIScene_LoadCreateJoinMenu:
+		newScene = new UIScene_LoadCreateJoinMenu(iPad, initData, this);
+		break;
 	case eUIScene_LoadMenu:
 		newScene = new UIScene_LoadMenu(iPad, initData, this);
 		break;

@@ -151,6 +151,11 @@ public:
 		EDeleteGame_InProgress,
 	};
 
+	enum ESaveIncompleteType
+	{
+		ESaveIncomplete_None = 0,
+	};
+
 
 	enum ESGIStatus
 	{
@@ -252,6 +257,7 @@ public:
 	void						ResetSaveData(); // Call before a new save to clear out stored save file name
 	void						SetDefaultSaveNameForKeyboardDisplay(LPCWSTR pwchDefaultSaveName);
 	void						SetSaveTitle(LPCWSTR pwchDefaultSaveName);
+	LPCWSTR						GetSaveTitle();
 	bool						GetSaveUniqueNumber(INT *piVal);
 	bool						GetSaveUniqueFilename(char *pszName);
 	void						SetSaveUniqueFilename(char *szFilename);
@@ -262,12 +268,19 @@ public:
 	void						GetSaveData(void *pvData,unsigned int *puiBytes);
 	PVOID						AllocateSaveData(unsigned int uiBytes);
 	void						SetSaveImages( PBYTE pbThumbnail,DWORD dwThumbnailBytes,PBYTE pbImage,DWORD dwImageBytes, PBYTE pbTextData ,DWORD dwTextDataBytes);					// Sets the thumbnail & image for the save, optionally setting the metadata in the png
+	void						SetDefaultImages(PBYTE pbOptionsImage, DWORD dwOptionsImageBytes, PBYTE pbSaveImage, DWORD dwSaveImageBytes, PBYTE pbSaveThumbnail, DWORD dwSaveThumbnailBytes);
+	void						GetDefaultSaveImage(PBYTE *ppbSaveImage, DWORD *pdwSaveImageBytes);
+	void						GetDefaultSaveThumbnail(PBYTE *ppbSaveThumbnail, DWORD *pdwSaveThumbnailBytes);
 	C4JStorage::ESaveGameState	SaveSaveData(int( *Func)(LPVOID ,const bool),LPVOID lpParam);
 	void						CopySaveDataToNewSave(PBYTE pbThumbnail,DWORD cbThumbnail,WCHAR *wchNewName,int ( *Func)(LPVOID lpParam, bool), LPVOID lpParam);
 	void						SetSaveDeviceSelected(unsigned int uiPad,bool bSelected);
 	bool						GetSaveDeviceSelected(unsigned int iPad);
 	C4JStorage::ESaveGameState	DoesSaveExist(bool *pbExists);
 	bool						EnoughSpaceForAMinSaveGame();
+	void						SetMaxSaves(int iMaxC);
+	void						SetIncompleteSaveCallback(void (*Func)(LPVOID, const ESaveIncompleteType, int blocksRequired), LPVOID param);
+	void						ContinueIncompleteOperation();
+	C4JStorage::ESaveGameState	GetSaveState();
 
 	void								SetSaveMessageVPosition(float fY); // The 'Saving' message will display at a default position unless changed
 	// Get the info for the saves
@@ -282,6 +295,7 @@ public:
 	// Load the save. Need to call GetSaveData once the callback is called
 	C4JStorage::ESaveGameState			LoadSaveData(PSAVE_INFO pSaveInfo,int( *Func)(LPVOID lpParam,const bool, const bool), LPVOID lpParam);
 	C4JStorage::ESaveGameState		DeleteSaveData(PSAVE_INFO pSaveInfo,int( *Func)(LPVOID lpParam,const bool), LPVOID lpParam);
+	C4JStorage::ESaveGameState		RenameSaveData(int iRenameIndex, uint16_t *pui16NewName, int (*Func)(LPVOID lpParam, const bool), LPVOID lpParam);
 
 	// DLC
 	void								RegisterMarketplaceCountsCallback(int ( *Func)(LPVOID lpParam, C4JStorage::DLC_TMS_DETAILS *, int), LPVOID lpParam );

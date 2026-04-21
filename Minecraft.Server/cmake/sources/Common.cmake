@@ -223,6 +223,7 @@ set(_MINECRAFT_SERVER_COMMON_ROOT
   "${_MS_SRC}/../Minecraft.Client/Common/UI/UIScene_LanguageSelector.cpp"
   "${_MS_SRC}/../Minecraft.Client/Common/UI/UIScene_LaunchMoreOptionsMenu.cpp"
   "${_MS_SRC}/../Minecraft.Client/Common/UI/UIScene_LeaderboardsMenu.cpp"
+  "${_MS_SRC}/../Minecraft.Client/Common/UI/UIScene_LoadCreateJoinMenu.cpp"
   "${_MS_SRC}/../Minecraft.Client/Common/UI/UIScene_LoadMenu.cpp"
   "${_MS_SRC}/../Minecraft.Client/Common/UI/UIScene_LoadOrJoinMenu.cpp"
   "${_MS_SRC}/../Minecraft.Client/Common/UI/UIScene_MainMenu.cpp"

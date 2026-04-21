@@ -85,6 +85,7 @@ enum EUIScene
 	eUIScene_InGamePlayerOptionsMenu,
 	eUIScene_CreativeMenu,
 	eUIScene_LaunchMoreOptionsMenu,
+	eUIScene_LoadCreateJoinMenu,
 	eUIScene_DLCMainMenu,
 	eUIScene_NewUpdateMessage,
 	eUIScene_EnchantingMenu,

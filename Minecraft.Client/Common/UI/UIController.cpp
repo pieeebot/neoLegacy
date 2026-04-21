@@ -609,6 +609,14 @@ void UIController::loadSkins()
 	m_iggyLibraries[eLibrary_Tooltips] = loadSkin(L"skinHDTooltips.swf", L"skinHDTooltips.swf");
 	m_iggyLibraries[eLibrary_Default] = loadSkin(L"skinHD.swf", L"skinHD.swf");
 
+	// Some 1080p menu ports (such as LoadCreateJoin) may import DR-specific HD
+	// libraries by distinct names. Load them opportunistically when present so
+	// those SWFs can resolve their imports without replacing the normal Windows
+	// skin set.
+	m_iggyLibraries[eLibraryDR_GraphicsDefault] = loadSkin(L"skinHDGraphicsDR.swf", L"skinHDGraphicsDR.swf");
+	m_iggyLibraries[eLibraryDR_Labels] = loadSkin(L"skinHDLabelsDR.swf", L"skinHDLabelsDR.swf");
+	m_iggyLibraries[eLibraryDR_Default] = loadSkin(L"skinHDDR.swf", L"skinHDDR.swf");
+
 #elif defined _DURANGO
 	m_iggyLibraries[eLibrary_Platform] = loadSkin(L"skinHDDurango.swf", L"platformskinHD.swf");
 
@@ -979,8 +987,16 @@ void UIController::tickInput()
 									{
 										// ButtonList manages focus internally via Flash —
 										// pass mouse coords so it can highlight the right item.
+										S32 adjustedMouseY = static_cast<S32>(sceneMouseY);
+										if (pScene->getSceneType() == eUIScene_LoadCreateJoinMenu)
+										{
+											const S32 visibleRows = 7;
+											const S32 rowHeight = (visibleRows > 0) ? (ch / visibleRows) : 0;
+											if (rowHeight > 0)
+												adjustedMouseY -= rowHeight;
+										}
 										static_cast<UIControl_ButtonList*>(ctrl)->SetTouchFocus(
-											static_cast<S32>(sceneMouseX), static_cast<S32>(sceneMouseY), false);
+											static_cast<S32>(sceneMouseX), adjustedMouseY, false);
 										hitControlId = -1;
 										hitArea = INT_MAX;
 										hitCtrl = NULL;

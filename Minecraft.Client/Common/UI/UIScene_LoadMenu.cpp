@@ -267,11 +267,10 @@ UIScene_LoadMenu::UIScene_LoadMenu(int iPad, void *initData, UILayer *parentLaye
 		}
 		if (params->saveDetails != nullptr)
 		{
-			// Set thumbnail name from save filename (needed for texture display in tick)
-			wchar_t wFilename[MAX_SAVEFILENAME_LENGTH];
-			ZeroMemory(wFilename, sizeof(wFilename));
-			mbstowcs(wFilename, params->saveDetails->UTF8SaveFilename, MAX_SAVEFILENAME_LENGTH - 1);
-			m_thumbnailName = wFilename;
+			// Use a stable texture key for saves so the icon survives save/quit refreshes.
+			wchar_t textureName[64];
+			swprintf(textureName, 64, L"loadsave_large_%08x", m_iSaveGameInfoIndex);
+			m_thumbnailName = textureName;
 
 			if (params->saveDetails->pbThumbnailData && params->saveDetails->dwThumbnailSize > 0)
 			{
@@ -742,9 +741,6 @@ void UIScene_LoadMenu::handlePress(F64 controlId, F64 childId)
 {
 	if(m_bIgnoreInput) return;
 
-	//CD - Added for audio
-	ui.PlayUISFX(eSFX_Press);
-
 	switch(static_cast<int>(controlId))
 	{
 // 	case eControl_GameMode:
@@ -776,11 +772,13 @@ void UIScene_LoadMenu::handlePress(F64 controlId, F64 childId)
 		break;
 	case eControl_TexturePackList:
 		{
+			ui.PlayUISFX(eSFX_Press);
 			UpdateCurrentTexturePack(static_cast<int>(childId));
 		}
 		break;
 	case eControl_LoadWorld:
 		{
+			ui.PlayUISFX(eSFX_Press);
 #ifdef _DURANGO
 			if(m_MoreOptionsParams.bOnlineGame)
 			{

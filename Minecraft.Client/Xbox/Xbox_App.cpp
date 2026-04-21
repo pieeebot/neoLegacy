@@ -255,6 +255,7 @@ WCHAR *CConsoleMinecraftApp::wchSceneA[]=
 	L"xuiscene_ingame_player_options",
 	L"xuiscene_inventory_creative",
 	L"xuiscene_multi_launch_more_options",
+	L"xuiscene_multi_joinload",
 
 	L"xuiscene_DLCMain",
 	L"xuiscene_NewUpdateMessage",
@@ -1658,7 +1659,7 @@ HRESULT CConsoleMinecraftApp::NavigateToScene(int iPad,EUIScene eScene, void *in
 	// If you're navigating to the multigamejoinload, and the player hasn't seen the updates message yet, display it now
 	// display this message the first 3 times
 	// todo: re-enable if we fix this menu, for now its just blank!
-	if(false && (eScene==eUIScene_LoadOrJoinMenu) && (bSeenUpdateTextThisSession==false) && ( app.GetGameSettings(ProfileManager.GetPrimaryPad(),eGameSetting_DisplayUpdateMessage)!=0))
+	if(false && ((eScene==eUIScene_LoadOrJoinMenu) || (eScene==eUIScene_LoadCreateJoinMenu)) && (bSeenUpdateTextThisSession==false) && ( app.GetGameSettings(ProfileManager.GetPrimaryPad(),eGameSetting_DisplayUpdateMessage)!=0))
 	{
 		eScene=eUIScene_NewUpdateMessage;
 		bSeenUpdateTextThisSession=true;
@@ -1738,6 +1739,7 @@ HRESULT CConsoleMinecraftApp::NavigateToScene(int iPad,EUIScene eScene, void *in
 	case eUIScene_Credits:
 	case eUIScene_CreateWorldMenu:
 	case eUIScene_LoadOrJoinMenu:
+	case eUIScene_LoadCreateJoinMenu:
 	case eUIScene_JoinMenu:
 	case eUIScene_DLCOffersMenu:
 	case eUIScene_DLCMainMenu:

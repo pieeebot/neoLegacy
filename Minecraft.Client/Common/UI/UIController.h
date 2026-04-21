@@ -116,6 +116,13 @@ private:
 		eLibraryFallback_HUD,
 		eLibraryFallback_Tooltips,
 		eLibraryFallback_Default,
+
+		// Optional DR-specific HD libraries used by some 1080p menu SWFs.
+		// Keep these after the normal HD and fallback sets so they don't disturb
+		// existing references and can be loaded only when the files exist.
+		eLibraryDR_GraphicsDefault,
+		eLibraryDR_Labels,
+		eLibraryDR_Default,
 #endif
 
 		eLibrary_Count,
