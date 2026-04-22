@@ -15,7 +15,7 @@
 #include "../../Minecraft.h"
 #include "../../Options.h"
 #include "../../Minecraft.World/Level.h"
-#include "../../MultiplayerLevel.h"
+#include "../../MultiPlayerLevel.h"
 #include "../../../Minecraft.World/Enchantment.h"
 #ifdef __ORBIS__
 #include <pad.h>
