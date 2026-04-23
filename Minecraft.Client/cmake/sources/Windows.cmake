@@ -347,15 +347,15 @@ set(_MINECRAFT_CLIENT_WINDOWS_SOURCE_FILES
 source_group("Source Files" FILES ${_MINECRAFT_CLIENT_WINDOWS_SOURCE_FILES})
 
 set(_MINECRAFT_CLIENT_WINDOWS_PLATFORM_LIBS_DEV_STORAGE
-  "${CMAKE_CURRENT_SOURCE_DIR}/Platform_Libs/Dev/Storage/4J_Storage.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/Platform_Libs/Dev/Storage/STO_DLC.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/Platform_Libs/Dev/Storage/STO_DLC.h"
-  "${CMAKE_CURRENT_SOURCE_DIR}/Platform_Libs/Dev/Storage/STO_Main.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/Platform_Libs/Dev/Storage/STO_Main.h"
-  "${CMAKE_CURRENT_SOURCE_DIR}/Platform_Libs/Dev/Storage/STO_SaveGame.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/Platform_Libs/Dev/Storage/STO_SaveGame.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/Windows64/4JLibs/impls/Windows_Libs/Storage/src/4J_Storage.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/Windows64/4JLibs/impls/Windows_Libs/Storage/src/STO_DLC.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/Windows64/4JLibs/impls/Windows_Libs/Storage/inc/STO_DLC.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/Windows64/4JLibs/impls/Windows_Libs/Storage/src/STO_Main.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/Windows64/4JLibs/impls/Windows_Libs/Storage/inc/STO_Main.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/Windows64/4JLibs/impls/Windows_Libs/Storage/src/STO_SaveGame.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/Windows64/4JLibs/impls/Windows_Libs/Storage/inc/STO_SaveGame.h"
 )
-source_group("Platform_Libs/Dev/Storage" FILES ${_MINECRAFT_CLIENT_WINDOWS_PLATFORM_LIBS_DEV_STORAGE})
+source_group("Windows64/4JLibs/impls/Windows_Libs/Storage/src" FILES ${_MINECRAFT_CLIENT_WINDOWS_PLATFORM_LIBS_DEV_STORAGE})
 
 set(_MINECRAFT_CLIENT_WINDOWS_WINDOWS
   "${CMAKE_CURRENT_SOURCE_DIR}/Xbox/MinecraftWindows.rc"
