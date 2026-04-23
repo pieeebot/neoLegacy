@@ -10,7 +10,7 @@ PerlinSimplexNoise::PerlinSimplexNoise(int levels)
 PerlinSimplexNoise::PerlinSimplexNoise(Random *random, int levels)
 {
 	init(random,levels);
-	delete random;
+	//delete random;
 }
 
 void PerlinSimplexNoise::init(Random *random, int levels)

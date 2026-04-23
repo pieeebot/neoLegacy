@@ -1,25 +1,22 @@
-#include "stdafx.h"
-
+﻿#include "stdafx.h"
 
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <algorithm>
-
 #include "MesaBiome.h"
-#include "BiomeDecorator.h"         
+#include "BiomeDecorator.h"
 #include "net.minecraft.world.level.h"
 #include "net.minecraft.world.level.tile.h"
 #include "ColoredTile.h"
 #include "SandTile.h"
 #include "DirtTile.h"
 #include "DyePowderItem.h"
-#include "PerlinNoise.h"
+#include "PerlinSimplexNoise.h"
 #include "Random.h"
-
+#include "TreeFeature.h"
 
 #undef max
 #undef min
-
 
 MesaBiome::MesaBiome(int id, bool mesaPlateau, bool hasTrees) : Biome(id)
 {
@@ -29,31 +26,22 @@ MesaBiome::MesaBiome(int id, bool mesaPlateau, bool hasTrees) : Biome(id)
     this->setNoRain();
     this->setTemperatureAndDownfall(2.0f, 0.0f);
 
-    // Red Sand  (id=12, data=1) 
-    // Orange Stained Hardened Clay (id=159, data=1) 
     this->topMaterial     = static_cast<byte>(Tile::sand_Id);
-    this->topMaterialData = static_cast<byte>(SandTile::RED_SAND); // 1
+    this->topMaterialData = static_cast<byte>(SandTile::RED_SAND);
     this->material        = static_cast<byte>(Tile::clayHardened_colored_Id);
-    this->materialData    = static_cast<byte>(BAND_ORANGE);        // 1
+    this->materialData    = static_cast<byte>(orangeColoredClayState);
 
     this->lastSeed             = INVALID_SEED;
+    this->clayBands            = nullptr;
     this->pillarNoise          = nullptr;
     this->pillarRoofNoise      = nullptr;
     this->clayBandsOffsetNoise = nullptr;
 
-   
-    /*friendlies.clear();
-    friendlies_chicken.clear();
-    enemies.clear();
-    waterFriendlies.clear();
-    ambientFriendlies.clear();*/
-
-    
     if (decorator)
     {
-        decorator->treeCount = hasTrees ? 5 : -999;
+        decorator->treeCount     = hasTrees ? 5 : -999;
         decorator->deadBushCount = 20;
-        decorator->reedsCount     = 3;
+        decorator->reedsCount    = 3;
         decorator->cactusCount   = 5;
         decorator->flowerCount   = 0;
     }
@@ -61,31 +49,135 @@ MesaBiome::MesaBiome(int id, bool mesaPlateau, bool hasTrees) : Biome(id)
 
 MesaBiome::~MesaBiome()
 {
+    delete[] clayBands;
+    clayBands = nullptr;
+
     delete pillarNoise;
+    pillarNoise = nullptr;
     delete pillarRoofNoise;
+    pillarRoofNoise = nullptr;
     delete clayBandsOffsetNoise;
+    clayBandsOffsetNoise = nullptr;
 }
 
-
-void MesaBiome::initBands(int64_t /*seed*/) {}
-
-
-
-
-int MesaBiome::getBandColor(int x, int y, int z)
+void MesaBiome::generateBands(int64_t seed)
 {
-    if (!clayBandsOffsetNoise)
-        return BAND_HARDENED_CLAY;
 
-    double noiseX = static_cast<double>(x) / 512.0;
-    int offset    = static_cast<int>(std::round(
-        clayBandsOffsetNoise->getValue(noiseX, noiseX) * 2.0));
+    delete[] clayBands;
+    clayBands = new BandEntry[BAND_COUNT];
 
-    int index = ((y + offset) % 64 + 64) % 64;
-    return static_cast<int>(static_cast<unsigned char>(clayBands[index]));
+    for (int i = 0; i < BAND_COUNT; ++i)
+    {
+        clayBands[i].blockId   = Tile::clayHardened_Id;
+        clayBands[i].blockData = defaultHardenedClayState;
+    }
+
+    Random r(seed);
+
+
+    delete clayBandsOffsetNoise;
+    clayBandsOffsetNoise = new PerlinSimplexNoise(&r, 1);
+
+    {
+        int i = 0;
+        while (i < BAND_COUNT)
+        {
+            i += r.nextInt(5) + 1;
+            if (i < BAND_COUNT)
+            {
+                clayBands[i].blockId   = Tile::clayHardened_colored_Id;
+                clayBands[i].blockData = orangeColoredClayState;
+            }
+        }
+    }
+
+    {
+        int groupCount = r.nextInt(4) + 2;
+        for (int g = 0; g < groupCount; ++g)
+        {
+            int len   = r.nextInt(3) + 1;
+            int start = r.nextInt(BAND_COUNT);
+            for (int k = 0; start + k < BAND_COUNT && k < len; ++k)
+            {
+                clayBands[start + k].blockId   = Tile::clayHardened_colored_Id;
+                clayBands[start + k].blockData = yellowColoredClayState;
+            }
+        }
+    }
+
+    {
+        int groupCount = r.nextInt(4) + 2;
+        for (int g = 0; g < groupCount; ++g)
+        {
+            int len   = r.nextInt(3) + 2;
+            int start = r.nextInt(BAND_COUNT);
+            for (int k = 0; start + k < BAND_COUNT && k < len; ++k)
+            {
+                clayBands[start + k].blockId   = Tile::clayHardened_colored_Id;
+                clayBands[start + k].blockData = brownColoredClayState;
+            }
+        }
+    }
+
+    {
+        int groupCount = r.nextInt(4) + 2;
+        for (int g = 0; g < groupCount; ++g)
+        {
+            int len   = r.nextInt(3) + 1;
+            int start = r.nextInt(BAND_COUNT);
+            for (int k = 0; start + k < BAND_COUNT && k < len; ++k)
+            {
+                clayBands[start + k].blockId   = Tile::clayHardened_colored_Id;
+                clayBands[start + k].blockData = redColoredClayState;
+            }
+        }
+    }
+
+    {
+        int stripeCount = r.nextInt(3) + 3;
+        int cursor      = 0;
+        for (int g = 0; g < stripeCount; ++g)
+        {
+            cursor += r.nextInt(16) + 4;
+            if (cursor >= BAND_COUNT) break;
+
+            clayBands[cursor].blockId   = Tile::clayHardened_colored_Id;
+            clayBands[cursor].blockData = whiteColoredClayState;
+
+            
+            if (cursor > 1 && r.nextBoolean())
+            {
+                clayBands[cursor - 1].blockId   = Tile::clayHardened_colored_Id;
+                clayBands[cursor - 1].blockData = silverColoredClayState;
+            }
+            
+            if (cursor < 63 && r.nextBoolean())
+            {
+                clayBands[cursor + 1].blockId   = Tile::clayHardened_colored_Id;
+                clayBands[cursor + 1].blockData = silverColoredClayState;
+            }
+        }
+    }
 }
 
 
+BandEntry MesaBiome::getBand(int x, int y, int z)
+{
+    if (!clayBandsOffsetNoise || !clayBands)
+        return { Tile::clayHardened_Id, 0 };
+
+    
+    double noiseVal = clayBandsOffsetNoise->getValue(
+        static_cast<double>(x) * 0.001953125,
+        static_cast<double>(x) * 0.001953125);
+
+    
+    int offset = static_cast<int>(std::round(noiseVal + noiseVal));
+
+    
+    int index = ((y + offset) + BAND_COUNT) % BAND_COUNT;
+    return clayBands[index];
+}
 
 void MesaBiome::decorate(Level* level, Random* random, int xo, int zo)
 {
@@ -94,203 +186,214 @@ void MesaBiome::decorate(Level* level, Random* random, int xo, int zo)
 
 Feature* MesaBiome::getTreeFeature(Random* random)
 {
-    return Biome::getTreeFeature(random);
+    return new TreeFeature(false);
 }
 
+int MesaBiome::getFolageColor() const
+{
+    return eMinecraftColour_Foliage_Mesa;
+}
 
+int MesaBiome::getGrassColor() const
+{
+    return eMinecraftColour_Grass_Mesa;
+}
 
 void MesaBiome::buildSurfaceAtDefault(Level* level, Random* random,
                                       byte* chunkBlocks, byte* chunkData,
                                       int x, int z, double noiseVal)
 {
-   
     int64_t seed = level->getSeed();
-    if (lastSeed != seed)
+
+    if (!clayBands || lastSeed != seed)
+        generateBands(seed);
+
+    if (!pillarNoise || !pillarRoofNoise || lastSeed != seed)
     {
-        lastSeed = seed;
-
-       
-        std::fill(std::begin(clayBands), std::end(clayBands),
-                  static_cast<byte>(BAND_HARDENED_CLAY));
-        {
-            Random r(seed);
-            delete clayBandsOffsetNoise;
-            clayBandsOffsetNoise = new PerlinNoise(&r, 1);
-
-            // Orange sparse
-            for (int i = 0; i < 64; )
-            {
-                i += r.nextInt(5) + 1;
-                if (i < 64) clayBands[i] = static_cast<byte>(BAND_ORANGE);
-            }
-            // Yellow groups
-            int yg = r.nextInt(4) + 2;
-            for (int g = 0; g < yg; ++g) {
-                int t = r.nextInt(3) + 1, s = r.nextInt(64);
-                for (int k = 0; s + k < 64 && k < t; ++k)
-                    clayBands[s + k] = static_cast<byte>(BAND_YELLOW);
-            }
-            // Brown groups
-            int bg = r.nextInt(4) + 2;
-            for (int g = 0; g < bg; ++g) {
-                int t = r.nextInt(3) + 2, s = r.nextInt(64);
-                for (int k = 0; s + k < 64 && k < t; ++k)
-                    clayBands[s + k] = static_cast<byte>(BAND_BROWN);
-            }
-            // Red groups
-            int rg = r.nextInt(4) + 2;
-            for (int g = 0; g < rg; ++g) {
-                int t = r.nextInt(3) + 1, s = r.nextInt(64);
-                for (int k = 0; s + k < 64 && k < t; ++k)
-                    clayBands[s + k] = static_cast<byte>(BAND_RED);
-            }
-            // White stripes
-            int ws = r.nextInt(3) + 3, cursor = 0;
-            for (int g = 0; g < ws; ++g) {
-                cursor += r.nextInt(16) + 4;
-                if (cursor >= 64) break;
-                clayBands[cursor] = static_cast<byte>(BAND_WHITE);
-                if (cursor > 1  && r.nextBoolean()) clayBands[cursor - 1] = static_cast<byte>(BAND_SILVER);
-                if (cursor < 63 && r.nextBoolean()) clayBands[cursor + 1] = static_cast<byte>(BAND_SILVER);
-            }
-        }
-
+        Random noiseRand(seed);
+        delete pillarNoise;
+        delete pillarRoofNoise;
         
-        delete pillarNoise;     pillarNoise     = nullptr;
-        delete pillarRoofNoise; pillarRoofNoise = nullptr;
-        {
-            Random r(seed);
-            pillarNoise     = new PerlinNoise(&r, 4); // field_150623_aE
-            pillarRoofNoise = new PerlinNoise(&r, 1); // field_150624_aF
-        }
+        pillarNoise     = new PerlinSimplexNoise(&noiseRand, 4);
+        pillarRoofNoise = new PerlinSimplexNoise(&noiseRand, 1);
     }
 
-   
-    const int seaLevel  = level->seaLevel;   
-    const int localX    = x & 15;
-    const int localZ    = z & 15;
+    lastSeed = seed;
 
-   
-    int  noiseDepth = (int)(noiseVal / 3.0 + 3.0 + random->nextDouble() * 0.25);
-    bool flag       = (cos(noiseVal / 3.0 * PI) > 0.0);
+    const int localX = x & 0xF;
+    const int localZ = z & 0xF;
 
-    int  run   = -1;
-    bool flag1 = false; 
+    double pillarHeight = 0.0;
 
-    for (int y = Level::genDepthMinusOne; y >= 0; --y)
+    
+    if (isMesaPlateau)
+{
+    double nx = static_cast<double>((x & ~0xF) + localZ);
+    double nz = static_cast<double>((z & ~0xF) + localX);
+
+    
+    double roofVal = pillarNoise->getValue(nx * 0.25, nz * 0.25);
+    double d0      = std::abs(noiseVal) - roofVal;
+
+    
+    if (d0 > 0.0)
     {
-        int index = (localZ * 16 + localX) * Level::genDepth + y;
+        
+        double pillarScale = pillarRoofNoise->getValue(
+            nx * 0.001953125,
+            nz * 0.001953125);
 
         
-        if (y <= 1 + random->nextInt(2))
+        double scaled = std::ceil(std::abs(pillarScale) * 50.0);
+        double height = d0 * d0 * 2.5;
+        double cap    = scaled + 14.0;
+        if (height > cap) height = cap;
+        pillarHeight = height + 64.0;
+    }
+}
+
+    const int localX2 = x & 0xF;
+    const int localZ2 = z & 0xF;
+    const int seaLevel = level->getSeaLevel();
+
+    int  noiseDepth  = static_cast<int>(noiseVal / 3.0 + 3.0 + random->nextDouble() * 0.25);
+    bool cosFlag     = (std::cos(noiseVal / 3.0 * PI) > 0.0);
+
+    int  run          = -1;
+    bool underRedSand = false;
+
+    for (int y = 0x7F; y >= 0; --y)
+    {
+        int idx = (localZ2 * 16 + localX2) * 128 + y;
+
+        
+        byte cur = chunkBlocks[idx];
+        if (cur == 0 && pillarHeight > 0.0 && y < static_cast<int>(pillarHeight))
         {
-            chunkBlocks[index] = static_cast<byte>(Tile::unbreakable_Id);
+            chunkBlocks[idx] = static_cast<byte>(Tile::stone_Id);
+            cur = static_cast<byte>(Tile::stone_Id);
+        }
+
+        
+        if (y <= random->nextInt(5))
+        {
+            chunkBlocks[idx] = static_cast<byte>(Tile::unbreakable_Id);
             continue;
         }
 
-        byte cur = chunkBlocks[index];
+        
+        cur = chunkBlocks[idx];
 
-        if (cur == 0) 
+       
+        if (cur == 0)
         {
             run = -1;
+            continue;
         }
-        else if (cur == static_cast<byte>(Tile::stone_Id))
+
+       
+        if (cur != static_cast<byte>(Tile::stone_Id))
+            continue;
+
+        if (run == -1)
         {
-            if (run == -1) 
+            underRedSand = false;
+            run = noiseDepth + std::max(0, y - seaLevel);
+
+            
+            if (y < seaLevel - 1)
             {
-                flag1 = false;
-
-                
-                run = noiseDepth + (y > seaLevel ? (y - seaLevel) : 0);
-
-                
-                if (y < seaLevel - 1)
+                if (noiseDepth <= 0)
                 {
-                    if (noiseDepth <= 0)
-                    {
-                        chunkBlocks[index] = static_cast<byte>(Tile::stone_Id);
-                    }
-                    else
-                    {
-                        chunkBlocks[index] = static_cast<byte>(Tile::clayHardened_colored_Id);
-                        chunkData[index]   = static_cast<byte>(BAND_ORANGE);
-                    }
-                }
-                else if (hasTrees && y > 86 + noiseDepth * 2)
-                {
-                    if (flag)
-                    {
-                        chunkBlocks[index] = static_cast<byte>(Tile::grass_Id);
-                    }
-                    else
-                    {
-                        chunkBlocks[index] = static_cast<byte>(Tile::dirt_Id);
-                        chunkData[index]   = static_cast<byte>(DirtTile::COARSE_DIRT);
-                    }
-                }
-                else if (y <= seaLevel + 3 + noiseDepth)
-                {
-                    chunkBlocks[index] = static_cast<byte>(Tile::sand_Id);
-                    chunkData[index]   = static_cast<byte>(SandTile::RED_SAND); // 1
-                    flag1 = true;
+                    chunkBlocks[idx] = static_cast<byte>(Tile::stone_Id);
                 }
                 else
                 {
-                    if (y >= 64)
-                    {
-                        if (flag)
-                        {
-                            chunkBlocks[index] = static_cast<byte>(Tile::clayHardened_Id);
-                        }
-                        else
-                        {
-                            int band = getBandColor(x, y, z);
-                            if (band == BAND_HARDENED_CLAY)
-                            {
-                                chunkBlocks[index] = static_cast<byte>(Tile::clayHardened_Id);
-                            }
-                            else
-                            {
-                                chunkBlocks[index] = static_cast<byte>(Tile::clayHardened_colored_Id);
-                                chunkData[index]   = static_cast<byte>(band);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        chunkBlocks[index] = static_cast<byte>(Tile::clayHardened_colored_Id);
-                        chunkData[index]   = static_cast<byte>(BAND_ORANGE);
-                    }
-                }
-
-                if (y < seaLevel && chunkBlocks[index] == 0)
-                {
-                    chunkBlocks[index] = (getTemperature(x, y, z) < 0.15f)
-                        ? static_cast<byte>(Tile::ice_Id)
-                        : static_cast<byte>(Tile::calmWater_Id);
+                    chunkBlocks[idx] = static_cast<byte>(Tile::clayHardened_colored_Id);
+                    chunkData[idx]   = static_cast<byte>(BAND_ORANGE);
                 }
             }
-            else if (run > 0)
+            else if (hasTrees && y > 86 + noiseDepth * 2)
             {
-                --run;
-
-                if (flag1)
+                
+                if (cosFlag)
                 {
-                    chunkBlocks[index] = static_cast<byte>(Tile::clayHardened_colored_Id);
-                    chunkData[index]   = static_cast<byte>(BAND_ORANGE);
+                    chunkBlocks[idx] = static_cast<byte>(Tile::dirt_Id);
+                    chunkData[idx]   = static_cast<byte>(DirtTile::COARSE_DIRT);
                 }
                 else
                 {
-                    int band = getBandColor(x, y, z);
-                    if (band == BAND_HARDENED_CLAY)
-                        chunkBlocks[index] = static_cast<byte>(Tile::clayHardened_Id);
+                    chunkBlocks[idx] = static_cast<byte>(Tile::grass_Id);
+                }
+            }
+            else if (y <= seaLevel + 3 + noiseDepth)
+            {
+                chunkBlocks[idx] = static_cast<byte>(Tile::sand_Id);
+                chunkData[idx]   = static_cast<byte>(SandTile::RED_SAND);
+                underRedSand     = true;
+            }
+            else
+            {
+                
+                if (y >= 64 && y <= 127)
+                {
+                    if (cosFlag)
+                    {
+                        chunkBlocks[idx] = static_cast<byte>(Tile::clayHardened_Id);
+                    }
                     else
                     {
-                        chunkBlocks[index] = static_cast<byte>(Tile::clayHardened_colored_Id);
-                        chunkData[index]   = static_cast<byte>(band);
+                        BandEntry band = getBand(x, y, z);
+                        chunkBlocks[idx] = static_cast<byte>(band.blockId);
+                        if (band.blockId == Tile::clayHardened_colored_Id)
+                            chunkData[idx] = static_cast<byte>(band.blockData);
                     }
                 }
+                else
+                {
+                    chunkBlocks[idx] = static_cast<byte>(Tile::clayHardened_colored_Id);
+                    chunkData[idx]   = static_cast<byte>(BAND_ORANGE);
+                }
+            }
+
+            
+            if (y < seaLevel && chunkBlocks[idx] == 0)
+                chunkBlocks[idx] = static_cast<byte>(Tile::calmWater_Id);
+        }
+        else if (run > 0)
+        {
+            --run;
+
+            if (underRedSand)
+            {
+                chunkBlocks[idx] = static_cast<byte>(Tile::clayHardened_colored_Id);
+                chunkData[idx]   = static_cast<byte>(BAND_ORANGE);
+            }
+            else
+            {
+                BandEntry band = getBand(x, y, z);
+                chunkBlocks[idx] = static_cast<byte>(band.blockId);
+                if (band.blockId == Tile::clayHardened_colored_Id)
+                    chunkData[idx] = static_cast<byte>(band.blockData);
             }
         }
     }
+}
+
+MesaBiome* MesaBiome::createMutatedCopy(int newId)
+{
+
+    bool isMesaBase = (this->id == Biome::mesa->id);
+
+    MesaBiome* copy = new MesaBiome(newId, isMesaBase, this->hasTrees);
+
+    if (!isMesaBase)
+    {
+        
+        copy->setDepthAndScale(0.1f, 0.3f);
+    }
+
+    copy->setWaterSkyColor(this->getWaterColor(), this->getSkyColor());
+
+    return copy;
 }

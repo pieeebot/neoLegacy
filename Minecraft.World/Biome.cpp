@@ -148,7 +148,7 @@ void Biome::staticCtor()
     Biome::savannaM = (new MutatedSavannaBiome(163, biomes[35]))->setColor(0xe5da87)->setName(L"Savanna M")->setNoRain()->setTemperatureAndDownfall(1.1f, 0.0f)->setDepthAndScale(0.35f, 1.3f)->setLeafFoliageWaterSkyColor(eMinecraftColour_Grass_Savanna, eMinecraftColour_Foliage_Savanna, eMinecraftColour_Sky_Desert, eMinecraftColour_Sky_Desert);
     Biome::savannaPlateauM = (new MutatedSavannaBiome(164, biomes[36]))->setColor(0xd1c890)->setName(L"Savanna Plateau M")->setNoRain()->setTemperatureAndDownfall(1.0f, 0.0f)->setDepthAndScale(1.05f, 1.2125f)->setLeafFoliageWaterSkyColor(eMinecraftColour_Grass_Savanna, eMinecraftColour_Foliage_Savanna, eMinecraftColour_Sky_Desert, eMinecraftColour_Sky_Desert);
 
-    Biome::mesaBryce = (new MesaBiome(165, false, false))->setColor(0xd94515)->setName(L"Mesa (Bryce)")->setLeafFoliageWaterSkyColor(eMinecraftColour_Grass_Mesa, eMinecraftColour_Foliage_Mesa, eMinecraftColour_Water_Mesa, eMinecraftColour_Sky_Desert);
+    Biome::mesaBryce = (new MesaBiome(165, true, false))->setColor(0xd94515)->setName(L"Mesa (Bryce)")->setLeafFoliageWaterSkyColor(eMinecraftColour_Grass_Mesa, eMinecraftColour_Foliage_Mesa, eMinecraftColour_Water_Mesa, eMinecraftColour_Sky_Desert);
     Biome::mesaPlateauFM = (new MesaBiome(166, true, true))->setColor(0xb09765)->setName(L"Mesa Plateau F M")->setLeafFoliageWaterSkyColor(eMinecraftColour_Grass_Mesa, eMinecraftColour_Foliage_Mesa, eMinecraftColour_Water_Mesa, eMinecraftColour_Sky_Desert);
     Biome::mesaPlateauM = (new MesaBiome(167, true, false))->setColor(0xca5936)->setName(L"Mesa Plateau M")->setLeafFoliageWaterSkyColor(eMinecraftColour_Grass_Mesa, eMinecraftColour_Foliage_Mesa, eMinecraftColour_Water_Mesa, eMinecraftColour_Sky_Desert);
     
