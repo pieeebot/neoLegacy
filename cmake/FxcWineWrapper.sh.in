@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+map_to_windows_path() {
+  local v="$1"
+  if [[ "$v" == /*/* ]]; then
+    winepath -w "$v" 2>/dev/null || printf '%s' "$v"
+  else
+    printf '%s' "$v"
+  fi
+}
+
+args=()
+out_header=""
+expect_out_header=0
+for arg in "$@"; do
+  if [[ "$expect_out_header" -eq 1 ]]; then
+    out_header="$arg"
+    expect_out_header=0
+  elif [[ "$arg" == "/Fh" ]]; then
+    expect_out_header=1
+  fi
+
+  args+=("$(map_to_windows_path "$arg")")
+done
+
+"@LCE_WINE_PROGRAM@" "@LCE_FXC_EXE@" "${args[@]}"
+status=$?
+
+if [[ "$status" -eq 0 && -n "$out_header" && -f "$out_header" ]]; then
+  tmp="${out_header}.tmp.$$"
+  # normalize CRLF and #endif arguments
+  LC_ALL=C awk '
+    BEGIN {
+      has_if0 = 0
+      has_endif = 0
+      inserted = 0
+    }
+    {
+      sub(/\r$/, "")
+
+      if (index($0, "#if 0") == 1) {
+        has_if0 = 1
+      }
+
+      if (index($0, "#endif") > 0) {
+        print "#endif"
+        has_endif = 1
+        next
+      }
+
+      if (has_if0 && !has_endif && !inserted && index($0, "const BYTE ") == 1) {
+        print "#endif"
+        inserted = 1
+        has_endif = 1
+      }
+
+      print $0
+    }
+    END {
+      if (has_if0 && !has_endif) {
+        print "#endif"
+      }
+    }
+  ' "$out_header" > "$tmp" && mv "$tmp" "$out_header"
+fi
+
+exit "$status"

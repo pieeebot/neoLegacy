@@ -17,7 +17,7 @@ warn()    { echo -e "${YELLOW}[warn]${NC} $*"; }
 die()     { echo -e "${RED}[error]${NC} $*" >&2; exit 1; }
 check_deps() {
     local missing=()
-    local deps=(clang-cl lld-link llvm-rc llvm-ml llvm-lib llvm-mt cmake ninja xwin rsync)
+    local deps=(clang-cl lld-link llvm-rc llvm-ml llvm-lib llvm-mt cmake ninja xwin rsync wine)
     for dep in "${deps[@]}"; do
         command -v "$dep" &>/dev/null || missing+=("$dep")
     done
