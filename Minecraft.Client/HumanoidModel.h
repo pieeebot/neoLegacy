@@ -3,30 +3,32 @@
 class HumanoidModel : public Model
 {
 public:
-    ModelPart *head, *hair, *body, *jacket, *arm0, *sleeve0, *arm1, *sleeve1, *leg0, *pants0, *leg1, *pants1, *ear, *cloak;
+    ModelPart* head, * hair, * body, * jacket, * arm0, * sleeve0, * arm1, * sleeve1, * leg0, * pants0, * leg1, * pants1, * ear, * cloak;
+    ModelPart* elytraLeft, * elytraRight;
     int holdingLeftHand;
     int holdingRightHand;
     bool idle;
     bool sneaking;
     bool bowAndArrow;
-    bool eating;
-    float eating_t;
-    float eating_swing;
-    unsigned int m_uiAnimOverrideBitmask;
+    bool eating;		
+    float eating_t;			
+    float eating_swing;	
+    bool elytraFlying;    
+    bool elytraCrouching; 
+    unsigned int m_uiAnimOverrideBitmask; 
     float m_fYOffset;
-
     enum animbits
     {
         eAnim_ArmsDown = 0,
         eAnim_ArmsOutFront,
         eAnim_NoLegAnim,
         eAnim_HasIdle,
-        eAnim_ForceAnim,
+        eAnim_ForceAnim, 
         eAnim_SingleLegs,
         eAnim_SingleArms,
-        eAnim_StatueOfLiberty,
-        eAnim_DontRenderArmour,
-        eAnim_NoBobbing,
+        eAnim_StatueOfLiberty, 
+        eAnim_DontRenderArmour, 
+        eAnim_NoBobbing, 
         eAnim_DisableRenderHead,
         eAnim_DisableRenderArm0,
         eAnim_DisableRenderArm1,
@@ -41,6 +43,7 @@ public:
         eAnim_DisableRenderPants0,
         eAnim_DisableRenderPants1
     };
+
 
     static const unsigned int m_staticBitmaskIgnorePlayerCustomAnimSetting =
         (1 << HumanoidModel::eAnim_ForceAnim) |
@@ -75,6 +78,8 @@ public:
     void renderHair(float scale, bool usecompiled);
     void renderEars(float scale, bool usecompiled);
     void renderCloak(float scale, bool usecompiled);
+    void renderElytra(float scale, bool usecompiled);
+
     void render(HumanoidModel* model, float scale, bool usecompiled);
 
     ModelPart* AddOrRetrievePart(SKIN_BOX* pBox);

@@ -127,6 +127,8 @@ public:
 	void GetSoundName(char *szSoundName,int iSound);
 #endif
     void play(int iSound, float x, float y, float z, float volume, float pitch) override;
+	void startElytraSound(float x, float y, float z, float volume, float pitch);
+	void stopElytraSound();
     void playStreaming(const wstring& name, float x, float y , float z, float volume, float pitch, bool bMusicDelay=true) override;
     void playUI(int iSound, float volume, float pitch) override;
     void playMusicTick() override;
@@ -158,6 +160,9 @@ private:
 #endif
 	
 	int GetRandomishTrack(int iStart,int iEnd);
+
+	MiniAudioSound* m_elytraLoopingSound = nullptr;
+
 
 	ma_engine m_engine;
 	ma_engine_config m_engineConfig;

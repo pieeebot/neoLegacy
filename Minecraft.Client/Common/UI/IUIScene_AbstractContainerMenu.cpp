@@ -1273,6 +1273,10 @@ void IUIScene_AbstractContainerMenu::onMouseTick()
 						case Item::chestplate_gold_Id:
 						case Item::leggings_gold_Id:
 						case Item::boots_gold_Id:
+
+
+						case Item::elytra_Id:
+
 							buttonY=eToolTipQuickMoveArmor;
 
 							break;

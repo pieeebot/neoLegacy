@@ -436,6 +436,7 @@ public:
 
 	static Item* prismarine_crystal;
 	static Item* prismarine_shard;
+	static Item* elytra;
 
 
 	static const int shovel_iron_Id			= 256;
@@ -667,6 +668,8 @@ public:
 	static const int door_acacia_Id = 430;
 	static const int door_dark_Id = 431;
 
+
+	static const int elytra_Id = 443;
 	//TU31
 	
 	

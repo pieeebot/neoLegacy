@@ -288,14 +288,21 @@ void PlayerRenderer::render(shared_ptr<Entity> _mob, double x, double y, double 
 	{
 		armorParts1->eating = armorParts2->eating = resModel->eating = false;
 	}
+	// Suppress crouch pose while elytra flying (superman pose is applied instead)
+	bool effectiveSneaking = mob->isSneaking() && !mob->isElytraFlying();
+	armorParts1->sneaking = armorParts2->sneaking = resModel->sneaking = effectiveSneaking;
+	// Signal models: elytraFlying suppresses walk/bob; elytraCrouching adds superman arms
+	// Suppress elytra pose in the inventory screen (isInventoryRender=true during that pass).
+	bool elytraFlying = mob->isElytraFlying() && !EntityRenderDispatcher::instance->isInventoryRender;
+	bool elytraCrouch = elytraFlying && mob->isSneaking();
+	armorParts1->elytraFlying = armorParts2->elytraFlying = resModel->elytraFlying = elytraFlying;
+	armorParts1->elytraCrouching = armorParts2->elytraCrouching = resModel->elytraCrouching = elytraCrouch;
 
-	armorParts1->sneaking = armorParts2->sneaking = resModel->sneaking = mob->isSneaking();
 	double yp = y - mob->heightOffset;
-	if (mob->isSneaking())
+	if (mob->isSneaking() && !mob->instanceof(eTYPE_LOCALPLAYER))
 	{
 		yp -= 2 / 16.0f;
 	}
-
 	if (mob->getAnimOverrideBitmask() & (1 << HumanoidModel::eAnim_SmallModel))
 	{
 		if (mob->isRiding())
@@ -357,6 +364,8 @@ void PlayerRenderer::render(shared_ptr<Entity> _mob, double x, double y, double 
 	}
 	armorParts1->bowAndArrow = armorParts2->bowAndArrow = resModel->bowAndArrow = false;
 	armorParts1->sneaking = armorParts2->sneaking = resModel->sneaking = false;
+	armorParts1->elytraFlying = armorParts2->elytraFlying = resModel->elytraFlying = false;
+	armorParts1->elytraCrouching = armorParts2->elytraCrouching = resModel->elytraCrouching = false;
 	armorParts1->holdingRightHand = armorParts2->holdingRightHand = resModel->holdingRightHand = 0;
 }
 
@@ -497,8 +506,6 @@ void PlayerRenderer::additionalRendering(shared_ptr<LivingEntity> _mob, float a)
 
 		// 4J Stu - Fix for sprint-flying causing the cape to rotate up by 180 degrees or more
 		float xRot = 6.0f + lean / 2 + flap;
-		if (xRot > 64.0f) xRot = 64.0f;
-
 		glRotatef(xRot, 1, 0, 0);
 		glRotatef(lean2 / 2, 0, 0, 1);
 		glRotatef(-lean2 / 2, 0, 1, 0);
@@ -507,101 +514,182 @@ void PlayerRenderer::additionalRendering(shared_ptr<LivingEntity> _mob, float a)
 		glPopMatrix();
 	}
 
-	shared_ptr<ItemInstance> item = mob->inventory->getSelected();
-
-	if (item != nullptr)
 	{
-		glPushMatrix();
-		resModel->arm0->translateTo(1 / 16.0f);
-		glTranslatef(-1 / 16.0f, 7 / 16.0f, 1 / 16.0f);
+		shared_ptr<ItemInstance> chestItem = mob->inventory->armor[LivingEntity::SLOT_CHEST - 1];
+		if (chestItem != nullptr && dynamic_cast<ElytraItem*>(chestItem->getItem()) != nullptr && !mob->isInvisible())
+		{
+			static ResourceLocation elytraTexture(L"item/elytra.png");
+			bindTexture(&elytraTexture);
 
-		if (mob->fishing != nullptr)
-		{
-			item = std::make_shared<ItemInstance>(Item::stick);
-		}
+			float brightness2 = SharedConstants::TEXTURE_LIGHTING ? 1 : mob->getBrightness(a);
+			glColor3f(brightness2, brightness2, brightness2);
 
-		UseAnim anim = UseAnim_none;//null;
-		if (mob->getUseItemDuration() > 0)
-		{
-			anim = item->getUseAnimation();
-		}
 
-		if (item->id < 256 && TileRenderer::canRender(Tile::tiles[item->id]->getRenderShape()))
-		{
-			float s = 8 / 16.0f;
-			glTranslatef(-0 / 16.0f, 3 / 16.0f, -5 / 16.0f);
-			s *= 0.75f;
-			glRotatef(20, 1, 0, 0);
-			glRotatef(45, 0, 1, 0);
-			glScalef(-s, -s, s);
-		}
-		else if (item->id == Item::bow->id)
-		{
-			float s = 10 / 16.0f;
-			glTranslatef(0 / 16.0f, 2 / 16.0f, 5 / 16.0f);
-			glRotatef(-20, 0, 1, 0);
-			glScalef(s, -s, s);
-			glRotatef(-100, 1, 0, 0);
-			glRotatef(45, 0, 1, 0);
-		}
-		else if (Item::items[item->id]->isHandEquipped())
-		{
-			float s = 10 / 16.0f;
-			if (Item::items[item->id]->isMirroredArt())
+			float wf = 0.2617994f;
+			float wf1 = -0.2617994f;
+			float wf2 = resModel->body->y;
+			float wf3 = 0.0f;
+
+			if (mob->isElytraFlying() && !EntityRenderDispatcher::instance->isInventoryRender)
 			{
-				glRotatef(180, 0, 0, 1);
-				glTranslatef(0, -2 / 16.0f, 0);
+				float f4 = 1.0f;
+				if (mob->yd < 0.0)
+				{
+					double speed = sqrt(mob->xd * mob->xd + mob->yd * mob->yd + mob->zd * mob->zd);
+					if (speed > 0.0)
+					{
+						double normY = mob->yd / speed;
+						f4 = 1.0f - (float)pow(-normY, 1.5);
+						if (f4 < 0.0f) f4 = 0.0f;
+						if (f4 > 1.0f) f4 = 1.0f;
+					}
+				}
+				wf = f4 * 0.34906584f + (1.0f - f4) * wf;
+				wf1 = f4 * (-(float)(PI / 2.0)) + (1.0f - f4) * wf1;
 			}
+			else if (mob->isSneaking())
+			{
+				wf = (float)(PI * 2.0 / 9.0);
+				wf1 = -(float)(PI / 4.0);
+				wf2 = 0.0f;
+				wf3 = 0.08726646f;
+			}
+
+			if (EntityRenderDispatcher::instance->isInventoryRender)
+			{
+				mob->rotateElytraX = wf;
+				mob->rotateElytraY = wf3;
+				mob->rotateElytraZ = wf1;
+			}
+			else
+			{
+				mob->rotateElytraX += (wf - mob->rotateElytraX) * 0.3f;
+				mob->rotateElytraY += (wf3 - mob->rotateElytraY) * 0.3f;
+				mob->rotateElytraZ += (wf1 - mob->rotateElytraZ) * 0.3f;
+			}
+
+
+			humanoidModel->elytraRight->y = wf2;
+			humanoidModel->elytraRight->xRot = mob->rotateElytraX;
+			humanoidModel->elytraRight->yRot = mob->rotateElytraY;
+			humanoidModel->elytraRight->zRot = mob->rotateElytraZ;
+
+			humanoidModel->elytraLeft->y = wf2;
+			humanoidModel->elytraLeft->xRot = mob->rotateElytraX;
+			humanoidModel->elytraLeft->yRot = -mob->rotateElytraY;
+			humanoidModel->elytraLeft->zRot = -mob->rotateElytraZ;
+
+			glPushMatrix();
+			glTranslatef(0, 0.0f, (2.0f + 0.125f) / 16.0f);
+			humanoidModel->renderElytra(1 / 16.0f, true);
+			glPopMatrix();
+		}
+
+
+		shared_ptr<ItemInstance> item = mob->inventory->getSelected();
+
+		if (item != nullptr)
+		{
+			glPushMatrix();
+			resModel->arm0->translateTo(1 / 16.0f);
+			glTranslatef(-1 / 16.0f, 7 / 16.0f, 1 / 16.0f);
+
+			if (mob->fishing != nullptr)
+			{
+				item = std::make_shared<ItemInstance>(Item::stick);
+			}
+
+			UseAnim anim = UseAnim_none;//null;
 			if (mob->getUseItemDuration() > 0)
 			{
-				if (anim == UseAnim_block)
+				anim = item->getUseAnimation();
+			}
+
+			if (item->id < 256 && TileRenderer::canRender(Tile::tiles[item->id]->getRenderShape()))
+			{
+				float s = 8 / 16.0f;
+				glTranslatef(-0 / 16.0f, 3 / 16.0f, -5 / 16.0f);
+				s *= 0.75f;
+				glRotatef(20, 1, 0, 0);
+				glRotatef(45, 0, 1, 0);
+				glScalef(-s, -s, s);
+			}
+			else if (item->id == Item::bow->id)
+			{
+				float s = 10 / 16.0f;
+				glTranslatef(0 / 16.0f, 2 / 16.0f, 5 / 16.0f);
+				glRotatef(-20, 0, 1, 0);
+				glScalef(s, -s, s);
+				glRotatef(-100, 1, 0, 0);
+				glRotatef(45, 0, 1, 0);
+			}
+			else if (Item::items[item->id]->isHandEquipped())
+			{
+				float s = 10 / 16.0f;
+				if (Item::items[item->id]->isMirroredArt())
 				{
-					glTranslatef(0.05f, 0, -0.1f);
-					glRotatef(-50, 0, 1, 0);
-					glRotatef(-10, 1, 0, 0);
-					glRotatef(-60, 0, 0, 1);
+					glRotatef(180, 0, 0, 1);
+					glTranslatef(0, -2 / 16.0f, 0);
+				}
+				if (mob->getUseItemDuration() > 0)
+				{
+					if (anim == UseAnim_block)
+					{
+						glTranslatef(0.05f, 0, -0.1f);
+						glRotatef(-50, 0, 1, 0);
+						glRotatef(-10, 1, 0, 0);
+						glRotatef(-60, 0, 0, 1);
+					}
+				}
+				glTranslatef(0, 3 / 16.0f, 0);
+				glScalef(s, -s, s);
+				glRotatef(-100, 1, 0, 0);
+				glRotatef(45, 0, 1, 0);
+			}
+			else if (item->id == Item::skull_Id)
+			{
+				float s = 0.5f;
+				glTranslatef(0, -3 / 16.0f, -4 / 16.0f);
+				glRotatef(45, 1, 0, 0);
+				glRotatef(45, 0, 1, 0);
+				glScalef(-s, -s, s);
+			}
+			else
+			{
+				float s = 6 / 16.0f;
+				glTranslatef(+4 / 16.0f, +3 / 16.0f, -3 / 16.0f);
+				glScalef(s, s, s);
+				glRotatef(60, 0, 0, 1);
+				glRotatef(-90, 1, 0, 0);
+				glRotatef(20, 0, 0, 1);
+			}
+
+			if (item->getItem()->hasMultipleSpriteLayers())
+			{
+				for (int layer = 0; layer <= 1; layer++)
+				{
+					int col = item->getItem()->getColor(item, layer);
+					float red = ((col >> 16) & 0xff) / 255.0f;
+					float g = ((col >> 8) & 0xff) / 255.0f;
+					float b = ((col) & 0xff) / 255.0f;
+
+					glColor4f(red, g, b, 1);
+					this->entityRenderDispatcher->itemInHandRenderer->renderItem(mob, item, layer, false);
 				}
 			}
-			glTranslatef(0, 3 / 16.0f, 0);
-			glScalef(s, -s, s);
-			glRotatef(-100, 1, 0, 0);
-			glRotatef(45, 0, 1, 0);
-		}
-		else
-		{
-			float s = 6 / 16.0f;
-			glTranslatef(+4 / 16.0f, +3 / 16.0f, -3 / 16.0f);
-			glScalef(s, s, s);
-			glRotatef(60, 0, 0, 1);
-			glRotatef(-90, 1, 0, 0);
-			glRotatef(20, 0, 0, 1);
-		}
-
-		if (item->getItem()->hasMultipleSpriteLayers())
-		{
-			for (int layer = 0; layer <= 1; layer++)
+			else
 			{
-				int col = item->getItem()->getColor(item, layer);
+				int col = item->getItem()->getColor(item, 0);
 				float red = ((col >> 16) & 0xff) / 255.0f;
 				float g = ((col >> 8) & 0xff) / 255.0f;
 				float b = ((col) & 0xff) / 255.0f;
 
 				glColor4f(red, g, b, 1);
-				this->entityRenderDispatcher->itemInHandRenderer->renderItem(mob, item, layer, false);
+				this->entityRenderDispatcher->itemInHandRenderer->renderItem(mob, item, 0);
 			}
-		}
-		else
-		{
-			int col = item->getItem()->getColor(item, 0);
-			float red = ((col >> 16) & 0xff) / 255.0f;
-			float g = ((col >> 8) & 0xff) / 255.0f;
-			float b = ((col) & 0xff) / 255.0f;
 
-			glColor4f(red, g, b, 1);
-			this->entityRenderDispatcher->itemInHandRenderer->renderItem(mob, item, 0);
+			glPopMatrix();
 		}
-
-		glPopMatrix();
 	}
 }
 
@@ -746,10 +834,34 @@ void PlayerRenderer::setupRotations(shared_ptr<LivingEntity> _mob, float bob, fl
 		glRotatef(getFlipDegrees(mob), 0, 0, 1);
 		glRotatef(270, 0, 1, 0);
 	}
-	else
+	else if (mob->isElytraFlying() && !EntityRenderDispatcher::instance->isInventoryRender)
 	{
 		LivingEntityRenderer::setupRotations(mob, bob, bodyRot, a);
+
+		float f = (float)mob->ticksElytraFlying + a;
+		float f1 = Mth::clamp(f * f / 100.0f, 0.0f, 1.0f);
+		glRotatef(f1 * (-90.0f - mob->xRot), 1.0f, 0.0f, 0.0f);
+
+		Vec3* look = mob->getLookAngle();
+		double d0 = mob->xd * mob->xd + mob->zd * mob->zd; 
+		double d1 = look->x * look->x + look->z * look->z;
+
+		if (d0 > 0.0 && d1 > 0.0)
+		{
+			double d2 = (mob->xd * look->x + mob->zd * look->z) / (sqrt(d0) * sqrt(d1));
+			if (d2 > 1.0)  d2 = 1.0;
+			if (d2 < -1.0) d2 = -1.0;
+			double d3 = mob->xd * look->z - mob->zd * look->x; 
+			float sign = (d3 >= 0.0) ? 1.0f : -1.0f;
+			glRotatef(sign * (float)(acos(d2) * 180.0 / PI), 0.0f, 1.0f, 0.0f);
+		}
+
 	}
+		else
+	{
+        LivingEntityRenderer::setupRotations(mob, bob, bodyRot, a);
+    }
+
 }
 
 // 4J Added override to stop rendering shadow if player is invisible

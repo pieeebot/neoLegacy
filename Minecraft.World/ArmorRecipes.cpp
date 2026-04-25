@@ -92,6 +92,8 @@ ArmorRecipes::_eArmorType ArmorRecipes::GetArmorType(int iId)
 	case Item::chestplate_iron_Id:	
 	case Item::chestplate_diamond_Id:
 	case Item::chestplate_gold_Id:
+	case Item::elytra_Id:
+
 		return eArmorType_Chestplate;
 		break;
 

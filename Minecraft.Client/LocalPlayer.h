@@ -31,6 +31,10 @@ protected:
 	int sprintTriggerTime;
 	bool sprintTriggerRegisteredReturn;		// 4J added
 	bool twoJumpsRegistered; // 4J added
+	int m_elytraCancelPressCount;  
+	int m_elytraCancelWindow;      
+	int m_elytraSoundTicks;       
+
 
 	unsigned int m_uiInactiveTicks; // To measure time for idle anims
 

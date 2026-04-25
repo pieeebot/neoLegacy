@@ -88,6 +88,17 @@ void HumanoidModel::_init(float g, float yOffset, int texWidth, int texHeight, b
     cloak = new ModelPart(this, 0, 0);
     cloak->addHumanoidBox(-5, -0, -1, 10, 16, 1, g); // Cloak
 
+	elytraRight = new ModelPart(this, 22, 0);
+	elytraRight->addHumanoidBox(-10.0f, 0.0f, 0.0f, 10, 20, 2, 0.0f);
+	elytraRight->setPos(5.0f, 0.0f + yOffset, 0.0f); // Wing Left
+
+	elytraLeft = new ModelPart(this, 22, 0);
+	elytraLeft->bMirror = true;
+	elytraLeft->addHumanoidBox(0.0f, 0.0f, 0.0f, 10, 20, 2, 0.0f);
+	elytraLeft->setPos(-5.0f, 0.0f + yOffset, 0.0f); // Wing Right
+
+
+
     ear = new ModelPart(this, 24, 0);
     ear->addHumanoidBox(-3, -6, -1, 6, 6, 1, g); // Ear
         
@@ -186,6 +197,8 @@ void HumanoidModel::_init(float g, float yOffset, int texWidth, int texHeight, b
 	// 4J added - compile now to avoid random performance hit first time cubes are rendered
 	// 4J Stu - Not just performance, but alpha+depth tests don't work right unless we compile here
 	cloak->compile(1.0f/16.0f);
+	elytraLeft->compile(1.0f / 16.0f);
+	elytraRight->compile(1.0f / 16.0f);
 	ear->compile(1.0f/16.0f);
 	head->compile(1.0f/16.0f);
 	body->compile(1.0f/16.0f);
@@ -211,6 +224,9 @@ void HumanoidModel::_init(float g, float yOffset, int texWidth, int texHeight, b
 	sneaking=false;
 	idle=false;
 	bowAndArrow=false;
+	elytraFlying = false;
+	elytraCrouching = false;
+
 
 	// 4J added
 	eating = false;
@@ -881,6 +897,57 @@ void HumanoidModel::setupAnim(float time, float r, float bob, float yRot, float 
 			}
 		}
 	}
+
+	if (elytraFlying)
+	{
+		if (elytraCrouching)
+		{
+			arm0->xRot = PI;  arm0->yRot = 0.0f; arm0->zRot = 0.0f; arm0->y = 2.0f;
+			if (sleeve0) { sleeve0->xRot = PI; sleeve0->yRot = 0.0f; sleeve0->zRot = 0.0f; sleeve0->y = 2.0f; }
+
+			arm1->xRot = 0.0f; arm1->yRot = 0.0f; arm1->zRot = 0.0f; arm1->y = 2.0f;
+			if (sleeve1) { sleeve1->xRot = 0.0f; sleeve1->yRot = 0.0f; sleeve1->zRot = 0.0f; sleeve1->y = 2.0f; }
+
+			leg0->xRot = 0.0f; leg0->yRot = 0.0f; leg0->zRot = 0.0f;
+			leg1->xRot = 0.0f; leg1->yRot = 0.0f; leg1->zRot = 0.0f;
+			if (pants0) { pants0->xRot = 0.0f; pants0->yRot = 0.0f; pants0->zRot = 0.0f; }
+			if (pants1) { pants1->xRot = 0.0f; pants1->yRot = 0.0f; pants1->zRot = 0.0f; }
+		}
+		else
+		{
+			float elytraTime = (float)(entity->tickCount) * 0.3f;  
+			float spd2 = (float)(entity->xd * entity->xd + entity->yd * entity->yd + entity->zd * entity->zd);
+			float fDamp = spd2 / 0.2f;
+			fDamp = fDamp * fDamp * fDamp;
+			if (fDamp < 1.0f) fDamp = 1.0f;
+
+			float armAmp = 2.0f * r * 0.5f / fDamp;
+			float legAmp = 1.4f * r / fDamp;
+
+			arm0->xRot = Mth::cos(elytraTime + PI) * armAmp;
+			arm0->yRot = 0.0f; arm0->zRot = 0.0f; arm0->y = 2.0f;
+			if (sleeve0) { sleeve0->xRot = arm0->xRot; sleeve0->yRot = 0.0f; sleeve0->zRot = 0.0f; sleeve0->y = 2.0f; }
+
+			arm1->xRot = Mth::cos(elytraTime) * armAmp;
+			arm1->yRot = 0.0f; arm1->zRot = 0.0f; arm1->y = 2.0f;
+			if (sleeve1) { sleeve1->xRot = arm1->xRot; sleeve1->yRot = 0.0f; sleeve1->zRot = 0.0f; sleeve1->y = 2.0f; }
+
+			leg0->xRot = Mth::cos(elytraTime) * legAmp;
+			leg0->yRot = 0.0f; leg0->zRot = 0.0f;
+			leg1->xRot = Mth::cos(elytraTime + PI) * legAmp;
+			leg1->yRot = 0.0f; leg1->zRot = 0.0f;
+			if (pants0) { pants0->xRot = leg0->xRot; pants0->yRot = 0.0f; pants0->zRot = 0.0f; }
+			if (pants1) { pants1->xRot = leg1->xRot; pants1->yRot = 0.0f; pants1->zRot = 0.0f; }
+		}
+
+		body->xRot = 0.0f;
+		body->z = 0.0f;
+
+
+		head->xRot = -(float)(PI / 4.0f);   
+		hair->xRot = head->xRot;
+	}
+
 }
 
 void HumanoidModel::renderHair(float scale,bool usecompiled)
@@ -902,6 +969,11 @@ void HumanoidModel::renderEars(float scale,bool usecompiled)
 void HumanoidModel::renderCloak(float scale,bool usecompiled)
 {
 	cloak->render(scale,usecompiled);
+}
+void HumanoidModel::renderElytra(float scale, bool usecompiled)
+{
+	elytraRight->render(scale, usecompiled);
+	elytraLeft->render(scale, usecompiled);
 }
 
 void HumanoidModel::render(HumanoidModel *model, float scale, bool usecompiled)

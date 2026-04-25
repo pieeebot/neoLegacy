@@ -32,6 +32,8 @@ public:
     float playerRotX;
     Options *options;
 	bool isGuiRender;		// 4J added
+    bool isInventoryRender;
+
 
     double xPlayer, yPlayer, zPlayer;
 

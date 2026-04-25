@@ -64,6 +64,13 @@ private:
     float cameraRoll;
     float cameraRollO;
 
+	float m_yBob;
+	float m_yBobO;
+
+	float m_elytaCamShift;
+
+
+
 	// 4J - changes brought forward from 1.8.2
 	static const int NUM_LIGHT_TEXTURES = 4;// * 3;
 	int		 lightTexture[NUM_LIGHT_TEXTURES];		// 4J - changed so that we have one lightTexture per level, to support split screen

@@ -272,6 +272,8 @@ const WCHAR *ConsoleSoundEngine::wchSoundNames[eSoundType_MAX]=
 	L"item.armor.equip_generic6",
 
 	L"damage.critical",				//eSoundType_DAMAGE_CRITICAL,
+	L"item.elytra.flying"			// eSoundType_ITEM_ELYTRA_FLYING
+
 };
 
 

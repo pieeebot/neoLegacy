@@ -11,6 +11,8 @@
 #include "MultiPlayerLocalPlayer.h"
 #include "Minimap.h"
 #include "MultiPlayerLevel.h"
+#include "SkullTileRenderer.h"
+#include "../Minecraft.World/Facing.h"
 #include "../Minecraft.World/net.minecraft.world.item.h"
 #include "../Minecraft.World/net.minecraft.world.level.tile.h"
 #include "../Minecraft.World/net.minecraft.world.entity.h"
@@ -237,6 +239,17 @@ void ItemInHandRenderer::renderItem(shared_ptr<LivingEntity> mob, shared_ptr<Ite
     }
 
     glPushMatrix();
+
+	/*if (item->id == Item::skull_Id && SkullTileRenderer::instance != nullptr)
+	{
+		wstring extra = L"";
+		if (item->hasTag() && item->getTag()->contains(L"SkullOwner"))
+			extra = item->getTag()->getString(L"SkullOwner");
+		SkullTileRenderer::instance->renderSkull(-0.5f, 0.0f, -0.5f, Facing::UP, 0.0f, item->getAuxValue(), extra);
+		glPopMatrix();
+		return;
+	}*/
+
 	Tile *tile = Tile::tiles[item->id];
     if (item->getIconType() == Icon::TYPE_TERRAIN && tile != nullptr && TileRenderer::canRender(tile->getRenderShape()))
 	{
@@ -680,6 +693,16 @@ void ItemInHandRenderer::render(float a)
 
             renderItem(player, item, 1, false);
         }
+		//else if (item->id == Item::skull_Id && SkullTileRenderer::instance != nullptr)
+		//{
+		//	wstring extra = L"";
+		//	if (item->hasTag() && item->getTag()->contains(L"SkullOwner"))
+		//		extra = item->getTag()->getString(L"SkullOwner");
+		//	glEnable(GL_RESCALE_NORMAL);
+		//	glScalef(2.0f, 2.0f, 2.0f);
+		//	SkullTileRenderer::instance->renderSkull(-0.5f, 0.0f, -0.5f, Facing::UP, 0.0f, item->getAuxValue(), extra);
+		//	glDisable(GL_RESCALE_NORMAL);
+		//}
 		else
 		{
             renderItem(player, item, 0, false);

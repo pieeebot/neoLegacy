@@ -31,6 +31,11 @@ bool ArmorSlot::mayPlace(shared_ptr<ItemInstance> item)
 	{
 		return slotNum == 0;
 	}
+	if (item->getItem()->id == Item::elytra_Id)
+	{
+		return slotNum == ArmorItem::SLOT_TORSO;
+	}
+
 	return false;
 }
 

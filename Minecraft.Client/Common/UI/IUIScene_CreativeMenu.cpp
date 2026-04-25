@@ -383,6 +383,7 @@ void IUIScene_CreativeMenu::staticCtor()
 		ITEM(Item::minecart_tnt_Id)
 		ITEM(Item::saddle_Id)
 		ITEM(Item::boat_Id)
+		ITEM(Item::elytra_Id)
 
 	// Miscellaneous
 	DEF(eCreativeInventory_Misc)

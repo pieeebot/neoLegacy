@@ -9393,4 +9393,7 @@ All Ender Chests in a world are linked. Items placed into an Ender Chest are acc
 	<data name="IDS_TILE_STONESLAB_REDSAND">
 		<value>Red Sandstone Slab</value>
 	</data>
+	<data name="IDS_ITEM_ELYTRA">
+		<value>Elytra</value>
+	</data>
 </root>

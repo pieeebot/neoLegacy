@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ArmorItem.h"
+#include "ElytraItem.h"
 #include "BedItem.h"
 #include "BoatItem.h"
 #include "BowItem.h"
