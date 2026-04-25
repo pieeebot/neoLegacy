@@ -96,10 +96,61 @@ if(PLATFORM_NAME STREQUAL "Windows64")
 endif()
 list(APPEND MINECRAFT_SHARED_DEFINES ${PLATFORM_DEFINES})
 
+# handle fxc shader compilation on non-windows platforms
+if(CMAKE_HOST_UNIX AND CMAKE_CROSSCOMPILING AND PLATFORM_NAME STREQUAL "Windows64")
+  set(_LCE_FXC_CANDIDATES
+    "${CMAKE_SOURCE_DIR}/Minecraft.Client/Windows64/Shaders/fxc.exe"
+    "${CMAKE_SOURCE_DIR}/Minecraft.Client/Windows64/4JLibs/impls/Windows_Libs/Render/shaders/fxc.exe"
+  )
+
+  unset(LCE_FXC_EXE)
+  foreach(_LCE_FXC_CANDIDATE IN LISTS _LCE_FXC_CANDIDATES)
+    if(EXISTS "${_LCE_FXC_CANDIDATE}")
+      set(LCE_FXC_EXE "${_LCE_FXC_CANDIDATE}")
+      break()
+    endif()
+  endforeach()
+
+  if(LCE_FXC_EXE)
+    find_program(LCE_WINE_PROGRAM NAMES wine)
+    if(NOT LCE_WINE_PROGRAM)
+      message(FATAL_ERROR "Found fxc.exe at '${LCE_FXC_EXE}', but could not find wine in the system PATH.")
+    endif()
+
+    set(_LCE_FXC_WRAPPER_DIR "${CMAKE_BINARY_DIR}/tools")
+    set(_LCE_FXC_WRAPPER "${_LCE_FXC_WRAPPER_DIR}/fxc")
+    file(MAKE_DIRECTORY "${_LCE_FXC_WRAPPER_DIR}")
+    configure_file(
+      "${CMAKE_SOURCE_DIR}/cmake/FxcWineWrapper.sh.in"
+      "${_LCE_FXC_WRAPPER}"
+      @ONLY
+    )
+    file(CHMOD "${_LCE_FXC_WRAPPER}"
+      PERMISSIONS
+      OWNER_READ OWNER_WRITE OWNER_EXECUTE
+      GROUP_READ GROUP_EXECUTE
+      WORLD_READ WORLD_EXECUTE
+    )
+
+    set(FXC_COMPILER "${_LCE_FXC_WRAPPER}" CACHE FILEPATH "Path to FXC compiler" FORCE)
+    message(STATUS "Translating FXC through Wine: ${LCE_WINE_PROGRAM} ${LCE_FXC_EXE}")
+  endif()
+endif()
+
 # ---
 # Sources
 # ---
 add_subdirectory("Minecraft.Client/${PLATFORM_NAME}/4JLibs")
+
+if(CMAKE_CROSSCOMPILING AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  # clang apparently doesnt like whatever __m128 is so we gotta define it manually
+  if(TARGET 4JLibs.${PLATFORM_NAME}.Render)
+    target_compile_definitions(4JLibs.${PLATFORM_NAME}.Render PRIVATE
+      _XM_NO_INTRINSICS_
+      m128_f32=vector4_f32
+    )
+  endif()
+endif()
 
 add_subdirectory(Minecraft.World)
 add_subdirectory(Minecraft.Client)
