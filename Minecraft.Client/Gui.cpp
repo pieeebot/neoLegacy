@@ -710,31 +710,25 @@ void Gui::render(float a, bool mouseFree, int xMouse, int yMouse)
 				glTranslatef(static_cast<float>(xo), static_cast<float>(yo), 50);
 				
 				// correct paper doll aspect ratio
-				float ss = 12;
+				float ss = 12.0f;
 				float aspectScaleX = 1.0f;
 				float aspectScaleY = 1.0f;
 
 				extern int g_rScreenWidth;
 				extern int g_rScreenHeight;
-				float screenAspect = (float)g_rScreenWidth / (float)g_rScreenHeight;
-				float targetAspect = 16.0f / 9.0f;
-				
-				// apply correction if window is not already at a 16:9 aspect ratio
-				float correction = 1.0f;
 
-				if (fabs(screenAspect - targetAspect) > 0.01f) {
-					if (g_rScreenHeight > 0) {
-						correction = 1080.0f / (float)g_rScreenHeight;
-						correction = std::clamp(correction, 0.5f, 2.0f);
-
+				if (g_rScreenWidth > 0 && g_rScreenHeight > 0) {
+					float screenAspect = (float)g_rScreenWidth / (float)g_rScreenHeight;
+					const float targetAspect = 16.0f / 9.0f;
+					
+					// apply correction if window is not already at a 16:9 aspect ratio
+					if (fabs(screenAspect - targetAspect) > 0.01f) {
 						if (screenAspect > targetAspect)
 							aspectScaleX = targetAspect / screenAspect;
 						else
 							aspectScaleY = screenAspect / targetAspect;
 					}
 				}
-
-				glTranslatef((float)xo, (float)yo, 50.0f);
 
 				glScalef(-ss * aspectScaleX, ss * aspectScaleY, ss);
 				glRotatef(180, 0, 0, 1);
