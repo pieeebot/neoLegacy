@@ -906,7 +906,7 @@ void LocalPlayer::awardStat(Stat *stat, byteArray param)
 
 		wstring path = L"Graphics\\Achievements\\TROP" +
 			(iconStr.empty() ? L"000" : iconStr) +
-			L".PNG";
+			L".png";
 		byteArray ba = app.getArchiveFile(path);
 		//auto t = ui.GetTopScene(0);
 		//t->registerSubstitutionTexture(path, ba.data, ba.length);

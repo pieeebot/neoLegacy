@@ -81,7 +81,8 @@ Stat* CommonStats::get_blocksPlaced(int blockId)
 #if (defined _EXTENDED_ACHIEVEMENTS) && (!defined _XBOX_ONE)
 	return Stats::blocksPlaced[blockId];
 #else
-	return nullptr;
+	return Stats::blocksPlaced[blockId];
+	//return nullptr;
 #endif
 }
 
@@ -95,7 +96,7 @@ Stat *CommonStats::get_itemsCollected(int itemId, int itemAux)
 #if (defined _EXTENDED_ACHIEVEMENTS) && (!defined _XBOX_ONE)
 	if (itemId == Tile::wool_Id)			return Stats::rainbowCollection[itemAux];
 #endif
-
+	if (itemId == Tile::wool_Id)			return Stats::rainbowCollection[itemAux];
 	if (itemId != Item::emerald_Id)			return Stats::itemsCollected[itemId];
 	else									return nullptr;
 }
@@ -110,8 +111,8 @@ Stat *CommonStats::get_itemsUsed(int itemId)
 	// 4J-JEV: I've done the same thing here, we can't place these items anyway.
 	if (itemId == Item::porkChop_cooked_Id)	return Stats::blocksPlaced[itemId];
 #endif
-
-	return nullptr;
+	if (itemId == Item::porkChop_cooked_Id)	return Stats::blocksPlaced[itemId];
+	//return nullptr;
 }
 
 Stat *CommonStats::get_itemsBought(int itemId)
@@ -133,7 +134,8 @@ Stat *CommonStats::get_enteredBiome(int biomeId)
 #if (defined _EXTENDED_ACHIEVEMENTS) && (!defined _XBOX_ONE)
 	return Stats::biomesVisisted[biomeId];
 #else
-	return nullptr;
+	return Stats::biomesVisisted[biomeId];
+	//return nullptr;
 #endif
 }
 

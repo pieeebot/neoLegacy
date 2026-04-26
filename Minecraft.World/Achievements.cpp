@@ -155,7 +155,7 @@ void Achievements::staticCtor()
 	Achievements::adventuringTime		= (new Achievement(eAward_adventuringTime,			L"adventuringTime",			0,0,	Tile::bookshelf,		(Achievement*) nullptr, "031", IDS_ACHIEVE_NAME_ADVENTURING_TIME, IDS_ACHIEVE_DESC_ADVENTURING_TIME) )->setAwardLocallyOnly()->postConstruct();
 	Achievements::repopulation			= (new Achievement(eAward_repopulation,				L"repopulation",			7,-5,	Tile::bookshelf,		(Achievement*) nullptr, "032", IDS_ACHIEVE_NAME_REPOPULATION, IDS_ACHIEVE_DESC_REPOPULATION) )->postConstruct();
 	//Achievements::porkChoop			// // //																						// // //
-	Achievements::diamondsToYou			= (new Achievement(eAward_diamondsToYou,			L"diamondsToYou",			0,0,	Tile::bookshelf,		(Achievement*) nullptr, "033", IDS_ACHIEVE_NAME_DIAMONDS, IDS_ACHIEVE_DESC_DIAMONDS) )->postConstruct();
+	Achievements::diamondsToYou			= (new Achievement(eAward_diamondsToYou,			L"diamondsToYou",			0,0,	Tile::bookshelf,		(Achievement*) nullptr, "033", IDS_ACHIEVE_NAME_DIAMONDS_TO_YOU, IDS_ACHIEVE_DESC_DIAMONDS_TO_YOU) )->postConstruct();
 	//Achievements::passingTheTime		= (new Achievement(eAward_play100Days,				L"passingTheTime",			0,0,	Tile::bookshelf,		(Achievement*) nullptr) )->postConstruct();	
 	//Achievements::archer				= (new Achievement(eAward_arrowKillCreeper,			L"archer",					0,0,	Tile::bookshelf,		(Achievement*) nullptr) )->postConstruct();	
 	Achievements::theHaggler			= (new Achievement(eAward_theHaggler,				L"theHaggler",				0,0,	Tile::bookshelf,		(Achievement*) nullptr, "037", IDS_ACHIEVE_NAME_THE_HAGGLER, IDS_ACHIEVE_DESC_THE_HAGGLER) )->setAwardLocallyOnly()->postConstruct();

@@ -37,13 +37,13 @@ UIScene_AchievementsMenu::UIScene_AchievementsMenu(int iPad, void* _initData, UI
 
 			path = L"Graphics\\Achievements\\TROP" +
 				(iconStr.empty() ? L"000" : iconStr) +
-				L".PNG";
+				L".png";
 			byteArray ba = app.getArchiveFile(path);
 			registerSubstitutionTexture(path, ba.data, ba.length);
 		}
 
 
-		std::string result = "Graphics\\Achievements\\" "TROP" + Achievements::achievements->at(i)->iconInt + ".PNG"; //media\\
+		std::string result = "Graphics\\Achievements\\" "TROP" + Achievements::achievements->at(i)->iconInt + ".png"; //media\\
 		
 		m_achievementsList.addnewItem(i+1, path);
 		if (Minecraft::GetInstance()->stats[Minecraft::GetInstance()->player->GetXboxPad()]->hasTaken(Achievements::achievements->at(i)))
