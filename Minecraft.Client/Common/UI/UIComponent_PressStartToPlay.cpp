@@ -70,12 +70,61 @@ void UIComponent_PressStartToPlay::handleReload()
 		m_controlPressStartPanel.setVisible(showPressStart);
 }
 
+void UIComponent_PressStartToPlay::ShowAchievementToast(string achievementName, string achievementDescription, string achT)
+{
+	/*IggyStringUTF8 stringVal;
+	stringVal.string = (char*)label.c_str();
+	stringVal.length = static_cast<S32>(label.length());
+	value[0].type = IGGY_DATATYPE_string_UTF8;
+	value[0].string8 = stringVal;*/
+
+	IggyDataValue result;
+	IggyDataValue value[3];
+
+	IggyStringUTF8 stringVal1;
+	value[0].type = IGGY_DATATYPE_string_UTF8;
+	stringVal1.string = (char*)achievementName.c_str();
+	stringVal1.length = static_cast<S32>(achievementName.length());
+	value[0].string8 = stringVal1;
+
+	IggyStringUTF8 stringVal2;
+	stringVal2.string = (char*)achievementDescription.c_str();
+	stringVal2.length = static_cast<S32>(achievementDescription.length());
+	value[1].type = IGGY_DATATYPE_string_UTF8;
+	value[1].string8 = stringVal2;
+
+	IggyStringUTF8 stringVal3;
+	stringVal3.string = (char*)achT.c_str();
+	stringVal3.length = static_cast<S32>(achT.length()+3);
+	value[2].type = IGGY_DATATYPE_string_UTF8;
+	value[2].string8 = stringVal3;
+
+	IggyResult out = IggyPlayerCallMethodRS(getMovie(), &result, IggyPlayerRootPath(getMovie()), m_funcShowAchToast, 3, value);
+
+	addTimer(1, 5000);
+
+	
+}
+
+void UIComponent_PressStartToPlay::HideAchievementToast()
+{
+	IggyDataValue result;
+	IggyResult out = IggyPlayerCallMethodRS(getMovie(), &result, IggyPlayerRootPath(getMovie()), m_funcHideAchToast, 0, nullptr);
+
+	Minecraft::GetInstance()->achID = 0;
+}
+
 void UIComponent_PressStartToPlay::handleTimerComplete(int id)
 {
 	m_controlPressStartPanel.setVisible(false);
 	for(unsigned int i = 0; i < XUSER_MAX_COUNT; ++i)
 	{
 		m_showingPressStart[i] = false;
+		if (id == 1) {
+			HideAchievementToast();
+			killTimer(id);
+			ui.toastOn = false;
+		}
 	}
 	ui.ClearPressStart();
 }

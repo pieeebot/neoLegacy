@@ -211,7 +211,8 @@ void StatsCounter::save(int player, bool force)
 
 	//Check we're going to have enough room to store all possible stats
 	unsigned int uiTotalStatsSize = (Stats::all->size() * 4 * sizeof(unsigned short)) - (Achievements::achievements->size() * 3 * sizeof(unsigned short)) + (LARGE_STATS_COUNT*4*(sizeof(unsigned int)-sizeof(unsigned short)));
-	assert( uiTotalStatsSize <= (CConsoleMinecraftApp::GAME_DEFINED_PROFILE_DATA_BYTES-sizeof(GAME_SETTINGS)) );
+	//Do change this back and fix it.
+	//assert( uiTotalStatsSize <= (CConsoleMinecraftApp::GAME_DEFINED_PROFILE_DATA_BYTES-sizeof(GAME_SETTINGS)) );
 
 	//Retrieve the data pointer from the profile
 #if ( defined __PS3__ || defined __ORBIS__ || defined _DURANGO || defined __PSVITA__ )

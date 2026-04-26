@@ -18,7 +18,7 @@ class UIController : public IUIController
 {
 public:
 	static int64_t iggyAllocCount;
-
+	bool toastOn = false;
 	// MGH - added to prevent crash loading Iggy movies while the skins were being reloaded
 	static CRITICAL_SECTION ms_reloadSkinCS;
 	static bool ms_bReloadSkinCSInitialised;
@@ -102,6 +102,9 @@ private:
 		eLibrary_HUD,
 		eLibrary_Tooltips,
 		eLibrary_Default,
+
+		eLibrary_LCDefault,
+		eLibrary_LCInGame,
 
 #if defined(_WINDOWS64)
 		// Non-HD skin libraries needed by 720p/480p scene SWFs.
@@ -208,6 +211,9 @@ protected:
 	UIGroup *m_groups[eUIGroup_COUNT];
 
 public:
+
+	auto& getGroups() { return m_groups; }
+
 	void showComponent(int iPad, EUIScene scene, EUILayer layer, EUIGroup group, bool show)
 	{
 		m_groups[group]->showComponent(iPad, scene, layer, show);
@@ -388,6 +394,7 @@ public:
 	virtual bool PressStartPlaying(unsigned int iPad);
 	virtual void ShowPressStart(unsigned int iPad);
 	virtual void HidePressStart();
+	void ShowAchievementToast(string achievementName, string achievementDescription, byteArray b, string achT = "");
 	void ClearPressStart();
 
 	virtual C4JStorage::EMessageResult RequestAlertMessage(UINT uiTitle, UINT uiText, UINT *uiOptionA,UINT uiOptionC, DWORD dwPad=XUSER_INDEX_ANY, int( *Func)(LPVOID,int,const C4JStorage::EMessageResult)=nullptr,LPVOID lpParam=nullptr, WCHAR *pwchFormatString=nullptr);

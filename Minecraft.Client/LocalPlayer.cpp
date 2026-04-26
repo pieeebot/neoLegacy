@@ -11,7 +11,7 @@
 #include "CraftingScreen.h"
 #include "FurnaceScreen.h"
 #include "TrapScreen.h"
-
+#include "../Minecraft.Client/Common/UI/UIScene.h"
 #include "MultiPlayerLocalPlayer.h"
 #include "CreativeMode.h"
 #include "GameRenderer.h"
@@ -864,6 +864,16 @@ void LocalPlayer::displayClientMessage(int messageId)
 	minecraft->gui->displayClientMessage(messageId, GetXboxPad());
 }
 
+// Helper to convert LPCWSTR -> std::string (UTF-8)
+static std::string WideToUtf8(LPCWSTR wide)
+{
+	if (!wide) return {};
+	int size = WideCharToMultiByte(CP_UTF8, 0, wide, -1, nullptr, 0, nullptr, nullptr);
+	std::string result(size - 1, '\0');
+	WideCharToMultiByte(CP_UTF8, 0, wide, -1, result.data(), size, nullptr, nullptr);
+	return result;
+}
+
 void LocalPlayer::awardStat(Stat *stat, byteArray param)
 {
 #ifdef _DURANGO
@@ -886,6 +896,30 @@ void LocalPlayer::awardStat(Stat *stat, byteArray param)
 	if (stat->isAchievement())
 	{
 		Achievement *ach = static_cast<Achievement *>(stat);
+		/*ui.ShowAchievementToast(
+			WideToUtf8(app.GetString(ach->nameID)),
+			WideToUtf8(app.GetString(IDS_ACHIEVEMENT_VIEW))
+		);*/
+
+		std::wstring iconStr(ach->iconInt.begin(),
+			ach->iconInt.end());
+
+		wstring path = L"Graphics\\Achievements\\TROP" +
+			(iconStr.empty() ? L"000" : iconStr) +
+			L".PNG";
+		byteArray ba = app.getArchiveFile(path);
+		//auto t = ui.GetTopScene(0);
+		//t->registerSubstitutionTexture(path, ba.data, ba.length);
+		if (!minecraft->stats[m_iPad]->hasTaken(ach))
+		{
+			ui.ShowAchievementToast(
+				WideToUtf8(app.GetString(ach->nameID)),
+				WideToUtf8(app.FormatHTMLString(0, app.GetString(IDS_ACHIEVEMENT_VIEW), 0xFFFFFFFF, true).c_str()), ba,
+				WideToUtf8(path.c_str())
+			);
+			minecraft->achID = ach->getAchievementID();
+		}
+		//app.FormatHTMLString(0, app.GetString(IDS_ACHIEVEMENT_VIEW));
 		// 4J-PB - changed to attempt to award everytime - the award may need a storage device, so needs a primary player, and the player may not have been a primary player when they first 'got' the award
 		// so let the award manager figure it out
 		//if (!minecraft->stats[m_iPad]->hasTaken(ach))
@@ -898,6 +932,8 @@ void LocalPlayer::awardStat(Stat *stat, byteArray param)
 			// This causes some extreme flooding of some awards
 			if(ProfileManager.CanBeAwarded(m_iPad, ach->getAchievementID() ) )
 			{
+				
+
 				// 4J Stu - We don't (currently) care about the gamerscore, so setting to a default of 0 points
 				TelemetryManager->RecordAchievementUnlocked(m_iPad,ach->getAchievementID(),0);
 
@@ -1022,7 +1058,7 @@ void LocalPlayer::awardStat(Stat *stat, byteArray param)
 		}
 #endif
 
-#ifdef _EXTENDED_ACHIEVEMENTS
+
 
 		// AWARD : Porkchop, cook and eat a porkchop.
 		{
@@ -1182,7 +1218,7 @@ void LocalPlayer::awardStat(Stat *stat, byteArray param)
 		}
 #endif
 	}
-#endif
+
 }
 
 bool LocalPlayer::isSolidBlock(int x, int y, int z)

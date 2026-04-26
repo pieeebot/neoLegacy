@@ -92,7 +92,8 @@ public:
 	Level *oldLevel; // 4J Stu added to keep a handle on an old level so we can delete it
 	//HANDLE m_hPlayerRespawned; // 4J Added so we can wait in menus until it is done (for async in multiplayer)
 public:
-
+	bool inventoryWasHeld = false;
+	int achID = 0;
 	MultiPlayerLevel *level;
 	LevelRenderer *levelRenderer;
 	shared_ptr<MultiplayerLocalPlayer> player;

@@ -161,17 +161,17 @@ Stat *CommonStats::get_achievement(eAward achievementId)
 	case eAward_MOARTools:			return (Stat *) Achievements::MOARTools;
 	case eAward_DispenseWithThis:	return (Stat *) Achievements::dispenseWithThis;
 	case eAward_InToTheNether:		return (Stat *) Achievements::InToTheNether;
-	case eAward_mine100Blocks:		return (Stat *) Achievements::mine100Blocks;
-	case eAward_kill10Creepers:		return (Stat *) Achievements::kill10Creepers;	
+	//case eAward_mine100Blocks:		return (Stat *) Achievements::mine100Blocks;
+	//case eAward_kill10Creepers:		return (Stat *) Achievements::kill10Creepers;	
 	case eAward_eatPorkChop:		return (Stat *) Achievements::eatPorkChop;
 	case eAward_play100Days:		return (Stat *) Achievements::play100Days;
 	case eAward_arrowKillCreeper:	return (Stat *) Achievements::arrowKillCreeper;	
-	case eAward_socialPost:			return (Stat *) Achievements::socialPost;
+	//case eAward_socialPost:			return (Stat *) Achievements::socialPost;
 
 #ifndef _XBOX
 	case eAward_snipeSkeleton:		return (Stat *) Achievements::snipeSkeleton;
 	case eAward_diamonds:			return (Stat *) Achievements::diamonds;
-	case eAward_portal:				return (Stat *) nullptr;						// TODO
+	//case eAward_portal:				return (Stat *) nullptr;						// TODO
 	case eAward_ghast:				return (Stat *) Achievements::ghast;
 	case eAward_blazeRod:			return (Stat *) Achievements::blazeRod;
 	case eAward_potion:				return (Stat *) Achievements::potion;
@@ -180,7 +180,7 @@ Stat *CommonStats::get_achievement(eAward achievementId)
 	case eAward_enchantments:		return (Stat *) Achievements::enchantments;
 #endif
 
-#ifdef _EXTENDED_ACHIEVEMENTS
+
 	case eAward_overkill:				return (Stat *) Achievements::overkill;		// Restored old ach.
 	case eAward_bookcase:				return (Stat *) Achievements::bookcase;		// Restored old ach.
 
@@ -203,7 +203,7 @@ Stat *CommonStats::get_achievement(eAward achievementId)
 	case eAward_ironMan:				return (Stat *) Achievements::ironMan;
 	case eAward_zombieDoctor:			return (Stat *) Achievements::zombieDoctor;
 	case eAward_lionTamer:				return (Stat *) Achievements::lionTamer;
-#endif
+
 
 	default:						return (Stat *) nullptr;
 	}

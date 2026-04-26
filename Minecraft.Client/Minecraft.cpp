@@ -71,6 +71,7 @@
 #endif
 #include "Common/UI/IUIScene_CreativeMenu.h"
 #include "Common/UI/UIFontData.h"
+#include "Common/UI/UIComponent_PressStartToPlay.h"
 #include "DLCTexturePack.h"
 #ifdef _WINDOWS64
 #define STB_IMAGE_WRITE_IMPLEMENTATION
@@ -1452,6 +1453,7 @@ void Minecraft::run_middle()
 					if(InputManager.ButtonPressed(i, MINECRAFT_ACTION_USE))					localplayers[i]->ullButtonsPressed|=1LL<<MINECRAFT_ACTION_USE;
 
 					if(InputManager.ButtonPressed(i, MINECRAFT_ACTION_INVENTORY))				localplayers[i]->ullButtonsPressed|=1LL<<MINECRAFT_ACTION_INVENTORY;
+					if(InputManager.ButtonDown(i, MINECRAFT_ACTION_INVENTORY))				    localplayers[i]->ullButtonsDown|=1LL<<MINECRAFT_ACTION_INVENTORY;
 					if(InputManager.ButtonPressed(i, MINECRAFT_ACTION_ACTION))					localplayers[i]->ullButtonsPressed|=1LL<<MINECRAFT_ACTION_ACTION;
 					if(InputManager.ButtonPressed(i, MINECRAFT_ACTION_CRAFTING))				localplayers[i]->ullButtonsPressed|=1LL<<MINECRAFT_ACTION_CRAFTING;
 					if(InputManager.ButtonPressed(i, MINECRAFT_ACTION_PAUSEMENU))
@@ -3666,21 +3668,22 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 #else
 		bool useHeld = InputManager.ButtonDown(iPad, MINECRAFT_ACTION_USE);
 #endif
+		bool achHeld;
 		if( player->isUsingItem() )
 		{
 			if(!useHeld) gameMode->releaseUsingItem(player);
 		}
-		else if( gameMode->isInputAllowed(MINECRAFT_ACTION_USE) )
+		else if (gameMode->isInputAllowed(MINECRAFT_ACTION_USE))
 		{
-			if( player->abilities.instabuild )
+			if (player->abilities.instabuild)
 			{
 				// 4J - attempt to handle click in special creative mode fashion if possible (used for placing blocks at regular intervals)
-				bool didClick = player->creativeModeHandleMouseClick(1, useHeld );
+				bool didClick = player->creativeModeHandleMouseClick(1, useHeld);
 				// If this handler has put us in lastClick_oldRepeat mode then it is because we aren't placing blocks - behave largely as the code used to
-				if( player->lastClickState == LocalPlayer::lastClick_oldRepeat )
+				if (player->lastClickState == LocalPlayer::lastClick_oldRepeat)
 				{
 					// If we've already handled the click in creativeModeHandleMouseClick then just record the time of this click
-					if( didClick )
+					if (didClick)
 					{
 						player->lastClickTick[1] = ticks;
 					}
@@ -3700,21 +3703,21 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 				// Consider as a click if we've had a period of not pressing the button, or we've reached auto-repeat time since the last time
 				// Auto-repeat is only considered if we aren't riding or sprinting, to avoid photo sensitivity issues when placing fire whilst doing fast things
 				// Also disable repeat when the player is sleeping to stop the waking up right after using the bed
-				bool firstClick = ( player->lastClickTick[1] == 0 );
+				bool firstClick = (player->lastClickTick[1] == 0);
 				bool autoRepeat = ticks - player->lastClickTick[1] >= timer->ticksPerSecond / 4;
-				if ( player->isRiding() || player->isSprinting() || player->isSleeping() ) autoRepeat = false;
-				if (useHeld )
+				if (player->isRiding() || player->isSprinting() || player->isSleeping()) autoRepeat = false;
+				if (useHeld)
 				{
 					// If the player has just exited a bed, then delay the time before a repeat key is allowed without releasing
-					if(player->isSleeping() ) player->lastClickTick[1] = ticks + (timer->ticksPerSecond * 2);
-					if( firstClick || autoRepeat )
+					if (player->isSleeping()) player->lastClickTick[1] = ticks + (timer->ticksPerSecond * 2);
+					if (firstClick || autoRepeat)
 					{
 						bool wasSleeping = player->isSleeping();
 
 						player->handleMouseClick(1);
 
 						// If the player has just exited a bed, then delay the time before a repeat key is allowed without releasing
-						if(wasSleeping) player->lastClickTick[1] = ticks + (timer->ticksPerSecond * 2);
+						if (wasSleeping) player->lastClickTick[1] = ticks + (timer->ticksPerSecond * 2);
 						else player->lastClickTick[1] = ticks;
 					}
 				}
@@ -3722,6 +3725,68 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 				{
 					player->lastClickTick[1] = 0;
 				}
+			}
+
+			achHeld = InputManager.ButtonDown(iPad, MINECRAFT_ACTION_INVENTORY) ||
+				(iPad == 0 && g_KBMInput.IsKBMActive() &&
+					g_KBMInput.IsKeyDown(KeyboardMouseInput::KEY_INVENTORY));
+			if (ui.toastOn) {
+				if (achHeld) {
+					// Record when the hold started
+					if (player->lastClickTick[2] == 0) {
+						player->lastClickTick[2] = ticks;
+					}
+					// Check if held for 1 second
+					bool heldLongEnough = (ticks - player->lastClickTick[2]) >= (timer->ticksPerSecond);
+					if (heldLongEnough) {
+						ui.PlayUISFX(eSFX_Press);
+						ui.NavigateToScene(iPad, eUIScene_AchievementsMenu);
+						ui.getGroups()[static_cast<int>(eUIGroup_Fullscreen)]->getPressStartToPlay()->handleTimerComplete(1);
+					}
+				}
+				else {
+					// If let go during period, open inventory
+					if (player->lastClickTick[2] != 0) {
+						shared_ptr<MultiplayerLocalPlayer> player = Minecraft::GetInstance()->player;
+						if (!player->isRiding())
+						{
+							ui.PlayUISFX(eSFX_Press);
+						}
+
+						if (gameMode->isServerControlledInventory())
+						{
+							player->sendOpenInventory();
+						}
+						else
+						{
+							app.LoadInventoryMenu(iPad, player);
+						}
+					}
+
+					// Reset when button is released
+					player->lastClickTick[2] = 0;
+				}
+			}
+			else {
+				//Just open inventory if the toast is not open
+				if ((player->ullButtonsPressed & (1LL << MINECRAFT_ACTION_INVENTORY)) && gameMode->isInputAllowed(MINECRAFT_ACTION_INVENTORY))
+				{
+					shared_ptr<MultiplayerLocalPlayer> player = Minecraft::GetInstance()->player;
+					if (!player->isRiding())
+					{
+						ui.PlayUISFX(eSFX_Press);
+					}
+
+					if (gameMode->isServerControlledInventory())
+					{
+						player->sendOpenInventory();
+					}
+					else
+					{
+						app.LoadInventoryMenu(iPad, player);
+					}
+				}
+				player->lastClickTick[2] = 0;
 			}
 		}
 
@@ -3860,19 +3925,26 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 
 		if((player->ullButtonsPressed&(1LL<<MINECRAFT_ACTION_INVENTORY)) && gameMode->isInputAllowed(MINECRAFT_ACTION_INVENTORY))
 		{
-			shared_ptr<MultiplayerLocalPlayer> player = Minecraft::GetInstance()->player;
-			if (!player->isRiding())
-			{
-				ui.PlayUISFX(eSFX_Press);
+			if (achHeld) {
+				
+				//ui.PlayUISFX(eSFX_Press);
+				//ui.NavigateToScene(iPad, eUIScene_AchievementsMenu);
 			}
+			else {
+				/*shared_ptr<MultiplayerLocalPlayer> player = Minecraft::GetInstance()->player;
+				if (!player->isRiding())
+				{
+					ui.PlayUISFX(eSFX_Press);
+				}
 
-			if(gameMode->isServerControlledInventory())
-			{
-				player->sendOpenInventory();
-			}
-			else
-			{
-				app.LoadInventoryMenu(iPad,player);
+				if (gameMode->isServerControlledInventory())
+				{
+					player->sendOpenInventory();
+				}
+				else
+				{
+					app.LoadInventoryMenu(iPad, player);
+				}*/
 			}
 		}
 
@@ -3900,7 +3972,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 			else
 			{
 				ui.PlayUISFX(eSFX_Press);
-				app.LoadCrafting2x2Menu(iPad,player);
+				app.LoadCrafting2x2Menu(iPad, player);
 			}
 		}
 

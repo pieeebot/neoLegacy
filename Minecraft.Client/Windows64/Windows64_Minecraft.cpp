@@ -1836,7 +1836,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
 		if (!g_KBMInput.IsMouseGrabbed())
 		{
-			if (!g_KBMInput.IsKBMActive())
+			if (!g_KBMInput.IsKBMActive() && ui.FindScene(eUIScene_AchievementsMenu) == nullptr)
 				g_KBMInput.SetCursorHiddenForUI(true);
 			else if (!g_KBMInput.IsScreenCursorHidden())
 				g_KBMInput.SetCursorHiddenForUI(false);

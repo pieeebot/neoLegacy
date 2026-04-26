@@ -55,14 +55,14 @@ public:
 	static Achievement *InToTheNether;
 
 	// 4J : WESTY : Added other awards. 
-	static Achievement *socialPost;
+	//static Achievement *socialPost;
 	static Achievement *eatPorkChop;
 	static Achievement *play100Days;
 	static Achievement *arrowKillCreeper;
-	static Achievement *mine100Blocks;
-	static Achievement *kill10Creepers;
+	//static Achievement *mine100Blocks;
+	//static Achievement *kill10Creepers;
 
-#ifdef _EXTENDED_ACHIEVEMENTS
+
 	static Achievement *overkill; // Old achievements;
 	static Achievement *bookcase; // Old achievements;
 	static Achievement *adventuringTime;
@@ -84,7 +84,6 @@ public:
 	static Achievement *ironMan;
 	static Achievement *zombieDoctor;
 	static Achievement *lionTamer;
-#endif
 
 	static void staticCtor();
 

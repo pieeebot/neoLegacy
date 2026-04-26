@@ -572,11 +572,11 @@ public:
 	int GetHTMLColour(eMinecraftColour colour);
 	int GetHTMLColor(eMinecraftColour colour) { return GetHTMLColour(colour); }
 	int GetHTMLFontSize(EHTMLFontSize size);
-	wstring FormatHTMLString(int iPad, const wstring& desc, int shadowColour = 0xFFFFFFFF);
+	wstring FormatHTMLString(int iPad, const wstring& desc, int shadowColour = 0xFFFFFFFF, bool override = false);
 	wstring EscapeHTMLString(const wstring &desc);
 	wstring FormatChatMessage(const wstring& desc, bool applyStyling = true);
 	wstring GetActionReplacement(int iPad, unsigned char ucAction);
-	wstring GetVKReplacement(unsigned int uiVKey);
+	wstring GetVKReplacement(unsigned int uiVKey, bool override = false);
 	wstring GetIconReplacement(unsigned int uiIcon);
 
 	float getAppTime() { return m_Time.fAppTime; }

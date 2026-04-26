@@ -15,7 +15,7 @@ private:
 protected:
 	UIControl_Label m_labelTrialTimer, m_labelPressStart, m_playerDisplayName;
 	UIControl m_controlSaveIcon, m_controlPressStartPanel;
-	IggyName m_funcShowController;
+	IggyName m_funcShowController, m_funcShowAchToast, m_funcHideAchToast;
 	UI_BEGIN_MAP_ELEMENTS_AND_NAMES(UIScene)
 		UI_MAP_ELEMENT(m_labelTrialTimer, "TrialTimer")
 		UI_MAP_ELEMENT(m_controlSaveIcon, "SaveIcon")
@@ -26,6 +26,8 @@ protected:
 		UI_END_MAP_CHILD_ELEMENTS()
 
 		UI_MAP_NAME(m_funcShowController, L"ShowController");
+		UI_MAP_NAME(m_funcShowAchToast, L"ShowAchievementToast");
+		UI_MAP_NAME(m_funcHideAchToast, L"HideAchievementToast");
 	UI_END_MAP_ELEMENTS_AND_NAMES()
 
 public:
@@ -46,6 +48,9 @@ public:
 
 	// Returns true if lower scenes in this scenes layer, or in any layer below this scenes layers should be hidden
 	virtual bool hidesLowerScenes() { return false; }
+
+	void ShowAchievementToast(string achievementName, string achievementDescription, string achT = "");
+	void HideAchievementToast();
 
 	virtual void handleReload();
 	virtual void handleTimerComplete(int id);
