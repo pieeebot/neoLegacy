@@ -128,6 +128,7 @@ void PotionBrewing::staticCtor()
 		potionEffectAmplifier.insert(intStringMap::value_type( MobEffect::heal->getId(), L"5" ));
 		potionEffectAmplifier.insert(intStringMap::value_type( MobEffect::damageResistance->getId(), L"5" ));
 		potionEffectAmplifier.insert(intStringMap::value_type( MobEffect::poison->getId(), L"5" ));
+		potionEffectAmplifier.insert(intStringMap::value_type( MobEffect::jump->getId(), L"5" ));
 #else
 		potionEffectDuration.put(movementSpeed.getId(), "!10 & !4 & 5*2+0 & >1 | !7 & !4 & 5*2+0 & >1");
 		potionEffectDuration.put(movementSlowdown.getId(), "10 & 7 & !4 & 7+5+1-0");

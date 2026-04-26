@@ -7926,6 +7926,14 @@ Would you like to install the mash-up pack or texture pack now?</value>
 		<value>Reduces health of the affected players, animals and monsters over time.</value>
 	</data>	
 
+	<data name="IDS_POTION_DESC_WATERBREATHING">
+		<value>Allows affected players to breathe normally underwater.</value>
+	</data>	
+
+	<data name="IDS_POTION_DESC_JUMPBOOST">
+		<value>Increases the jump height of the affected player.</value>
+	</data>	
+
 	<data name="IDS_POTION_EFFECTS_WHENDRANK">
 		<value>When Applied:</value>
 	</data>	

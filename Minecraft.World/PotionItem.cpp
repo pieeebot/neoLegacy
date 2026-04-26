@@ -353,6 +353,8 @@ unsigned int PotionItem::getUseDescriptionId(shared_ptr<ItemInstance> instance)
 	else if( MACRO_POTION_IS_SLOWNESS(brew)) return IDS_POTION_DESC_MOVESLOWDOWN;
 	else if( MACRO_POTION_IS_POISON(brew)) return IDS_POTION_DESC_POISON;
 	else if( MACRO_POTION_IS_INSTANTDAMAGE(brew)) return IDS_POTION_DESC_HARM;
+	else if( MACRO_POTION_IS_WATERBREATHING(brew)) return IDS_POTION_DESC_WATERBREATHING;
+	else if( MACRO_POTION_IS_JUMPBOOST(brew)) return IDS_POTION_DESC_JUMPBOOST;
 	return IDS_POTION_DESC_EMPTY;
 }
 
