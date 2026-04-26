@@ -61,6 +61,8 @@ private:
 
 protected:
 	static const int FLAG_HIDE_CAPE = 1;
+	static const int FLAG_ELYTRA_FLYING = 2; // bit 2 of DATA_PLAYER_FLAGS_ID
+
 
 public:
 	shared_ptr<Inventory> inventory;
@@ -79,6 +81,20 @@ protected:
 	int jumpTriggerTime;
 
 public:
+	int ticksElytraFlying;
+	float rotateElytraX; 
+	float rotateElytraY;
+	float rotateElytraZ;
+	float m_elytraImpactYd;    
+	bool  m_wasElytraFlying;   
+	int   m_elytraFallProtectTicks; 
+	bool isElytraFlying();
+	virtual void setElytraFlying(bool flying);
+
+	virtual void onElytraKineticDamage(float damage);
+
+public:
+
 	BYTE userType;
 	float oBob, bob;
 
@@ -351,6 +367,7 @@ private:
 	bool m_bAwardedOnARail;
 
 protected:
+	virtual void checkFallDamage(double ya, bool onGround) override;
 	virtual void causeFallDamage(float distance);
 
 public:

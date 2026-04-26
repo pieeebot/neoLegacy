@@ -169,7 +169,7 @@ Recipes::Recipes()
 		L"W#W", //
 
 		L'#', Item::stick,
-		L'W', new ItemInstance(Tile::wood, 1, TreeTile::DARK_TRUNK),
+		L'W', new ItemInstance(Tile::wood, 1, TreeTile::SPRUCE_TRUNK),
 		L'S');
 
 	addShapedRecipy(new ItemInstance(Tile::jungleFence, 3), //

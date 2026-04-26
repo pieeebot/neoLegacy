@@ -1,4 +1,4 @@
-![banner](.gitea/banner.png)
+![banner](.github/banner.png)
 # neoLegacy (Legacy Console Edition)
 This project aims to backport the newer title updates back to Legacy Console Edition (which is based on TU19).
 
@@ -6,7 +6,7 @@ This project aims to backport the newer title updates back to Legacy Console Edi
 [![Emerald Launcher](https://img.shields.io/badge/Get_it_on-LCE_Emerald_Launcher-3fc724)](https://github.com/LCE-Hub/LCE-Emerald-Launcher)
 
 # Our roadmap:
-![Roadmap](.gitea/roadmap.png)
+![Roadmap](.github/roadmap.png)
 
 - Port Title Update 25 (100% complete) ( 🎉 )
 - Port Title Update 31 (86.36% complete)
@@ -14,7 +14,7 @@ This project aims to backport the newer title updates back to Legacy Console Edi
 See our [Contributor's Guide](./CONTRIBUTING.md) for more information on the goals of this project.
 
 # Download
-Users can download our [Nightly Build](https://codeberg.org/piebot/LegacyEvolved/releases)! Simply download the `.zip` file and extract it!
+Users can download our [Nightly Build](https://github.com/pieeebot/neoLegacy/releases/tag/Nightly)! Simply download the `.zip` file and extract it!
 
 # Acknowledgments
 

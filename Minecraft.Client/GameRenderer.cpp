@@ -47,6 +47,8 @@
 #include "../Minecraft.World/compression.h"
 #include "PS3/PS3Extras/ShutdownManager.h"
 #include "BossMobGuiInfo.h"
+#include "../Minecraft.World/LivingEntity.h"
+
 
 #include "TexturePackRepository.h"
 #include "TexturePack.h"
@@ -96,6 +98,10 @@ GameRenderer::GameRenderer(Minecraft *mc)
 	fovOffsetO = 0;
 	cameraRoll = 0;
 	cameraRollO = 0;
+	m_yBob = 0.0f;
+	m_yBobO = 0.0f;
+	m_elytaCamShift = 0.0f;
+
 	for( int i = 0; i < 4; i++ )
 	{
 		fov[i] = 0.0f;
@@ -196,6 +202,20 @@ void GameRenderer::tick(bool first)		// 4J - add bFirst
 	thirdTiltO = thirdTilt;
 	fovOffsetO = fovOffset;
 	cameraRollO = cameraRoll;
+
+	m_yBobO = m_yBob;
+
+	{
+		shared_ptr<Player> yBobPlayer = dynamic_pointer_cast<Player>(mc->cameraTargetPlayer);
+		float target = 0.0f;
+		if (yBobPlayer != nullptr && !yBobPlayer->onGround
+			&& !(yBobPlayer->abilities.mayfly && yBobPlayer->abilities.flying))
+		{
+
+			target = (float)(atan(-yBobPlayer->yd * 0.2) * 15.0);
+		}
+		m_yBob += (target - m_yBob) * 0.8f;
+	}
 
 	if (mc->options->smoothCamera)
 	{
@@ -455,6 +475,11 @@ void GameRenderer::bobView(float a)
 	glRotatef((float) Mth::sin(b * PI) * bob * 3, 0, 0, 1);
 	glRotatef((float) abs(Mth::cos(b * PI - 0.2f) * bob) * 5, 1, 0, 0);
 	glRotatef((float) tilt, 1, 0, 0);
+
+	float yBobAngle = m_yBobO + (m_yBob - m_yBobO) * a;
+	if (fabsf(yBobAngle) > 0.001f)
+		glRotatef(yBobAngle, 1, 0, 0);
+
 }
 
 void GameRenderer::moveCameraToPlayer(float a)
@@ -468,7 +493,71 @@ void GameRenderer::moveCameraToPlayer(float a)
 	double z = player->zo + (player->z - player->zo) * a;
 
 
-	glRotatef(cameraRollO + (cameraRoll - cameraRollO) * a, 0, 0, 1);
+	{
+		shared_ptr<Player> elytraPlayer = dynamic_pointer_cast<Player>(player);
+		bool elytraFlying = (elytraPlayer != nullptr && elytraPlayer->isElytraFlying());
+		float targetShift = elytraFlying ? -1.22f : 0.0f;
+		m_elytaCamShift += (targetShift - m_elytaCamShift) * 0.15f;
+		if (fabsf(m_elytaCamShift) < 0.001f) m_elytaCamShift = 0.0f;
+
+
+		y += m_elytaCamShift;
+	}
+
+	
+	if (localplayer != nullptr && !player->isSleeping())
+	{
+		shared_ptr<Player> rollPlayer = dynamic_pointer_cast<Player>(player);
+		if (rollPlayer != nullptr && rollPlayer->isElytraFlying())
+		{
+	
+			double velX = rollPlayer->xd;
+			double velZ = rollPlayer->zd;
+			double horizVelSq = velX * velX + velZ * velZ;
+
+	
+			Vec3* look = rollPlayer->getLookAngle();
+			double horizLookSq = look->x * look->x + look->z * look->z;
+
+			float targetRoll = 0.0f;
+			if (horizVelSq > 1.0e-6 && horizLookSq > 1.0e-6)
+			{
+				double dot = velX * look->x + velZ * look->z;
+				double cosAngle = dot / sqrt(horizVelSq * horizLookSq);
+		
+				if (cosAngle > 1.0) cosAngle = 1.0;
+				if (cosAngle < -1.0) cosAngle = -1.0;
+
+	
+				double angle = acos(cosAngle) / 2.5;
+				if (angle > PI / 8.0) angle = PI / 8.0;
+
+
+				double cross = velX * look->z - velZ * look->x;
+				float sign = (cross < 0.0) ? -1.0f : 1.0f;
+
+	
+				targetRoll = sign * (float)(angle * (180.0 / PI));
+			}
+
+
+			cameraRoll += (targetRoll - cameraRoll) * 0.1f;
+		}
+		else
+		{
+	
+			if (fabsf(cameraRoll) > 0.01f)
+			{
+				cameraRoll += (0.0f - cameraRoll) * 0.15f;
+				if (fabsf(cameraRoll) < 0.01f) cameraRoll = 0.0f;
+			}
+		}
+
+
+		if (fabsf(cameraRoll) > 0.01f)
+			glRotatef(cameraRoll, 0, 0, 1);
+	}
+
 
 	if (player->isSleeping())
 	{
@@ -574,10 +663,12 @@ void GameRenderer::moveCameraToPlayer(float a)
 		}
 	}
 
-	glTranslatef(0, heightOffset, 0);
+
+	glTranslatef(0, heightOffset - m_elytaCamShift, 0);
+
 
 	x = player->xo + (player->x - player->xo) * a;
-	y = player->yo + (player->y - player->yo) * a - heightOffset;
+	y = player->yo + (player->y - player->yo) * a - heightOffset + m_elytaCamShift;
 	z = player->zo + (player->z - player->zo) * a;
 
 	isInClouds = mc->levelRenderer->isInCloud(x, y, z, a);

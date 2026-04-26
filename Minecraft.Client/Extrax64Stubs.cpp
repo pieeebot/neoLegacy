@@ -576,6 +576,126 @@ DWORD XEnableGuestSignin(BOOL fEnable) { return 0; }
 #ifdef _WINDOWS64
 static void* profileData[4];
 static bool s_bProfileIsFullVersion;
+static unsigned int s_profileDataBytesPerPad = 0;
+
+static void Win64_GetProfileDataPath(int iQuadrant, char* outPath, size_t outPathSize)
+{
+	if (outPath == nullptr || outPathSize == 0)
+		return;
+
+	outPath[0] = '\0';
+	GetModuleFileNameA(nullptr, outPath, static_cast<DWORD>(outPathSize));
+	char* lastSlash = strrchr(outPath, '\\');
+	char* lastForwardSlash = strrchr(outPath, '/');
+	if (lastForwardSlash != nullptr && (lastSlash == nullptr || lastForwardSlash > lastSlash))
+		lastSlash = lastForwardSlash;
+	if (lastSlash != nullptr)
+		*(lastSlash + 1) = '\0';
+
+	char profileFileName[32] = {};
+	sprintf_s(profileFileName, "profile%d.dat", iQuadrant);
+	strncat_s(outPath, outPathSize, profileFileName, _TRUNCATE);
+}
+
+static bool Win64_LoadProfileDataBlob(int iQuadrant, void* dstData, unsigned int dataSize)
+{
+	if (dstData == nullptr || dataSize == 0)
+		return false;
+
+	char filePath[MAX_PATH] = {};
+	Win64_GetProfileDataPath(iQuadrant, filePath, MAX_PATH);
+
+	FILE* profileFile = nullptr;
+	if (fopen_s(&profileFile, filePath, "rb") != 0 || profileFile == nullptr)
+		return false;
+
+	fseek(profileFile, 0, SEEK_END);
+	long fileSize = ftell(profileFile);
+	rewind(profileFile);
+
+	if (fileSize != static_cast<long>(dataSize))
+	{
+		fclose(profileFile);
+		return false;
+	}
+
+	const size_t bytesRead = fread(dstData, 1, dataSize, profileFile);
+	fclose(profileFile);
+
+	return bytesRead == dataSize;
+}
+
+static void Win64_SaveProfileDataBlob(int iQuadrant, const void* srcData, unsigned int dataSize)
+{
+	if (srcData == nullptr || dataSize == 0)
+		return;
+
+	char filePath[MAX_PATH] = {};
+	Win64_GetProfileDataPath(iQuadrant, filePath, MAX_PATH);
+
+	FILE* profileFile = nullptr;
+	if (fopen_s(&profileFile, filePath, "wb") != 0 || profileFile == nullptr)
+		return;
+
+	fwrite(srcData, 1, dataSize, profileFile);
+	fclose(profileFile);
+}
+
+static void Win64_ApplyDefaultProfileGameSettings(void* profileBytes)
+{
+	if (profileBytes == nullptr)
+		return;
+
+	// Set some sane initial values!
+	GAME_SETTINGS* pGameSettings = static_cast<GAME_SETTINGS*>(profileBytes);
+	pGameSettings->ucMenuSensitivity = 100; //eGameSetting_Sensitivity_InMenu
+	pGameSettings->ucInterfaceOpacity = 80; //eGameSetting_Sensitivity_InMenu
+	pGameSettings->usBitmaskValues |= 0x0200; //eGameSetting_DisplaySplitscreenGamertags - on
+	pGameSettings->usBitmaskValues |= 0x0400; //eGameSetting_Hints - on
+	pGameSettings->usBitmaskValues |= 0x1000; //eGameSetting_Autosave - 2
+	pGameSettings->usBitmaskValues |= 0x8000; //eGameSetting_Tooltips - on
+	pGameSettings->uiBitmaskValues = 0L; // reset
+	pGameSettings->uiBitmaskValues |= GAMESETTING_CLOUDS;					//eGameSetting_Clouds - on
+	pGameSettings->uiBitmaskValues |= GAMESETTING_ONLINE;					//eGameSetting_GameSetting_Online - on
+	pGameSettings->uiBitmaskValues |= GAMESETTING_FRIENDSOFFRIENDS;		//eGameSetting_GameSetting_FriendsOfFriends - on
+	pGameSettings->uiBitmaskValues |= GAMESETTING_DISPLAYUPDATEMSG;		//eGameSetting_DisplayUpdateMessage (counter)
+	pGameSettings->uiBitmaskValues &= ~GAMESETTING_BEDROCKFOG;			//eGameSetting_BedrockFog - off
+	pGameSettings->uiBitmaskValues |= GAMESETTING_DISPLAYHUD;				//eGameSetting_DisplayHUD - on
+	pGameSettings->uiBitmaskValues |= GAMESETTING_DISPLAYHAND;			//eGameSetting_DisplayHand - on
+	pGameSettings->uiBitmaskValues |= GAMESETTING_CUSTOMSKINANIM;			//eGameSetting_CustomSkinAnim - on
+	pGameSettings->uiBitmaskValues |= GAMESETTING_DEATHMESSAGES;			//eGameSetting_DeathMessages - on
+	pGameSettings->uiBitmaskValues |= (GAMESETTING_UISIZE & 0x00000800);				// uisize 2
+	pGameSettings->uiBitmaskValues |= (GAMESETTING_UISIZE_SPLITSCREEN & 0x00004000);	// splitscreen ui size 3
+	pGameSettings->uiBitmaskValues |= GAMESETTING_ANIMATEDCHARACTER;		//eGameSetting_AnimatedCharacter - on
+
+	// TU12
+	// favorite skins added, but only set in TU12 - set to FFs
+	for (int skinIndex = 0; skinIndex < MAX_FAVORITE_SKINS; ++skinIndex)
+	{
+		pGameSettings->uiFavoriteSkinA[skinIndex] = 0xFFFFFFFF;
+	}
+	pGameSettings->ucCurrentFavoriteSkinPos = 0;
+	// Added a bitmask in TU13 to enable/disable display of the Mash-up pack worlds in the saves list
+	pGameSettings->uiMashUpPackWorldsDisplay = 0xFFFFFFFF;
+
+	// PS3DEC13
+	pGameSettings->uiBitmaskValues &= ~GAMESETTING_PS3EULAREAD;		//eGameSetting_PS3_EULA_Read - off
+
+	// PS3 1.05 - added Greek
+	pGameSettings->ucLanguage = MINECRAFT_LANGUAGE_DEFAULT; // use the system language
+
+	// PS Vita - network mode added
+	pGameSettings->uiBitmaskValues &= ~GAMESETTING_PSVITANETWORKMODEADHOC;		//eGameSetting_PSVita_NetworkModeAdhoc - off
+
+	// Tutorials for most menus, and a few other things
+	pGameSettings->ucTutorialCompletion[0] = 0xFF;
+	pGameSettings->ucTutorialCompletion[1] = 0xFF;
+	pGameSettings->ucTutorialCompletion[2] = 0xF;
+
+	// Has gone halfway through the tutorial
+	pGameSettings->ucTutorialCompletion[28] |= 1 << 0;
+}
+
 void				C_4JProfile::Initialise(DWORD dwTitleID,
 	DWORD dwOfferID,
 	unsigned short usProfileVersion,
@@ -585,60 +705,24 @@ void				C_4JProfile::Initialise(DWORD dwTitleID,
 	int iGameDefinedDataSizeX4,
 	unsigned int* puiGameDefinedDataChangedBitmask)
 {
+	s_profileDataBytesPerPad = static_cast<unsigned int>(iGameDefinedDataSizeX4 / XUSER_MAX_COUNT);
+	if (s_profileDataBytesPerPad == 0)
+		s_profileDataBytesPerPad = static_cast<unsigned int>(iGameDefinedDataSizeX4 / 4);
+
 	for (int i = 0; i < 4; i++)
 	{
-		profileData[i] = new byte[iGameDefinedDataSizeX4 / 4];
-		ZeroMemory(profileData[i], sizeof(byte) * iGameDefinedDataSizeX4 / 4);
+		profileData[i] = new byte[s_profileDataBytesPerPad];
+		ZeroMemory(profileData[i], sizeof(byte) * s_profileDataBytesPerPad);
 
-		// Set some sane initial values!
-		GAME_SETTINGS* pGameSettings = static_cast<GAME_SETTINGS *>(profileData[i]);
-		pGameSettings->ucMenuSensitivity = 100; //eGameSetting_Sensitivity_InMenu
-		pGameSettings->ucInterfaceOpacity = 80; //eGameSetting_Sensitivity_InMenu
-		pGameSettings->usBitmaskValues |= 0x0200; //eGameSetting_DisplaySplitscreenGamertags - on
-		pGameSettings->usBitmaskValues |= 0x0400; //eGameSetting_Hints - on
-		pGameSettings->usBitmaskValues |= 0x1000; //eGameSetting_Autosave - 2
-		pGameSettings->usBitmaskValues |= 0x8000; //eGameSetting_Tooltips - on
-		pGameSettings->uiBitmaskValues = 0L; // reset
-		pGameSettings->uiBitmaskValues |= GAMESETTING_CLOUDS;					//eGameSetting_Clouds - on
-		pGameSettings->uiBitmaskValues |= GAMESETTING_ONLINE;					//eGameSetting_GameSetting_Online - on
-		pGameSettings->uiBitmaskValues |= GAMESETTING_FRIENDSOFFRIENDS;		//eGameSetting_GameSetting_FriendsOfFriends - on
-		pGameSettings->uiBitmaskValues |= GAMESETTING_DISPLAYUPDATEMSG;		//eGameSetting_DisplayUpdateMessage (counter)
-		pGameSettings->uiBitmaskValues &= ~GAMESETTING_BEDROCKFOG;			//eGameSetting_BedrockFog - off
-		pGameSettings->uiBitmaskValues |= GAMESETTING_DISPLAYHUD;				//eGameSetting_DisplayHUD - on
-		pGameSettings->uiBitmaskValues |= GAMESETTING_DISPLAYHAND;			//eGameSetting_DisplayHand - on
-		pGameSettings->uiBitmaskValues |= GAMESETTING_CUSTOMSKINANIM;			//eGameSetting_CustomSkinAnim - on
-		pGameSettings->uiBitmaskValues |= GAMESETTING_DEATHMESSAGES;			//eGameSetting_DeathMessages - on
-		pGameSettings->uiBitmaskValues |= (GAMESETTING_UISIZE & 0x00000800);				// uisize 2
-		pGameSettings->uiBitmaskValues |= (GAMESETTING_UISIZE_SPLITSCREEN & 0x00004000);	// splitscreen ui size 3
-		pGameSettings->uiBitmaskValues |= GAMESETTING_ANIMATEDCHARACTER;		//eGameSetting_AnimatedCharacter - on
-
-		// TU12
-		// favorite skins added, but only set in TU12 - set to FFs
-		for (int i = 0; i < MAX_FAVORITE_SKINS; i++)
+		if (!Win64_LoadProfileDataBlob(i, profileData[i], s_profileDataBytesPerPad))
 		{
-			pGameSettings->uiFavoriteSkinA[i] = 0xFFFFFFFF;
+			Win64_ApplyDefaultProfileGameSettings(profileData[i]);
 		}
-		pGameSettings->ucCurrentFavoriteSkinPos = 0;
-		// Added a bitmask in TU13 to enable/disable display of the Mash-up pack worlds in the saves list
-		pGameSettings->uiMashUpPackWorldsDisplay = 0xFFFFFFFF;
+	}
 
-		// PS3DEC13
-		pGameSettings->uiBitmaskValues &= ~GAMESETTING_PS3EULAREAD;		//eGameSetting_PS3_EULA_Read - off
-
-		// PS3 1.05 - added Greek
-		pGameSettings->ucLanguage = MINECRAFT_LANGUAGE_DEFAULT; // use the system language
-
-		// PS Vita - network mode added
-		pGameSettings->uiBitmaskValues &= ~GAMESETTING_PSVITANETWORKMODEADHOC;		//eGameSetting_PSVita_NetworkModeAdhoc - off
-
-
-		// Tutorials for most menus, and a few other things
-		pGameSettings->ucTutorialCompletion[0] = 0xFF;
-		pGameSettings->ucTutorialCompletion[1] = 0xFF;
-		pGameSettings->ucTutorialCompletion[2] = 0xF;
-
-		// Has gone halfway through the tutorial
-		pGameSettings->ucTutorialCompletion[28] |= 1 << 0;
+	if (puiGameDefinedDataChangedBitmask != nullptr)
+	{
+		*puiGameDefinedDataChangedBitmask = (1u << XUSER_MAX_COUNT) - 1u;
 	}
 }
 void				C_4JProfile::SetTrialTextStringTable(CXuiStringTable * pStringTable, int iAccept, int iReject) {}
@@ -730,8 +814,31 @@ int					C_4JProfile::SetOldProfileVersionCallback(int(*Func)(LPVOID, unsigned ch
 C_4JProfile::PROFILESETTINGS ProfileSettingsA[XUSER_MAX_COUNT];
 
 C_4JProfile::PROFILESETTINGS* C_4JProfile::GetDashboardProfileSettings(int iPad) { return &ProfileSettingsA[iPad]; }
-void				C_4JProfile::WriteToProfile(int iQuadrant, bool bGameDefinedDataChanged, bool bOverride5MinuteLimitOnProfileWrites) {}
-void				C_4JProfile::ForceQueuedProfileWrites(int iPad) {}
+void				C_4JProfile::WriteToProfile(int iQuadrant, bool bGameDefinedDataChanged, bool bOverride5MinuteLimitOnProfileWrites)
+{
+	if (s_profileDataBytesPerPad == 0)
+		return;
+
+	if (iQuadrant == XUSER_INDEX_ANY)
+	{
+		for (int i = 0; i < XUSER_MAX_COUNT; ++i)
+		{
+			if (profileData[i] != nullptr)
+				Win64_SaveProfileDataBlob(i, profileData[i], s_profileDataBytesPerPad);
+		}
+		return;
+	}
+
+	if (iQuadrant < 0 || iQuadrant >= XUSER_MAX_COUNT)
+		return;
+
+	if (profileData[iQuadrant] != nullptr)
+		Win64_SaveProfileDataBlob(iQuadrant, profileData[iQuadrant], s_profileDataBytesPerPad);
+}
+void				C_4JProfile::ForceQueuedProfileWrites(int iPad)
+{
+	WriteToProfile(iPad, true, true);
+}
 void* C_4JProfile::GetGameDefinedProfileData(int iQuadrant)
 {
 	// 4J Stu - Don't reset the options when we call this!!

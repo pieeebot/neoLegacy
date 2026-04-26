@@ -189,7 +189,9 @@ EntityRenderDispatcher::EntityRenderDispatcher()
 		it.second->init(this);
 	}
 
-	isGuiRender = false;	// 4J added
+	isGuiRender = false;		// 4J added
+	isInventoryRender = false;
+
 }
 
 EntityRenderer *EntityRenderDispatcher::getRenderer(eINSTANCEOF e)

@@ -31,6 +31,9 @@ unsigned int DirtTile::getDescriptionId(int iData)
 
 int DirtTile::getSpawnResourcesAuxValue(int data)
 {
+
+    if (data == DirtTile::PODZOL) data = 0;
+
     return data;
 }
 

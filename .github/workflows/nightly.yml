@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          submodules: recursive
 
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
@@ -82,7 +84,6 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path staging
           Copy-Item neoLegacyWindows64.zip staging/
-          Copy-Item ./build/windows64/Minecraft.Client/Release/Minecraft.Client.exe staging/
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v6
@@ -96,6 +97,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v6
+      with:
+        submodules: recursive
 
     - name: Setup MSVC
       uses: ilammy/msvc-dev-cmd@v1
@@ -274,7 +277,6 @@ jobs:
         with:
           subject-path: |
             artifacts/neoLegacyWindows64.zip
-            artifacts/Minecraft.Client.exe
 
       - name: Get short SHA
         id: sha

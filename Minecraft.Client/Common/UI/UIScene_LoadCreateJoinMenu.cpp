@@ -727,6 +727,8 @@ UIScene_LoadCreateJoinMenu::UIScene_LoadCreateJoinMenu(int iPad, void *initData,
     m_activeTab = eTab_Load;
     m_bPendingSaveSizeBarRefresh = false;
     m_bPendingJoinTabAvailabilityRefresh = false;
+    m_bPendingJoinVisualRefresh = false;
+    m_bRebuildingJoinVisual = false;
 #ifdef _WINDOWS64
     m_lastHoverMouseX = -1;
     m_lastHoverMouseY = -1;
@@ -1396,39 +1398,12 @@ void UIScene_LoadCreateJoinMenu::handleGainFocus(bool navBack)
 
 {
 
-    app.DebugPrintf("[LCJ] handleGainFocus navBack=%d\n", navBack ? 1 : 0);
-
-    app.DebugPrintf("[LCJ] handleGainFocus before UIScene::handleGainFocus\n");
-
     UIScene::handleGainFocus(navBack);
-
-    app.DebugPrintf("[LCJ] handleGainFocus after UIScene::handleGainFocus\n");
-
-
-
-    app.DebugPrintf("[LCJ] handleGainFocus before updateTooltips\n");
-
     updateTooltips();
-
-    app.DebugPrintf("[LCJ] handleGainFocus after updateTooltips\n");
-
-    app.DebugPrintf("[LCJ] handleGainFocus before SyncMovieTab\n");
-
     SyncMovieTab();
-
-    app.DebugPrintf("[LCJ] handleGainFocus after SyncMovieTab\n");
-
-    app.DebugPrintf("[LCJ] handleGainFocus queue deferred bar/tab refresh\n");
     m_bPendingSaveSizeBarRefresh = true;
     m_bPendingJoinTabAvailabilityRefresh = true;
-
-
-
-    app.DebugPrintf("[LCJ] handleGainFocus before addTimer JOIN_LOAD_ONLINE_TIMER_ID\n");
-
     addTimer(JOIN_LOAD_ONLINE_TIMER_ID,JOIN_LOAD_ONLINE_TIMER_TIME);
-
-    app.DebugPrintf("[LCJ] handleGainFocus after addTimer JOIN_LOAD_ONLINE_TIMER_ID\n");
 
     if(navBack)
 
@@ -1786,9 +1761,6 @@ void UIScene_LoadCreateJoinMenu::UpdateMouseHoverForActiveTab()
 wstring UIScene_LoadCreateJoinMenu::getMoviePath()
 
 {
-
-    app.DebugPrintf("[LCJ] getMoviePath -> LoadCreateJoinMenu\n");
-
     return L"LoadCreateJoinMenu";
 
 }
@@ -1858,8 +1830,14 @@ void UIScene_LoadCreateJoinMenu::SyncMovieTab()
 void UIScene_LoadCreateJoinMenu::SetActiveTab(ELoadCreateJoinTab tab, bool setFocus)
 
 {
-
+    const bool enteringJoin = (m_activeTab != eTab_Join) && (tab == eTab_Join);
     m_activeTab = tab;
+
+    if (m_activeTab == eTab_Join && !m_bRebuildingJoinVisual && (enteringJoin || m_bPendingJoinVisualRefresh))
+    {
+        RebuildJoinGamesListVisual(true);
+        m_bPendingJoinVisualRefresh = false;
+    }
 
     SetMovieTab((int)tab);
 
@@ -1941,9 +1919,6 @@ void UIScene_LoadCreateJoinMenu::UpdateJoinTabAvailability()
         return;
 
 
-
-    app.DebugPrintf("[LCJ] UpdateJoinTabAvailability forced disabled count=%d\n", m_buttonListGames.getItemCount());
-
     IggyDataValue result;
 
     IggyDataValue value[1];
@@ -1953,8 +1928,6 @@ void UIScene_LoadCreateJoinMenu::UpdateJoinTabAvailability()
     value[0].boolval = false;
 
     IggyPlayerCallMethodRS(getMovie(), &result, IggyPlayerRootPath(getMovie()), m_funcSetMatchesAvailable, 1, value);
-
-    app.DebugPrintf("[LCJ] UpdateJoinTabAvailability exit\n");
 
 }
 
@@ -1972,13 +1945,6 @@ void UIScene_LoadCreateJoinMenu::UpdateSaveSizeBarVisibility()
 
     const bool showSaveSizeBar = (m_activeTab == eTab_Load);
 
-    app.DebugPrintf("[LCJ] UpdateSaveSizeBarVisibility enter show=%d\n", showSaveSizeBar ? 1 : 0);
-    app.DebugPrintf("[LCJ] SaveSizeBar pending=%d activeTab=%d\n",
-                    m_bPendingSaveSizeBarRefresh ? 1 : 0,
-                    static_cast<int>(m_activeTab));
-
-
-
     IggyDataValue result;
 
     IggyDataValue value[1];
@@ -1988,8 +1954,6 @@ void UIScene_LoadCreateJoinMenu::UpdateSaveSizeBarVisibility()
     value[0].boolval = showSaveSizeBar;
 
     IggyPlayerCallMethodRS(getMovie(), &result, IggyPlayerRootPath(getMovie()), m_funcShowSaveSizeBar, 1, value);
-
-    app.DebugPrintf("[LCJ] UpdateSaveSizeBarVisibility exit\n");
 
 }
 
@@ -3656,13 +3620,31 @@ void UIScene_LoadCreateJoinMenu::handleInitFocus(F64 controlId, F64 childId)
 void UIScene_LoadCreateJoinMenu::handleFocusChange(F64 controlId, F64 childId)
 
 {
-
-    app.DebugPrintf(app.USER_SR, "UIScene_LoadCreateJoinMenu::handleFocusChange - %d , %d\n", static_cast<int>(controlId), static_cast<int>(childId));
-
     const int visibleRows = 7;
 
+    if (m_bRebuildingJoinVisual && static_cast<int>(controlId) == eControl_GamesList)
+    {
+        return;
+    }
+
+    if (static_cast<int>(controlId) == eControl_GamesList && m_activeTab != eTab_Join)
+    {
+        return;
+    }
+
+    if (static_cast<int>(controlId) == eControl_NewGamesList && m_activeTab != eTab_Create)
+    {
+        return;
+    }
+
+    if (static_cast<int>(controlId) == eControl_SavesList && m_activeTab != eTab_Load)
+    {
+        return;
+    }
 
 
+
+    const ELoadCreateJoinTab oldTab = m_activeTab;
     switch(static_cast<int>(controlId))
 
     {
@@ -3763,17 +3745,18 @@ void UIScene_LoadCreateJoinMenu::handleFocusChange(F64 controlId, F64 childId)
     };
 
     updateTooltips();
-
-    SetActiveTab(m_activeTab, false);
-    m_bPendingSaveSizeBarRefresh = true;
-    m_bPendingJoinTabAvailabilityRefresh = true;
+    if (m_activeTab != oldTab)
+    {
+        SetActiveTab(m_activeTab, false);
+        m_bPendingSaveSizeBarRefresh = true;
+        m_bPendingJoinTabAvailabilityRefresh = true;
+    }
 
 }
 
 void UIScene_LoadCreateJoinMenu::handlePress(F64 controlId, F64 childId)
 
 {
-
     switch(static_cast<int>(controlId))
 
     {
@@ -4539,12 +4522,177 @@ void UIScene_LoadCreateJoinMenu::UpdateGamesListCallback(LPVOID pParam)
 
 }
 
+void UIScene_LoadCreateJoinMenu::RebuildJoinGamesListVisual(bool syncFocus)
+
+{
+    if (m_bRebuildingJoinVisual)
+    {
+        return;
+    }
+
+    m_bRebuildingJoinVisual = true;
+
+    FriendSessionInfo *pSelectedSession = nullptr;
+
+    if(DoesGamesListHaveFocus() && m_buttonListGames.getItemCount() > 0)
+
+    {
+
+        unsigned int nIndex = m_buttonListGames.getCurrentSelection();
+
+#ifdef _WINDOWS64
+
+        if (m_currentSessions != nullptr && nIndex > 0 && (nIndex - 1) < m_currentSessions->size())
+
+            pSelectedSession = m_currentSessions->at( nIndex - 1 );
+
+#else
+
+        if (m_currentSessions != nullptr && nIndex < m_currentSessions->size())
+
+            pSelectedSession = m_currentSessions->at( nIndex );
+
+#endif
+
+    }
+
+    SessionID selectedSessionId;
+
+	ZeroMemory(&selectedSessionId,sizeof(SessionID));
+    if( pSelectedSession != nullptr )selectedSessionId = pSelectedSession->sessionId;
+
+    m_buttonListGames.clearList();
+
+#ifdef _WINDOWS64
+
+    m_buttonListGames.addItem(wstring(L"Add Server"));
+    TrySetButtonListIcon(
+        m_buttonListGames,
+        m_buttonListGames.getItemCount() - 1,
+        L"lceheadwer.png",
+        L"lceheadwer");
+
+#endif
+
+    if (m_currentSessions == nullptr || m_currentSessions->empty())
+    {
+        m_buttonListGames.setCurrentSelection(0);
+        if(syncFocus)
+            m_buttonListGames.updateChildFocus(0);
+        m_bRebuildingJoinVisual = false;
+        return;
+    }
+
+    unsigned int sessionIndex = 0;
+
+    m_buttonListGames.setCurrentSelection(0);
+
+    for( FriendSessionInfo *sessionInfo : *m_currentSessions )
+
+    {
+
+        wchar_t textureName[64] = L"\0";
+
+        if(sessionInfo->data.texturePackParentId!=0)
+
+        {
+
+            Minecraft *pMinecraft = Minecraft::GetInstance();
+            TexturePack *tp = pMinecraft->skins->getTexturePackById(sessionInfo->data.texturePackParentId);
+            DWORD dwImageBytes=0;
+            PBYTE pbImageData=nullptr;
+
+            if(tp==nullptr)
+
+            {
+
+                DWORD dwBytes=0;
+                PBYTE pbData=nullptr;
+                app.GetTPD(sessionInfo->data.texturePackParentId,&pbData,&dwBytes);
+                app.GetFileFromTPD(eTPDFileType_Icon,pbData,dwBytes,&pbImageData,&dwImageBytes );
+
+                if(dwImageBytes > 0 && pbImageData)
+
+                {
+
+                    swprintf(textureName,64,L"%ls",sessionInfo->displayLabel);
+                    registerSubstitutionTexture(textureName,pbImageData,dwImageBytes);
+
+                }
+
+            }
+
+            else
+
+            {
+
+                pbImageData = tp->getPackIcon(dwImageBytes);
+                if(dwImageBytes > 0 && pbImageData)
+
+                {
+
+                    swprintf(textureName,64,L"%ls",sessionInfo->displayLabel);
+                    registerSubstitutionTexture(textureName,pbImageData,dwImageBytes);
+
+                }
+
+            }
+
+        }
+
+        else
+
+        {
+
+            Minecraft *pMinecraft = Minecraft::GetInstance();
+            TexturePack *tp = pMinecraft->skins->getTexturePackByIndex(0);
+            DWORD dwImageBytes;
+            PBYTE pbImageData = tp->getPackIcon(dwImageBytes);
+            if(dwImageBytes > 0 && pbImageData)
+
+            {
+
+                swprintf(textureName,64,L"%ls",sessionInfo->displayLabel);
+                registerSubstitutionTexture(textureName,pbImageData,dwImageBytes);
+
+            }
+
+        }
+
+        m_buttonListGames.addItem( sessionInfo->displayLabel, textureName );
+
+        if(memcmp( &selectedSessionId, &sessionInfo->sessionId, sizeof(SessionID) ) == 0)
+
+        {
+
+#ifdef _WINDOWS64
+
+            m_buttonListGames.setCurrentSelection(sessionIndex + 1);
+
+#else
+
+            m_buttonListGames.setCurrentSelection(sessionIndex);
+
+#endif
+
+        }
+
+        ++sessionIndex;
+
+    }
+
+    if(syncFocus)
+        m_buttonListGames.updateChildFocus(m_buttonListGames.getCurrentSelection());
+
+    m_bRebuildingJoinVisual = false;
+
+}
+
 
 
 void UIScene_LoadCreateJoinMenu::UpdateGamesList()
 
 {
-
     // If we're ignoring input scene isn't active so do nothing
 
     if (m_bIgnoreInput) return;
@@ -4566,45 +4714,6 @@ void UIScene_LoadCreateJoinMenu::UpdateGamesList()
         return;
 
     }
-
-
-
-
-
-    FriendSessionInfo *pSelectedSession = nullptr;
-
-    if(DoesGamesListHaveFocus() && m_buttonListGames.getItemCount() > 0)
-
-    {
-
-        unsigned int nIndex = m_buttonListGames.getCurrentSelection();
-
-#ifdef _WINDOWS64
-
-        // Offset past the "Add Server" button
-
-        if (nIndex > 0)
-
-            pSelectedSession = m_currentSessions->at( nIndex - 1 );
-
-#else
-
-        pSelectedSession = m_currentSessions->at( nIndex );
-
-#endif
-
-    }
-
-
-
-    SessionID selectedSessionId;
-
-	ZeroMemory(&selectedSessionId,sizeof(SessionID));
-
-    if( pSelectedSession != nullptr )selectedSessionId = pSelectedSession->sessionId;
-
-    pSelectedSession = nullptr;
-
 
 
     m_controlJoinTimer.setVisible( false );
@@ -4685,12 +4794,6 @@ void UIScene_LoadCreateJoinMenu::UpdateGamesList()
 
     m_currentSessions = newSessions;
 
-
-
-    // Update the xui list displayed
-
-    unsigned int xuiListSize = m_buttonListGames.getItemCount();
-
     unsigned int filteredListSize = static_cast<unsigned int>(m_currentSessions->size());
 
 
@@ -4747,179 +4850,14 @@ void UIScene_LoadCreateJoinMenu::UpdateGamesList()
 
     }
 
-
-
-    // clear out the games list and re-fill
-
-    m_buttonListGames.clearList();
-
-
-
-#ifdef _WINDOWS64
-
-    // Always add the "Add Server" button as the first entry in the games list
-
-    m_buttonListGames.addItem(wstring(L"Add Server"));
-    TrySetButtonListIcon(
-        m_buttonListGames,
-        m_buttonListGames.getItemCount() - 1,
-        L"lceheadwer.png",
-        L"lceheadwer");
-
-#endif
-
-
-
-    if( filteredListSize > 0 )
-
+    if (m_activeTab == eTab_Join)
     {
-
-        // Reset the focus to the selected session if it still exists
-
-        unsigned int sessionIndex = 0;
-
-        m_buttonListGames.setCurrentSelection(0);
-
-
-
-        for( FriendSessionInfo *sessionInfo : *m_currentSessions )
-
-        {
-
-            wchar_t textureName[64] = L"\0";
-
-
-
-            // Is this a default game or a texture pack game?
-
-            if(sessionInfo->data.texturePackParentId!=0)
-
-            {
-
-                // Do we have the texture pack
-
-                Minecraft *pMinecraft = Minecraft::GetInstance();
-
-                TexturePack *tp = pMinecraft->skins->getTexturePackById(sessionInfo->data.texturePackParentId);
-
-                HRESULT hr;
-
-
-
-                DWORD dwImageBytes=0;
-
-                PBYTE pbImageData=nullptr;
-
-
-
-                if(tp==nullptr)
-
-                {
-
-                    DWORD dwBytes=0;
-
-                    PBYTE pbData=nullptr;
-
-                    app.GetTPD(sessionInfo->data.texturePackParentId,&pbData,&dwBytes);
-
-
-
-                    // is it in the tpd data ?
-
-                    app.GetFileFromTPD(eTPDFileType_Icon,pbData,dwBytes,&pbImageData,&dwImageBytes );
-
-                    if(dwImageBytes > 0 && pbImageData)
-
-                    {
-
-                        swprintf(textureName,64,L"%ls",sessionInfo->displayLabel);
-
-                        registerSubstitutionTexture(textureName,pbImageData,dwImageBytes);
-
-                    }
-
-                }
-
-                else
-
-                {
-
-                    pbImageData = tp->getPackIcon(dwImageBytes);
-
-                    if(dwImageBytes > 0 && pbImageData)
-
-                    {
-
-                        swprintf(textureName,64,L"%ls",sessionInfo->displayLabel);
-
-                        registerSubstitutionTexture(textureName,pbImageData,dwImageBytes);
-
-                    }
-
-                }
-
-            }
-
-            else
-
-            {
-
-                // default texture pack
-
-                Minecraft *pMinecraft = Minecraft::GetInstance();
-
-                TexturePack *tp = pMinecraft->skins->getTexturePackByIndex(0);
-
-
-
-                DWORD dwImageBytes;
-
-                PBYTE pbImageData = tp->getPackIcon(dwImageBytes);
-
-
-
-                if(dwImageBytes > 0 && pbImageData)
-
-                {
-
-                    swprintf(textureName,64,L"%ls",sessionInfo->displayLabel);
-
-                    registerSubstitutionTexture(textureName,pbImageData,dwImageBytes);
-
-                }
-
-            }
-
-
-
-            m_buttonListGames.addItem( sessionInfo->displayLabel, textureName );
-
-
-
-            if(memcmp( &selectedSessionId, &sessionInfo->sessionId, sizeof(SessionID) ) == 0)
-
-            {
-
-#ifdef _WINDOWS64
-
-                // Offset past the "Add Server" button
-
-                m_buttonListGames.setCurrentSelection(sessionIndex + 1);
-
-#else
-
-                m_buttonListGames.setCurrentSelection(sessionIndex);
-
-#endif
-
-                break;
-
-            }
-
-            ++sessionIndex;
-
-        }
-
+        RebuildJoinGamesListVisual(true);
+        m_bPendingJoinVisualRefresh = false;
+    }
+    else
+    {
+        m_bPendingJoinVisualRefresh = true;
     }
 
 
@@ -9031,9 +8969,6 @@ int UIScene_LoadCreateJoinMenu::AddServerKeyboardCallback(LPVOID lpParam, bool b
 {
 
     UIScene_LoadCreateJoinMenu *pClass = static_cast<UIScene_LoadCreateJoinMenu*>(lpParam);
-
-
-
     if (!bRes)
 
     {
@@ -9153,8 +9088,6 @@ int UIScene_LoadCreateJoinMenu::AddServerKeyboardCallback(LPVOID lpParam, bool b
         pClass->m_addServerPhase = eAddServer_Idle;
 
         pClass->m_bIgnoreInput = false;
-
-
 
         g_NetworkManager.ForceFriendsSessionRefresh();
 
@@ -9317,35 +9250,6 @@ void UIScene_LoadCreateJoinMenu::AppendServerToFile(const wstring& ip, const wst
 }
 
 #endif // _WINDOWS64
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

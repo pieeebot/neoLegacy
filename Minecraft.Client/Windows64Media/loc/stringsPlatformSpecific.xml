@@ -75,7 +75,7 @@ When in flying mode, you can hold down{*CONTROLLER_ACTION_JUMP*} to move up and{
 	</data>	
 
 	<data name="IDS_TOOLTIPS_INVITE_PARTY">
-		<value>Invite Xbox LIVE Party</value>
+		<value>Invite Party</value>
 	</data>	
 
 	<data name="IDS_CONFIRM_START_CREATIVE">
@@ -95,11 +95,11 @@ When in flying mode, you can hold down{*CONTROLLER_ACTION_JUMP*} to move up and{
 	</data>	
 
 	<data name="IDS_CONNECTION_LOST_LIVE">
-		<value>Connection to Xbox LIVE was lost. Exiting to the main menu.</value>
+		<value>Connection to the server was lost. Exiting to the main menu.</value>
 	</data>	
 
 	<data name="IDS_CONNECTION_LOST_LIVE_NO_EXIT">
-		<value>Connection to Xbox LIVE was lost.</value>
+		<value>Connection to the server was lost.</value>
 	</data>	
 
 	<data name="IDS_AWARD_AVATAR1">
@@ -152,7 +152,7 @@ Would you like to unlock the full game?</value>
 	</data>	
 
 	<data name="IDS_UNLOCK_GUEST_TEXT">
-		<value>Guest players cannot unlock the full game. Please sign in with an Xbox LIVE user ID.</value>
+		<value>Guest players cannot unlock the full game. Please sign in with a correct user ID.</value>
 	</data>	
 
 	<data name="IDS_LEADERBOARD_GAMERTAG">
@@ -176,11 +176,11 @@ Would you like to unlock the full game?</value>
 	</data>	
 
 	<data name="IDS_NO_MULTIPLAYER_PRIVILEGE_JOIN_TEXT">
-		<value>Failed to join the game as one or more players are not allowed to play multiplayer games on Xbox LIVE.</value>
+		<value>Failed to join the game as one or more players are not allowed to play multiplayer games online.</value>
 	</data>	
 
 	<data name="IDS_NO_MULTIPLAYER_PRIVILEGE_HOST_TEXT">
-		<value>Failed to create an online game as one or more players are not allowed to play multiplayer games on Xbox LIVE. Uncheck the "Online Game" box to start an offline game.</value>
+		<value>Failed to create a game as one or more players are not allowed to play multiplayer games online. Uncheck the "Online Game" box to start an offline game.</value>
 	</data>	
 
 	<data name="IDS_NO_USER_CREATED_CONTENT_PRIVILEGE_SINGLE_LOCAL">

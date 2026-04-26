@@ -42,6 +42,7 @@
 #include "../Minecraft.Client/LocalPlayer.h"
 #include "../Minecraft.Client/HumanoidModel.h"
 #include "SoundTypes.h"
+#include "ElytraItem.h"
 
 
 
@@ -83,6 +84,14 @@ void Player::_init()
 	m_uiDebugOptions=0L;
 
 	jumpTriggerTime = 0;
+	ticksElytraFlying = 0;
+	rotateElytraX = 0.2617994f;
+	rotateElytraY = 0.0f;
+	rotateElytraZ = -0.2617994f;
+	m_elytraImpactYd = 0.0f;
+	m_wasElytraFlying = false;
+	m_elytraFallProtectTicks = 0;
+
 	takeXpDelay = 0;
 	experienceLevel = totalExperience = 0;
 	experienceProgress = 0.0f;
@@ -1000,6 +1009,8 @@ void Player::serverAiStep()
 void Player::aiStep()
 {
 	if (jumpTriggerTime > 0) jumpTriggerTime--;
+	if (m_elytraFallProtectTicks > 0) m_elytraFallProtectTicks--;
+
 
 	if (level->difficulty == Difficulty::PEACEFUL && getHealth() < getMaxHealth() && level->getGameRules()->getBoolean(GameRules::RULE_NATURAL_REGENERATION))
 	{
@@ -1008,7 +1019,42 @@ void Player::aiStep()
 	inventory->tick();
 	oBob = bob;
 
+	if (jumping && !onGround && yd < 0.0 && !isElytraFlying() && !abilities.flying && jumpTriggerTime == 0)
+	{
+		shared_ptr<ItemInstance> chestItem = inventory->armor[LivingEntity::SLOT_CHEST - 1];
+		if (chestItem != nullptr && chestItem->getItem() != nullptr)
+		{
+			ElytraItem* elytra = dynamic_cast<ElytraItem*>(chestItem->getItem());
+			if (elytra != nullptr && ElytraItem::isFlyEnabled(chestItem))
+				setElytraFlying(true);
+		}
+	}
+
+
+
 	LivingEntity::aiStep();
+
+	if (isElytraFlying() && !onGround)
+	{
+		ticksElytraFlying++;
+
+		if (!level->isClientSide && ticksElytraFlying % 20 == 0)
+		{
+			shared_ptr<ItemInstance> chestItem = inventory->armor[LivingEntity::SLOT_CHEST - 1];
+			if (chestItem != nullptr && dynamic_cast<ElytraItem*>(chestItem->getItem()) != nullptr)
+			{
+				chestItem->hurtAndBreak(1, dynamic_pointer_cast<LivingEntity>(shared_from_this()));
+				if (!ElytraItem::isFlyEnabled(chestItem))
+					setElytraFlying(false);
+			}
+			else
+			{
+				setElytraFlying(false);
+			}
+		}
+	}
+
+
 
 	AttributeInstance *speed = getAttribute(SharedMonsterAttributes::MOVEMENT_SPEED);
 	if (!level->isClientSide) speed->setBaseValue(abilities.getWalkingSpeed());
@@ -1388,6 +1434,8 @@ bool Player::hurt(DamageSource *source, float dmg)
 	if (isInvulnerable()) return false;
 	
 	if ( hasInvulnerablePrivilege() || (abilities.invulnerable && !source->isBypassInvul()) )	return false;
+
+
 
 	// 4J-JEV: Fix for PSVita: #3987 - [IN GAME] The user can take damage/die, when attempting to re-enter fly mode when falling from a height.
 	if ( source == DamageSource::fall && isAllowedToFly() && abilities.flying )					return false;
@@ -2110,7 +2158,90 @@ void Player::travel(float xa, float ya)
 {
 	double preX = x, preY = y, preZ = z;
 
-	if (abilities.flying && riding == nullptr)
+	m_elytraImpactYd = (float)yd;
+
+	if (isElytraFlying() && riding == nullptr)
+	{
+		double preHorizSpeed = Mth::sqrt(xd * xd + zd * zd);
+
+
+		if (yd > -0.5)
+			fallDistance = 1.0f;
+
+		Vec3* look = getLookAngle();
+		float pitchRad = xRot * (PI / 180.0f);
+		double horizLookLen = Mth::sqrt(look->x * look->x + look->z * look->z);
+		double horizSpeed = Mth::sqrt(xd * xd + zd * zd);
+
+
+		float cosPitch = Mth::cos(pitchRad);
+		cosPitch = cosPitch * cosPitch;
+
+
+		yd += -0.08 + (double)cosPitch * 0.06;
+
+		if (yd < 0.0 && horizLookLen > 0.0)
+		{
+			double thrust = yd * -0.1 * (double)cosPitch;
+			yd += thrust;
+			xd += look->x * thrust / horizLookLen;
+			zd += look->z * thrust / horizLookLen;
+		}
+
+		if (pitchRad < 0.0f && horizLookLen > 0.0)
+		{
+			double boost = horizSpeed * (double)(-Mth::sin(pitchRad)) * 0.04;
+			yd += boost * 3.2;
+			xd -= look->x * boost / horizLookLen;
+			zd -= look->z * boost / horizLookLen;
+		}
+
+
+		if (horizLookLen > 0.0)
+		{
+			xd += (look->x / horizLookLen * horizSpeed - xd) * 0.1;
+			zd += (look->z / horizLookLen * horizSpeed - zd) * 0.1;
+		}
+
+		// Air drag
+		xd *= 0.99;
+		yd *= 0.98;
+		zd *= 0.99;
+
+		if (jumping && abilities.instabuild)
+			yd += (double)abilities.getFlyingSpeed() * 3.0;
+
+		m_elytraImpactYd = (float)yd; 
+		move(xd, yd, zd);
+
+		if (horizontalCollision && !verticalCollision)
+		{
+			double postHorizSpeed = Mth::sqrt(xd * xd + zd * zd);
+			double speedLost = preHorizSpeed - postHorizSpeed;
+			float damage = (float)(speedLost * 10.0 - 3.0);
+
+			if (damage > 0.0f)
+				onElytraKineticDamage(damage);
+		}
+
+		if (onGround)
+		{
+			bool canStandUp = true;
+			if (level != nullptr)
+			{
+				float halfW = bbWidth / 2.0f;
+				AABB* standingBB = AABB::newTemp(
+					x - halfW, bb->y0, z - halfW,
+					x + halfW, bb->y0 + 1.8, z + halfW);
+				AABBList* collisions = level->getCubes(shared_from_this(), standingBB, true);
+				canStandUp = collisions->empty();
+			}
+			if (canStandUp)
+				setElytraFlying(false);
+		}
+	}
+	else if (abilities.flying && riding == nullptr)
+
 	{
 		double ydo = yd;
 		float ofs = flyingSpeed;
@@ -2278,6 +2409,13 @@ void Player::checkRidingStatistiscs(double dx, double dy, double dz)
 		}
 	}
 }
+void Player::checkFallDamage(double ya, bool onGround)
+{
+	LivingEntity::checkFallDamage(ya, onGround);
+}
+
+
+
 
 
 void Player::causeFallDamage(float distance)
@@ -2686,6 +2824,37 @@ bool Player::isCapeHidden()
 {
 	return getPlayerFlag(FLAG_HIDE_CAPE);
 }
+bool Player::isElytraFlying()
+{
+	return getPlayerFlag(FLAG_ELYTRA_FLYING);
+}
+
+void Player::onElytraKineticDamage(float damage)
+{
+	hurt(DamageSource::fall, damage);
+}
+
+void Player::setElytraFlying(bool flying)
+{
+	setPlayerFlag(FLAG_ELYTRA_FLYING, flying);
+	if (flying)
+	{
+		m_wasElytraFlying = false;
+		setSize(0.6f, 0.6f);   
+		fallDistance = 0.0f;   
+	}
+	else
+	{
+		ticksElytraFlying = 0;
+
+		m_wasElytraFlying = true;
+		m_elytraFallProtectTicks = 60;
+		setSize(0.6f, 1.8f);  
+
+	}
+}
+
+
 
 bool Player::isPushedByWater()
 {

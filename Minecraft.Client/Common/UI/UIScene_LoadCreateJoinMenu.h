@@ -163,6 +163,8 @@ private:
 	bool m_bUpdateSaveSize;
 	bool m_bPendingSaveSizeBarRefresh;
 	bool m_bPendingJoinTabAvailabilityRefresh;
+	bool m_bPendingJoinVisualRefresh;
+	bool m_bRebuildingJoinVisual;
 bool m_bHasNoGamesLabel;
 int m_iNewGameListIndex;
 #ifdef _WINDOWS64
@@ -213,6 +215,7 @@ private:
 	void SetMovieTab(int tab);
 	void SetActiveTab(ELoadCreateJoinTab tab, bool setFocus);
 	void ApplyTabVisibility(bool setFocus);
+	void RebuildJoinGamesListVisual(bool syncFocus);
 	void UpdateJoinTabAvailability();
 	void UpdateSaveSizeBarVisibility();
 #ifdef _WINDOWS64
@@ -401,10 +404,6 @@ private:
 	static int CopySaveErrorDialogFinishedCallback(void *pParam,int iPad,C4JStorage::EMessageResult result);
 #endif
 };
-
-
-
-
 
 
 

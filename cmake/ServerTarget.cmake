@@ -84,16 +84,10 @@ function(configure_lce_server_target target)
       XInput9_1_0
       wsock32
       legacy_stdio_definitions
-      $<$<CONFIG:Debug>:
-        "${CMAKE_SOURCE_DIR}/Minecraft.Client/${PLATFORM_NAME}/4JLibs/libs/4J_Input_d.lib"
-        "${CMAKE_SOURCE_DIR}/Minecraft.Client/${PLATFORM_NAME}/4JLibs/libs/4J_Storage_d.lib"
-        "${CMAKE_SOURCE_DIR}/Minecraft.Client/${PLATFORM_NAME}/4JLibs/libs/4J_Render_PC_d.lib"
-      >
-      $<$<NOT:$<CONFIG:Debug>>:
-        "${CMAKE_SOURCE_DIR}/Minecraft.Client/${PLATFORM_NAME}/4JLibs/libs/4J_Input.lib"
-        "${CMAKE_SOURCE_DIR}/Minecraft.Client/${PLATFORM_NAME}/4JLibs/libs/4J_Storage.lib"
-        "${CMAKE_SOURCE_DIR}/Minecraft.Client/${PLATFORM_NAME}/4JLibs/libs/4J_Render_PC.lib"
-      >
+      4JLibs.${PLATFORM_NAME}.Input
+      4JLibs.${PLATFORM_NAME}.Profile
+      4JLibs.${PLATFORM_NAME}.Storage
+      4JLibs.${PLATFORM_NAME}.Render
     )
   else()
     target_link_libraries(${target} PRIVATE

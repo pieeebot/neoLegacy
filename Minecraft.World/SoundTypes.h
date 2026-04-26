@@ -261,6 +261,8 @@ enum eSOUND_TYPE
 	eSoundType_ITEM_ARMOR_equipGeneric6,
 
 	eSoundType_DAMAGE_CRITICAL,
+	eSoundType_ITEM_ELYTRA_FLYING,
+
 
 	eSoundType_MAX
 };

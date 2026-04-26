@@ -67,6 +67,9 @@ LocalPlayer::LocalPlayer(Minecraft *minecraft, Level *level, User *user, int dim
 	sprintTriggerTime = 0;
 	sprintTriggerRegisteredReturn = false;
 	twoJumpsRegistered = false;
+	m_elytraCancelPressCount = 0;
+	m_elytraCancelWindow = 0;
+	m_elytraSoundTicks = 0;
 	sprintTime = 0;
 	m_uiInactiveTicks=0;
 	portalTime = 0.0f;
@@ -330,6 +333,58 @@ void LocalPlayer::aiStep()
 		}
 	}
 	
+
+	if (isElytraFlying())
+	{
+		if (m_elytraCancelWindow > 0) m_elytraCancelWindow--;
+
+		if (!wasJumping && input->jumping) 
+		{
+			m_elytraCancelPressCount++;
+			if (m_elytraCancelPressCount == 1)
+			{
+				m_elytraCancelWindow = 15; 
+			}
+			else if (m_elytraCancelPressCount >= 2 && m_elytraCancelWindow > 0)
+			{
+				setElytraFlying(false);
+				jumpTriggerTime = 10; 
+				m_elytraCancelPressCount = 0;
+				m_elytraCancelWindow = 0;
+			}
+		}
+
+		if (m_elytraCancelWindow == 0 && m_elytraCancelPressCount > 0)
+			m_elytraCancelPressCount = 0;
+
+
+		m_elytraSoundTicks++;
+		float vol = 0.0f;
+		float pitch = 1.0f;
+		if (m_elytraSoundTicks >= 20)
+		{
+			float totalSpeed = (float)Mth::sqrt(xd * xd + yd * yd + zd * zd);
+			float f1 = totalSpeed / 2.0f;
+			float speedVol = f1 * f1;
+			if (speedVol > 1.0f) speedVol = 1.0f;
+			float fadeFactor = (m_elytraSoundTicks < 40)
+				? (float)(m_elytraSoundTicks - 20) / 20.0f
+				: 1.0f;
+			vol = speedVol * fadeFactor;
+			if (vol > 0.8f)
+				pitch = 1.0f + (vol - 0.8f);
+		}
+		if (vol > 0.01f)
+			minecraft->soundEngine->startElytraSound((float)x, (float)y, (float)z, vol, pitch);
+	}
+	else
+	{
+		m_elytraCancelPressCount = 0;
+		m_elytraCancelWindow = 0;
+		m_elytraSoundTicks = 0;
+		minecraft->soundEngine->stopElytraSound();
+	}
+
 
 	if (abilities.flying)
 	{

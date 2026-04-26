@@ -1,0 +1,3 @@
+[submodule "Minecraft.Client/Windows64/4JLibs"]
+	path = Minecraft.Client/Windows64/4JLibs
+	url = https://github.com/Patoke/4JLibs.git
