@@ -731,6 +731,7 @@ void ConsoleSaveFileOriginal::Flush(bool autosave, bool updateThumbnail )
 		s_bgSaveActive.store(true, std::memory_order_release);
 
 		std::thread([snap, fileSize, thumb, thumbSz, meta, metaLen, this]() {
+			Compression::UseDefaultThreadStorage();
 			unsigned int compLen = fileSize + 8;
 			byte *buf = static_cast<byte *>(StorageManager.AllocateSaveData(compLen));
 			if (!buf)
