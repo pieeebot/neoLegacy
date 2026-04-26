@@ -19,6 +19,7 @@
 #include "../Minecraft.World/Biome.h"
 #include "../Minecraft.World/LightLayer.h"
 #include "../Minecraft.Client/Windows64/Network/WinsockNetLayer.h"
+#include <mstcpip.h>
 #include "../Minecraft.World/AbstractContainerMenu.h"
 #include "../Minecraft.World/AddGlobalEntityPacket.h"
 #include "../Minecraft.World/ArrayWithLength.h"
@@ -642,6 +643,33 @@ int __cdecl NativeGetPlayerLatency(int entityId)
 {
     auto player = FindPlayer(entityId);
     if (!player) return -1;
+
+    // Prefer the kernel's TCP round trip when available. Microsecond precision
+    // and free of the application-layer tick scheduler delay that smooths
+    // player->latency upward by ~one tick interval per direction.
+    if (player->connection && player->connection->connection &&
+        player->connection->connection->getSocket())
+    {
+        unsigned char smallId = player->connection->connection->getSocket()->getSmallId();
+        if (smallId != 0)
+        {
+            SOCKET sock = WinsockNetLayer::GetSocketForSmallId(smallId);
+            if (sock != INVALID_SOCKET)
+            {
+                TCP_INFO_v0 info = {};
+                DWORD infoVersion = 0;
+                DWORD bytesReturned = 0;
+                int rc = WSAIoctl(sock, SIO_TCP_INFO,
+                                  &infoVersion, sizeof(infoVersion),
+                                  &info, sizeof(info),
+                                  &bytesReturned, NULL, NULL);
+                if (rc == 0 && bytesReturned == sizeof(info))
+                {
+                    return (int)(info.RttUs / 1000);
+                }
+            }
+        }
+    }
 
     return player->latency;
 }
