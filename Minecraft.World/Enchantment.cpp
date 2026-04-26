@@ -83,7 +83,7 @@ void Enchantment::_init(int id)
 	{
 		app.DebugPrintf("Duplicate enchantment id!");
 #ifndef _CONTENT_PACKAGE
-		__debugbreak();
+		DEBUG_BREAK();
 #endif
 		//throw new IllegalArgumentException("Duplicate enchantment id!");
 	}

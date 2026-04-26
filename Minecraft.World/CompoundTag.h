@@ -36,7 +36,7 @@ public:
 		{
 #ifndef _CONTENT_PACKAGE
 			printf("Tried to read NBT tag with too high complexity, depth > %d" , MAX_DEPTH);
-			__debugbreak();
+			DEBUG_BREAK();
 #endif
 			return;
 		}

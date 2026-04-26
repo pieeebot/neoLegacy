@@ -315,8 +315,6 @@ int __cdecl main()
 	HRESULT hr;
 	static bool bTrialTimerDisplayed=true;
 
-	//__debugbreak();
-
 #ifdef MEMORY_TRACKING
 	ResetMem();
 	MEMORYSTATUS memStat;

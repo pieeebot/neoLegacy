@@ -96,7 +96,7 @@ CMinecraftApp::CMinecraftApp()
 		// 4J Stu - See comment for GAME_SETTINGS_PROFILE_DATA_BYTES in Xbox_App.h
 		DebugPrintf("WARNING: The size of the profile GAME_SETTINGS struct has changed, so all stat data is likely incorrect. Is: %d, Should be: %d\n",sizeof(GAME_SETTINGS),GAME_SETTINGS_PROFILE_DATA_BYTES);
 #ifndef _CONTENT_PACKAGE
-		__debugbreak();
+		DEBUG_BREAK();
 #endif
 	}
 
@@ -1300,9 +1300,6 @@ int CMinecraftApp::OldProfileVersionCallback(LPVOID pParam,unsigned char *pucDat
 		{
 			// This might be from a version during testing of new profile updates
 			app.DebugPrintf("Don't know what to do with this profile version!\n");
-#ifndef _CONTENT_PACKAGE
-			//		__debugbreak();
-#endif
 
 			GAME_SETTINGS *pGameSettings=(GAME_SETTINGS *)pucData;
 			pGameSettings->ucMenuSensitivity=100; //eGameSetting_Sensitivity_InMenu
@@ -6421,7 +6418,7 @@ void CMinecraftApp::InitialiseTips()
 		{
 			// the m_TriviaTipA or the m_GameTipA are out of sync
 #ifndef _CONTENT_PACKAGE
-			__debugbreak();
+			DEBUG_BREAK();
 #endif
 		}
 	}

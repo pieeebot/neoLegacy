@@ -2411,7 +2411,7 @@ void Level::tickEntities()
 			{
 				if(isClientSide)
 				{
-					__debugbreak();
+					DEBUG_BREAK();
 				}
 				it = tileEntityList.erase(it);
 			}

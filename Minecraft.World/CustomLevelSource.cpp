@@ -41,7 +41,7 @@ CustomLevelSource::CustomLevelSource(Level *level, int64_t seed, bool generateSt
 	{
 
 #ifdef _DURANGO
-		__debugbreak();	// TODO
+		DEBUG_BREAK();	// TODO
 		DWORD bytesRead,dwFileSize = 0;
 #else
 		DWORD bytesRead,dwFileSize = GetFileSize(file,nullptr);
@@ -49,7 +49,7 @@ CustomLevelSource::CustomLevelSource(Level *level, int64_t seed, bool generateSt
 		if(dwFileSize > m_heightmapOverride.length)
 		{
 			app.DebugPrintf("Heightmap binary is too large!!\n");
-			__debugbreak();
+			DEBUG_BREAK();
 		}
 		BOOL bSuccess = ReadFile(file,m_heightmapOverride.data,dwFileSize,&bytesRead,nullptr);
 
@@ -83,7 +83,7 @@ CustomLevelSource::CustomLevelSource(Level *level, int64_t seed, bool generateSt
 	{
 
 #ifdef _DURANGO
-		__debugbreak();	// TODO
+		DEBUG_BREAK();	// TODO
 		DWORD bytesRead,dwFileSize = 0;
 #else
 		DWORD bytesRead,dwFileSize = GetFileSize(file,nullptr);
@@ -91,7 +91,7 @@ CustomLevelSource::CustomLevelSource(Level *level, int64_t seed, bool generateSt
 		if(dwFileSize > m_waterheightOverride.length)
 		{
 			app.DebugPrintf("waterheight binary is too large!!\n");
-			__debugbreak();
+			DEBUG_BREAK();
 		}
 		BOOL bSuccess = ReadFile(file,m_waterheightOverride.data,dwFileSize,&bytesRead,nullptr);
 
