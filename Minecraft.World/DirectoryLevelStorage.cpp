@@ -11,6 +11,7 @@
 #include "LevelData.h"
 #include "DirectoryLevelStorage.h"
 #include "ConsoleSaveFileIO.h"
+#include "../Minecraft.Client/Minecraft.h"
 
 const wstring DirectoryLevelStorage::sc_szPlayerDir(L"players/");
 
@@ -391,6 +392,7 @@ void DirectoryLevelStorage::save(shared_ptr<Player> player)
 	if( playerXuid != INVALID_XUID && !player->isGuest() )
 #endif
 	{
+		Minecraft::GetInstance()->forceStatsSave(player->getPlayerIndex());
 		CompoundTag *tag = new CompoundTag();
 		player->saveWithoutId(tag);
 #if defined(__PS3__) || defined(__ORBIS__) || defined(__PSVITA__)

@@ -358,7 +358,7 @@ Stat* GenericStats::overkill()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->get_achievement( eAward_overkill );
 #else
-	return nullptr;
+	return instance->get_achievement(eAward_overkill);
 #endif
 }
 
@@ -367,7 +367,7 @@ Stat* GenericStats::bookcase()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->get_achievement( eAward_bookcase );
 #else
-	return nullptr;
+	return instance->get_achievement(eAward_bookcase);
 #endif
 }
 
@@ -391,10 +391,10 @@ Stat* GenericStats::InToTheNether()
 	return instance->get_achievement( eAward_InToTheNether );
 }
 
-Stat* GenericStats::socialPost() 
-{
-	return instance->get_achievement( eAward_socialPost );
-}
+//Stat* GenericStats::socialPost() 
+//{
+//	return instance->get_achievement( eAward_socialPost );
+//}
 
 Stat* GenericStats::eatPorkChop() 
 {
@@ -411,22 +411,22 @@ Stat* GenericStats::arrowKillCreeper()
 	return instance->get_achievement( eAward_arrowKillCreeper );
 }
 
-Stat* GenericStats::mine100Blocks() 
-{
-	return instance->get_achievement( eAward_mine100Blocks );
-}
+//Stat* GenericStats::mine100Blocks() 
+//{
+//	return instance->get_achievement( eAward_mine100Blocks );
+//}
 
-Stat* GenericStats::kill10Creepers() 
-{
-	return instance->get_achievement( eAward_kill10Creepers );
-}
+//Stat* GenericStats::kill10Creepers() 
+//{
+//	return instance->get_achievement( eAward_kill10Creepers );
+//}
 
 Stat* GenericStats::adventuringTime()
 {
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->get_achievement(eAward_adventuringTime);
 #else
-	return nullptr;
+	return instance->get_achievement(eAward_adventuringTime);
 #endif
 }
 
@@ -435,7 +435,7 @@ Stat* GenericStats::repopulation()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->get_achievement(eAward_repopulation);
 #else
-	return nullptr;
+	return instance->get_achievement(eAward_repopulation);
 #endif
 }
 
@@ -444,7 +444,7 @@ Stat* GenericStats::porkChop()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->get_achievement(eAward_eatPorkChop);
 #else
-	return nullptr;
+	return instance->get_achievement(eAward_eatPorkChop);
 #endif
 }
 
@@ -453,7 +453,7 @@ Stat* GenericStats::diamondsToYou()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->get_achievement(eAward_diamondsToYou);
 #else
-	return nullptr;
+	return instance->get_achievement(eAward_diamondsToYou);
 #endif
 }
 
@@ -462,7 +462,7 @@ Stat* GenericStats::passingTheTime()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->get_achievement(eAward_play100Days);
 #else
-	return nullptr;
+	return instance->get_achievement(eAward_play100Days);
 #endif
 }
 
@@ -471,7 +471,7 @@ Stat* GenericStats::archer()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->get_achievement(eAward_arrowKillCreeper);
 #else
-	return nullptr;
+	return instance->get_achievement(eAward_arrowKillCreeper);
 #endif
 }
 
@@ -480,7 +480,7 @@ Stat* GenericStats::theHaggler()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->get_achievement(eAward_theHaggler);
 #else
-	return nullptr;
+	return instance->get_achievement(eAward_theHaggler);
 #endif
 }
 
@@ -489,7 +489,7 @@ Stat* GenericStats::potPlanter()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->get_achievement(eAward_potPlanter);
 #else
-	return nullptr;
+	return instance->get_achievement(eAward_potPlanter);
 #endif
 }
 
@@ -498,7 +498,7 @@ Stat* GenericStats::itsASign()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->get_achievement(eAward_itsASign);
 #else
-	return nullptr;
+	return instance->get_achievement(eAward_itsASign);
 #endif
 }
 
@@ -507,7 +507,7 @@ Stat* GenericStats::ironBelly()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->get_achievement(eAward_ironBelly);
 #else
-	return nullptr;
+	return instance->get_achievement(eAward_ironBelly);
 #endif
 }
 
@@ -516,7 +516,7 @@ Stat* GenericStats::haveAShearfulDay()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->get_achievement(eAward_haveAShearfulDay);
 #else
-	return nullptr;
+	return instance->get_achievement(eAward_haveAShearfulDay);
 #endif
 }
 
@@ -525,7 +525,7 @@ Stat* GenericStats::rainbowCollection()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->get_achievement(eAward_rainbowCollection);
 #else
-	return nullptr;
+	return instance->get_achievement(eAward_rainbowCollection);
 #endif
 }
 
@@ -534,7 +534,7 @@ Stat* GenericStats::stayinFrosty()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->get_achievement(eAward_stayinFrosty);
 #else
-	return nullptr;
+	return instance->get_achievement(eAward_stayinFrosty);
 #endif
 }
 
@@ -543,7 +543,7 @@ Stat* GenericStats::chestfulOfCobblestone()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->get_achievement(eAward_chestfulOfCobblestone);
 #else
-	return nullptr;
+	return instance->get_achievement(eAward_chestfulOfCobblestone);
 #endif
 }
 
@@ -552,7 +552,7 @@ Stat* GenericStats::renewableEnergy()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->get_achievement(eAward_renewableEnergy);
 #else
-	return nullptr;
+	return instance->get_achievement(eAward_renewableEnergy);
 #endif
 }
 
@@ -561,7 +561,7 @@ Stat* GenericStats::musicToMyEars()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->get_achievement(eAward_musicToMyEars);
 #else
-	return nullptr;
+	return instance->get_achievement(eAward_musicToMyEars);
 #endif
 }
 
@@ -570,7 +570,7 @@ Stat* GenericStats::bodyGuard()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->get_achievement(eAward_bodyGuard);
 #else
-	return nullptr;
+	return instance->get_achievement(eAward_bodyGuard);
 #endif
 }
 
@@ -579,7 +579,7 @@ Stat* GenericStats::ironMan()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->get_achievement(eAward_ironMan);
 #else
-	return nullptr;
+	return instance->get_achievement(eAward_ironMan);
 #endif
 }
 
@@ -588,7 +588,7 @@ Stat* GenericStats::zombieDoctor()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->get_achievement(eAward_zombieDoctor);
 #else
-	return nullptr;
+	return instance->get_achievement(eAward_zombieDoctor);
 #endif
 }
 
@@ -597,7 +597,7 @@ Stat* GenericStats::lionTamer()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->get_achievement(eAward_lionTamer);
 #else
-	return nullptr;
+	return instance->get_achievement(eAward_lionTamer);
 #endif
 }
 
@@ -750,7 +750,7 @@ byteArray GenericStats::getParam_chestfulOfCobblestone(int cobbleStone)
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return getParam_achievement(eAward_chestfulOfCobblestone);
 #else
-	return getParam_noArgs();
+	return getParam_achievement(eAward_chestfulOfCobblestone);
 #endif
 }
 
@@ -759,7 +759,7 @@ byteArray GenericStats::getParam_musicToMyEars(int recordId)
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return getParam_achievement(eAward_musicToMyEars);
 #else
-	return getParam_noArgs();
+	return getParam_achievement(eAward_musicToMyEars);
 #endif
 }
 
@@ -1057,7 +1057,7 @@ byteArray GenericStats::param_bookcase()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->getParam_achievement(eAward_bookcase);
 #else
-	return instance->getParam_noArgs();
+	return instance->getParam_achievement(eAward_bookcase);
 #endif
 }
 
@@ -1081,10 +1081,10 @@ byteArray GenericStats::param_InToTheNether()
 	return instance->getParam_achievement(eAward_InToTheNether);
 }
 
-byteArray GenericStats::param_socialPost()
-{
-	return instance->getParam_achievement(eAward_socialPost);
-}
+//byteArray GenericStats::param_socialPost()
+//{
+//	return instance->getParam_achievement(eAward_socialPost);
+//}
 
 byteArray GenericStats::param_eatPorkChop()
 {
@@ -1101,22 +1101,22 @@ byteArray GenericStats::param_arrowKillCreeper()
 	return instance->getParam_achievement(eAward_arrowKillCreeper);
 }
 
-byteArray GenericStats::param_mine100Blocks()
-{
-	return instance->getParam_achievement(eAward_mine100Blocks);
-}
-
-byteArray GenericStats::param_kill10Creepers()
-{
-	return instance->getParam_achievement(eAward_kill10Creepers);
-}
+//byteArray GenericStats::param_mine100Blocks()
+//{
+//	return instance->getParam_achievement(eAward_mine100Blocks);
+//}
+//
+//byteArray GenericStats::param_kill10Creepers()
+//{
+//	return instance->getParam_achievement(eAward_kill10Creepers);
+//}
 
 byteArray GenericStats::param_adventuringTime()
 {
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->getParam_achievement(eAward_adventuringTime);
 #else
-	return instance->getParam_noArgs();
+	return instance->getParam_achievement(eAward_adventuringTime);
 #endif
 }
 
@@ -1125,7 +1125,7 @@ byteArray GenericStats::param_repopulation()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->getParam_achievement(eAward_repopulation);
 #else
-	return instance->getParam_noArgs();
+	return instance->getParam_achievement(eAward_repopulation);
 #endif
 }
 
@@ -1134,7 +1134,7 @@ byteArray GenericStats::param_porkChop()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->getParam_achievement(eAward_eatPorkChop);
 #else
-	return instance->getParam_noArgs();
+	return instance->getParam_achievement(eAward_eatPorkChop);
 #endif
 }
 
@@ -1143,7 +1143,7 @@ byteArray GenericStats::param_diamondsToYou()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->getParam_achievement(eAward_diamondsToYou);
 #else
-	return instance->getParam_noArgs();
+	return instance->getParam_achievement(eAward_diamondsToYou);
 #endif
 }
 
@@ -1152,7 +1152,7 @@ byteArray GenericStats::param_passingTheTime()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->getParam_achievement(eAward_play100Days);
 #else
-	return instance->getParam_noArgs();
+	return instance->getParam_achievement(eAward_play100Days);
 #endif
 }
 
@@ -1161,7 +1161,7 @@ byteArray GenericStats::param_archer()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->getParam_achievement(eAward_arrowKillCreeper);
 #else
-	return instance->getParam_noArgs();
+	return instance->getParam_achievement(eAward_arrowKillCreeper);
 #endif
 }
 
@@ -1170,7 +1170,7 @@ byteArray GenericStats::param_theHaggler()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->getParam_achievement(eAward_theHaggler);
 #else
-	return instance->getParam_noArgs();
+	return instance->getParam_achievement(eAward_theHaggler);
 #endif
 }
 
@@ -1179,7 +1179,7 @@ byteArray GenericStats::param_potPlanter()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->getParam_achievement(eAward_potPlanter);
 #else
-	return instance->getParam_noArgs();
+	return instance->getParam_achievement(eAward_potPlanter);
 #endif
 }
 
@@ -1188,7 +1188,7 @@ byteArray GenericStats::param_itsASign()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->getParam_achievement(eAward_itsASign);
 #else
-	return instance->getParam_noArgs();
+	return instance->getParam_achievement(eAward_itsASign);
 #endif
 }
 
@@ -1197,7 +1197,7 @@ byteArray GenericStats::param_ironBelly()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->getParam_achievement(eAward_ironBelly);
 #else
-	return instance->getParam_noArgs();
+	return instance->getParam_achievement(eAward_ironBelly);
 #endif
 }
 
@@ -1206,7 +1206,7 @@ byteArray GenericStats::param_haveAShearfulDay()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->getParam_achievement(eAward_haveAShearfulDay);
 #else
-	return instance->getParam_noArgs();
+	return instance->getParam_achievement(eAward_haveAShearfulDay);
 #endif
 }
 
@@ -1215,7 +1215,7 @@ byteArray GenericStats::param_rainbowCollection()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->getParam_achievement(eAward_rainbowCollection);
 #else
-	return instance->getParam_noArgs();
+	return instance->getParam_achievement(eAward_rainbowCollection);
 #endif
 }
 
@@ -1224,7 +1224,7 @@ byteArray GenericStats::param_stayinFrosty()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->getParam_achievement(eAward_stayinFrosty);
 #else
-	return instance->getParam_noArgs();
+	return instance->getParam_achievement(eAward_stayinFrosty);
 #endif
 }
 
@@ -1238,7 +1238,7 @@ byteArray GenericStats::param_renewableEnergy()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->getParam_achievement(eAward_renewableEnergy);
 #else
-	return instance->getParam_noArgs();
+	return instance->getParam_achievement(eAward_renewableEnergy);
 #endif
 }
 
@@ -1252,7 +1252,7 @@ byteArray GenericStats::param_bodyGuard()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->getParam_achievement(eAward_bodyGuard);
 #else
-	return instance->getParam_noArgs();
+	return instance->getParam_achievement(eAward_bodyGuard);
 #endif
 }
 
@@ -1261,7 +1261,7 @@ byteArray GenericStats::param_ironMan()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->getParam_achievement(eAward_ironMan);
 #else
-	return instance->getParam_noArgs();
+	return instance->getParam_achievement(eAward_ironMan);
 #endif
 }
 
@@ -1270,7 +1270,7 @@ byteArray GenericStats::param_zombieDoctor()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->getParam_achievement(eAward_zombieDoctor);
 #else
-	return instance->getParam_noArgs();
+	return instance->getParam_achievement(eAward_zombieDoctor);
 #endif
 }
 
@@ -1279,6 +1279,6 @@ byteArray GenericStats::param_lionTamer()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	return instance->getParam_achievement(eAward_lionTamer);
 #else
-	return instance->getParam_noArgs();
+	return instance->getParam_achievement(eAward_lionTamer);
 #endif
 }

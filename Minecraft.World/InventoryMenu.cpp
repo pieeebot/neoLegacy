@@ -235,7 +235,7 @@ shared_ptr<ItemInstance> InventoryMenu::clicked(int slotIndex, int buttonNum, in
 {
 	shared_ptr<ItemInstance> out = AbstractContainerMenu::clicked(slotIndex, buttonNum, clickType, player, looped);
 
-#ifdef _EXTENDED_ACHIEVEMENTS
+
 	static int ironItems[4] = {Item::helmet_iron_Id,Item::chestplate_iron_Id,Item::leggings_iron_Id,Item::boots_iron_Id};
 	for (int i = ARMOR_SLOT_START; i < ARMOR_SLOT_END; i++)
 	{
@@ -246,7 +246,6 @@ shared_ptr<ItemInstance> InventoryMenu::clicked(int slotIndex, int buttonNum, in
 		}
 	}
 	player->awardStat(GenericStats::ironMan(),GenericStats::param_ironMan());
-#endif
 
 	return out;
 }

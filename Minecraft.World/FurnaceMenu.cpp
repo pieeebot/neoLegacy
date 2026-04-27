@@ -100,10 +100,9 @@ shared_ptr<ItemInstance> FurnaceMenu::quickMoveStack(shared_ptr<Player> player, 
 			slot->onQuickCraft(stack, clicked);
 
 			// 4J-JEV, hook for Durango achievement 'Renewable Energy'.
-#ifdef _EXTENDED_ACHIEVEMENTS
+
 			if ( charcoalUsed && stack->getItem()->id == Item::coal_Id && stack->getAuxValue() == CoalItem::CHAR_COAL)
 				player->awardStat(GenericStats::renewableEnergy(),GenericStats::param_renewableEnergy());
-#endif
 		}
 		else if (slotIndex == FUEL_SLOT || slotIndex == INGREDIENT_SLOT)
 		{
@@ -164,13 +163,11 @@ shared_ptr<ItemInstance> FurnaceMenu::clicked(int slotIndex, int buttonNum, int 
 
 	shared_ptr<ItemInstance> out = AbstractContainerMenu::clicked(slotIndex, buttonNum, clickType, player, looped);
 
-#ifdef _EXTENDED_ACHIEVEMENTS
 	if ( charcoalUsed && (out!=nullptr) && (buttonNum==0 || buttonNum==1) && clickType==CLICK_PICKUP
 		&& out->getItem()->id == Item::coal_Id && out->getAuxValue() == CoalItem::CHAR_COAL	)
 	{
 		player->awardStat(GenericStats::renewableEnergy(),GenericStats::param_renewableEnergy());
 	}
-#endif
 
 	return out;
 }

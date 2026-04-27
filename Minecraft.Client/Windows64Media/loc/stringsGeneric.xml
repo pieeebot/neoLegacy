@@ -1,4 +1,4 @@
-﻿<root>
+<root>
 	<data name="IDS_TIPS_GAMETIP_NEWDLC">
 		<value>New Downloadable Content is available! Access it from the Minecraft Store button on the Main Menu.</value>
 	</data>	
@@ -9404,4 +9404,156 @@ All Ender Chests in a world are linked. Items placed into an Ender Chest are acc
 	<data name="IDS_ITEM_ELYTRA">
 		<value>Elytra</value>
 	</data>
+
+	<data name="IDS_ACHIEVE_NAME_TAKING_INVENTORY"><value>Taking Inventory</value></data>
+	<data name="IDS_ACHIEVE_DESC_TAKING_INVENTORY"><value>Open your inventory.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_GETTING_WOOD"><value>Getting Wood</value></data>
+	<data name="IDS_ACHIEVE_DESC_GETTING_WOOD"><value>Punch a tree until a block of wood pops out.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_BENCHMARKING"><value>Benchmarking</value></data>
+	<data name="IDS_ACHIEVE_DESC_BENCHMARKING"><value>Craft a Workbench with four blocks of Wooden Planks.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_TIME_TO_MINE"><value>Time to Mine!</value></data>
+	<data name="IDS_ACHIEVE_DESC_TIME_TO_MINE"><value>Use Planks and Sticks to make a Pickaxe.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_HOT_TOPIC"><value>Hot Topic</value></data>
+	<data name="IDS_ACHIEVE_DESC_HOT_TOPIC"><value>Construct a Furnace out of eight Cobblestone blocks.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_ACQUIRE_HARDWARE"><value>Acquire Hardware</value></data>
+	<data name="IDS_ACHIEVE_DESC_ACQUIRE_HARDWARE"><value>Smelt an Iron Ingot.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_TIME_TO_FARM"><value>Time to Farm!</value></data>
+	<data name="IDS_ACHIEVE_DESC_TIME_TO_FARM"><value>Make a Hoe.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_BAKE_BREAD"><value>Bake Bread</value></data>
+	<data name="IDS_ACHIEVE_DESC_BAKE_BREAD"><value>Turn Wheat into Bread.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_THE_LIE"><value>The Lie</value></data>
+	<data name="IDS_ACHIEVE_DESC_THE_LIE"><value>Bake a Cake using: Wheat, Sugar, Milk and Eggs.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_GETTING_AN_UPGRADE"><value>Getting an Upgrade</value></data>
+	<data name="IDS_ACHIEVE_DESC_GETTING_AN_UPGRADE"><value>Construct a better pickaxe.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_DELICIOUS_FISH"><value>Delicious Fish</value></data>
+	<data name="IDS_ACHIEVE_DESC_DELICIOUS_FISH"><value>Catch and cook Fish!</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_ON_A_RAIL"><value>On A Rail</value></data>
+	<data name="IDS_ACHIEVE_DESC_ON_A_RAIL"><value>Travel by Minecart to a point at least 500m in a single direction from where you started.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_TIME_TO_STRIKE"><value>Time to Strike!</value></data>
+	<data name="IDS_ACHIEVE_DESC_TIME_TO_STRIKE"><value>Use Planks and Sticks to make a Sword.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_MONSTER_HUNTER"><value>Monster Hunter</value></data>
+	<data name="IDS_ACHIEVE_DESC_MONSTER_HUNTER"><value>Attack and destroy a monster.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_COW_TIPPER"><value>Cow Tipper</value></data>
+	<data name="IDS_ACHIEVE_DESC_COW_TIPPER"><value>Harvest some leather.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_WHEN_PIGS_FLY"><value>When Pigs Fly</value></data>
+	<data name="IDS_ACHIEVE_DESC_WHEN_PIGS_FLY"><value>Use a Saddle to ride a Pig, and then have the Pig get hurt from fall damage while riding it.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_LEADER_OF_THE_PACK"><value>Leader of the Pack</value></data>
+	<data name="IDS_ACHIEVE_DESC_LEADER_OF_THE_PACK"><value>Befriend five Wolves.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_MOAR_TOOLS"><value>MOAR Tools</value></data>
+	<data name="IDS_ACHIEVE_DESC_MOAR_TOOLS"><value>Construct one type of each tool.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_DISPENSE_WITH_THIS"><value>Dispense With This</value></data>
+	<data name="IDS_ACHIEVE_DESC_DISPENSE_WITH_THIS"><value>Construct a dispenser.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_INTO_THE_NETHER"><value>Into The Nether</value></data>
+	<data name="IDS_ACHIEVE_DESC_INTO_THE_NETHER"><value>Construct a Nether Portal.</value></data>	
+
+	<data name="IDS_ACHIEVE_NAME_EAT_PORKCHOP"><value>Pork Chop</value></data>
+	<data name="IDS_ACHIEVE_DESC_EAT_PORKCHOP"><value>Cook and eat a Pork Chop.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_PLAY_100_DAYS"><value>Passing the Time</value></data>
+	<data name="IDS_ACHIEVE_DESC_PLAY_100_DAYS"><value>Play for 100 days.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_ARROW_KILL_CREEPER"><value>Archer</value></data>
+	<data name="IDS_ACHIEVE_DESC_ARROW_KILL_CREEPER"><value>Kill a Creeper with Arrows.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_SNIPESKELETON"><value>Sniper Duel</value></data>
+	<data name="IDS_ACHIEVE_DESC_SNIPESKELETON"><value>Kill a Skeleton with an Arrow from more than 50 meters.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_DIAMONDS"><value>DIAMONDS!</value></data>
+	<data name="IDS_ACHIEVE_DESC_DIAMONDS"><value>Acquire diamonds with your iron tools.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_GHAST"><value>Return to Sender</value></data>
+	<data name="IDS_ACHIEVE_DESC_GHAST"><value>Destroy a Ghast with a Fireball.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_BLAZEROD"><value>Into Fire</value></data>
+	<data name="IDS_ACHIEVE_DESC_BLAZEROD"><value>Relieve a Blaze of its rod.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_POTION"><value>Local Brewery</value></data>
+	<data name="IDS_ACHIEVE_DESC_POTION"><value>Brew a potion.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_THE_END"><value>The End?</value></data>
+	<data name="IDS_ACHIEVE_DESC_THE_END"><value>Enter an End Portal.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_WINGAME"><value>The End.</value></data>
+	<data name="IDS_ACHIEVE_DESC_WINGAME"><value>Kill the Enderdragon.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_ENCHANTMENTS"><value>Enchanter</value></data>
+	<data name="IDS_ACHIEVE_DESC_ENCHANTMENTS"><value>Construct an Enchantment Table.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_OVERKILL"><value>Overkill</value></data>
+	<data name="IDS_ACHIEVE_DESC_OVERKILL"><value>Deal nine hearts of damage in a single hit.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_BOOKCASE"><value>Librarian</value></data>
+	<data name="IDS_ACHIEVE_DESC_BOOKCASE"><value>Build some Bookshelves to improve your Enchantment Table.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_ADVENTURING_TIME"><value>Adventuring Time</value></data>
+	<data name="IDS_ACHIEVE_DESC_ADVENTURING_TIME"><value>Discover all biomes.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_REPOPULATION"><value>Repopulation</value></data>
+	<data name="IDS_ACHIEVE_DESC_REPOPULATION"><value>Breed two Cows with Wheat.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_DIAMONDS_TO_YOU"><value>Diamonds to you!</value></data>
+	<data name="IDS_ACHIEVE_DESC_DIAMONDS_TO_YOU"><value>Throw diamonds to another player.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_THE_HAGGLER"><value>The Haggler</value></data>
+	<data name="IDS_ACHIEVE_DESC_THE_HAGGLER"><value>Mine or purchase 30 Emeralds.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_POT_PLANTER"><value>Pot Planter</value></data>
+	<data name="IDS_ACHIEVE_DESC_POT_PLANTER"><value>Craft and place a Flower pot.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_ITS_A_SIGN"><value>It's a Sign!</value></data>
+	<data name="IDS_ACHIEVE_DESC_ITS_A_SIGN"><value>Craft and place a sign.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_IRON_BELLY"><value>Iron Belly</value></data>
+	<data name="IDS_ACHIEVE_DESC_IRON_BELLY"><value>Stop starvation using rotten flesh.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_HAVE_A_SHEARFUL_DAY"><value>Have a Shearful Day</value></data>
+	<data name="IDS_ACHIEVE_DESC_HAVE_A_SHEARFUL_DAY"><value>Use Shears to obtain Wool from a Sheep.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_RAINBOW_COLLECTION"><value>Rainbow Collection</value></data>
+	<data name="IDS_ACHIEVE_DESC_RAINBOW_COLLECTION"><value>Gather all 16 colors of Wool.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_STAYING_FROSTY"><value>Stayin' Frosty</value></data>
+	<data name="IDS_ACHIEVE_DESC_STAYING_FROSTY"><value>Swim in Lava while having the Fire Resistance effect.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_CHESTFUL_OF_COBBLESTONE"><value>Chestful of Cobblestone</value></data>
+	<data name="IDS_ACHIEVE_DESC_CHESTFUL_OF_COBBLESTONE"><value>Mine 1,728 Cobblestone and place it in a Chest.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_RENEWABLE_ENERGY"><value>Renewable Energy</value></data>
+	<data name="IDS_ACHIEVE_DESC_RENEWABLE_ENERGY"><value>Smelt Wood Trunks using Charcoal to make more Charcoal.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_MUSIC_TO_MY_EARS"><value>Music to my Ears</value></data>
+	<data name="IDS_ACHIEVE_DESC_MUSIC_TO_MY_EARS"><value>Play a Music Disc in a Jukebox.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_BODYGUARD"><value>Body Guard</value></data>
+	<data name="IDS_ACHIEVE_DESC_BODYGUARD"><value>Create an Iron Golem.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_IRON_MAN"><value>Iron Man</value></data>
+	<data name="IDS_ACHIEVE_DESC_IRON_MAN"><value>Wear a full suit of Iron Armor.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_ZOMBIE_DOCTOR"><value>Zombie Doctor</value></data>
+	<data name="IDS_ACHIEVE_DESC_ZOMBIE_DOCTOR"><value>Cure a Zombie Villager.</value></data>
+
+	<data name="IDS_ACHIEVE_NAME_LION_TAMER"><value>Lion Tamer</value></data>
+	<data name="IDS_ACHIEVE_DESC_LION_TAMER"><value>Tame an ocelot.</value></data>
+
+	<data name="IDS_ACHIEVEMENT_VIEW"><value>Hold {*CONTROLLER_VK_Y*} to view</value></data>
 </root>

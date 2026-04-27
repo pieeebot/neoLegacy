@@ -94,7 +94,6 @@ shared_ptr<ItemInstance> ContainerMenu::clicked(int slotIndex, int buttonNum, in
 {
 	shared_ptr<ItemInstance> out = AbstractContainerMenu::clicked(slotIndex, buttonNum, clickType, player, looped);
 
-#ifdef _EXTENDED_ACHIEVEMENTS
 	shared_ptr<LocalPlayer> localPlayer = dynamic_pointer_cast<LocalPlayer>(player);
 
 	if (localPlayer != nullptr)	// 4J-JEV: For "Chestful o'Cobblestone" achievement.
@@ -119,7 +118,6 @@ shared_ptr<ItemInstance> ContainerMenu::clicked(int slotIndex, int buttonNum, in
 			localPlayer->awardStat(GenericStats::chestfulOfCobblestone(),GenericStats::param_chestfulOfCobblestone(cobblecount));
 		}
 	}
-#endif
 
 	return out;
 }

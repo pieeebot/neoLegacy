@@ -100,6 +100,7 @@ enum EUIScene
 	eUIScene_HorseMenu,
 	eUIScene_FireworksMenu,
 	eUIScene_BookMenu,
+	eUIScene_AchievementsMenu,
 #ifdef _XBOX
 //	eUIScene_TransferToXboxOne,
 #endif

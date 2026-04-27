@@ -23,18 +23,18 @@ enum eAward
 	eAward_DispenseWithThis,
 	eAward_InToTheNether,
 
-	eAward_mine100Blocks,		
-	eAward_kill10Creepers,	
+	//eAward_mine100Blocks,		
+	//eAward_kill10Creepers,	
 	eAward_eatPorkChop,		
 	eAward_play100Days,		
 	eAward_arrowKillCreeper,	
-	eAward_socialPost,
+	//eAward_socialPost,
 
 #ifndef _XBOX	
 	// 4J Stu - Does not map to any Xbox achievements
 	eAward_snipeSkeleton,
 	eAward_diamonds,
-	eAward_portal,
+	//eAward_portal,
 	eAward_ghast,
 	eAward_blazeRod,
 	eAward_potion,
@@ -45,7 +45,7 @@ enum eAward
 	eAward_bookcase,
 #endif
 
-#ifdef _EXTENDED_ACHIEVEMENTS
+
 	eAward_adventuringTime,
 	eAward_repopulation,
 	//eAward_porkChop,
@@ -66,7 +66,6 @@ enum eAward
 	eAward_ironMan,
 	eAward_zombieDoctor,
 	eAward_lionTamer,
-#endif
 
 	eAward_Max,
 };

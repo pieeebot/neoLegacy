@@ -2040,6 +2040,7 @@ void UIScene_MainMenu::RunAchievements(int iPad)
 		XShowAchievementsUI( iPad );
 	}
 #endif
+	ui.NavigateToScene(iPad, eUIScene_AchievementsMenu);
 }
 
 void UIScene_MainMenu::RunHelpAndOptions(int iPad)

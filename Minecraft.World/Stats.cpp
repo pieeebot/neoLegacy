@@ -23,9 +23,9 @@ vector<ItemStat *> *Stats::blocksMinedStats = new vector<ItemStat *>;
 vector<ItemStat *> *Stats::itemsCollectedStats = new vector<ItemStat *>;
 vector<ItemStat *> *Stats::itemsCraftedStats = new vector<ItemStat *>;
 
-#if (defined _EXTENDED_ACHIEVEMENTS) && (!defined _DURANGO)
+
 vector<ItemStat *> *Stats::blocksPlacedStats = new vector<ItemStat *>;
-#endif
+
 
 Stat *Stats::walkOneM = nullptr;
 Stat *Stats::swimOneM = nullptr;
@@ -56,11 +56,11 @@ StatArray Stats::blocksMined;
 StatArray Stats::itemsCollected;
 StatArray Stats::itemsCrafted;
 
-#if (defined _EXTENDED_ACHIEVEMENTS) && (!defined _DURANGO)
+
 StatArray Stats::blocksPlaced;
 StatArray Stats::rainbowCollection;
 StatArray Stats::biomesVisisted;
-#endif
+
 
 Stat *Stats::killsEnderdragon = nullptr; // The number of times this player has dealt the killing blow to the Enderdragon
 Stat *Stats::completeTheEnd = nullptr; // The number of times this player has been present when the Enderdragon has died
@@ -473,7 +473,7 @@ void Stats::buildAdditionalStats()
 	Stats::completeTheEnd = (new GeneralStat(offset++, L"stat.completeTheEnd"))->postConstruct();
 
 
-#if (defined _EXTENDED_ACHIEVEMENTS) && (!defined _DURANGO)
+
 	{
 		ItemStat *itemStat = new ItemStat(offset++, L"craftItem.flowerPot", Item::flowerPot_Id);
 		itemsCraftedStats->push_back(itemStat);
@@ -547,7 +547,7 @@ void Stats::buildAdditionalStats()
 		blocksPlaced[itemStat->getItemId()] = itemStat;
 		itemStat->postConstruct();
 	}
-#endif
+
 
 }
 

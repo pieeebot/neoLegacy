@@ -6698,7 +6698,7 @@ int CMinecraftApp::GetHTMLFontSize(EHTMLFontSize size)
 	return s_iHTMLFontSizesA[size];
 }
 
-wstring CMinecraftApp::FormatHTMLString(int iPad, const wstring &desc, int shadowColour /*= 0xFFFFFFFF*/)
+wstring CMinecraftApp::FormatHTMLString(int iPad, const wstring &desc, int shadowColour /*= 0xFFFFFFFF*/, bool override)
 {
 	wstring text(desc);
 
@@ -6781,7 +6781,7 @@ wstring CMinecraftApp::FormatHTMLString(int iPad, const wstring &desc, int shado
 	text = replaceAll(text, L"{*CONTROLLER_VK_A*}",					GetVKReplacement(VK_PAD_A) );
 	text = replaceAll(text, L"{*CONTROLLER_VK_B*}",					GetVKReplacement(VK_PAD_B) );
 	text = replaceAll(text, L"{*CONTROLLER_VK_X*}",					GetVKReplacement(VK_PAD_X) );
-	text = replaceAll(text, L"{*CONTROLLER_VK_Y*}",					GetVKReplacement(VK_PAD_Y) );
+	text = replaceAll(text, L"{*CONTROLLER_VK_Y*}",					GetVKReplacement(VK_PAD_Y, override) );
 	text = replaceAll(text, L"{*CONTROLLER_VK_LB*}",				GetVKReplacement(VK_PAD_LSHOULDER) );
 	text = replaceAll(text, L"{*CONTROLLER_VK_RB*}",				GetVKReplacement(VK_PAD_RSHOULDER) );
 	text = replaceAll(text, L"{*CONTROLLER_VK_LS*}",				GetVKReplacement(VK_PAD_LTHUMB_UP) );
@@ -7018,7 +7018,7 @@ wstring CMinecraftApp::GetActionReplacement(int iPad, unsigned char ucAction)
 #endif
 }
 
-wstring CMinecraftApp::GetVKReplacement(unsigned int uiVKey)
+wstring CMinecraftApp::GetVKReplacement(unsigned int uiVKey, bool override)
 {
 #ifdef _XBOX
 	switch(uiVKey)
@@ -7136,7 +7136,7 @@ wstring CMinecraftApp::GetVKReplacement(unsigned int uiVKey)
 	int size = 30;
 #elif defined _WIN64
 	int size = 45;
-	if(ui.getScreenHeight() < 1080) size = 30;
+	if(ui.getScreenHeight() < 1080 || override == true) size = 30;
 #else
 	int size = 45;
 #endif

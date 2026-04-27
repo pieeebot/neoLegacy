@@ -33,6 +33,7 @@ public:
 		eTouchControl,
 		eBook,
 		ePageFlip,
+		eAchievementList,
 	};
 protected:
 	eUIControlType m_eControlType;
@@ -65,7 +66,7 @@ public:
 	UIControl();
 
 	virtual bool setupControl(UIScene *scene, IggyValuePath *parent, const string &controlName);
-	void UpdateControl();
+	virtual void UpdateControl();
 	void setHidden(bool bHidden) {m_bHidden=bHidden;}
 	bool getHidden(void) {return m_bHidden;}
 

@@ -2628,10 +2628,10 @@ void Player::startUsingItem(shared_ptr<ItemInstance> instance, int duration)
 	awardStat(GenericStats::itemsUsed(instance->getItem()->id),
 		GenericStats::param_itemsUsed(dynamic_pointer_cast<Player>(shared_from_this()),instance));
 
-#if (!defined _DURANGO) && (defined _EXTENDED_ACHIEVEMENTS)
+
 	if ( (instance->getItem()->id == Item::rotten_flesh_Id) && (getFoodData()->getFoodLevel() == 0) )
 		awardStat(GenericStats::ironBelly(), GenericStats::param_ironBelly());
-#endif
+
 }
 
 bool Player::mayDestroyBlockAt(int x, int y, int z)

@@ -57,6 +57,7 @@ public:
 
 	int m_iScreenSection; // assuming 4player splitscreen for now, or -1 for single player
 	uint64_t ullButtonsPressed; // Stores the button presses, since the inputmanager can be ticked faster than the minecraft
+	uint64_t ullButtonsDown; // Stores the button presses, since the inputmanager can be ticked faster than the minecraft
 	// player tick, and a button press and release combo can be missed in the minecraft::tick
 
 	uint64_t ullDpad_last;
@@ -66,7 +67,7 @@ public:
 	// 4J-PB - moved these in from the minecraft structure, since they are per player things for splitscreen
 	//int ticks;
 	int missTime;
-	int lastClickTick[2];
+	int lastClickTick[3];
 	bool isRaining ;
 	int m_iThirdPersonView;
 
