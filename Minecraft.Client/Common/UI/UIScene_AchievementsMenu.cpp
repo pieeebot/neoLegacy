@@ -125,17 +125,35 @@ void UIScene_AchievementsMenu::handleInput(int iPad, int key, bool repeat, bool 
 		break;
 	case ACTION_MENU_Y:
 		if (pressed) {
-			showDescription = !showDescription;
+			if (!g_KBMInput.IsKBMActive()) {
+				showDescription = !showDescription;
 
-			if (showDescription) {
-				SetAchievementDescription(app.GetString(Achievements::achievements->at(m_achievementsList.m_iCurrentSelection - 1)->descID));
+				if (showDescription) {
+					SetAchievementDescription(app.GetString(Achievements::achievements->at(m_achievementsList.m_iCurrentSelection - 1)->descID));
+				}
+				else {
+					SetAchievementDescription(L"");
+				}
 			}
-			else {
-				SetAchievementDescription(L"");
-			}
+			sendInputToMovie(key, repeat, pressed, released);
+			handled = true;
 		}
-		sendInputToMovie(key, repeat, pressed, released);
-		handled = true;
+		break;
+	case ACTION_MENU_X:
+		if (pressed) {
+			if (g_KBMInput.IsKBMActive()) {
+				showDescription = !showDescription;
+
+				if (showDescription) {
+					SetAchievementDescription(app.GetString(Achievements::achievements->at(m_achievementsList.m_iCurrentSelection - 1)->descID));
+				}
+				else {
+					SetAchievementDescription(L"");
+				}
+			}
+			sendInputToMovie(key, repeat, pressed, released);
+			handled = true;
+		}
 		break;
 	case ACTION_MENU_UP:
 		if (pressed) {
