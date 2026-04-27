@@ -141,8 +141,9 @@ LevelRenderer::LevelRenderer(Minecraft *mc, Textures *textures)
 	culledEntities = 0;
 	chunkFixOffs = 0;
 	frame = 0;
+#ifndef MINECRAFT_SERVER_BUILD
 	repeatList = MemoryTracker::genLists(1);
-
+#endif
 	destroyProgress = 0.0f;
 
 	totalChunks= offscreenChunks= occludedChunks= renderedChunks= emptyChunks = 0;
@@ -171,7 +172,7 @@ LevelRenderer::LevelRenderer(Minecraft *mc, Textures *textures)
 
 	this->mc = mc;
 	this->textures = textures;
-
+#ifndef MINECRAFT_SERVER_BUILD
 	chunkLists = MemoryTracker::genLists(getGlobalChunkCount() * CHUNK_RENDER_LAYERS);		// One render list per chunk render layer.
 	globalChunkFlags = new unsigned char[getGlobalChunkCount()];
 	memset(globalChunkFlags, 0, getGlobalChunkCount());
@@ -261,6 +262,7 @@ LevelRenderer::LevelRenderer(Minecraft *mc, Textures *textures)
 		t->end();
 		glEndList();
 	}
+#endif
 
 	Chunk::levelRenderer = this;
 
@@ -536,6 +538,7 @@ void LevelRenderer::allChanged(int playerIndex)
 
 void LevelRenderer::renderEntities(Vec3 *cam, Culler *culler, float a)
 {
+#ifndef MINECRAFT_SERVER_BUILD
 	if (mc == nullptr || mc->player == nullptr)
 	{
 		return;
@@ -662,6 +665,7 @@ void LevelRenderer::renderEntities(Vec3 *cam, Culler *culler, float a)
 	LeaveCriticalSection(&m_csRenderableTileEntities);
 
 	mc->gameRenderer->turnOffLightLayer(a);		// 4J - brought forward from 1.8.2
+#endif
 }
 
 wstring LevelRenderer::gatherStats1()
@@ -3960,7 +3964,9 @@ int LevelRenderer::rebuildChunkThreadProc(LPVOID lpParam)
 	AABB::CreateNewThreadStorage();
 	IntCache::CreateNewThreadStorage();
 	Tesselator::CreateNewThreadStorage(1024*1024);
+#ifndef MINECRAFT_SERVER_BUILD
 	RenderManager.InitialiseContext();
+#endif
 	Chunk::CreateNewThreadStorage();
 	Tile::CreateNewThreadStorage();
 
