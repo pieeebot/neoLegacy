@@ -11,6 +11,8 @@ class Minimap
 private:
 	static const int w = MapItem::IMAGE_WIDTH;
     static const int h = MapItem::IMAGE_HEIGHT;
+#ifndef MINECRAFT_SERVER_BUILD
+
 #ifdef __ORBIS__
 	static short LUT[256];	// 4J added
 #else
@@ -19,6 +21,7 @@ private:
 	static bool genLUT;		// 4J added
 	int renderCount;		// 4J added
 	bool m_optimised;		// 4J Added
+
 #ifdef __ORBIS__
 	shortArray pixels;
 #else
@@ -27,6 +30,7 @@ private:
     int mapTexture;
     Options *options;
     Font *font;
+#endif
 
 public:
 	Minimap(Font *font, Options *options, Textures *textures, bool optimised = true); // 4J Added optimised param
