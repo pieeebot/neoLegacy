@@ -80,6 +80,7 @@ public:
 	static int getDiggingLootBonus(shared_ptr<LivingEntity> source);
 	static int getKillingLootBonus(shared_ptr<LivingEntity> source);
 	static bool hasWaterWorkerBonus(shared_ptr<LivingEntity> source);
+    static int getWaterWalker(shared_ptr<LivingEntity> source);
 	static int getArmorThorns(shared_ptr<LivingEntity> source);
 	static shared_ptr<ItemInstance> getRandomItemWith(Enchantment *enchantment, shared_ptr<LivingEntity> source);
 

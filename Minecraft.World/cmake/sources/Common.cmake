@@ -1267,6 +1267,8 @@ set(_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_WORLD_ITEM_ENCHANTMENT
   "${CMAKE_CURRENT_SOURCE_DIR}/UntouchingEnchantment.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/WaterWorkerEnchantment.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/WaterWorkerEnchantment.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/WaterWalkerEnchantment.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/WaterWalkerEnchantment.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/net.minecraft.world.item.enchantment.h"
 )
 source_group("net/minecraft/world/item/enchantment" FILES ${_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_WORLD_ITEM_ENCHANTMENT})
