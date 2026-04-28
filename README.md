@@ -9,7 +9,7 @@ This project aims to backport the newer title updates back to Legacy Console Edi
 ![Roadmap](.github/roadmap.png)
 
 - Port Title Update 25 (100% complete) ( 🎉 )
-- Port Title Update 31 (89.55% complete)
+- Port Title Update 31 (94.03%% complete)
 
 See our [Contributor's Guide](./CONTRIBUTING.md) for more information on the goals of this project.
 
