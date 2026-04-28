@@ -11,7 +11,7 @@ public abstract class HumanEntity : LivingEntity, InventoryHolder
     private GameMode _gameMode = GameMode.SURVIVAL;
     private string _name = string.Empty;
     internal PlayerInventory _playerInventory = new();
-    internal Inventory _enderChestInventory = new("Ender Chest", InventoryType.ENDER_CHEST, 27);
+    internal EnderChestInventory? _enderChestInventory;
     private ItemStack? _cursorItem;
     private bool _sleeping;
     private int _sleepTicks;
@@ -59,6 +59,8 @@ public abstract class HumanEntity : LivingEntity, InventoryHolder
     /// <returns>The EnderChest of the player.</returns>
     public Inventory getEnderChest()
     {
+        // AAAAAH
+        _enderChestInventory ??= new EnderChestInventory(getEntityId());
         return _enderChestInventory;
     }
 
@@ -86,14 +88,44 @@ public abstract class HumanEntity : LivingEntity, InventoryHolder
     /// Will always be empty if the player currently has no open window.
     /// </summary>
     /// <returns>The ItemStack of the item you are currently moving around.</returns>
-    public ItemStack? getItemOnCursor() => _cursorItem;
+    public ItemStack? getItemOnCursor()
+    {
+        if (NativeBridge.GetCarriedItem != null)
+        {
+            int[] buf = new int[3];
+            var gh = System.Runtime.InteropServices.GCHandle.Alloc(buf, System.Runtime.InteropServices.GCHandleType.Pinned);
+            try
+            {
+                NativeBridge.GetCarriedItem(getEntityId(), gh.AddrOfPinnedObject());
+            }
+            finally
+            {
+                gh.Free();
+            }
+            int id = buf[0];
+            int aux = buf[1];
+            int count = buf[2];
+            if (id > 0 && count > 0)
+                _cursorItem = new ItemStack(id, count, (short)aux);
+            else
+                _cursorItem = null;
+        }
+        return _cursorItem;
+    }
 
     /// <summary>
     /// Sets the item to the given ItemStack, this will replace whatever the
     /// user was moving. Will always be empty if the player currently has no open window.
     /// </summary>
     /// <param name="item">The ItemStack which will end up in the hand.</param>
-    public void setItemOnCursor(ItemStack? item) => _cursorItem = item;
+    public void setItemOnCursor(ItemStack? item)
+    {
+        _cursorItem = item;
+        NativeBridge.SetCarriedItem?.Invoke(getEntityId(),
+            item?.getTypeId() ?? 0,
+            item?.getAmount() ?? 0,
+            item?.getDurability() ?? 0);
+    }
 
     /// <summary>
     /// If the player currently has an inventory window open, this method will

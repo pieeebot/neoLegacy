@@ -106,6 +106,7 @@ set(_MINECRAFT_WORLD_COMMON_CONSOLEJAVALIBS_INPUTOUTPUTSTREAM
 source_group("ConsoleJavaLibs/InputOutputStream" FILES ${_MINECRAFT_WORLD_COMMON_CONSOLEJAVALIBS_INPUTOUTPUTSTREAM})
 
 set(_MINECRAFT_WORLD_COMMON_HEADER_FILES
+  "${CMAKE_CURRENT_SOURCE_DIR}/Debug.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/LevelObjectInputStream.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/Minecraft.World.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/ParticleTypes.h"
@@ -432,8 +433,8 @@ set(_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_NETWORK_PACKET
   "${CMAKE_CURRENT_SOURCE_DIR}/UseItemPacket.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/XZPacket.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/XZPacket.h"
-  "${CMAKE_CURRENT_SOURCE_DIR}/net.minecraft.network.packet.h"
-   "${CMAKE_CURRENT_SOURCE_DIR}/../Minecraft.Client/ParticleType.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/net.minecraft.network.packet.h" 
+  "${CMAKE_CURRENT_SOURCE_DIR}/../Minecraft.Client/ParticleType.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/../Minecraft.Client/ParticleType.cpp"
 )
 source_group("net/minecraft/network/packet" FILES ${_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_NETWORK_PACKET})
@@ -852,9 +853,8 @@ set(_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_WORLD_ENTITY_ITEM
   "${CMAKE_CURRENT_SOURCE_DIR}/MinecartTNT.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/MinecartTNT.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/PrimedTnt.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/PrimedTnt.h"
-
-   "${CMAKE_CURRENT_SOURCE_DIR}/ArmorStand.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/PrimedTnt.h" 
+  "${CMAKE_CURRENT_SOURCE_DIR}/ArmorStand.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/ArmorStand.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/net.minecraft.world.entity.item.h"
 )

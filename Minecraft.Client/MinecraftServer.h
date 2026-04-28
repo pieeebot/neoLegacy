@@ -258,6 +258,12 @@ private:
 	static int s_slowQueuePlayerIndex;
 	static int s_slowQueueLastTime;
 	static bool s_slowQueuePacketSent;
+#ifdef MINECRAFT_SERVER_BUILD
+	// Cap on chunk-data packet sends per tick. Paired with per-tick rotation
+	// in ServerConnection::tick so every player gets a turn even when bound.
+	static int s_dedicatedChunkSendsThisTick;
+	static const int DEDICATED_MAX_CHUNK_SENDS_PER_TICK = 10;
+#endif
 #endif
 
 	bool IsServerPaused() { return m_isServerPaused; }

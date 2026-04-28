@@ -288,7 +288,7 @@ byteArray Packet::readBytes(DataInputStream *datainputstream)
 	{
 		app.DebugPrintf("Key was smaller than nothing!  Weird key!");
 #ifndef _CONTENT_PACKAGE
-		__debugbreak();
+		DEBUG_BREAK();
 #endif
 		return byteArray();
 		//throw new IOException("Key was smaller than nothing!  Weird key!");

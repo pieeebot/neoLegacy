@@ -7,5 +7,7 @@
     <AssemblyName>Minecraft.Server.FourKit</AssemblyName>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <BaseOutputPath>bin</BaseOutputPath>
+    <ServerGarbageCollection>true</ServerGarbageCollection>
+    <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
   </PropertyGroup>
 </Project>

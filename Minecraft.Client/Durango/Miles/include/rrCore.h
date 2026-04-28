@@ -1619,7 +1619,7 @@ RADDEFSTART
     #define RR_BREAK() __builtin_trap()
     #define RR_CACHE_LINE_SIZE  32
   #elif defined(__RADXENON__)
-	#define RR_BREAK() __debugbreak()
+	#define RR_BREAK() DEBUG_BREAK()
     #define RR_CACHE_LINE_SIZE      128
   #elif defined(__RADANDROID__)
     #define RR_BREAK() __builtin_trap()

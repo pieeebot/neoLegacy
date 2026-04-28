@@ -41,4 +41,9 @@ namespace ServerRuntime
 	void LogStartupStep(const char *message);
 	void LogWorldIO(const char *message);
 	void LogWorldName(const char *prefix, const std::wstring &name);
+
+	// When true, noisy [perf] sampling output (histograms, per-iter samples)
+	// is enabled. Threshold-fired warnings remain always-on. Toggled via the
+	// -perftrace CLI flag.
+	extern bool g_serverPerfTrace;
 }

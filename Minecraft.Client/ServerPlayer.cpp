@@ -8,6 +8,9 @@
 #include "Settings.h"
 #include "PlayerList.h"
 #include "MultiPlayerLevel.h"
+#include "Minecraft.h"
+#include "Common/Audio/SoundEngine.h"
+#include "../Minecraft.World/SoundTypes.h"
 
 #include "../Minecraft.World/net.minecraft.network.packet.h"
 #include "../Minecraft.World/net.minecraft.world.damagesource.h"
@@ -474,28 +477,82 @@ void ServerPlayer::doTickA()
 }
 
 // 4J - split off the chunk sending bit of the tick here from ::doTick so we can do this exactly once per player per server tick
+//
+// Find-nearest uses spiral iteration from the player's chunk position with
+// O(1) hash lookups against chunksToSend. A bounded fallback walk covers
+// the rare case of a stale entry outside the spiral radius.
 void ServerPlayer::doChunkSendingTick(bool dontDelayChunks)
 {
 	//	printf("[%d] %s: sendChunks: %d, empty: %d\n",tickCount, connection->getNetworkPlayer()->GetUID().getOnlineID(),sendChunks,chunksToSend.empty());
 	if (!chunksToSend.empty())
 	{
-		ChunkPos nearest = chunksToSend.front();
+		ChunkPos nearest(0, 0);
 		bool nearestValid = false;
-
-		// 4J - reinstated and optimised some code that was commented out in the original, to make sure that we always
-		// send the nearest chunk to the player. The original uses the bukkit sorting thing to try and avoid doing this, but
-		// the player can quickly wander away from the centre of the spiral of chunks that that method creates, long before transmission
-		// of them is complete.
 		double dist = DBL_MAX;
-		for(ChunkPos chunk : chunksToSend)
+
+		const int px = (int)floor(x) >> 4;
+		const int pz = (int)floor(z) >> 4;
+		// Bound on spiral radius. Configured view distance is much smaller.
+		const int kMaxSpiralRadius = 32;
+
+		// Inline distance: ChunkPos::distanceToSqr is non-const so it can't
+		// be called on the const refs we get when iterating an unordered_set.
+		auto chunkDistSq = [&](int cx, int cz) -> double {
+			double xPos = cx * 16.0 + 8.0;
+			double zPos = cz * 16.0 + 8.0;
+			double xd = xPos - this->x;
+			double zd = zPos - this->z;
+			return xd * xd + zd * zd;
+		};
+
+		// Ring r=0: the player's own chunk.
 		{
-			if( level->isChunkFinalised(chunk.x, chunk.z) )
+			ChunkPos cp(px, pz);
+			auto it = chunksToSend.find(cp);
+			if (it != chunksToSend.end() && level->isChunkFinalised(cp.x, cp.z))
 			{
-				double newDist = chunk.distanceToSqr(x, z);
-				if ( (!nearestValid) || (newDist < dist) )
+				nearest = cp;
+				dist = chunkDistSq(cp.x, cp.z);
+				nearestValid = true;
+			}
+		}
+
+		// Rings r>=1: Chebyshev perimeter. First ring with a match wins;
+		// within it pick the closest by true Euclidean distance.
+		for (int r = 1; r <= kMaxSpiralRadius && !nearestValid; r++)
+		{
+			for (int dx = -r; dx <= r; dx++)
+			{
+				for (int dz = -r; dz <= r; dz++)
 				{
-					nearest = chunk;
-					dist = chunk.distanceToSqr(x, z);
+					int adx = dx < 0 ? -dx : dx;
+					int adz = dz < 0 ? -dz : dz;
+					if ((adx > adz ? adx : adz) != r) continue; // perimeter only
+					ChunkPos cp(px + dx, pz + dz);
+					if (chunksToSend.find(cp) == chunksToSend.end()) continue;
+					if (!level->isChunkFinalised(cp.x, cp.z)) continue;
+					double d = chunkDistSq(cp.x, cp.z);
+					if (!nearestValid || d < dist)
+					{
+						nearest = cp;
+						dist = d;
+						nearestValid = true;
+					}
+				}
+			}
+		}
+
+		// Fallback for chunks outside the spiral radius (rare).
+		if (!nearestValid)
+		{
+			for (const ChunkPos& cp : chunksToSend)
+			{
+				if (!level->isChunkFinalised(cp.x, cp.z)) continue;
+				double d = chunkDistSq(cp.x, cp.z);
+				if (!nearestValid || d < dist)
+				{
+					nearest = cp;
+					dist = d;
 					nearestValid = true;
 				}
 			}
@@ -564,7 +621,7 @@ void ServerPlayer::doChunkSendingTick(bool dontDelayChunks)
 			{
 				ServerLevel *level = server->getLevel(dimension);
 				int flagIndex = getFlagIndexForChunk(nearest,this->level->dimension->id);
-				chunksToSend.remove(nearest);
+				chunksToSend.erase(nearest);
 
 				bool chunkDataSent = false;
 
@@ -1036,6 +1093,13 @@ void ServerPlayer::changeDimension(int i)
 			// 4J: Removed on the advice of the mighty King of Achievments (JV)
 			// awardStat(GenericStats::portal(), GenericStats::param_portal());
 		}
+		// play the travel whoosh right before the actual dimension swap
+		Minecraft *mc = Minecraft::GetInstance();
+		if (mc != nullptr && mc->soundEngine != nullptr)
+		{
+			mc->soundEngine->playUI(eSoundType_PORTAL_TRAVEL, 1, 1.0f);
+		}
+
 		server->getPlayers()->toggleDimension( dynamic_pointer_cast<ServerPlayer>(shared_from_this()), i);
 #if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
 		if (portalDestModified)

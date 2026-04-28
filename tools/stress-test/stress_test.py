@@ -20,6 +20,7 @@ Options:
 
 import argparse
 import logging
+import math
 import os
 import random
 import secrets
@@ -68,7 +69,9 @@ CIPHER_ON_PATTERN = (
     b"\x00\x00"
 )
 
+CIPHER_KEY_CHANNEL = "MC|CKey"
 CIPHER_ACK_CHANNEL = "MC|CAck"
+CIPHER_ON_CHANNEL = "MC|COn"
 IDENTITY_TOKEN_ISSUE = "MC|CTIssue"
 IDENTITY_TOKEN_CHALLENGE = "MC|CTChallenge"
 IDENTITY_TOKEN_RESPONSE = "MC|CTResponse"
@@ -130,14 +133,17 @@ class Stats:
 # Movement packet builder
 # ---------------------------------------------------------------------------
 
-MOVE_PLAYER = 0x0D  # MovePlayerPacket ID
+MOVE_PLAYER = 0x0D  # MovePlayerPacket::PosRot — what we send AND what server sends for teleports.
 
 def build_move_player(x: float, y: float, z: float,
                       yaw: float, pitch: float, on_ground: bool) -> bytes:
+    # Wire order matches MovePlayerPacket::PosRot::write: x, y (feet),
+    # yView (eye), z, yaw, pitch, flags. Server kicks for IllegalStance
+    # if (yView - y) is outside [0.1, 1.65], so feet must come first.
     dos = DataOutputStream()
     dos.write_double(x)
-    dos.write_double(y + 1.62)  # stance
     dos.write_double(y)
+    dos.write_double(y + 1.62)
     dos.write_double(z)
     dos.write_float(yaw)
     dos.write_float(pitch)
@@ -174,6 +180,13 @@ class StressBot:
         self._identity_token = b""
         self._entity_id = 0
         self._running = True
+        # Server-tracked position. Initialized when server sends its first
+        # MovePlayer::PosRot teleport after login, and updated whenever the
+        # server teleports us (eg. plugin scatter, anti-cheat correction).
+        self._pos_x = 0.0
+        self._pos_y = 64.0
+        self._pos_z = 0.0
+        self._pos_initialized = False
 
     def log(self, msg: str) -> None:
         if not self.quiet:
@@ -250,8 +263,6 @@ class StressBot:
         hold_end = time.time() + hold_time
         last_keepalive = time.time()
         keepalive_counter = 0
-        move_x, move_z = random.uniform(-50, 50), random.uniform(-50, 50)
-        move_y = 65.0
 
         while time.time() < hold_end and self._running:
             # Drain incoming data
@@ -276,13 +287,22 @@ class StressBot:
                     self.stats.keepalives_sent += 1
                 last_keepalive = now
 
-            # Movement packets every 50ms
-            if self.send_moves:
-                move_x += random.uniform(-0.5, 0.5)
-                move_z += random.uniform(-0.5, 0.5)
+            # Movement packets every 50ms. We can't do real travel because
+            # the server's anti-cheat compares our claimed position against
+            # what its own physics computes, and we don't simulate collision
+            # or gravity. Instead we drift ±0.3 blocks from whatever
+            # position the server most recently teleported us to. To spread
+            # bots out, use the test plugin's /fktest scatter from in-game.
+            if self.send_moves and self._pos_initialized:
+                new_x = self._pos_x + random.uniform(-0.3, 0.3)
+                new_z = self._pos_z + random.uniform(-0.3, 0.3)
                 yaw = random.uniform(0, 360)
                 self._send_packet(MOVE_PLAYER,
-                    build_move_player(move_x, move_y, move_z, yaw, 0.0, True))
+                    build_move_player(new_x, self._pos_y, new_z, yaw, 0.0, True))
+                # Optimistically update; server will correct us via PosRot
+                # if it disagreed (eg. we drifted into a block).
+                self._pos_x = new_x
+                self._pos_z = new_z
                 with self.stats.lock:
                     self.stats.moves_sent += 1
                 time.sleep(0.05)
@@ -294,11 +314,23 @@ class StressBot:
         return True
 
     def _do_cipher_scan(self) -> None:
-        """Scan for cipher handshake for up to 3 seconds."""
+        """Wait for the cipher handshake to finish or up to ~4s.
+
+        Returns early once both keys are exchanged. The upper bound has to
+        cover the worst case where a stack of plaintext setup packets
+        (level info, scoreboard, initial chunks) sits in front of MC|CKey
+        in the recv buffer. The server's own cipher-handshake grace is
+        100 ticks (~5s).
+        """
         scan_start = time.time()
         scan_buf = bytearray()
 
-        while time.time() - scan_start < 0.5 and self._running:
+        while time.time() - scan_start < 4.0 and self._running:
+            # _handle_custom_payload may have already activated cipher via
+            # the drain path inside _read_until_packet.
+            if self._cipher_key and self._recv_cipher:
+                return
+
             try:
                 chunk = self._sock.recv(65536)
                 if not chunk:
@@ -393,6 +425,14 @@ class StressBot:
                             pass
                         return True
 
+                # Handle cipher handshake during the login wait. With
+                # require-secure-client, the server holds the Login response
+                # behind the security gate until cipher activates, so the
+                # gate-bypass MC|CKey/MC|COn frames arrive before LOGIN.
+                # Dropping them here would deadlock both sides.
+                elif packet_id == CUSTOM_PAYLOAD:
+                    self._handle_custom_payload(data)
+
                 elif packet_id == DISCONNECT:
                     try:
                         dis = DataInputStream(data)
@@ -428,16 +468,51 @@ class StressBot:
             # Handle identity tokens
             if packet_id == CUSTOM_PAYLOAD:
                 self._handle_custom_payload(data)
+            elif packet_id == MOVE_PLAYER:
+                self._handle_server_move(data)
+
+    def _handle_server_move(self, data: bytes) -> None:
+        """Track server's view of our position. PosRot format:
+        double x, double y, double yView, double z, float yRot, float xRot, byte flags."""
+        try:
+            dis = DataInputStream(data)
+            x = dis.read_double()
+            y = dis.read_double()
+            _yView = dis.read_double()
+            z = dis.read_double()
+            self._pos_x = x
+            self._pos_y = y
+            self._pos_z = z
+            self._pos_initialized = True
+        except Exception:
+            pass
 
     def _handle_custom_payload(self, data: bytes) -> None:
-        """Handle identity token packets."""
+        """Handle cipher handshake and identity token channels."""
         try:
             dis = DataInputStream(data)
             channel = dis.read_utf()
             length = dis.read_short()
             payload = dis.read_raw(length) if length > 0 else b""
 
-            if channel == IDENTITY_TOKEN_ISSUE and len(payload) == 32:
+            # Cipher channels arrive in plaintext before encryption is active.
+            # Handle them here so the bot survives bursts where the whole
+            # handshake frame lands in a single recv(), bypassing the leftover
+            # byte-pattern scan.
+            if channel == CIPHER_KEY_CHANNEL and len(payload) == 32 and not self._cipher_key:
+                self._cipher_key = payload[:16]
+                self._cipher_iv = payload[16:32]
+                self.log(f"[{self.name}] got cipher key")
+                self._send_packet(CUSTOM_PAYLOAD,
+                    build_custom_payload(CIPHER_ACK_CHANNEL))
+                iv_send = bytearray(self._cipher_iv)
+                iv_send[0] ^= 0x80
+                self._send_cipher = CipherState(self._cipher_key, bytes(iv_send))
+            elif channel == CIPHER_ON_CHANNEL:
+                if self._cipher_key and not self._recv_cipher:
+                    self._recv_cipher = CipherState(self._cipher_key, self._cipher_iv)
+                    self.log(f"[{self.name}] cipher active")
+            elif channel == IDENTITY_TOKEN_ISSUE and len(payload) == 32:
                 self._identity_token = payload
                 self.log(f"[{self.name}] got identity token")
             elif channel == IDENTITY_TOKEN_CHALLENGE:

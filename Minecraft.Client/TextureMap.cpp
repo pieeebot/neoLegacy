@@ -214,7 +214,7 @@ Icon *TextureMap::registerIcon(const wstring &name)
 	{
 		app.DebugPrintf("Don't register nullptr\n");
 #ifndef _CONTENT_PACKAGE
-		__debugbreak();
+		DEBUG_BREAK();
 #endif
 		//new RuntimeException("Don't register null!").printStackTrace();
 	}

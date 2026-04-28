@@ -698,23 +698,26 @@ void SoundEngine::playUI(int iSound, float volume, float pitch)
 {
     U8 szSoundName[256];
     wstring name;
+    const char* soundDir;
 
     if (iSound >= eSFX_MAX)
     {
         strcpy((char*)szSoundName, "Minecraft/");
         name = wchSoundNames[iSound];
+        soundDir = "Minecraft";
     }
     else
     {
         strcpy((char*)szSoundName, "Minecraft/UI/");
         name = wchUISoundNames[iSound];
+        soundDir = "Minecraft/UI";
     }
 
     char* SoundName = (char*)ConvertSoundPathToName(name);
     strcat((char*)szSoundName, SoundName);
 
     char basePath[256];
-    sprintf_s(basePath, "Windows64Media/Sound/Minecraft/UI/%s", ConvertSoundPathToName(name));
+    sprintf_s(basePath, "Windows64Media/Sound/%s/%s", soundDir, ConvertSoundPathToName(name));
 
     char finalPath[256];
     sprintf_s(finalPath, "%s.wav", basePath);

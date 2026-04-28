@@ -13,6 +13,14 @@
 #include "../Minecraft.World/System.h"
 #include "PlayerList.h"
 #include <unordered_set>
+#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
+#include "../Minecraft.Server/ServerLogger.h"
+
+// Per-tick accumulators for tickAddRequests timing.
+static int64_t g_findUsAccum = 0;
+static int64_t g_addUsAccum  = 0;
+static int     g_addCount    = 0;
+#endif
 
 PlayerChunkMap::PlayerChunk::PlayerChunk(int x, int z, PlayerChunkMap *pcm) : pos(x,z)
 {
@@ -74,7 +82,7 @@ void PlayerChunkMap::PlayerChunk::add(shared_ptr<ServerPlayer> player, bool send
 
 	players.push_back(player);
 
-	player->chunksToSend.push_back(pos);
+	player->chunksToSend.insert(pos);
 
 #ifdef _LARGE_WORLDS
 	parent->getLevel()->cache->dontDrop(pos.x, pos.z); // 4J Added;
@@ -118,7 +126,7 @@ void PlayerChunkMap::PlayerChunk::remove(shared_ptr<ServerPlayer> player)
         parent->getLevel()->cache->drop(pos.x, pos.z);
     }
 
-    player->chunksToSend.remove(pos);
+    player->chunksToSend.erase(pos);
 	// 4J - I don't think there's any point sending these anymore, as we don't need to unload chunks with fixed sized maps
 	// 4J - We do need to send these to unload entities in chunks when players are dead. If we do not and the entity is removed
 	// while they are dead, that entity will remain in the clients world
@@ -369,6 +377,15 @@ ServerLevel *PlayerChunkMap::getLevel()
 
 void PlayerChunkMap::tick()
 {
+#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
+	// Substep timing for slow chunkMap diagnostics.
+	const int64_t CHUNKMAP_SLOW_THRESHOLD_MS = 50;
+	int64_t cm_t0 = System::currentTimeMillis();
+	int    cm_addReqStart = (int)addRequests.size();
+	g_findUsAccum = 0;
+	g_addUsAccum  = 0;
+	g_addCount    = 0;
+#endif
 	int64_t time = level->getGameTime();
 
 	if (time - lastInhabitedUpdate > Level::TICKS_PER_DAY / 3)
@@ -385,6 +402,9 @@ void PlayerChunkMap::tick()
             chunk->updateInhabitedTime();
         }
     }
+#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
+	int64_t cm_t1 = System::currentTimeMillis();
+#endif
 
 	// 4J - some changes here so that we only send one region update per tick. The chunks themselves also
 	// limit their resend rate to once every MIN_TICKS_BETWEEN_REGION_UPDATE ticks
@@ -404,11 +424,35 @@ void PlayerChunkMap::tick()
 			i++;
 		}
     }
+#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
+	int64_t cm_t2 = System::currentTimeMillis();
+#endif
 
 	for( unsigned int i = 0; i < players.size(); i++ )
 	{
 		tickAddRequests(players[i]);
 	}
+#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
+	int64_t cm_t3 = System::currentTimeMillis();
+	int64_t cm_total = cm_t3 - cm_t0;
+	if (cm_total > CHUNKMAP_SLOW_THRESHOLD_MS)
+	{
+		ServerRuntime::LogInfof("perf",
+			"L%d chunkMap total=%lldms inhabited=%lld changed=%lld addReq=%lld | players=%d addReqQueue=%d->%d | adds=%d findUs=%lld addUs=%lld avgAddUs=%lld",
+			this->dimension,
+			(long long)cm_total,
+			(long long)(cm_t1 - cm_t0),
+			(long long)(cm_t2 - cm_t1),
+			(long long)(cm_t3 - cm_t2),
+			(int)players.size(),
+			cm_addReqStart,
+			(int)addRequests.size(),
+			g_addCount,
+			(long long)g_findUsAccum,
+			(long long)g_addUsAccum,
+			g_addCount > 0 ? (long long)(g_addUsAccum / g_addCount) : 0LL);
+	}
+#endif
 
 	// 4J Stu - Added 1.1 but not relevant to us as we never no 0 players anyway, and don't think we should be dropping stuff
 	//if (players.isEmpty()) {
@@ -490,7 +534,11 @@ void PlayerChunkMap::getChunkAndRemovePlayer(int x, int z, shared_ptr<ServerPlay
 // Processes up to CHUNKS_PER_PLAYER_PER_TICK requests per call to speed up initial chunk loading.
 
 #if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
-static const int CHUNKS_PER_PLAYER_PER_TICK = 16;
+// Per-player drain rate for the addRequest queue. Each PlayerChunk::add
+// issues a synchronous ChunkVisibilityPacket, so per-tick send volume
+// scales as players * this. Pair with DEDICATED_MAX_CHUNK_SENDS_PER_TICK
+// on the chunk-data side.
+static const int CHUNKS_PER_PLAYER_PER_TICK = 4;
 #else
 static const int CHUNKS_PER_PLAYER_PER_TICK = 1;
 #endif
@@ -504,6 +552,11 @@ void PlayerChunkMap::tickAddRequests(shared_ptr<ServerPlayer> player)
 
 		for (int processed = 0; processed < CHUNKS_PER_PLAYER_PER_TICK; processed++)
 		{
+#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
+			LARGE_INTEGER qpcFreq, qpcA, qpcB, qpcC;
+			QueryPerformanceFrequency(&qpcFreq);
+			QueryPerformanceCounter(&qpcA);
+#endif
 			// Find the nearest chunk request to the player
 			int minDistSq = -1;
 			auto itNearest = addRequests.end();
@@ -522,12 +575,21 @@ void PlayerChunkMap::tickAddRequests(shared_ptr<ServerPlayer> player)
 					}
 				}
 			}
+#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
+			QueryPerformanceCounter(&qpcB);
+			g_findUsAccum += (qpcB.QuadPart - qpcA.QuadPart) * 1000000 / qpcFreq.QuadPart;
+#endif
 
 			// If we found one, process it and continue; otherwise done
 			if( itNearest != addRequests.end() )
 			{
 				getChunk(itNearest->x, itNearest->z, true)->add(itNearest->player);
 				addRequests.erase(itNearest);
+#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
+				QueryPerformanceCounter(&qpcC);
+				g_addUsAccum += (qpcC.QuadPart - qpcB.QuadPart) * 1000000 / qpcFreq.QuadPart;
+				g_addCount++;
+#endif
 			}
 			else
 			{
@@ -781,7 +843,7 @@ bool PlayerChunkMap::isPlayerIn(shared_ptr<ServerPlayer> player, int xChunk, int
 	else
 	{
         auto it1 = find(chunk->players.begin(), chunk->players.end(), player);
-        auto it2 = find(player->chunksToSend.begin(), player->chunksToSend.end(), chunk->pos);
+        auto it2 = player->chunksToSend.find(chunk->pos);
         return it1 != chunk->players.end() && it2 == player->chunksToSend.end();
 	}
 

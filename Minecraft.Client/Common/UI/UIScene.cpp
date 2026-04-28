@@ -328,7 +328,7 @@ void UIScene::loadMovie()
 			{
 				app.DebugPrintf("ERROR: Could not find any iggy movie for %ls!\n", moviePath.c_str());
 #ifndef _CONTENT_PACKAGE
-				__debugbreak();
+				DEBUG_BREAK();
 #endif
 				app.FatalLoadError();
 			}
@@ -344,7 +344,7 @@ void UIScene::loadMovie()
 	{
 		app.DebugPrintf("ERROR: Failed to load iggy scene!\n");
 #ifndef _CONTENT_PACKAGE
-		__debugbreak();
+		DEBUG_BREAK();
 #endif
 		app.FatalLoadError();
 	}
@@ -969,9 +969,6 @@ void UIScene::_customDrawSlotControl(CustomDrawData *region, int iPad, shared_pt
 //	if(m_parentLayer == nullptr)
 //	{
 //		app.DebugPrintf("A scene is trying to navigate forwards, but it's parent layer is nullptr!\n");
-//#ifndef _CONTENT_PACKAGE
-//		__debugbreak();
-//#endif
 //	}
 //	else
 //	{
@@ -988,10 +985,6 @@ void UIScene::navigateBack()
 
 	if(m_parentLayer == nullptr)
 	{
-//		app.DebugPrintf("A scene is trying to navigate back, but it's parent layer is nullptr!\n");
-#ifndef _CONTENT_PACKAGE
-//		__debugbreak();
-#endif
 	}
 	else
 	{
@@ -1222,7 +1215,7 @@ void UIScene::externalCallback(IggyExternalFunctionCallUTF16 * call)
 		{
 			app.DebugPrintf("Callback for handlePress did not have the correct number of arguments\n");
 #ifndef _CONTENT_PACKAGE
-			__debugbreak();
+			DEBUG_BREAK();
 #endif
 			return;
 		}
@@ -1230,7 +1223,7 @@ void UIScene::externalCallback(IggyExternalFunctionCallUTF16 * call)
 		{
 			app.DebugPrintf("Arguments for handlePress were not of the correct type\n");
 #ifndef _CONTENT_PACKAGE
-			__debugbreak();
+			DEBUG_BREAK();
 #endif
 			return;
 		}
@@ -1242,7 +1235,7 @@ void UIScene::externalCallback(IggyExternalFunctionCallUTF16 * call)
 		{
 			app.DebugPrintf("Callback for handleFocusChange did not have the correct number of arguments\n");
 #ifndef _CONTENT_PACKAGE
-			__debugbreak();
+			DEBUG_BREAK();
 #endif
 			return;
 		}
@@ -1250,7 +1243,7 @@ void UIScene::externalCallback(IggyExternalFunctionCallUTF16 * call)
 		{
 			app.DebugPrintf("Arguments for handleFocusChange were not of the correct type\n");
 #ifndef _CONTENT_PACKAGE
-			__debugbreak();
+			DEBUG_BREAK();
 #endif
 			return;
 		}
@@ -1262,7 +1255,7 @@ void UIScene::externalCallback(IggyExternalFunctionCallUTF16 * call)
 		{
 			app.DebugPrintf("Callback for handleInitFocus did not have the correct number of arguments\n");
 #ifndef _CONTENT_PACKAGE
-			__debugbreak();
+			DEBUG_BREAK();
 #endif
 			return;
 		}
@@ -1270,7 +1263,7 @@ void UIScene::externalCallback(IggyExternalFunctionCallUTF16 * call)
 		{
 			app.DebugPrintf("Arguments for handleInitFocus were not of the correct type\n");
 #ifndef _CONTENT_PACKAGE
-			__debugbreak();
+			DEBUG_BREAK();
 #endif
 			return;
 		}
@@ -1282,7 +1275,7 @@ void UIScene::externalCallback(IggyExternalFunctionCallUTF16 * call)
 		{
 			app.DebugPrintf("Callback for handleCheckboxToggled did not have the correct number of arguments\n");
 #ifndef _CONTENT_PACKAGE
-			__debugbreak();
+			DEBUG_BREAK();
 #endif
 			return;
 		}
@@ -1290,7 +1283,7 @@ void UIScene::externalCallback(IggyExternalFunctionCallUTF16 * call)
 		{
 			app.DebugPrintf("Arguments for handleCheckboxToggled were not of the correct type\n");
 #ifndef _CONTENT_PACKAGE
-			__debugbreak();
+			DEBUG_BREAK();
 #endif
 			return;
 		}
@@ -1302,7 +1295,7 @@ void UIScene::externalCallback(IggyExternalFunctionCallUTF16 * call)
 		{
 			app.DebugPrintf("Callback for handleSliderMove did not have the correct number of arguments\n");
 #ifndef _CONTENT_PACKAGE
-			__debugbreak();
+			DEBUG_BREAK();
 #endif
 			return;
 		}
@@ -1310,7 +1303,7 @@ void UIScene::externalCallback(IggyExternalFunctionCallUTF16 * call)
 		{
 			app.DebugPrintf("Arguments for handleSliderMove were not of the correct type\n");
 #ifndef _CONTENT_PACKAGE
-			__debugbreak();
+			DEBUG_BREAK();
 #endif
 			return;
 		}
@@ -1322,7 +1315,7 @@ void UIScene::externalCallback(IggyExternalFunctionCallUTF16 * call)
 		{
 			app.DebugPrintf("Callback for handleAnimationEnd did not have the correct number of arguments\n");
 #ifndef _CONTENT_PACKAGE
-			__debugbreak();
+			DEBUG_BREAK();
 #endif
 			return;
 		}
@@ -1334,7 +1327,7 @@ void UIScene::externalCallback(IggyExternalFunctionCallUTF16 * call)
 		{
 			app.DebugPrintf("Callback for handleSelectionChanged did not have the correct number of arguments\n");
 #ifndef _CONTENT_PACKAGE
-			__debugbreak();
+			DEBUG_BREAK();
 #endif
 			return;
 		}
@@ -1342,7 +1335,7 @@ void UIScene::externalCallback(IggyExternalFunctionCallUTF16 * call)
 		{
 			app.DebugPrintf("Arguments for handleSelectionChanged were not of the correct type\n");
 #ifndef _CONTENT_PACKAGE
-			__debugbreak();
+			DEBUG_BREAK();
 #endif
 			return;
 		}
@@ -1360,7 +1353,7 @@ void UIScene::externalCallback(IggyExternalFunctionCallUTF16 * call)
 			{
 				app.DebugPrintf("Callback for handleRequestMoreData did not have the correct number of arguments\n");
 #ifndef _CONTENT_PACKAGE
-				__debugbreak();
+				DEBUG_BREAK();
 #endif
 				return;
 			}
@@ -1368,7 +1361,7 @@ void UIScene::externalCallback(IggyExternalFunctionCallUTF16 * call)
 			{
 				app.DebugPrintf("Arguments for handleRequestMoreData were not of the correct type\n");
 #ifndef _CONTENT_PACKAGE
-				__debugbreak();
+				DEBUG_BREAK();
 #endif
 				return;
 			}
