@@ -11,6 +11,7 @@ class GrassTile;
 class LeafTile;
 class LeafTile2;
 class TallGrass;
+class BarrierTile;
 class DeadBushTile;
 class FireTile;
 class PortalTile;
@@ -373,7 +374,7 @@ public:
 	static const int stairs_acaciawood_Id = 163;
 	static const int stairs_darkwood_Id = 164;
 	//165 slimeblock
-	//166 barrier
+	static const int barrier_Id = 166;
 	static const int iron_trapdoor_Id = 167;
 	static const int prismarine_Id = 168;
 	static const int seaLantern_Id = 169;
@@ -606,6 +607,7 @@ public:
 	static Tile *clayHardened;
 	static Tile *coalBlock;
 
+	static Tile *barrier;
 	static Tile *iron_trapdoor;
 
 	static Tile* door_spruce;
@@ -613,7 +615,7 @@ public:
 	static Tile* door_jungle;
 	static Tile* door_acacia;
 	static Tile* door_dark;
-
+	
 	static Tile* spruceFence;
 	static Tile* birchFence;
 	static Tile* jungleFence;

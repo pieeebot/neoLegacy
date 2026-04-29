@@ -241,7 +241,7 @@ void HumanoidMobRenderer::additionalRendering(shared_ptr<LivingEntity> mob, floa
 		humanoidModel->arm0->translateTo(1 / 16.0f);
 		glTranslatef(-1 / 16.0f, 7 / 16.0f, 1 / 16.0f);
 
-		if (item->id < 256 && TileRenderer::canRender(Tile::tiles[item->id]->getRenderShape()))
+		if (item->id < 256 && TileRenderer::canRender(Tile::tiles[item->id]->getRenderShape()) && item->id != Tile::barrier_Id)
 		{
 			float s = 8 / 16.0f;
 			glTranslatef(-0 / 16.0f, 3 / 16.0f, -5 / 16.0f);

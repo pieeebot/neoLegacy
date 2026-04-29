@@ -1049,6 +1049,7 @@ void PreStitchedTextureMap::loadUVs()
 		ADD_ICON(21, 13, L"prismarine_dark");
 		ADD_ICON(20, 13, L"prismarine_bricks");
 
+		ADD_ICON(23, 11, L"barrier");
 		ADD_ICON(23, 12, L"packed_ice");
 		ADD_ICON(23, 14, L"inverted_daylight_detector");
 		ADD_ICON(23, 15, L"iron_trapdoor");

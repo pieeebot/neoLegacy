@@ -82,7 +82,7 @@ void ItemRenderer::render(shared_ptr<Entity> _itemEntity, double x, double y, do
 
 	Tile *tile = Tile::tiles[item->id];
 
-	if (item->getIconType() == Icon::TYPE_TERRAIN && tile != nullptr && TileRenderer::canRender(tile->getRenderShape()))
+	if ((item->getIconType() == Icon::TYPE_TERRAIN && tile != nullptr && TileRenderer::canRender(tile->getRenderShape())) && item->id != Tile::barrier_Id)
 	{
         glRotatef(spin, 0, 1, 0);
 
@@ -355,7 +355,7 @@ void ItemRenderer::renderGuiItem(Font *font, Textures *textures, shared_ptr<Item
 	int itemAuxValue = item->getAuxValue();
 	Icon *itemIcon = item->getIcon();
 
-    if (item->getIconType() == Icon::TYPE_TERRAIN && TileRenderer::canRender(Tile::tiles[itemId]->getRenderShape()))
+    if ((item->getIconType() == Icon::TYPE_TERRAIN && TileRenderer::canRender(Tile::tiles[itemId]->getRenderShape())) && itemId != Tile::barrier_Id)
 	{
 		PIXBeginNamedEvent(0,"3D gui item render %d\n",itemId);
 		MemSect(31);

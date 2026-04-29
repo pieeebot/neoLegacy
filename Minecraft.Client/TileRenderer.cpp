@@ -263,6 +263,11 @@ bool TileRenderer::tesselateInWorld( Tile* tt, int x, int y, int z, int forceDat
 									shared_ptr< TileEntity > forceEntity )	// 4J added forceData, forceEntity param
 {
 	Tesselator* t = Tesselator::getInstance();
+	// skip in-game rendering of barrier block
+	if (tt != nullptr && tt->id == Tile::barrier_Id)
+	{
+		return false;
+	}
 	int	shape = tt->getRenderShape();
 	tt->updateShape( level, x, y, z, forceData, forceEntity );
 	// AP - now that the culling is done earlier we don't need to call setShape until later on (only for SHAPE_BLOCK)

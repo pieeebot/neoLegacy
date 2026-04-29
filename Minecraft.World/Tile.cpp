@@ -265,6 +265,7 @@ Tile* Tile::prismarine = nullptr;
 Tile* Tile::tree2Trunk = nullptr;
 Tile* Tile::packedIce = nullptr;
 
+Tile* Tile::barrier = nullptr;
 TallGrass2* Tile::tallgrass2 = nullptr;
 
 DWORD Tile::tlsIdxShape = TlsAlloc();
@@ -517,6 +518,7 @@ void Tile::staticCtor()
 	Tile::tree2Trunk = (new TreeTile2(162))->setDestroyTime(2.0f)->setSoundType(Tile::SOUND_WOOD)->setIconName(L"log")->setDescriptionId(IDS_TILE_LOG)->sendTileData()->setUseDescriptionId(IDS_DESC_LOG);
 	Tile::woodStairsAcacia = (new StairTile(163, Tile::wood, TreeTile::ACACIA_TRUNK))->setBaseItemTypeAndMaterial(Item::eBaseItemType_stairs, Item::eMaterial_acaciawood)->setIconName(L"stairsWoodAcacia")->setDescriptionId(IDS_TILE_STAIRS_ACACIAWOOD)->sendTileData()->setUseDescriptionId(IDS_DESC_STAIRS);
 	Tile::woodStairsDark = (new StairTile(164, Tile::wood, TreeTile::DARK_TRUNK))->setBaseItemTypeAndMaterial(Item::eBaseItemType_stairs, Item::eMaterial_darkwood)->setIconName(L"stairsWoodDark")->setDescriptionId(IDS_TILE_STAIRS_DARKWOOD)->sendTileData()->setUseDescriptionId(IDS_DESC_STAIRS);
+	Tile::barrier = (new BarrierTile(166, Material::stone, false))	->setIndestructible()->setExplodeable(6000000)->setSoundType(Tile::SOUND_STONE)->setIconName(L"barrier")->setDescriptionId(IDS_TILE_BARRIER)->setNotCollectStatistics()->setUseDescriptionId(IDS_DESC_BARRIER);
 	Tile::iron_trapdoor = (new TrapDoorTile(167, Material::metal))->setBaseItemTypeAndMaterial(Item::eBaseItemType_door, Item::eMaterial_trap)->setDestroyTime(5.0f)->setSoundType(Tile::SOUND_METAL)->setIconName(L"iron_trapdoor")->setDescriptionId(IDS_TILE_IRON_TRAPDOOR)->setNotCollectStatistics()->sendTileData()->setUseDescriptionId(IDS_DESC_TRAPDOOR);
 
 	Tile::hayBlock = (new HayBlockTile(170))						->setBaseItemTypeAndMaterial(Item::eBaseItemType_block,	Item::eMaterial_wheat)->setDestroyTime(0.5f)->setSoundType(SOUND_GRASS)->setIconName(L"hay_block")->setDescriptionId(IDS_TILE_HAY)->setUseDescriptionId(IDS_DESC_HAY);
@@ -591,9 +593,6 @@ void Tile::staticCtor()
 	Item::items[double_stone_slab2_Id] = (new StoneSlabTileItem(Tile::double_stone_slab2_Id - 256, Tile::stoneSlab2Half, Tile::stoneSlab2, true))->setIconName(L"red_sandstone")->setDescriptionId(IDS_TILE_RED_SANDSTONE)->setUseDescriptionId(IDS_DESC_SLAB);
 	Item::items[tree2Trunk_Id] = (new MultiTextureTileItem(Tile::tree2Trunk_Id - 256, tree2Trunk, (int*)TreeTile2::TREE_NAMES, TreeTile2::TREE_NAMES_LENGTH))->setIconName(L"log")->setDescriptionId(IDS_TILE_LOG)->setUseDescriptionId(IDS_DESC_LOG);
 	Item::items[sponge_Id] = (new MultiTextureTileItem(Tile::sponge_Id - 256, sponge, (int*)Sponge::SPONGE_NAMES, Sponge::SPONGE_NAMES_LENGTH))->setIconName(L"sponge")->setDescriptionId(IDS_TILE_SPONGE)->setUseDescriptionId(IDS_DESC_SPONGE);
-
-
-
 
 	int tallgrass2IdsData[TallGrass2::VARIANT_COUNT] = {
 		IDS_TILE_SUNFLOWER,			  // 0 - Sunflower, not implemented yet

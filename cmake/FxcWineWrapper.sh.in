@@ -24,7 +24,7 @@ for arg in "$@"; do
   args+=("$(map_to_windows_path "$arg")")
 done
 
-"@LCE_WINE_PROGRAM@" "@LCE_FXC_EXE@" "${args[@]}"
+WINEDEBUG=-all "@LCE_WINE_PROGRAM@" "@LCE_FXC_EXE@" "${args[@]}"
 status=$?
 
 if [[ "$status" -eq 0 && -n "$out_header" && -f "$out_header" ]]; then

@@ -37,6 +37,7 @@ enum ePARTICLE_TYPE
 	eParticleType_enchantmenttable,
 	eParticleType_dragonbreath,
 	eParticleType_ender, // 4J Added - These are things that used the "portal" particle but are actually end related entities
+	eParticleType_barrier,
 	eParticleType_angryVillager,
 	eParticleType_happyVillager,
 	eParticleType_fireworksspark,

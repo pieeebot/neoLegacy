@@ -6,6 +6,7 @@
 #include "../Minecraft.World/Level.h"
 #include "ResourceLocation.h"
 #include <xmcore.h>
+#include <unordered_set>
 #ifdef __PS3__
 #include "C4JSpursJob.h"
 #endif
@@ -45,6 +46,8 @@ private:
 	static ResourceLocation END_SKY_LOCATION;
 
 public:
+    void doBarrierParticles(int posX, int posY, int posZ); 
+
 	static const int CHUNK_XZSIZE = 16;
 	static const int CHUNK_RENDER_LAYERS = 3;
 #ifdef _LARGE_WORLDS
@@ -67,6 +70,13 @@ public:
 public:
 	LevelRenderer(Minecraft *mc, Textures *textures);
 private:
+	void spawnBarrierParticles(
+			int x, int y, int z,
+			int radius,
+			Random& random,
+			bool holdingBarrier,
+			BlockPos& pos,
+			std::unordered_set<int> &spawnedPositions);
 	void renderStars();
 	void createCloudMesh();	// 4J added
 public:

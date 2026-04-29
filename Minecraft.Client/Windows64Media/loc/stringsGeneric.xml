@@ -1473,6 +1473,10 @@ Can also be used for low-level lighting.</value>
 		<value>Collected by getting a Skeleton to kill a Creeper. Can be played in a jukebox.</value>
 	</data>	
 
+	<data name="IDS_DESC_BARRIER">
+		<value>An invisible, but solid block.</value>
+	</data>	
+
 	<data name="IDS_DESC_WATER">
 		<value>Extinguishes fire and helps crops grow. Can be collected in a bucket.</value>
 	</data>	
@@ -2999,6 +3003,10 @@ Can also be used for low-level lighting.</value>
 
 	<data name="IDS_TILE_BEDROCK">
 		<value>Bedrock</value>
+	</data>	
+
+	<data name="IDS_TILE_BARRIER">
+		<value>Barrier</value>
 	</data>	
 
 	<data name="IDS_TILE_WATER">

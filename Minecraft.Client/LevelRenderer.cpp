@@ -11,6 +11,7 @@
 #include "MobSkinTextureProcessor.h"
 #include "MobSkinMemTextureProcessor.h"
 #include "GameRenderer.h"
+#include "BarrierParticle.h"
 #include "BubbleParticle.h"
 #include "SmokeParticle.h"
 #include "NoteParticle.h"
@@ -42,6 +43,7 @@
 #include "Lighting.h"
 #include "Options.h"
 #include "MultiPlayerChunkCache.h"
+#include "../Minecraft.World/BlockPos.h"
 #include "../Minecraft.World/ParticleTypes.h"
 #include "../Minecraft.World/IntCache.h"
 #include "../Minecraft.World/IntBuffer.h"
@@ -63,6 +65,7 @@
 #include "FrustumCuller.h"
 #include "../Minecraft.World/BasicTypeContainers.h"
 #include "Common/UI/UIScene_SettingsGraphicsMenu.h"	
+#include <unordered_set>
 
 //#define DISABLE_SPU_CODE
 
@@ -1053,6 +1056,15 @@ void LevelRenderer::tick()
 				++it;
 			}
 		}
+	}
+
+	if (mc && mc->player)
+	{
+		doBarrierParticles(
+			mc->player->x,
+			mc->player->y,
+			mc->player->z
+		);
 	}
 }
 
@@ -3060,6 +3072,9 @@ shared_ptr<Particle> LevelRenderer::addParticleInternal(ePARTICLE_TYPE eParticle
 	case eParticleType_dragonbreath:
 		particle = std::make_shared<DragonBreathParticle>(lev, x, y, z, xa, ya, za);
 		break;
+	case eParticleType_barrier:
+		particle = std::make_shared<BarrierParticle>(lev, x, y, z, xa, ya, za);
+		break;
 	default:
 		if( ( eParticleType >= eParticleType_iconcrack_base ) &&  ( eParticleType <= eParticleType_iconcrack_last )  )
 		{
@@ -3079,6 +3094,76 @@ shared_ptr<Particle> LevelRenderer::addParticleInternal(ePARTICLE_TYPE eParticle
 	}
 
 	return particle;
+}
+
+void LevelRenderer::doBarrierParticles(int posX, int posY, int posZ)
+{
+	// get currently selected item
+	shared_ptr<ItemInstance> held = mc->player->getSelectedItem();
+
+	bool isCreative = false;
+	if (mc->gameMode != nullptr) {
+		isCreative = (mc->gameMode->getLocalPlayerMode() == GameType::CREATIVE);
+	} else {
+		int lp = mc->getLocalPlayerIdx();
+		if (lp >= 0 && lp < XUSER_MAX_COUNT && mc->localgameModes[lp] != nullptr)
+			isCreative = (mc->localgameModes[lp]->getLocalPlayerMode() == GameType::CREATIVE);
+	}
+
+	bool holdingBarrier = isCreative && held != nullptr && held->id == Tile::barrier_Id;
+
+	if (!holdingBarrier)
+		return;
+
+	Random random;
+	BlockPos pos;
+
+	// track spawned particle position(s)
+	std::unordered_set<int> spawnedPositions;
+
+	for (int i = 0; i < 667; i++)
+	{
+		spawnBarrierParticles(posX, posY, posZ, 16, random, holdingBarrier, pos, spawnedPositions);
+		spawnBarrierParticles(posX, posY, posZ, 32, random, holdingBarrier, pos, spawnedPositions);
+	}
+}
+
+void LevelRenderer::spawnBarrierParticles(
+	int x, int y, int z,
+	int radius,
+	Random& random,
+	bool holdingBarrier,
+	BlockPos& pos,
+	std::unordered_set<int> &spawnedPositions)
+{
+    if (!holdingBarrier)
+        return;
+
+	int bx = x + random.nextInt(radius * 2) - radius;
+	int by = y + random.nextInt(radius * 2) - radius;
+	int bz = z + random.nextInt(radius * 2) - radius;
+
+	pos.set(bx, by, bz);
+
+	int tileId = mc->level->getTile(pos.getX(), pos.getY(), pos.getZ());
+
+	// spawn particles
+	if (tileId == Tile::barrier_Id)
+	{
+		int key = pos.hashCode();
+		if (spawnedPositions.find(key) == spawnedPositions.end()) {
+			spawnedPositions.insert(key);
+			mc->particleEngine->add(
+				std::make_shared<BarrierParticle>(
+					mc->level,
+					bx + 0.5,
+					by + 0.5,
+					bz + 0.5,
+					0, 0, 0
+				)
+			);
+		}
+	}
 }
 
 void LevelRenderer::entityAdded(shared_ptr<Entity> entity)
