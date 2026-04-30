@@ -1366,6 +1366,7 @@ void Tile::playerDestroy(Level *level, shared_ptr<Player> player, int x, int y, 
 	player->causeFoodExhaustion(FoodConstants::EXHAUSTION_MINE);
 
 	if( id == Tile::treeTrunk_Id )
+	if( id == Tile::treeTrunk_Id || id == Tile::tree2Trunk_Id )
 		player->awardStat(GenericStats::mineWood(), GenericStats::param_noArgs());
 
 
