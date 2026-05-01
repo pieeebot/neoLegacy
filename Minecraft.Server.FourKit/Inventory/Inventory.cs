@@ -174,7 +174,9 @@ public class Inventory : IEnumerable<ItemStack>
                 if (_items[slot] == null)
                 {
                     int added = Math.Min(64, remaining);
-                    setItem(slot, new ItemStack(toAdd.getType(), added, toAdd.getDurability()));
+                    var newItem = new ItemStack(toAdd.getType(), added, toAdd.getDurability());
+                    newItem.setItemMetaInternal(toAdd.getItemMetaInternal()?.clone());
+                    setItem(slot, newItem);
                     remaining -= added;
                 }
             }

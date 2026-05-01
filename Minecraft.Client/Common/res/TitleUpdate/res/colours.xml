@@ -214,7 +214,7 @@ if __name__=="__main__": notecolors()
   <colour name="Effect_DamageBoost" value="932423"/>
   <colour name="Effect_Heal" value="f82423"/>
   <colour name="Effect_Harm" value="430a09"/>
-  <colour name="Effect_Jump" value="786297"/>
+  <colour name="Effect_Jump" value="22ff4c"/>
   <colour name="Effect_Confusion" value="551d4a"/>
   <colour name="Effect_Regeneration" value="cd5cab"/>
   <colour name="Effect_DamageResistance" value="99453a"/>

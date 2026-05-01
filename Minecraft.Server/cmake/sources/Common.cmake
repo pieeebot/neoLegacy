@@ -416,6 +416,7 @@ set(_MINECRAFT_SERVER_COMMON_ROOT
   "${_MS_SRC}/../Minecraft.Client/ScrolledSelectionList.cpp"
   "${_MS_SRC}/../Minecraft.Client/SelectWorldScreen.cpp"
   "${_MS_SRC}/../Minecraft.Client/ServerChunkCache.cpp"
+  "${_MS_SRC}/../Minecraft.Client/ServerChunkCache.h"
   "${_MS_SRC}/../Minecraft.Client/ServerCommandDispatcher.cpp"
   "${_MS_SRC}/../Minecraft.Client/ServerConnection.cpp"
   "${_MS_SRC}/../Minecraft.Client/ServerLevel.cpp"

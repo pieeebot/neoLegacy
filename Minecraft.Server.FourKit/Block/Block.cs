@@ -89,7 +89,19 @@ public class Block
     /// <returns>Whether the change was successful.</returns>
     public bool setTypeId(int type)
     {
-        NativeBridge.SetTile?.Invoke(_world.getDimensionId(), _x, _y, _z, type, 0);
+        return setTypeId(type, true);
+    }
+
+    /// <summary>
+    /// Sets the type ID of this block.
+    /// </summary>
+    /// <param name="type">Type ID to change this block to.</param>
+    /// <param name="applyPhysics">False to cancel physics on the changed block.</param>
+    /// <returns>Whether the block was changed.</returns>
+    public bool setTypeId(int type, bool applyPhysics)
+    {
+        int flags = applyPhysics ? 3 : 2;
+        NativeBridge.SetTile?.Invoke(_world.getDimensionId(), _x, _y, _z, type, 0, flags);
         return true;
     }
 
@@ -108,7 +120,43 @@ public class Block
     /// <param name="data">New block specific metadata.</param>
     public void setData(byte data)
     {
-        NativeBridge.SetTileData?.Invoke(_world.getDimensionId(), _x, _y, _z, data);
+        setData(data, true);
+    }
+
+    /// <summary>
+    /// Sets the metadata for this block.
+    /// </summary>
+    /// <param name="data">New block specific metadata.</param>
+    /// <param name="applyPhysics">False to cancel physics from the changed block.</param>
+    public void setData(byte data, bool applyPhysics)
+    {
+        int flags = applyPhysics ? 3 : 2;
+        NativeBridge.SetTileData?.Invoke(_world.getDimensionId(), _x, _y, _z, data, flags);
+    }
+
+    /// <summary>
+    /// Sets the type ID and data of this block.
+    /// </summary>
+    /// <param name="type">Type ID to change this block to.</param>
+    /// <param name="data">The data value to change this block to.</param>
+    /// <returns>Whether the block was changed.</returns>
+    public bool setTypeIdAndData(int type, byte data)
+    {
+        return setTypeIdAndData(type, data, true);
+    }
+
+    /// <summary>
+    /// Sets the type ID and data of this block.
+    /// </summary>
+    /// <param name="type">Type ID to change this block to.</param>
+    /// <param name="data">The data value to change this block to.</param>
+    /// <param name="applyPhysics">False to cancel physics on the changed block.</param>
+    /// <returns>Whether the block was changed.</returns>
+    public bool setTypeIdAndData(int type, byte data, bool applyPhysics)
+    {
+        int flags = applyPhysics ? 3 : 2;
+        NativeBridge.SetTile?.Invoke(_world.getDimensionId(), _x, _y, _z, type, data, flags);
+        return true;
     }
 
     /// <summary>
@@ -132,6 +180,15 @@ public class Block
     public Block getRelative(int modX, int modY, int modZ)
     {
         return getWorld().getBlockAt(getX() + modX, getY() + modY, getZ() + modZ);
+    }
+
+    /// <summary>
+    /// Gets the chunk which contains this block.
+    /// </summary>
+    /// <returns>Containing Chunk.</returns>
+    public Chunk.Chunk getChunk()
+    {
+        return getWorld().getChunkAt(getX() >> 4, getZ() >> 4);
     }
 
     /// <summary>
@@ -162,5 +219,93 @@ public class Block
     {
         return getRelative(face.getModX() * distance, face.getModY() * distance, face.getModZ() * distance);
     }
-    
+
+    /// <summary>
+    /// Returns the biome that this block resides in.
+    /// </summary>
+    /// <returns>Biome type containing this block.</returns>
+    public Biome getBiome()
+    {
+        if (NativeBridge.GetBiomeId != null)
+            return BiomeHelper.fromId(NativeBridge.GetBiomeId(_world.getDimensionId(), _x, _z));
+        return Biome.PLAINS;
+    }
+
+    /// <summary>
+    /// Sets the biome that this block resides in.
+    /// </summary>
+    /// <param name="bio">New Biome type for this block.</param>
+    public void setBiome(Biome bio)
+    {
+        NativeBridge.SetBiomeId?.Invoke(_world.getDimensionId(), _x, _z, (int)bio);
+    }
+
+    /// <summary>
+    /// Gets the humidity of the biome of this block.
+    /// </summary>
+    /// <returns>Humidity of this block.</returns>
+    public double getHumidity()
+    {
+        return getBiome().getRainfall();
+    }
+
+    /// <summary>
+    /// Gets the temperature of the biome of this block.
+    /// </summary>
+    /// <returns>Temperature of this block.</returns>
+    public double getTemperature()
+    {
+        return getBiome().getTemperature();
+    }
+
+    /// <summary>
+    /// Checks if this block is liquid.
+    /// <para>A block is considered liquid when <see cref="getType()"/> returns
+    /// <see cref="Material.WATER"/>, <see cref="Material.STATIONARY_WATER"/>,
+    /// <see cref="Material.LAVA"/> or <see cref="Material.STATIONARY_LAVA"/>.</para>
+    /// </summary>
+    /// <returns>true if this block is liquid.</returns>
+    public bool isLiquid()
+    {
+        Material type = getType();
+        return type == Material.WATER || type == Material.STATIONARY_WATER ||
+               type == Material.LAVA || type == Material.STATIONARY_LAVA;
+    }
+
+
+    /// <summary>
+    /// Gets the light level between 0-15.
+    /// </summary>
+    /// <returns>Light level.</returns>
+    public byte getLightLevel()
+    {
+        int sky = getLightFromSky();
+        int block = getLightFromBlocks();
+        return (byte)(sky > block ? sky : block);
+    }
+
+    /// <summary>
+    /// Get the amount of light at this block from the sky.
+    /// Any light given from other sources (such as blocks like torches) will be ignored.
+    /// </summary>
+    /// <returns>Sky light level.</returns>
+    public byte getLightFromSky()
+    {
+        if (NativeBridge.GetSkyLight != null)
+            return (byte)NativeBridge.GetSkyLight(_world.getDimensionId(), _x, _y, _z);
+        return 0;
+    }
+
+    /// <summary>
+    /// Get the amount of light at this block from nearby blocks.
+    /// Any light given from other sources (such as the sun) will be ignored.
+    /// </summary>
+    /// <returns>Block light level.</returns>
+    public byte getLightFromBlocks()
+    {
+        if (NativeBridge.GetBlockLight != null)
+            return (byte)NativeBridge.GetBlockLight(_world.getDimensionId(), _x, _y, _z);
+        return 0;
+    }
+
 }

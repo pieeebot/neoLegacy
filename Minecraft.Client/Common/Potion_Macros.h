@@ -14,6 +14,16 @@
 #define MASK_STRENGTH			0x2009
 #define MASK_SLOWNESS			0x200A
 #define MASK_INSTANTDAMAGE		0x200C
+#define MASK_WATERBREATHING		0x200F
+#define MASK_JUMPBOOST			0x200B
+
+// note from fireblade: good luck here
+// if youre adding a new potion, i genuinely hope you know what youre doing
+// i legit had to guess for both waterbreathing and jump boost
+// dont do 0x2007 or 0x200D btw, they show up as 'artless potion' and 'clear potion' resectively
+// i have no idea how this system works besides that, and therefore i wish you the best of luck towards adding new potions in this game
+
+// george if you happen to be stalking my commit messages again btw please for the love of god figure out how this system works and get back to me accordingly
 
 #define MASK_TYPE_AWKWARD		0x0010
 
@@ -37,6 +47,8 @@
 #define MACRO_POTION_IS_INSTANTDAMAGE(aux)		((aux & 0x200F)									== MASK_INSTANTDAMAGE)
 #define MACRO_POTION_IS_NIGHTVISION(aux)		((aux & 0x200F)									== MASK_NIGHTVISION)
 #define MACRO_POTION_IS_INVISIBILITY(aux)		((aux & 0x200F)									== MASK_INVISIBILITY)
+#define MACRO_POTION_IS_WATERBREATHING(aux)	    ((aux & 0x200F)									== MASK_WATERBREATHING)
+#define MACRO_POTION_IS_JUMPBOOST(aux)			((aux & 0x200F)									== MASK_JUMPBOOST)
 
 #define MACRO_POTION_IS_SPLASH(aux)				((aux & MASK_SPLASH)							== MASK_SPLASH)
 #define MACRO_POTION_IS_BOTTLE(aux)				((aux & MASK_SPLASH)							== 0)

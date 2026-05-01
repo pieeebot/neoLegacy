@@ -23,7 +23,7 @@ GameCommandPacket::GameCommandPacket(EGameCommand command, byteArray data)
 		{
 			app.DebugPrintf("Payload may not be larger than 32K\n");
 #ifndef _CONTENT_PACKAGE
-			__debugbreak();
+			DEBUG_BREAK();
 #endif
 			//throw new IllegalArgumentException("Payload may not be larger than 32k");
 		}

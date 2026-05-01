@@ -62,7 +62,7 @@ body:
   - type: input
     id: itsrevela
     attributes:
-      label: Is this reproducable in itsRevela/MinecraftConsoles? (https://github.com/itsRevela/MinecraftConsoles)
+      label: Is this reproducable in itsRevela/LCE-Revelations? (https://github.com/itsRevela/LCE-Revelations)
     validations:
       required: true
 

@@ -1018,7 +1018,7 @@ Recipes::Recipes()
 		L'M');
 
 	addShapedRecipy(new ItemInstance(Tile::pressurePlate_stone, 1), //
-		L"scg",
+		L"sczg",
 		L"##", //
 		L'#', new ItemInstance(Tile::stone, 1, 0),
 		L'M');

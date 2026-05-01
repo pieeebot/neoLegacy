@@ -111,7 +111,7 @@ int Entity::getSmallId()
     return fallbackId;
 #else
 	app.DebugPrintf("Out of small entity Ids... possible leak?\n");
-	__debugbreak();
+	DEBUG_BREAK();
 	return -1;
 #endif
 }

@@ -227,7 +227,6 @@ void PreStitchedTextureMap::makeTextureAnimated(TexturePack *texturePack, Stitch
 		if(first->getWidth() != tex->getWidth() || first->getHeight() != tex->getHeight())
 		{
 			app.DebugPrintf("%ls - first w - %d, h - %d, tex w - %d, h - %d\n",textureFileName.c_str(),first->getWidth(),tex->getWidth(),first->getHeight(),tex->getHeight());
-			//__debugbreak();
 		}
 #endif
 
@@ -246,7 +245,7 @@ StitchedTexture *PreStitchedTextureMap::getTexture(const wstring &name)
 {
 #ifndef _CONTENT_PACKAGE
 	app.DebugPrintf("Not implemented!\n");
-	__debugbreak();
+	DEBUG_BREAK();
 #endif
 	return nullptr;
 #if 0
@@ -277,7 +276,7 @@ Icon *PreStitchedTextureMap::registerIcon(const wstring &name)
 	{
 		app.DebugPrintf("Don't register nullptr\n");
 #ifndef _CONTENT_PACKAGE
-		__debugbreak();
+		DEBUG_BREAK();
 #endif
 		result = missingPosition;
 		//new RuntimeException("Don't register null!").printStackTrace();
@@ -290,7 +289,7 @@ Icon *PreStitchedTextureMap::registerIcon(const wstring &name)
 	{
 #ifndef _CONTENT_PACKAGE
 		app.DebugPrintf("Could not find uv data for icon %ls\n", name.c_str() );
-		__debugbreak();
+		DEBUG_BREAK();
 #endif
 		result = missingPosition;
 	}

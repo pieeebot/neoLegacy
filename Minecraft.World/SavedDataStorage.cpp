@@ -50,7 +50,7 @@ shared_ptr<SavedData> SavedDataStorage::get(const type_info& clazz, const wstrin
 			else
 			{
 				// Handling of new SavedData class required
-				__debugbreak();
+				DEBUG_BREAK();
 			}
 
 		    ConsoleSaveFileInputStream fis = ConsoleSaveFileInputStream(levelStorage->getSaveFile(), file);

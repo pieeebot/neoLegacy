@@ -817,6 +817,42 @@ skipUseItemOn:
 			send(std::make_shared<ContainerSetSlotPacket>(player->containerMenu->containerId, s->index, player->inventory->getSelected()));
 		}
 	}
+
+	//Migrate QuickEquip packet here instead
+	if (item != nullptr && (item->getItem()->getBaseItemType() == Item::eBaseItemType_helmet
+		|| item->getItem()->getBaseItemType() == Item::eBaseItemType_chestplate
+		|| item->getItem()->getBaseItemType() == Item::eBaseItemType_leggings
+		|| item->getItem()->getBaseItemType() == Item::eBaseItemType_boots)) {
+
+		int slot = Mob::getEquipmentSlotForItem(item) - 1;
+
+		auto item1 = item->clone(item);
+
+		// If player is in survival mode
+		if (!player->abilities.instabuild) { //
+			// Equip the armor to the appropriate slot
+			if (player->inventory->armor[slot] == nullptr) {
+				player->inventory->removeItemNoUpdate(player->inventory->selected);
+				player->inventory->setItem(36 + slot, item);
+			}
+			else {
+				player->inventory->setItem(player->inventory->selected, player->inventory->armor[slot]);
+				player->inventory->setItem(36 + slot, item);
+			}
+		}
+		else {
+			if (player->inventory->armor[slot] == nullptr) {
+				player->inventory->setItem(36 + slot, item);
+				//hacky fix for ghost item
+				player->inventory->setItem(player->inventory->selected, item1);
+			}
+			else {
+				player->inventory->setItem(player->inventory->selected, player->inventory->armor[slot]);
+				player->inventory->setItem(36 + slot, item);
+			}
+		}
+	}
+
 }
 
 void PlayerConnection::onDisconnect(DisconnectPacket::eDisconnectReason reason, void *reasonObjects)
@@ -2060,34 +2096,34 @@ void PlayerConnection::handleCustomPayload(shared_ptr<CustomPayloadPacket> custo
 		}
 	}
 	else if (CustomPayloadPacket::QUICK_EQUIP_PACKET.compare(customPayloadPacket->identifier) == 0) {
-		ByteArrayInputStream bais(customPayloadPacket->data);
-		DataInputStream input(&bais);
-		shared_ptr<ItemInstance> sentItem = Packet::readItem(&input);
-		//->connection->send(std::make_shared<SetEquippedItemPacket>(e->entityId, i, item));
-		int slot = Mob::getEquipmentSlotForItem(sentItem) - 1;
+		//ByteArrayInputStream bais(customPayloadPacket->data);
+		//DataInputStream input(&bais);
+		//shared_ptr<ItemInstance> sentItem = Packet::readItem(&input);
+		////->connection->send(std::make_shared<SetEquippedItemPacket>(e->entityId, i, item));
+		//int slot = Mob::getEquipmentSlotForItem(sentItem) - 1;
 
-		// If player is in survival mode (not creative)
-		if(!player->abilities.instabuild) { //
-			// Equip the armor to the appropriate slot
-			if (player->inventory->armor[slot] == nullptr) {
-				player->inventory->setItem(36 + slot, sentItem);
-				player->inventory->removeItemNoUpdate(player->inventory->selected);
-			}
-			else {
-				player->inventory->setItem(player->inventory->selected, player->inventory->armor[slot]);
-				player->inventory->setItem(36 + slot, sentItem);
-			}
-		}
-		else {
-			if (player->inventory->armor[slot] == nullptr) {
-				player->inventory->setItem(36 + slot, sentItem);
-			}
-			else {
-				player->inventory->setItem(player->inventory->selected, player->inventory->armor[slot]);
-				player->inventory->setItem(36 + slot, sentItem);
-			}
-		}
-		PlayerList* playerList = MinecraftServer::getInstance()->getPlayers();
+		//// If player is in survival mode (not creative)
+		//if(!player->abilities.instabuild) { //
+		//	// Equip the armor to the appropriate slot
+		//	if (player->inventory->armor[slot] == nullptr) {
+		//		player->inventory->setItem(36 + slot, sentItem);
+		//		player->inventory->removeItemNoUpdate(player->inventory->selected);
+		//	}
+		//	else {
+		//		player->inventory->setItem(player->inventory->selected, player->inventory->armor[slot]);
+		//		player->inventory->setItem(36 + slot, sentItem);
+		//	}
+		//}
+		//else {
+		//	if (player->inventory->armor[slot] == nullptr) {
+		//		player->inventory->setItem(36 + slot, sentItem);
+		//	}
+		//	else {
+		//		player->inventory->setItem(player->inventory->selected, player->inventory->armor[slot]);
+		//		player->inventory->setItem(36 + slot, sentItem);
+		//	}
+		//}
+		//PlayerList* playerList = MinecraftServer::getInstance()->getPlayers();
 		//playerList->broadcastAll(std::make_shared<SetEquippedItemPacket>(player->entityId, slot, sentItem));
 
 	}
@@ -2316,19 +2352,23 @@ void PlayerConnection::handleCraftItem(shared_ptr<CraftItemPacket> packet)
 	}
 
 	// handle achievements
-	switch(pTempItemInst->id )
+	switch(pTempItemInst->id)
 	{
 	case Tile::workBench_Id:		player->awardStat(GenericStats::buildWorkbench(),		GenericStats::param_buildWorkbench());		break;
 	case Item::pickAxe_wood_Id:		player->awardStat(GenericStats::buildPickaxe(),			GenericStats::param_buildPickaxe());		break;
 	case Tile::furnace_Id:			player->awardStat(GenericStats::buildFurnace(),			GenericStats::param_buildFurnace());		break;
-	case Item::hoe_wood_Id:			player->awardStat(GenericStats::buildHoe(),				GenericStats::param_buildHoe());			break;
+	//case Item::hoe_wood_Id:			player->awardStat(GenericStats::buildHoe(),				GenericStats::param_buildHoe());			break;
 	case Item::bread_Id:			player->awardStat(GenericStats::makeBread(),			GenericStats::param_makeBread());			break;
 	case Item::cake_Id:				player->awardStat(GenericStats::bakeCake(),				GenericStats::param_bakeCake());			break;
 	case Item::pickAxe_stone_Id:	player->awardStat(GenericStats::buildBetterPickaxe(),	GenericStats::param_buildBetterPickaxe());	break;
-	case Item::sword_wood_Id:		player->awardStat(GenericStats::buildSword(),			GenericStats::param_buildSword());			break;
+	//case Item::sword_wood_Id:		player->awardStat(GenericStats::buildSword(),			GenericStats::param_buildSword());			break;
 	case Tile::dispenser_Id:		player->awardStat(GenericStats::dispenseWithThis(),		GenericStats::param_dispenseWithThis());	break;
 	case Tile::enchantTable_Id:		player->awardStat(GenericStats::enchantments(),			GenericStats::param_enchantments());		break;
 	case Tile::bookshelf_Id:		player->awardStat(GenericStats::bookcase(),				GenericStats::param_bookcase());			break;
+	}
+	switch (pTempItemInst->getItem()->getBaseItemType()) {
+	case Item::eBaseItemType_hoe:		player->awardStat(GenericStats::buildHoe(), GenericStats::param_buildHoe());			break;
+	case Item::eBaseItemType_sword:		player->awardStat(GenericStats::buildSword(), GenericStats::param_buildSword());		break;
 	}
 	//}
 	// ELSE The server thinks the client was wrong...

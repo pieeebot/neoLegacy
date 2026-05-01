@@ -329,7 +329,9 @@ bool PlayerList::placeNewPlayer(Connection *connection, shared_ptr<ServerPlayer>
 
 	// 4J-PB - removed, since it needs to be localised in the language the client is in
 	//server->players->broadcastAll( shared_ptr<ChatPacket>( new ChatPacket(L"�e" + playerEntity->name + L" joined the game.") ) );
+#if !(defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD))
 	broadcastAll(std::make_shared<ChatPacket>(player->name, ChatPacket::e_ChatPlayerJoinedGame));
+#endif
 
 	MemSect(14);
 	add(player);

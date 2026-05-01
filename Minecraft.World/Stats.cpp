@@ -528,8 +528,8 @@ void Stats::buildAdditionalStats()
 			generalStat->postConstruct();
 		}
 
-		biomesVisisted = StatArray(23);
-		for (unsigned int i = 0; i < 23; i++)
+		biomesVisisted = StatArray(170);
+		for (unsigned int i = 0; i < 170; i++)
 		{
 			generalStat = new GeneralStat(offset++, L"biomesVisited." + std::to_wstring(i));
 			generalStats->push_back(generalStat);
@@ -553,5 +553,7 @@ void Stats::buildAdditionalStats()
 
 Stat *Stats::get(int key)
 {
+	if (statsById->find(key) == statsById->end())
+		return nullptr;
 	return statsById->at(key);
 }

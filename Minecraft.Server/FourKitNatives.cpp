@@ -3,6 +3,7 @@
 #include "Common/StringUtils.h"
 #include "stdafx.h"
 
+#include <atomic>
 #include <string>
 #include <vector>
 
@@ -13,6 +14,10 @@
 #include "../Minecraft.Client/ServerLevel.h"
 #include "../Minecraft.Client/ServerPlayer.h"
 #include "../Minecraft.Client/ServerPlayerGameMode.h"
+#include "../Minecraft.Client/ServerChunkCache.h"
+#include "../Minecraft.World/LevelChunk.h"
+#include "../Minecraft.World/Biome.h"
+#include "../Minecraft.World/LightLayer.h"
 #include "../Minecraft.Client/Windows64/Network/WinsockNetLayer.h"
 #include "../Minecraft.World/AbstractContainerMenu.h"
 #include "../Minecraft.World/AddGlobalEntityPacket.h"
@@ -29,6 +34,7 @@
 #include "../Minecraft.World/Player.h"
 #include "../Minecraft.World/PlayerAbilitiesPacket.h"
 #include "../Minecraft.World/SetCarriedItemPacket.h"
+#include "../Minecraft.World/BlockRegionUpdatePacket.h"
 #include "../Minecraft.World/SetExperiencePacket.h"
 #include "../Minecraft.World/SetHealthPacket.h"
 #include "../Minecraft.World/LevelSoundPacket.h"
@@ -46,6 +52,8 @@
 
 namespace
 {
+
+std::atomic<uint32_t> g_handlerMask{0};
 
 static shared_ptr<ServerPlayer> FindPlayer(int entityId)
 {
@@ -105,6 +113,24 @@ class VirtualContainer : public SimpleContainer
 
 namespace FourKitBridge
 {
+
+void __cdecl NativeSetHandlerMask(uint32_t mask)
+{
+    g_handlerMask.store(mask, std::memory_order_release);
+}
+
+bool HasHandlers(int kind)
+{
+    if (kind < 0 || kind >= 32) return false;
+    return (g_handlerMask.load(std::memory_order_acquire) & (1u << kind)) != 0;
+}
+
+int __cdecl NativeGetServerTickCount()
+{
+    MinecraftServer *srv = MinecraftServer::getInstance();
+    return srv ? srv->tickCount : 0;
+}
+
 void __cdecl NativeDamagePlayer(int entityId, float amount)
 {
     auto player = FindPlayer(entityId);
@@ -305,20 +331,20 @@ int __cdecl NativeGetTileData(int dimId, int x, int y, int z)
     return level->getData(x, y, z);
 }
 
-void __cdecl NativeSetTile(int dimId, int x, int y, int z, int tileId, int data)
+void __cdecl NativeSetTile(int dimId, int x, int y, int z, int tileId, int data, int flags)
 {
     ServerLevel *level = GetLevel(dimId);
     if (!level)
         return;
-    level->setTileAndData(x, y, z, tileId, data, Tile::UPDATE_ALL);
+    level->setTileAndData(x, y, z, tileId, data, flags);
 }
 
-void __cdecl NativeSetTileData(int dimId, int x, int y, int z, int data)
+void __cdecl NativeSetTileData(int dimId, int x, int y, int z, int data, int flags)
 {
     ServerLevel *level = GetLevel(dimId);
     if (!level)
         return;
-    level->setData(x, y, z, data, Tile::UPDATE_ALL);
+    level->setData(x, y, z, data, flags);
 }
 
 int __cdecl NativeBreakBlock(int dimId, int x, int y, int z)
@@ -634,6 +660,9 @@ int __cdecl NativeSendRaw(int entityId, unsigned char *bufferData, int bufferSiz
 
 void WriteInventoryItemData(std::shared_ptr<ItemInstance> item, int index, int* outBuffer) {
     if (item) {
+        //ItemFlags Key:
+        // 0x1 = hasMetadata (has data that needs to be gotten from "ReadMetaFromNative")
+
         uint8_t itemFlags = 0;
         if (item->getTag() == nullptr) goto doneWithMetadataFlag;
         CompoundTag* itemTag = item->getTag();
@@ -642,7 +671,7 @@ void WriteInventoryItemData(std::shared_ptr<ItemInstance> item, int index, int* 
             itemFlags |= 0x1;
             goto doneWithMetadataFlag;
         }
-        else {
+        else { //we just want to check one tag for metadata and return for this flag, not all of them
             CompoundTag* displayTag = itemTag->getCompound(L"display");
             if (displayTag->contains(L"Name") || displayTag->contains(L"Lore")) {
                 itemFlags |= 0x1;
@@ -650,7 +679,9 @@ void WriteInventoryItemData(std::shared_ptr<ItemInstance> item, int index, int* 
             }
         }
 
+
     doneWithMetadataFlag:
+
         outBuffer[(index * 3) + 0] = item->id;
         outBuffer[(index * 3) + 1] = item->getAuxValue();
         outBuffer[(index * 3) + 2] = (((int)itemFlags << 24) | ((int)item->count << 8));
@@ -659,6 +690,9 @@ void WriteInventoryItemData(std::shared_ptr<ItemInstance> item, int index, int* 
 
 void __cdecl NativeGetPlayerInventory(int entityId, int *outData)
 {
+    // 9 slots per row, 3 slots in the inventory and the hotbar, 4 armor slots, 1 hand slot
+    // (((slotsPerRow * Rows) + ArmorSlots) * AmountOfIntsPerSlot) + hand slot
+    // (((9 * 4) + 4) * 3) + 1 = 121
     memset(outData, 0, 121 * sizeof(int));
 
     auto player = FindPlayer(entityId);
@@ -799,7 +833,8 @@ void __cdecl NativeOpenVirtualContainer(int entityId, int nativeType, const char
 
     player->openContainer(container);
 }
-
+//didnt update this for enchants
+// [nameLen:int32][nameUTF8:bytes][loreCount:int32][lore0Len:int32][lore0UTF8:bytes]
 int __cdecl NativeGetItemMeta(int entityId, int slot, char *outBuf, int bufSize)
 {
     auto player = FindPlayer(entityId);
@@ -815,15 +850,14 @@ int __cdecl NativeGetItemMeta(int entityId, int slot, char *outBuf, int bufSize)
         return 0;
 
     CompoundTag *tag = item->getTag();
-    if (!tag || !tag->contains(L"display"))
-        return 0;
 
-    CompoundTag *display = tag->getCompound(L"display");
-    bool hasName = display->contains(L"Name");
-    bool hasLore = display->contains(L"Lore");
     bool hasEnchantments = item->isEnchanted();
 
-    if (!hasName && !hasLore)
+    CompoundTag *display = (tag && tag->contains(L"display")) ? tag->getCompound(L"display") : nullptr;
+    bool hasName = display && display->contains(L"Name");
+    bool hasLore = display && display->contains(L"Lore");
+
+    if (!hasName && !hasLore && !hasEnchantments)
         return 0;
 
     int offset = 0;
@@ -879,14 +913,18 @@ int __cdecl NativeGetItemMeta(int entityId, int slot, char *outBuf, int bufSize)
         ListTag<CompoundTag>* list = item->getEnchantmentTags();
         if (list != nullptr) {
             int listSize = list->size();
+
             if ((offset + 4 + (listSize * (4 + 4))) > bufSize) return 0;
+
             memcpy(outBuf + offset, &listSize, 4);
             offset += 4;
             for (int i = 0; i < listSize; i++) {
                 int type = list->get(i)->getShort((wchar_t*)ItemInstance::TAG_ENCH_ID);
                 int level = list->get(i)->getShort((wchar_t*)ItemInstance::TAG_ENCH_LEVEL);
+
                 memcpy(outBuf + offset, &type, 4);
                 offset += 4;
+
                 memcpy(outBuf + offset, &level, 4);
                 offset += 4;
             }
@@ -933,8 +971,11 @@ void __cdecl NativeSetItemMeta(int entityId, int slot, const char *inBuf, int bu
                         item->setTag(nullptr);
                 }
             }
+
             if (tag && tag->contains(L"ench"))
+            {
                 tag->remove(L"ench");
+            }
         }
         return;
     }
@@ -1014,12 +1055,15 @@ void __cdecl NativeSetItemMeta(int entityId, int slot, const char *inBuf, int bu
 
         for (int i = 0; i < enchantCount; i++) {
             if (offset + (4 + 4) > bufSize) break;
+
             int type = 0;
             memcpy(&type, inBuf + offset, 4);
             offset += 4;
+
             int level = 0;
             memcpy(&level, inBuf + offset, 4);
             offset += 4;
+
             CompoundTag* ench = new CompoundTag();
             ench->putShort((wchar_t*)ItemInstance::TAG_ENCH_ID, static_cast<short>(type));
             ench->putShort((wchar_t*)ItemInstance::TAG_ENCH_LEVEL, static_cast<byte>(level));
@@ -1032,7 +1076,9 @@ void __cdecl NativeSetItemMeta(int entityId, int slot, const char *inBuf, int bu
         {
             CompoundTag* tag = item->getTag();
             if (tag && tag->contains(L"ench"))
+            {
                 tag->remove(L"ench");
+            }
         }
     }
 }
@@ -1045,6 +1091,68 @@ void __cdecl NativeSetHeldItemSlot(int entityId, int slot)
     player->inventory->selected = slot;
     if (player->connection)
         player->connection->queueSend(std::make_shared<SetCarriedItemPacket>(slot));
+}
+
+void __cdecl NativeGetCarriedItem(int entityId, int *outData)
+{
+    outData[0] = 0;
+    outData[1] = 0;
+    outData[2] = 0;
+    auto player = FindPlayer(entityId);
+    if (!player || !player->inventory)
+        return;
+    auto item = player->inventory->getCarried();
+    if (item)
+    {
+        outData[0] = item->id;
+        outData[1] = item->getAuxValue();
+        outData[2] = (int)item->count;
+    }
+}
+
+void __cdecl NativeSetCarriedItem(int entityId, int itemId, int count, int aux)
+{
+    auto player = FindPlayer(entityId);
+    if (!player || !player->inventory)
+        return;
+    if (itemId <= 0 || count <= 0)
+        player->inventory->setCarried(nullptr);
+    else
+        player->inventory->setCarried(std::make_shared<ItemInstance>(itemId, count, aux));
+}
+
+void __cdecl NativeGetEnderChestContents(int entityId, int *outData)
+{
+    memset(outData, 0, 27 * 3 * sizeof(int));
+    auto player = FindPlayer(entityId);
+    if (!player)
+        return;
+    auto ec = player->getEnderChestInventory();
+    if (!ec)
+        return;
+    unsigned int size = ec->getContainerSize();
+    if (size > 27)
+        size = 27;
+    for (unsigned int i = 0; i < size; i++)
+    {
+        WriteInventoryItemData(ec->getItem(i), i, outData);
+    }
+}
+
+void __cdecl NativeSetEnderChestSlot(int entityId, int slot, int itemId, int count, int aux)
+{
+    auto player = FindPlayer(entityId);
+    if (!player)
+        return;
+    auto ec = player->getEnderChestInventory();
+    if (!ec)
+        return;
+    if (slot < 0 || slot >= (int)ec->getContainerSize())
+        return;
+    if (itemId <= 0 || count <= 0)
+        ec->setItem(slot, nullptr);
+    else
+        ec->setItem(slot, std::make_shared<ItemInstance>(itemId, count, aux));
 }
 
 void __cdecl NativeSetSneaking(int entityId, int sneak)
@@ -1169,7 +1277,6 @@ void __cdecl NativeSetExhaustion(int entityId, float exhaustion)
     fd->setExhaustion(exhaustion);
 }
 
-
 void __cdecl NativeSpawnParticle(int entityId, int particleId, float x, float y, float z, float offsetX, float offsetY, float offsetZ, float speed, int count)
 {
     auto player = FindPlayer(entityId);
@@ -1247,6 +1354,286 @@ void __cdecl NativeGetEntityInfo(int entityId, double *outData)
     outData[2] = entity->y;
     outData[3] = entity->z;
     outData[4] = (double)entity->dimension;
+}
+
+int __cdecl NativeGetWorldEntities(int dimId, int **outBuf)
+{
+    *outBuf = nullptr;
+    ServerLevel *level = GetLevel(dimId);
+    if (!level)
+        return 0;
+
+    EnterCriticalSection(&level->m_entitiesCS);
+    int total = (int)level->entities.size();
+    int *buf = (int *)CoTaskMemAlloc(total * 3 * sizeof(int));
+    int count = 0;
+    if (buf)
+    {
+        for (auto &entity : level->entities)
+        {
+            if (!entity)
+                continue;
+            int idx = count * 3;
+            buf[idx] = entity->entityId;
+            buf[idx + 1] = MapEntityType((int)entity->GetType());
+            buf[idx + 2] = entity->instanceof(eTYPE_LIVINGENTITY) ? 1 : 0;
+            count++;
+        }
+    }
+    LeaveCriticalSection(&level->m_entitiesCS);
+    *outBuf = buf;
+    return count;
+}
+
+int __cdecl NativeGetChunkEntities(int dimId, int chunkX, int chunkZ, int **outBuf)
+{
+    *outBuf = nullptr;
+    ServerLevel *level = GetLevel(dimId);
+    if (!level)
+        return 0;
+
+    EnterCriticalSection(&level->m_entitiesCS);
+    int total = (int)level->entities.size();
+    int *buf = (int *)CoTaskMemAlloc(total * 3 * sizeof(int));
+    int count = 0;
+    if (buf)
+    {
+        for (auto &entity : level->entities)
+        {
+            if (!entity)
+                continue;
+            int ecx = Mth::floor(entity->x / 16.0);
+            int ecz = Mth::floor(entity->z / 16.0);
+            if (ecx != chunkX || ecz != chunkZ)
+                continue;
+            int idx = count * 3;
+            buf[idx] = entity->entityId;
+            buf[idx + 1] = MapEntityType((int)entity->GetType());
+            buf[idx + 2] = entity->instanceof(eTYPE_LIVINGENTITY) ? 1 : 0;
+            count++;
+        }
+    }
+    LeaveCriticalSection(&level->m_entitiesCS);
+    *outBuf = buf;
+    return count;
+}
+
+int __cdecl NativeIsChunkLoaded(int dimId, int chunkX, int chunkZ)
+{
+    ServerLevel *level = GetLevel(dimId);
+    if (!level || !level->cache)
+        return 0;
+    return level->cache->hasChunk(chunkX, chunkZ) ? 1 : 0;
+}
+
+int __cdecl NativeLoadChunk(int dimId, int chunkX, int chunkZ, int generate)
+{
+    ServerLevel *level = GetLevel(dimId);
+    if (!level || !level->cache)
+        return 0;
+    LevelChunk *chunk = level->cache->create(chunkX, chunkZ);
+    return (chunk != nullptr) ? 1 : 0;
+}
+
+int __cdecl NativeUnloadChunk(int dimId, int chunkX, int chunkZ, int save, int safe)
+{
+    ServerLevel *level = GetLevel(dimId);
+    if (!level || !level->cache)
+        return 0;
+    if (safe)
+    {
+        if (!level->cache->hasChunk(chunkX, chunkZ))
+            return 0;
+        LevelChunk *chunk = level->cache->getChunk(chunkX, chunkZ);
+        if (chunk && chunk->containsPlayer())
+            return 0;
+    }
+    level->cache->drop(chunkX, chunkZ);
+    return 1;
+}
+
+int __cdecl NativeGetLoadedChunks(int dimId, int **coordBuf)
+{
+    // wow gay
+    *coordBuf = nullptr;
+    ServerLevel *level = GetLevel(dimId);
+    if (!level || !level->cache)
+        return 0;
+
+    std::vector<LevelChunk *> *list = level->cache->getLoadedChunkList();
+
+    if (!list)
+        return 0;
+
+
+
+    int total = (int)list->size();
+    int *buf = (int *)CoTaskMemAlloc(total * 2 * sizeof(int));
+    int count = 0;
+
+    if (buf)
+    {
+        for (auto *chunk : *list)
+        {
+            if (chunk)
+            {
+                buf[count * 2] = chunk->x;
+                buf[count * 2 + 1] = chunk->z;
+                count++;
+            }
+        }
+    }
+
+    *coordBuf = buf;
+    return count;
+}
+
+int __cdecl NativeIsChunkInUse(int dimId, int chunkX, int chunkZ)
+{
+    PlayerList *list = MinecraftServer::getPlayerList();
+    if (!list)
+        return 0;
+    for (auto &p : list->players)
+    {
+        if (p && p->dimension == dimId)
+        {
+            int px = (int)floor(p->x) >> 4;
+            int pz = (int)floor(p->z) >> 4;
+            if (px == chunkX && pz == chunkZ)
+                return 1;
+        }
+    }
+    return 0;
+}
+
+void __cdecl NativeGetChunkSnapshot(int dimId, int chunkX, int chunkZ, int *blockIds, int *blockData, int *maxBlockY)
+{
+    ServerLevel *level = GetLevel(dimId);
+    if (!level || !level->cache)
+    {
+        memset(blockIds, 0, 16 * 128 * 16 * sizeof(int));
+        memset(blockData, 0, 16 * 128 * 16 * sizeof(int));
+        memset(maxBlockY, 0, 16 * 16 * sizeof(int));
+        return;
+    }
+    if (!level->cache->hasChunk(chunkX, chunkZ))
+    {
+        memset(blockIds, 0, 16 * 128 * 16 * sizeof(int));
+        memset(blockData, 0, 16 * 128 * 16 * sizeof(int));
+        memset(maxBlockY, 0, 16 * 16 * sizeof(int));
+        return;
+    }
+    LevelChunk *chunk = level->cache->getChunk(chunkX, chunkZ);
+    if (!chunk)
+    {
+        memset(blockIds, 0, 16 * 128 * 16 * sizeof(int));
+        memset(blockData, 0, 16 * 128 * 16 * sizeof(int));
+        memset(maxBlockY, 0, 16 * 16 * sizeof(int));
+        return;
+    }
+    for (int lx = 0; lx < 16; lx++)
+    {
+        for (int lz = 0; lz < 16; lz++)
+        {
+            int highest = 0;
+            for (int ly = 0; ly < 128; ly++)
+            {
+                int idx = (lx * 128 * 16) + (ly * 16) + lz;
+                blockIds[idx] = chunk->getTile(lx, ly, lz);
+                blockData[idx] = chunk->getData(lx, ly, lz);
+                if (blockIds[idx] != 0)
+                    highest = ly;
+            }
+            maxBlockY[lx * 16 + lz] = highest;
+        }
+    }
+}
+
+int __cdecl NativeUnloadChunkRequest(int dimId, int chunkX, int chunkZ, int safe)
+{
+    ServerLevel *level = GetLevel(dimId);
+    if (!level || !level->cache)
+        return 0;
+    if (safe)
+    {
+        if (!level->cache->hasChunk(chunkX, chunkZ))
+            return 0;
+        LevelChunk *chunk = level->cache->getChunk(chunkX, chunkZ);
+        if (chunk && chunk->containsPlayer())
+            return 0;
+    }
+    level->cache->drop(chunkX, chunkZ);
+    return 1;
+}
+
+int __cdecl NativeRegenerateChunk(int dimId, int chunkX, int chunkZ)
+{
+    ServerLevel *level = GetLevel(dimId);
+    if (!level || !level->cache)
+        return 0;
+    level->cache->regenerateChunk(chunkX, chunkZ);
+    return 1;
+}
+
+int __cdecl NativeRefreshChunk(int dimId, int chunkX, int chunkZ)
+{
+    ServerLevel *level = GetLevel(dimId);
+    if (!level)
+        return 0;
+
+    PlayerList *list = MinecraftServer::getPlayerList();
+    if (!list)
+        return 0;
+
+    auto packet = std::make_shared<BlockRegionUpdatePacket>(chunkX * 16, 0, chunkZ * 16, 16, Level::maxBuildHeight, 16, level);
+    for (auto &p : list->players)
+    {
+        if (!p || p->dimension != dimId || !p->connection || p->connection->isLocal())
+            continue;
+        p->connection->send(packet);
+    }
+    return 1;
+}
+
+int __cdecl NativeGetSkyLight(int dimId, int x, int y, int z)
+{
+    ServerLevel *level = GetLevel(dimId);
+    if (!level)
+        return 0;
+    return level->getBrightness(LightLayer::Sky, x, y, z);
+}
+
+int __cdecl NativeGetBlockLight(int dimId, int x, int y, int z)
+{
+    ServerLevel *level = GetLevel(dimId);
+    if (!level)
+        return 0;
+    return level->getBrightness(LightLayer::Block, x, y, z);
+}
+
+int __cdecl NativeGetBiomeId(int dimId, int x, int z)
+{
+    ServerLevel *level = GetLevel(dimId);
+    if (!level)
+        return 1;
+    Biome *biome = level->getBiome(x, z);
+    return biome ? biome->id : 1;
+}
+
+void __cdecl NativeSetBiomeId(int dimId, int x, int z, int biomeId)
+{
+    ServerLevel *level = GetLevel(dimId);
+    if (!level)
+        return;
+    LevelChunk *chunk = level->getChunk(x >> 4, z >> 4);
+    if (!chunk)
+        return;
+    byteArray biomes = chunk->getBiomes();
+    if (biomes.data == nullptr)
+        return;
+    int lx = x & 0xf;
+    int lz = z & 0xf;
+    biomes.data[(lz << 4) | lx] = static_cast<unsigned char>(biomeId & 0xff);
 }
 
 } // namespace FourKitBridge

@@ -11,10 +11,67 @@ using Minecraft.Server.FourKit.Plugin;
 /// </summary>
 public static class FourKit
 {
-    private static readonly EventDispatcher _dispatcher = new();
+    private static readonly EventDispatcher _dispatcher;
     private static readonly Dictionary<string, Player> _players = new(StringComparer.OrdinalIgnoreCase);
     private static readonly Dictionary<int, Player> _playersByEntityId = new();
     private static readonly object _playerLock = new();
+
+    // Must match HandlerKind in FourKitNatives.h.
+    private enum HandlerKind
+    {
+        ChunkLoad = 0,
+        ChunkUnload = 1,
+        PlayerMove = 2,
+    }
+
+    private static uint _handlerMask;
+    private static readonly object _handlerMaskLock = new();
+
+    static FourKit()
+    {
+        _dispatcher = new EventDispatcher();
+        _dispatcher.OnSubscriptionChanged = OnEventSubscribed;
+    }
+
+    private static HandlerKind? MapEventTypeToHandlerKind(Type eventType)
+    {
+        if (eventType == typeof(Event.World.ChunkLoadEvent)) return HandlerKind.ChunkLoad;
+        if (eventType == typeof(Event.World.ChunkUnloadEvent)) return HandlerKind.ChunkUnload;
+        if (eventType == typeof(Event.Player.PlayerMoveEvent)) return HandlerKind.PlayerMove;
+        return null;
+    }
+
+    private static void OnEventSubscribed(Type eventType)
+    {
+        var kind = MapEventTypeToHandlerKind(eventType);
+        if (kind == null) return;
+
+        lock (_handlerMaskLock)
+        {
+            uint newMask = _handlerMask | (1u << (int)kind.Value);
+            if (newMask == _handlerMask) return;
+            _handlerMask = newMask;
+            NativeBridge.SetHandlerMask?.Invoke(_handlerMask);
+        }
+    }
+
+    internal static void ResyncHandlerMask()
+    {
+        lock (_handlerMaskLock)
+        {
+            NativeBridge.SetHandlerMask?.Invoke(_handlerMask);
+        }
+    }
+
+    /// <summary>
+    /// Gets the current server tick count. Increments once per server tick
+    /// (~20 per second under nominal load). Useful for measuring TPS by
+    /// sampling the delta against wall clock time.
+    /// </summary>
+    public static int getServerTick()
+    {
+        return NativeBridge.GetServerTickCount?.Invoke() ?? 0;
+    }
 
     internal const int MAX_CHAT_LENGTH = 123;
 

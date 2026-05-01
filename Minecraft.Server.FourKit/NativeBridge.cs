@@ -43,10 +43,10 @@ internal static class NativeBridge
     internal delegate int NativeGetTileDataDelegate(int dimId, int x, int y, int z);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void NativeSetTileDelegate(int dimId, int x, int y, int z, int tileId, int data);
+    internal delegate void NativeSetTileDelegate(int dimId, int x, int y, int z, int tileId, int data, int flags);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void NativeSetTileDataDelegate(int dimId, int x, int y, int z, int data);
+    internal delegate void NativeSetTileDataDelegate(int dimId, int x, int y, int z, int data, int flags);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal delegate int NativeBreakBlockDelegate(int dimId, int x, int y, int z);
@@ -124,6 +124,18 @@ internal static class NativeBridge
     internal delegate void NativeSetHeldItemSlotDelegate(int entityId, int slot);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void NativeGetCarriedItemDelegate(int entityId, IntPtr outData);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void NativeSetCarriedItemDelegate(int entityId, int itemId, int count, int aux);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void NativeGetEnderChestContentsDelegate(int entityId, IntPtr outData);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void NativeSetEnderChestSlotDelegate(int entityId, int slot, int itemId, int count, int aux);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal delegate void NativeSetSneakingDelegate(int entityId, int sneak);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -180,6 +192,58 @@ internal static class NativeBridge
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal delegate void NativeGetEntityInfoDelegate(int entityId, IntPtr outBuf);
 
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate int NativeIsChunkLoadedDelegate(int dimId, int chunkX, int chunkZ);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate int NativeLoadChunkDelegate(int dimId, int chunkX, int chunkZ, int generate);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate int NativeUnloadChunkDelegate(int dimId, int chunkX, int chunkZ, int save, int safe);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate int NativeGetLoadedChunksDelegate(int dimId, out IntPtr coordBuf);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate int NativeIsChunkInUseDelegate(int dimId, int chunkX, int chunkZ);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void NativeGetChunkSnapshotDelegate(int dimId, int chunkX, int chunkZ, IntPtr blockIds, IntPtr blockData, IntPtr maxBlockY);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate int NativeUnloadChunkRequestDelegate(int dimId, int chunkX, int chunkZ, int safe);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate int NativeRegenerateChunkDelegate(int dimId, int chunkX, int chunkZ);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate int NativeRefreshChunkDelegate(int dimId, int chunkX, int chunkZ);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate int NativeGetWorldEntitiesDelegate(int dimId, out IntPtr outBuf);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate int NativeGetChunkEntitiesDelegate(int dimId, int chunkX, int chunkZ, out IntPtr outBuf);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate int NativeGetSkyLightDelegate(int dimId, int x, int y, int z);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate int NativeGetBlockLightDelegate(int dimId, int x, int y, int z);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate int NativeGetBiomeIdDelegate(int dimId, int x, int z);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void NativeSetBiomeIdDelegate(int dimId, int x, int z, int biomeId);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void NativeSetHandlerMaskDelegate(uint mask);
+    internal static NativeSetHandlerMaskDelegate? SetHandlerMask;
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate int NativeGetServerTickCountDelegate();
+    internal static NativeGetServerTickCountDelegate? GetServerTickCount;
 
     internal static NativeDamageDelegate? DamagePlayer;
     internal static NativeSetHealthDelegate? SetPlayerHealth;
@@ -221,6 +285,10 @@ internal static class NativeBridge
     internal static NativeGetItemMetaDelegate? GetItemMeta;
     internal static NativeSetItemMetaDelegate? SetItemMeta;
     internal static NativeSetHeldItemSlotDelegate? SetHeldItemSlot;
+    internal static NativeGetCarriedItemDelegate? GetCarriedItem;
+    internal static NativeSetCarriedItemDelegate? SetCarriedItem;
+    internal static NativeGetEnderChestContentsDelegate? GetEnderChestContents;
+    internal static NativeSetEnderChestSlotDelegate? SetEnderChestSlot;
     internal static NativeSetSneakingDelegate? SetSneaking;
     internal static NativeSetVelocityDelegate? SetVelocity;
     internal static NativeSetAllowFlightDelegate? SetAllowFlight;
@@ -240,6 +308,21 @@ internal static class NativeBridge
     internal static NativeGetVehicleIdDelegate? GetVehicleId;
     internal static NativeGetPassengerIdDelegate? GetPassengerId;
     internal static NativeGetEntityInfoDelegate? GetEntityInfo;
+    internal static NativeIsChunkLoadedDelegate? IsChunkLoaded;
+    internal static NativeLoadChunkDelegate? LoadChunk;
+    internal static NativeUnloadChunkDelegate? UnloadChunk;
+    internal static NativeGetLoadedChunksDelegate? GetLoadedChunks;
+    internal static NativeIsChunkInUseDelegate? IsChunkInUse;
+    internal static NativeGetChunkSnapshotDelegate? GetChunkSnapshot;
+    internal static NativeUnloadChunkRequestDelegate? UnloadChunkRequest;
+    internal static NativeRegenerateChunkDelegate? RegenerateChunk;
+    internal static NativeRefreshChunkDelegate? RefreshChunk;
+    internal static NativeGetWorldEntitiesDelegate? GetWorldEntities;
+    internal static NativeGetChunkEntitiesDelegate? GetChunkEntities;
+    internal static NativeGetSkyLightDelegate? GetSkyLight;
+    internal static NativeGetBlockLightDelegate? GetBlockLight;
+    internal static NativeGetBiomeIdDelegate? GetBiomeId;
+    internal static NativeSetBiomeIdDelegate? SetBiomeId;
 
     internal static void SetCallbacks(IntPtr damage, IntPtr setHealth, IntPtr teleport, IntPtr setGameMode, IntPtr broadcastMessage, IntPtr setFallDistance, IntPtr getPlayerSnapshot, IntPtr sendMessage, IntPtr setWalkSpeed, IntPtr teleportEntity)
     {
@@ -286,7 +369,7 @@ internal static class NativeBridge
         SendRaw = Marshal.GetDelegateForFunctionPointer<NativeSendRawDelegate>(sendRaw);
     }
 
-    internal static void SetInventoryCallbacks(IntPtr getPlayerInventory, IntPtr setPlayerInventorySlot, IntPtr getContainerContents, IntPtr setContainerSlot, IntPtr getContainerViewerEntityIds, IntPtr closeContainer, IntPtr openVirtualContainer, IntPtr getItemMeta, IntPtr setItemMeta, IntPtr setHeldItemSlot)
+    internal static void SetInventoryCallbacks(IntPtr getPlayerInventory, IntPtr setPlayerInventorySlot, IntPtr getContainerContents, IntPtr setContainerSlot, IntPtr getContainerViewerEntityIds, IntPtr closeContainer, IntPtr openVirtualContainer, IntPtr getItemMeta, IntPtr setItemMeta, IntPtr setHeldItemSlot, IntPtr getCarriedItem, IntPtr setCarriedItem, IntPtr getEnderChestContents, IntPtr setEnderChestSlot)
     {
         GetPlayerInventory = Marshal.GetDelegateForFunctionPointer<NativeGetPlayerInventoryDelegate>(getPlayerInventory);
         SetPlayerInventorySlot = Marshal.GetDelegateForFunctionPointer<NativeSetPlayerInventorySlotDelegate>(setPlayerInventorySlot);
@@ -298,6 +381,10 @@ internal static class NativeBridge
         GetItemMeta = Marshal.GetDelegateForFunctionPointer<NativeGetItemMetaDelegate>(getItemMeta);
         SetItemMeta = Marshal.GetDelegateForFunctionPointer<NativeSetItemMetaDelegate>(setItemMeta);
         SetHeldItemSlot = Marshal.GetDelegateForFunctionPointer<NativeSetHeldItemSlotDelegate>(setHeldItemSlot);
+        GetCarriedItem = Marshal.GetDelegateForFunctionPointer<NativeGetCarriedItemDelegate>(getCarriedItem);
+        SetCarriedItem = Marshal.GetDelegateForFunctionPointer<NativeSetCarriedItemDelegate>(setCarriedItem);
+        GetEnderChestContents = Marshal.GetDelegateForFunctionPointer<NativeGetEnderChestContentsDelegate>(getEnderChestContents);
+        SetEnderChestSlot = Marshal.GetDelegateForFunctionPointer<NativeSetEnderChestSlotDelegate>(setEnderChestSlot);
     }
 
     internal static void SetEntityCallbacks(IntPtr setSneaking, IntPtr setVelocity, IntPtr setAllowFlight, IntPtr playSound, IntPtr setSleepingIgnored)
@@ -333,5 +420,42 @@ internal static class NativeBridge
         GetVehicleId = Marshal.GetDelegateForFunctionPointer<NativeGetVehicleIdDelegate>(getVehicleId);
         GetPassengerId = Marshal.GetDelegateForFunctionPointer<NativeGetPassengerIdDelegate>(getPassengerId);
         GetEntityInfo = Marshal.GetDelegateForFunctionPointer<NativeGetEntityInfoDelegate>(getEntityInfo);
+    }
+
+    internal static void SetChunkCallbacks(IntPtr isChunkLoaded, IntPtr loadChunk, IntPtr unloadChunk, IntPtr getLoadedChunks, IntPtr isChunkInUse, IntPtr getChunkSnapshot, IntPtr unloadChunkRequest, IntPtr regenerateChunk, IntPtr refreshChunk)
+    {
+        IsChunkLoaded = Marshal.GetDelegateForFunctionPointer<NativeIsChunkLoadedDelegate>(isChunkLoaded);
+        LoadChunk = Marshal.GetDelegateForFunctionPointer<NativeLoadChunkDelegate>(loadChunk);
+        UnloadChunk = Marshal.GetDelegateForFunctionPointer<NativeUnloadChunkDelegate>(unloadChunk);
+        GetLoadedChunks = Marshal.GetDelegateForFunctionPointer<NativeGetLoadedChunksDelegate>(getLoadedChunks);
+        IsChunkInUse = Marshal.GetDelegateForFunctionPointer<NativeIsChunkInUseDelegate>(isChunkInUse);
+        GetChunkSnapshot = Marshal.GetDelegateForFunctionPointer<NativeGetChunkSnapshotDelegate>(getChunkSnapshot);
+        UnloadChunkRequest = Marshal.GetDelegateForFunctionPointer<NativeUnloadChunkRequestDelegate>(unloadChunkRequest);
+        RegenerateChunk = Marshal.GetDelegateForFunctionPointer<NativeRegenerateChunkDelegate>(regenerateChunk);
+        RefreshChunk = Marshal.GetDelegateForFunctionPointer<NativeRefreshChunkDelegate>(refreshChunk);
+    }
+
+    internal static void SetWorldEntityCallbacks(IntPtr getWorldEntities, IntPtr getChunkEntities)
+    {
+        GetWorldEntities = Marshal.GetDelegateForFunctionPointer<NativeGetWorldEntitiesDelegate>(getWorldEntities);
+        GetChunkEntities = Marshal.GetDelegateForFunctionPointer<NativeGetChunkEntitiesDelegate>(getChunkEntities);
+    }
+
+    internal static void SetBlockInfoCallbacks(IntPtr getSkyLight, IntPtr getBlockLight, IntPtr getBiomeId, IntPtr setBiomeId)
+    {
+        GetSkyLight = Marshal.GetDelegateForFunctionPointer<NativeGetSkyLightDelegate>(getSkyLight);
+        GetBlockLight = Marshal.GetDelegateForFunctionPointer<NativeGetBlockLightDelegate>(getBlockLight);
+        GetBiomeId = Marshal.GetDelegateForFunctionPointer<NativeGetBiomeIdDelegate>(getBiomeId);
+        SetBiomeId = Marshal.GetDelegateForFunctionPointer<NativeSetBiomeIdDelegate>(setBiomeId);
+    }
+
+    internal static void SetSubscriptionCallbacks(IntPtr setHandlerMask)
+    {
+        SetHandlerMask = Marshal.GetDelegateForFunctionPointer<NativeSetHandlerMaskDelegate>(setHandlerMask);
+    }
+
+    internal static void SetServerCallbacks(IntPtr getServerTickCount)
+    {
+        GetServerTickCount = Marshal.GetDelegateForFunctionPointer<NativeGetServerTickCountDelegate>(getServerTickCount);
     }
 }

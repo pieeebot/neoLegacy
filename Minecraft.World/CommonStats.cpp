@@ -112,6 +112,7 @@ Stat *CommonStats::get_itemsUsed(int itemId)
 	if (itemId == Item::porkChop_cooked_Id)	return Stats::blocksPlaced[itemId];
 #endif
 	if (itemId == Item::porkChop_cooked_Id)	return Stats::blocksPlaced[itemId];
+	else 									return nullptr;
 	//return nullptr;
 }
 

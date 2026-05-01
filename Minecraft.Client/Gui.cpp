@@ -697,8 +697,8 @@ void Gui::render(float a, bool mouseFree, int xMouse, int yMouse)
 				glEnable(GL_COLOR_MATERIAL);
 
 				// 4J - TomK now using safe zone values directly instead of the magic number calculation that lived here before (which only worked for medium scale, the other two were off!)
-				int xo = iSafezoneXHalf + 10;
-				int yo = iSafezoneTopYHalf + 10;
+				int xo = iSafezoneXHalf + 10; // TODO: fix relative scaling for atrocious aspect ratios
+				int yo = iSafezoneTopYHalf + 10; // TODO: fix relative scaling for atrocious aspect ratios
 
 #ifdef __PSVITA__
 				// align directly with corners, there are no safe zones on vita
@@ -708,8 +708,29 @@ void Gui::render(float a, bool mouseFree, int xMouse, int yMouse)
 
 				glPushMatrix();
 				glTranslatef(static_cast<float>(xo), static_cast<float>(yo), 50);
-				float ss = 12;
-				glScalef(-ss, ss, ss);
+				
+				// correct paper doll aspect ratio
+				float ss = 12.0f;
+				float aspectScaleX = 1.0f;
+				float aspectScaleY = 1.0f;
+
+				extern int g_rScreenWidth;
+				extern int g_rScreenHeight;
+
+				if (g_rScreenWidth > 0 && g_rScreenHeight > 0) {
+					float screenAspect = (float)g_rScreenWidth / (float)g_rScreenHeight;
+					const float targetAspect = 16.0f / 9.0f;
+					
+					// apply correction if window is not already at a 16:9 aspect ratio
+					if (fabs(screenAspect - targetAspect) > 0.01f) {
+						if (screenAspect > targetAspect)
+							aspectScaleX = targetAspect / screenAspect;
+						else
+							aspectScaleY = screenAspect / targetAspect;
+					}
+				}
+
+				glScalef(-ss * aspectScaleX, ss * aspectScaleY, ss);
 				glRotatef(180, 0, 0, 1);
 
 				float oyr = minecraft->player->yRot;

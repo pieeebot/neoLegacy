@@ -888,6 +888,14 @@ ServerPropertiesConfig LoadServerPropertiesConfig()
 	config.hardcore = ReadNormalizedBoolProperty(&merged, "hardcore", false, &shouldWrite);
 	config.hardcoreBanIp = ReadNormalizedBoolProperty(&merged, "hardcore-ban-ip", false, &shouldWrite);
 
+	config.maxMonsters = ReadNormalizedIntProperty(&merged, "max-monsters", 50, 0, 1000, &shouldWrite);
+	config.maxAnimals = ReadNormalizedIntProperty(&merged, "max-animals", 50, 0, 1000, &shouldWrite);
+	config.maxAmbient = ReadNormalizedIntProperty(&merged, "max-ambient", 20, 0, 1000, &shouldWrite);
+	config.maxWaterAnimals = ReadNormalizedIntProperty(&merged, "max-water-animals", 5, 0, 1000, &shouldWrite);
+	config.maxWolves = ReadNormalizedIntProperty(&merged, "max-wolves", 8, 0, 1000, &shouldWrite);
+	config.maxChickens = ReadNormalizedIntProperty(&merged, "max-chickens", 8, 0, 1000, &shouldWrite);
+	config.maxMushroomCows = ReadNormalizedIntProperty(&merged, "max-mushroom-cows", 2, 0, 1000, &shouldWrite);
+
 	config.maxBuildHeight = ReadNormalizedIntProperty(&merged, "max-build-height", 256, 64, 256, &shouldWrite);
 	config.motd = ReadNormalizedStringProperty(&merged, "motd", "A Minecraft Server", 255, &shouldWrite);
 

@@ -3845,78 +3845,6 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 			//options->thirdPersonView = !options->thirdPersonView;
 		}
 
-#ifdef _WINDOWS64
-		if(player->ullButtonsPressed&(1LL<<MINECRAFT_ACTION_SCREENSHOT))
-		{
-			extern ID3D11Device* g_pd3dDevice;
-			extern ID3D11DeviceContext* g_pImmediateContext;
-			extern IDXGISwapChain* g_pSwapChain;
-
-			ID3D11Texture2D* pBackBuffer = nullptr;
-			HRESULT hr = g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&pBackBuffer);
-			if (SUCCEEDED(hr))
-			{
-				D3D11_TEXTURE2D_DESC desc;
-				pBackBuffer->GetDesc(&desc);
-				desc.Usage = D3D11_USAGE_STAGING;
-				desc.BindFlags = 0;
-				desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
-				desc.MiscFlags = 0;
-
-				ID3D11Texture2D* pStaging = nullptr;
-				hr = g_pd3dDevice->CreateTexture2D(&desc, nullptr, &pStaging);
-				if (SUCCEEDED(hr))
-				{
-					g_pImmediateContext->CopyResource(pStaging, pBackBuffer);
-
-					// Build path next to the executable
-					wchar_t exePath[MAX_PATH];
-					GetModuleFileNameW(NULL, exePath, MAX_PATH);
-					wchar_t* lastSlash = wcsrchr(exePath, L'\\');
-					if (lastSlash) *(lastSlash + 1) = L'\0';
-					wstring screenshotDirPath = wstring(exePath) + L"screenshots";
-					CreateDirectoryW(screenshotDirPath.c_str(), NULL);
-
-					SYSTEMTIME st;
-					GetLocalTime(&st);
-					wchar_t filename[128];
-					swprintf_s(filename, L"%04d-%02d-%02d_%02d.%02d.%02d.png",
-						st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond);
-					wstring screenshotPath = screenshotDirPath + L"\\" + filename;
-
-					D3D11_MAPPED_SUBRESOURCE mapped;
-					hr = g_pImmediateContext->Map(pStaging, 0, D3D11_MAP_READ, 0, &mapped);
-					if (SUCCEEDED(hr))
-					{
-						// Copy RGBA rows (back buffer is R8G8B8A8_UNORM, already RGBA)
-						unsigned char* rgba = new unsigned char[desc.Width * desc.Height * 4];
-						for (UINT row = 0; row < desc.Height; row++)
-						{
-							unsigned char* src = (unsigned char*)mapped.pData + row * mapped.RowPitch;
-							unsigned char* dst = rgba + row * desc.Width * 4;
-							memcpy(dst, src, desc.Width * 4);
-						}
-						g_pImmediateContext->Unmap(pStaging, 0);
-
-						// Save PNG via stb_image_write
-						string narrowPath(screenshotPath.begin(), screenshotPath.end());
-						int writeResult = stbi_write_png(narrowPath.c_str(), desc.Width, desc.Height, 4, rgba, desc.Width * 4);
-						delete[] rgba;
-
-						// Local chat message — only on success
-						if (writeResult)
-						{
-							wstring msg = L"Saved screenshot to " + wstring(filename);
-							gui->addMessage(msg, iPad);
-						}
-					}
-					pStaging->Release();
-				}
-				pBackBuffer->Release();
-			}
-		}
-#endif
-
 		if((player->ullButtonsPressed&(1LL<<MINECRAFT_ACTION_GAME_INFO)) && gameMode->isInputAllowed(MINECRAFT_ACTION_GAME_INFO))
 		{
 			ui.NavigateToScene(iPad,eUIScene_InGameInfoMenu);
@@ -4994,7 +4922,7 @@ void Minecraft::main()
 			app.DebugPrintf("<xs:enumeration value=\"%d\"><xs:annotation><xs:documentation>%ls</xs:documentation></xs:annotation></xs:enumeration>\n", i, app.GetString( Tile::tiles[i]->getDescriptionId() ));
 		}
 	}
-	__debugbreak();
+	DEBUG_BREAK();
 #endif
 
 	// 4J-PB - Can't call this for the first 5 seconds of a game - MS rule

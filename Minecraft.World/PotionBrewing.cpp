@@ -81,6 +81,8 @@ const wstring PotionBrewing::MOD_REDSTONE = L"-5+6-7"; // redstone increases dur
 const wstring PotionBrewing::MOD_GLOWSTONE = L"+5-6-7"; // glowstone increases amplification
 // 4J Stu - Don't require bit 13 to be set. We don't use it in the creative menu. Side effect is you can make a (virtually useless) Splash Mundane potion with water bottle and gunpowder
 const wstring PotionBrewing::MOD_GUNPOWDER = L"+14";//&13-13"; // gunpowder makes them throwable! // gunpowder requires 13 and sets 14
+const wstring PotionBrewing::MOD_RABBITS_FOOT = L"+0+1-2+3&4-4+13";
+const wstring PotionBrewing::MOD_PUFFERFISH = L"+0+1+2+3&4-4+13";
 #else
 const wstring PotionBrewing::MOD_WATER = L"-1-3-5-7-9-11-13";
 const wstring PotionBrewing::MOD_SUGAR = L"+0";
@@ -114,6 +116,8 @@ void PotionBrewing::staticCtor()
 		potionEffectDuration.insert(intStringMap::value_type( MobEffect::damageBoost->getId(), L"0 & !1 & !2 & 3 & 3+6" ));
 		potionEffectDuration.insert(intStringMap::value_type( MobEffect::nightVision->getId(), L"!0 & 1 & 2 & !3 & 2+6" ));
 		potionEffectDuration.insert(intStringMap::value_type( MobEffect::invisibility->getId(), L"!0 & 1 & 2 & 3 & 2+6" ));
+		potionEffectDuration.insert(intStringMap::value_type( MobEffect::jump->getId(), L"0 & 1 & !2 & 3 & 0+6" ));
+		potionEffectDuration.insert(intStringMap::value_type( MobEffect::waterBreathing->getId(), L"0 & 1 & 2 & 3 & 0+6" ));
 
 		// glowstone increases amplification
 		potionEffectAmplifier.insert(intStringMap::value_type( MobEffect::movementSpeed->getId(), L"5" ));
@@ -124,6 +128,7 @@ void PotionBrewing::staticCtor()
 		potionEffectAmplifier.insert(intStringMap::value_type( MobEffect::heal->getId(), L"5" ));
 		potionEffectAmplifier.insert(intStringMap::value_type( MobEffect::damageResistance->getId(), L"5" ));
 		potionEffectAmplifier.insert(intStringMap::value_type( MobEffect::poison->getId(), L"5" ));
+		potionEffectAmplifier.insert(intStringMap::value_type( MobEffect::jump->getId(), L"5" ));
 #else
 		potionEffectDuration.put(movementSpeed.getId(), "!10 & !4 & 5*2+0 & >1 | !7 & !4 & 5*2+0 & >1");
 		potionEffectDuration.put(movementSlowdown.getId(), "10 & 7 & !4 & 7+5+1-0");

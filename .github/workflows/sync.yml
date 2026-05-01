@@ -1,0 +1,35 @@
+name: Sync branches with main
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Git
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+      - name: Sync branches
+        run: |
+          git fetch --all
+          for branch in $(git for-each-ref --format='%(refname:short)' refs/remotes/origin/); do
+            if [[ "$branch" == "origin/exp/"* || "$branch" == "origin/feat/"* || "$branch" == "origin/experimental" ]]; then
+              local_branch="${branch#origin/}"
+              git checkout -B "$local_branch" "$branch"
+              if git merge origin/main --no-edit; then
+                git push origin "$local_branch"
+              else
+                echo "Merge conflict in $local_branch"
+                git merge --abort
+              fi
+            fi
+          done

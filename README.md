@@ -9,7 +9,7 @@ This project aims to backport the newer title updates back to Legacy Console Edi
 ![Roadmap](.github/roadmap.png)
 
 - Port Title Update 25 (100% complete) ( 🎉 )
-- Port Title Update 31 (86.36% complete)
+- Port Title Update 31 (97.01% complete)
 
 See our [Contributor's Guide](./CONTRIBUTING.md) for more information on the goals of this project.
 
@@ -36,5 +36,5 @@ Huge thanks to the following projects:
 
 We provide both a generic build script and a Nix flake.
 
-- Nix: `nix run .#client`
+- Nix: `nix run .#client` (not recommended)
 - Generic: `./build-linux.sh`

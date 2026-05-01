@@ -187,8 +187,6 @@ void CPlatformNetworkManagerDurango::HandlePlayerJoined(DQRNetworkPlayer *pDQRPl
 
 void CPlatformNetworkManagerDurango::HandlePlayerLeaving(DQRNetworkPlayer *pDQRPlayer)
 {
-	//__debugbreak();
-
 	app.DebugPrintf( "Player 0x%p leaving.\n",
         pDQRPlayer );
 

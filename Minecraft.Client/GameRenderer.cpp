@@ -2219,7 +2219,7 @@ void GameRenderer::setupFog(int i, float alpha)
 
 	if (i == 999)
 	{
-		__debugbreak();
+		DEBUG_BREAK();
 		// 4J TODO
 		/*
 		glFog(GL_FOG_COLOR, getBuffer(0, 0, 0, 1));

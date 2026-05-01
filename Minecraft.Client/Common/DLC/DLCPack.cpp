@@ -107,7 +107,7 @@ void DLCPack::addChildPack(DLCPack *childPack)
 #ifndef _CONTENT_PACKAGE
 	if(packId < 0 || packId > 15)
 	{
-		__debugbreak();
+		DEBUG_BREAK();
 	}
 #endif
 	childPack->SetPackId( (packId<<24) | m_packId );
@@ -362,7 +362,7 @@ DWORD DLCPack::getFileIndexAt(DLCManager::EDLCType type, const wstring &path, bo
 	{
 		app.DebugPrintf("Unimplemented\n");
 #ifndef __CONTENT_PACKAGE
-		__debugbreak();
+		DEBUG_BREAK();
 #endif
 		return 0;
 	}
@@ -392,9 +392,6 @@ bool DLCPack::hasPurchasedFile(DLCManager::EDLCType type, const wstring &path)
 	/*if(type == DLCManager::e_DLCType_All)
 	{
 		app.DebugPrintf("Unimplemented\n");
-#ifndef _CONTENT_PACKAGE
-		__debugbreak();
-#endif
 		return false;
 	}
 #ifndef _CONTENT_PACKAGE

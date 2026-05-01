@@ -25,38 +25,6 @@ bool ElytraItem::TestUse(shared_ptr<ItemInstance> instance, Level* level, shared
 
 shared_ptr<ItemInstance> ElytraItem::use(shared_ptr<ItemInstance> instance, Level* level, shared_ptr<Player> player)
 {
-    // Elytra equips to the chest slot (SLOT_CHEST = 3, armor array index = SLOT_CHEST - 1 = 2)
-    const int chestSlot = LivingEntity::SLOT_CHEST - 1;
-
-    ItemInstance copy = *instance->copy_not_shared();
-
-    if (!player->abilities.instabuild)
-    {
-        if (player->inventory->armor[chestSlot] == nullptr)
-        {
-            player->inventory->armor[chestSlot] = make_shared<ItemInstance>(copy);
-            player->inventory->removeItemNoUpdate(player->inventory->selected);
-            instance->count = 0;
-        }
-        else
-        {
-            player->inventory->setItem(player->inventory->selected, player->inventory->armor[chestSlot]);
-            player->inventory->armor[chestSlot] = make_shared<ItemInstance>(copy);
-        }
-    }
-    else
-    {
-        if (player->inventory->armor[chestSlot] == nullptr)
-        {
-            player->inventory->armor[chestSlot] = make_shared<ItemInstance>(copy);
-        }
-        else
-        {
-            player->inventory->setItem(player->inventory->selected, player->inventory->armor[chestSlot]);
-            player->inventory->armor[chestSlot] = make_shared<ItemInstance>(copy);
-        }
-    }
-
     // Play cloth armor equip sound (range 194–199)
     player->playSound(194, 0.5f, 1.0f);
 

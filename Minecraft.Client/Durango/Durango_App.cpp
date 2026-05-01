@@ -641,7 +641,7 @@ int CConsoleMinecraftApp::Callback_TMSPPReadDLCFile(void *pParam,int iPad, int i
 		{
 			DWORD error = GetLastError();
 			app.DebugPrintf("Failed to open DLCXbox1.cmp with error code %d (%x)\n", error, error);
-			__debugbreak();
+			DEBUG_BREAK();
 			return 0;
 		}
 

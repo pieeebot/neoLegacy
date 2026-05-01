@@ -90,7 +90,7 @@ ConsoleSaveFileOriginal::ConsoleSaveFileOriginal(const wstring &fileName, LPVOID
 	if( pagesCommitted != 0 )
 	{
 #ifndef _CONTENT_PACKAGE
-		__debugbreak();
+		DEBUG_BREAK();
 #endif
 	}
 
@@ -101,7 +101,7 @@ ConsoleSaveFileOriginal::ConsoleSaveFileOriginal(const wstring &fileName, LPVOID
 	{
 #ifndef _CONTENT_PACKAGE
 		// Out of physical memory
-		__debugbreak();
+		DEBUG_BREAK();
 #endif
 	}
 	pagesCommitted = pagesRequired;
@@ -206,7 +206,7 @@ ConsoleSaveFileOriginal::ConsoleSaveFileOriginal(const wstring &fileName, LPVOID
 						if( pvRet == nullptr )
 						{
 							// Out of physical memory
-							__debugbreak();
+							DEBUG_BREAK();
 						}
 						pagesCommitted = pagesRequired;
 					}
@@ -503,7 +503,7 @@ void ConsoleSaveFileOriginal::finalizeWrite()
 		void *pvRet = VirtualAlloc(pvHeap, pagesRequired * CSF_PAGE_SIZE, COMMIT_ALLOCATION, PAGE_READWRITE);
 		if( pvRet == NULL )
 		{
-			__debugbreak();
+			DEBUG_BREAK();
 		}
 		pagesCommitted = pagesRequired;
 	}
@@ -537,7 +537,7 @@ void ConsoleSaveFileOriginal::MoveDataBeyond(FileEntry *file, DWORD nNumberOfByt
 		if( pvRet == nullptr )
 		{
 			// Out of physical memory
-			__debugbreak();
+			DEBUG_BREAK();
 		}
 		pagesCommitted = pagesRequired;
 	}
@@ -739,6 +739,7 @@ void ConsoleSaveFileOriginal::Flush(bool autosave, bool updateThumbnail )
 		s_bgSaveActive.store(true, std::memory_order_release);
 
 		std::thread([snap, fileSize, thumb, thumbSz, meta, metaLen, this]() {
+			Compression::UseDefaultThreadStorage();
 			unsigned int compLen = fileSize + 8;
 			byte *buf = static_cast<byte *>(StorageManager.AllocateSaveData(compLen));
 			if (!buf)

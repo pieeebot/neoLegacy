@@ -80,6 +80,21 @@ namespace ServerRuntime
 		/** `hardcore-ban-ip` — whether hardcore death bans include IP bans */
 		bool hardcoreBanIp;
 
+		/** `max-monsters` natural spawn cap for monsters (zombies, skeletons, creepers, etc.) */
+		int maxMonsters;
+		/** `max-animals` natural spawn cap for animals (cows, sheep, pigs) */
+		int maxAnimals;
+		/** `max-ambient` natural spawn cap for ambient mobs (bats) */
+		int maxAmbient;
+		/** `max-water-animals` natural spawn cap for water mobs (squid) */
+		int maxWaterAnimals;
+		/** `max-wolves` natural spawn cap for wolves */
+		int maxWolves;
+		/** `max-chickens` natural spawn cap for chickens */
+		int maxChickens;
+		/** `max-mushroom-cows` natural spawn cap for mooshrooms */
+		int maxMushroomCows;
+
 		/** security settings */
 		/** `hide-player-list-prelogin` — strip XUIDs from PreLoginPacket response */
 		bool hidePlayerListPreLogin;

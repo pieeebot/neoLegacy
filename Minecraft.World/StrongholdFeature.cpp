@@ -158,7 +158,7 @@ bool StrongholdFeature::isFeatureChunk(int x, int z,bool bIsSuperflat)
 #ifndef _CONTENT_PACKAGE
 					if(position->x > 2560 || position->x < -2560 || position->z > 2560 || position->z < -2560)
 					{
-						__debugbreak();
+						DEBUG_BREAK();
 					}
 #endif
 
