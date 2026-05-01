@@ -1,9 +1,9 @@
-﻿name: Nightly Release
+name: Stable Release
 
 on:
   push:
     branches:
-      - experimental
+      - main
   workflow_dispatch:
 
 permissions:
@@ -12,7 +12,7 @@ permissions:
   attestations: write
 
 concurrency:
-  group: nightly
+  group: stable
   cancel-in-progress: true
 
 jobs:
@@ -228,25 +228,25 @@ jobs:
     - name: Delete old release
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: gh release delete Nightly-Dedicated-Server --yes || true
+      run: gh release delete Stable-Dedicated-Server --yes || true
 
     - name: Delete old tag
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: gh api repos/${{ github.repository }}/git/refs/tags/Nightly-Dedicated-Server --method DELETE || true
+      run: gh api repos/${{ github.repository }}/git/refs/tags/Stable-Dedicated-Server --method DELETE || true
 
     - name: Create tag
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
-        git tag -f Nightly-Dedicated-Server -m "Nightly server release ${{ steps.sha.outputs.short }}"
-        git push origin Nightly-Dedicated-Server --force
+        git tag -f Stable-Dedicated-Server -m "Stable server release ${{ steps.sha.outputs.short }}"
+        git push origin Stable-Dedicated-Server --force
 
     - name: Create release
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        gh release create Nightly-Dedicated-Server artifacts/* \
+        gh release create Stable-Dedicated-Server artifacts/* \
           --title "Server: ${{ steps.sha.outputs.short }}" \
           --notes "Dedicated Server runtime for Windows64.
 
@@ -285,19 +285,19 @@ jobs:
       - name: Delete old release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release delete Nightly --yes || true
+        run: gh release delete Stable --yes || true
 
       - name: Delete old tag
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh api repos/${{ github.repository }}/git/refs/tags/Nightly --method DELETE || true
+        run: gh api repos/${{ github.repository }}/git/refs/tags/Stable --method DELETE || true
 
       - name: Create tag
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -f Nightly -m "Nightly release ${{ steps.sha.outputs.short }}"
-          git push origin Nightly --force
+          git tag -f Stable -m "Stable release ${{ steps.sha.outputs.short }}"
+          git push origin Stable --force
 
       - name: Write release notes
         run: |
@@ -331,7 +331,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create Nightly artifacts/* \
+          gh release create Stable artifacts/* \
             --title "Client: ${{ steps.sha.outputs.short }}" \
             --notes-file notes.md
 
