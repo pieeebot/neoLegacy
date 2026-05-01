@@ -113,6 +113,7 @@
 #include "UIScene_BookAndQuillMenu.h"
 
 #include "UIScene_CraftingMenu.h"
+#include "UIScene_ClassicCraftingMenu.h"
 #include "UIScene_SignEntryMenu.h"
 
 #include "UIScene_ConnectingProgress.h"

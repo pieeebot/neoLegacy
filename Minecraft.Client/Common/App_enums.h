@@ -182,6 +182,8 @@ enum eGameSetting
 	eGameSetting_VSync,
 	eGameSetting_ExclusiveFullscreen,
 
+	//TU25
+	eGameSetting_ClassicCrafting,
 };
 
 

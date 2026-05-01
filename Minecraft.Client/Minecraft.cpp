@@ -1520,7 +1520,7 @@ void Minecraft::run_middle()
 
 							if(g_KBMInput.IsKeyPressed(KeyboardMouseInput::KEY_CRAFTING) || g_KBMInput.IsKeyPressed(KeyboardMouseInput::KEY_CRAFTING_ALT))
 							{
-							if((ui.IsSceneInStack(i, eUIScene_Crafting2x2Menu) || ui.IsSceneInStack(i, eUIScene_Crafting3x3Menu) || ui.IsSceneInStack(i, eUIScene_CreativeMenu) || isClosableByEitherKey) && !isEditing)
+								if ((ui.IsSceneInStack(i, eUIScene_Crafting2x2Menu) || ui.IsSceneInStack(i, eUIScene_Crafting3x3Menu) || ui.IsSceneInStack(i, eUIScene_CreativeMenu) || ui.IsSceneInStack(i, eUIScene_ClassicCraftingMenu) || isClosableByEitherKey) && !isEditing)
 							{
 								ui.CloseUIScenes(i);
 							}
@@ -3900,7 +3900,10 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 			else
 			{
 				ui.PlayUISFX(eSFX_Press);
-				app.LoadCrafting2x2Menu(iPad, player);
+				if (app.GetGameSettings(iPad, eGameSetting_ClassicCrafting))
+					app.LoadInventoryMenu(iPad, player);
+				else
+					app.LoadCrafting2x2Menu(iPad, player);
 			}
 		}
 

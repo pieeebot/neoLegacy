@@ -246,6 +246,9 @@ bool UILayer::NavigateToScene(int iPad, EUIScene scene, void *initData)
 	case eUIScene_Crafting3x3Menu:
 		newScene = new UIScene_CraftingMenu(iPad, initData, this);
 		break;
+	case eUIScene_ClassicCraftingMenu:
+		newScene = new UIScene_ClassicCraftingMenu(iPad, initData, this);
+		break;
 	case eUIScene_TradingMenu:
 		newScene = new UIScene_TradingMenu(iPad, initData, this);
 		break;

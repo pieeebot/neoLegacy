@@ -9,13 +9,13 @@ class CraftingMenu : public AbstractContainerMenu
 {
 	// 4J Stu Made these public for UI menus, perhaps should make friend class?
 public:
-	static const int RESULT_SLOT;
-	static const int CRAFT_SLOT_START;
-	static const int CRAFT_SLOT_END;
-	static const int INV_SLOT_START;
-	static const int INV_SLOT_END;
-	static const int USE_ROW_SLOT_START;
-	static const int USE_ROW_SLOT_END;
+	static const int RESULT_SLOT = 0;
+	static const int CRAFT_SLOT_START = 1;
+	static const int CRAFT_SLOT_END = CRAFT_SLOT_START + 9;
+	static const int INV_SLOT_START = CRAFT_SLOT_END;
+	static const int INV_SLOT_END = INV_SLOT_START + (9 * 3);
+	static const int USE_ROW_SLOT_START = INV_SLOT_END;
+	static const int USE_ROW_SLOT_END = USE_ROW_SLOT_START + 9;
 
 public:
 	shared_ptr<CraftingContainer> craftSlots;

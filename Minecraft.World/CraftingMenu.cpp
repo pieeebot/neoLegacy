@@ -9,14 +9,6 @@
 #include "ResultSlot.h"
 #include "CraftingMenu.h"
 
-const int CraftingMenu::RESULT_SLOT = 0;
-const int CraftingMenu::CRAFT_SLOT_START = 1;
-const int CraftingMenu::CRAFT_SLOT_END = CraftingMenu::CRAFT_SLOT_START + 9;
-const int CraftingMenu::INV_SLOT_START = CraftingMenu::CRAFT_SLOT_END;
-const int CraftingMenu::INV_SLOT_END = CraftingMenu::INV_SLOT_START + 9 * 3;
-const int CraftingMenu::USE_ROW_SLOT_START = CraftingMenu::INV_SLOT_END;
-const int CraftingMenu::USE_ROW_SLOT_END = CraftingMenu::USE_ROW_SLOT_START + 9;
-
 CraftingMenu::CraftingMenu(shared_ptr<Inventory> inventory, Level *level, int xt, int yt, int zt) : AbstractContainerMenu()
 {
 	craftSlots = std::make_shared<CraftingContainer>(this, 3, 3);

@@ -1,5 +1,7 @@
 #pragma once
-
+#include "UIControl_SlotList.h"
+#include "UIControl_Cursor.h"
+#include "UIControl_Label.h"
 #include "UIScene.h"
 #include "IUIScene_AbstractContainerMenu.h"
 
