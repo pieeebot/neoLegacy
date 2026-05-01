@@ -22,7 +22,7 @@ Huge thanks to the following projects:
 
 - [Patoke/LCERenewed](https://github.com/Patoke/LCERenewed) - for some of the patches that required deep decompilation
 - [itsRevela/LCE-Revelations](https://github.com/itsRevela/LCE-Revelations) - for providing a stable project for neoLegacy to continue with
-- [GabsPuNs/MinecraftConsoles](https://github.com/GabsPuNs/MinecraftConsoles) - for providing Classic Crafting
+- [GabsPuNs/MinecraftConsoles](https://github.com/GabsPuNs/MinecraftConsoles) - for providing us with their implemention of the Classic Crafting Feature.
 
 # Build & Run
 
