@@ -9548,4 +9548,6 @@ All Ender Chests in a world are linked. Items placed into an Ender Chest are acc
 	<data name="IDS_ACHIEVE_DESC_LION_TAMER"><value>Tame an ocelot.</value></data>
 
 	<data name="IDS_ACHIEVEMENT_VIEW"><value>Hold {*CONTROLLER_VK_Y*} to view</value></data>
+
+	<data name="IDS_CHECKBOX_CLASSICCRAFTING"><value>Classic Crafting</value></data>
 </root>

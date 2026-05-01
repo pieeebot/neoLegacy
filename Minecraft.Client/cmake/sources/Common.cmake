@@ -293,6 +293,8 @@ set(_MINECRAFT_CLIENT_COMMON_COMMON_UI_ALL_PLATFORMS
   "${BASE_DIR}/UI/IUIScene_ContainerMenu.h"
   "${BASE_DIR}/UI/IUIScene_CraftingMenu.cpp"
   "${BASE_DIR}/UI/IUIScene_CraftingMenu.h"
+  "${BASE_DIR}/UI/IUIScene_ClassicCraftingMenu.cpp"
+  "${BASE_DIR}/UI/IUIScene_ClassicCraftingMenu.h"
   "${BASE_DIR}/UI/IUIScene_CreativeMenu.cpp"
   "${BASE_DIR}/UI/IUIScene_CreativeMenu.h"
   "${BASE_DIR}/UI/IUIScene_DispenserMenu.cpp"

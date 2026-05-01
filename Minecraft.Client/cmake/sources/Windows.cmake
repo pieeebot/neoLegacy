@@ -219,6 +219,8 @@ source_group("Common/UI/Scenes/Help & Options" FILES ${_MINECRAFT_CLIENT_WINDOWS
 set(_MINECRAFT_CLIENT_WINDOWS_COMMON_UI_SCENES_INGAME_MENU_SCREENS
   "${CMAKE_CURRENT_SOURCE_DIR}/Common/UI/UIScene_CraftingMenu.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/Common/UI/UIScene_CraftingMenu.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/Common/UI/UIScene_ClassicCraftingMenu.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/Common/UI/UIScene_ClassicCraftingMenu.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/Common/UI/UIScene_DeathMenu.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/Common/UI/UIScene_DeathMenu.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/Common/UI/UIScene_EndPoem.cpp"

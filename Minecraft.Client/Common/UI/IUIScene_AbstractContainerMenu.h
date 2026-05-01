@@ -43,6 +43,8 @@ protected:
 		eSectionInventoryUsing,
 		eSectionInventoryInventory,
 		eSectionInventoryArmor,
+		eSectionInventoryCraftingGrid,
+		eSectionInventoryCraftingResult,
 		eSectionInventoryMax,
 		
 		eSectionTrapUsing,
@@ -118,6 +120,12 @@ protected:
 		eSectionFireworksResult,
 		eSectionFireworksIngredients,
 		eSectionFireworksMax,
+
+		eSectionClassicCraftingHotbar,
+		eSectionClassicCraftingInventory,
+		eSectionClassicCraftingResult,
+		eSectionClassicCraftingGrid,
+		eSectionClassicCraftingMax,
 	};
 
 	AbstractContainerMenu* m_menu;
