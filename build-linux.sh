@@ -78,7 +78,7 @@ do_cmake_configure() {
     local winsdk="$XWIN_CACHE/splat"
     local toolchain
     toolchain="$(write_toolchain)"
-    local c_flags="/MT -Wno-non-pod-varargs -fms-compatibility -fms-extensions --target=x86_64-pc-windows-msvc \
+    local c_flags="/MT -w -Wno-non-pod-varargs -fms-compatibility -fms-extensions --target=x86_64-pc-windows-msvc \
 -imsvc $winsdk/crt/include \
 -imsvc $winsdk/sdk/include/ucrt \
 -imsvc $winsdk/sdk/include/um \
@@ -161,6 +161,7 @@ export WINEPREFIX="\${WINEPREFIX:-\$HOME/.local/share/minecraft-lce-client-prefi
 export WINEDLLOVERRIDES="winemenubuilder.exe=d"
 export WINEESYNC=1
 export WINEFSYNC=1
+export WINEDEBUG=debugstr
 export DXVK_LOG_LEVEL=none
 mkdir -p "\$PERSIST_DIR" "\$WINEPREFIX"
 WORK_DIR="\$(mktemp -d)"
@@ -171,7 +172,8 @@ mkdir -p "\$PERSIST_DIR/GameHDD"
 rm -rf "\$WORK_DIR/Windows64/GameHDD" 2>/dev/null || true
 ln -sf "\$PERSIST_DIR/GameHDD" "\$WORK_DIR/Windows64/GameHDD"
 cd "\$WORK_DIR"
-exec wine "\$WORK_DIR/Minecraft.Client.exe" "\$@"
+wine "\$WORK_DIR/Minecraft.Client.exe" "\$@" 2>&1 | \
+sed -nE 's/^[0-9a-f]+:warn:debugstr:OutputDebugStringA "(.*)"$/\1/p' | sed -E 's/\\\n$//; s/\\\xa9/©/g; s/\\\\"/"/g'
 LAUNCHER
     chmod +x "$INSTALL_DIR/minecraft-lce-client"
 }

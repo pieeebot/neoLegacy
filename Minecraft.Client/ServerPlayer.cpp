@@ -143,6 +143,10 @@ static std::wstring FormatDeathMessage(const shared_ptr<ChatPacket>& packet)
 		message = app.GetString(IDS_DEATH_FELL_ASSIST_ITEM); replacePlayer = true; replaceEntitySource = true; replaceItem = true; break;
 	case ChatPacket::e_ChatDeathFellFinishItem:
 		message = app.GetString(IDS_DEATH_FELL_FINISH_ITEM); replacePlayer = true; replaceEntitySource = true; replaceItem = true; break;
+	case ChatPacket::e_ChatDeathHotFloor:
+		message = app.GetString(IDS_DEATH_HOT_FLOOR); replacePlayer = true; break;
+	case ChatPacket::e_ChatDeathHotFloorPlayer:
+		message = app.GetString(IDS_DEATH_HOT_FLOOR_PLAYER); replacePlayer = true; replaceEntitySource = true; break;
 	default:
 		message = app.GetString(IDS_DEATH_GENERIC); replacePlayer = true; break;
 	}

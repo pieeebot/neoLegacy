@@ -91,7 +91,10 @@ public:
 		eMaterial_bookshelf,
 		eMaterial_wheat,
 		eMaterial_acaciawood,
-		eMaterial_darkwood
+		eMaterial_darkwood,
+		eMaterial_netherstalk,
+		eMaterial_rednetherbrick,
+		eMaterial_bone
 
 	}
 	eMaterial;

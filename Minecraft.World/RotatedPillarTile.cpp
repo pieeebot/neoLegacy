@@ -1,9 +1,15 @@
 #include "stdafx.h"
 #include "net.minecraft.h"
-#include "RotatedPillarTile.h"
+#include "IconRegister.h"
+#include "RotatedPillarTile.h" 
 
 RotatedPillarTile::RotatedPillarTile(int id, Material *material) : Tile(id, material)
 {
+}
+
+RotatedPillarTile::RotatedPillarTile(int id, Material *material, const wstring &iconNameStr) : Tile(id, material)
+{
+	setIconName(iconNameStr);
 }
 
 int RotatedPillarTile::getRenderShape()
@@ -56,9 +62,20 @@ Icon *RotatedPillarTile::getTexture(int face, int data)
 	return getTypeTexture(type);
 }
 
+Icon *RotatedPillarTile::getTypeTexture(int type)
+{
+	return icon;
+}
+
 Icon *RotatedPillarTile::getTopTexture(int type)
 {
 	return iconTop;
+}
+
+void RotatedPillarTile::registerIcons(IconRegister *iconRegister)
+{
+	icon = iconRegister->registerIcon(getIconName());
+	iconTop = iconRegister->registerIcon(getIconName() + L"_top");
 }
 
 int RotatedPillarTile::getSpawnResourcesAuxValue(int data)

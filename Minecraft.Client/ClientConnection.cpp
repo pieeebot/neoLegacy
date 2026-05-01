@@ -1877,7 +1877,15 @@ void ClientConnection::handleChat(shared_ptr<ChatPacket> packet)
 		replaceEntitySource = true;
 		replaceItem = true;
 		break;
-
+	case ChatPacket::e_ChatDeathHotFloor:
+		message=app.GetString(IDS_DEATH_HOT_FLOOR);
+		replacePlayer = true;
+		break;
+	case ChatPacket::e_ChatDeathHotFloorPlayer:
+		message=app.GetString(IDS_DEATH_HOT_FLOOR_PLAYER);
+		replacePlayer = true;
+		replaceEntitySource = true;
+		break;
 	case ChatPacket::e_ChatPlayerEnteredEnd:
 		message=app.GetString(IDS_PLAYER_ENTERED_END);
 		iPos=message.find(L"%s");

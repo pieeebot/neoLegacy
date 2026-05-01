@@ -29,6 +29,7 @@ public:
     static DamageSource *wither;
     static DamageSource *anvil;
     static DamageSource *fallingBlock;
+    static DamageSource *hotFloor;
 
     static DamageSource *mobAttack(shared_ptr<LivingEntity> mob);
     static DamageSource *playerAttack(shared_ptr<Player> player);

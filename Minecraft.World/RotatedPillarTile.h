@@ -14,7 +14,9 @@ public:
 protected:
 	Icon *iconTop;
 
+public:
 	RotatedPillarTile(int id, Material *material);
+	RotatedPillarTile(int id, Material *material, const wstring &iconName);
 
 public:
 	virtual int getRenderShape();
@@ -22,9 +24,11 @@ public:
 	virtual Icon *getTexture(int face, int data);
 
 protected:
-	virtual Icon *getTypeTexture(int type) = 0;
+	virtual Icon *getTypeTexture(int type);
 
 	virtual Icon *getTopTexture(int type);
+	
+	virtual void registerIcons(IconRegister *iconRegister);
 
 public:
 	virtual int getSpawnResourcesAuxValue(int data);

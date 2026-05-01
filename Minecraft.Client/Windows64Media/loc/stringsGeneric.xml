@@ -1474,7 +1474,23 @@ Can also be used for low-level lighting.</value>
 	</data>	
 
 	<data name="IDS_DESC_BARRIER">
-		<value>An invisible, but solid block.</value>
+		<value>An invisible but solid block.</value>
+	</data>	
+
+	<data name="IDS_DESC_BONE_BLOCK">
+		<value>Crafted from Bone Meal, or found underground in fossils. Can be used as decoration.</value>
+	</data>	
+	
+	<data name="IDS_DESC_NETHER_WART_BLOCK">
+		<value>A decorative block crafted from Nether Wart.</value>
+	</data>	
+
+	<data name="IDS_DESC_RED_NETHER_BRICK">
+		<value>Crafted from Nether Wart and Nether Brick. Can be used as decoration.</value>
+	</data>	
+
+	<data name="IDS_DESC_MAGMA_BLOCK">
+		<value>Causes fire damage when you stand on it.</value>
 	</data>	
 
 	<data name="IDS_DESC_WATER">
@@ -3007,6 +3023,22 @@ Can also be used for low-level lighting.</value>
 
 	<data name="IDS_TILE_BARRIER">
 		<value>Barrier</value>
+	</data>	
+	
+	<data name="IDS_TILE_BONE_BLOCK">
+		<value>Bone Block</value>
+	</data>	
+	
+	<data name="IDS_TILE_NETHER_WART_BLOCK">
+		<value>Nether Wart Block</value>
+	</data>	
+
+	<data name="IDS_TILE_RED_NETHER_BRICK">
+		<value>Red Nether Bricks</value>
+	</data>	
+
+	<data name="IDS_TILE_MAGMA_BLOCK">
+		<value>Magma Block</value>
 	</data>	
 
 	<data name="IDS_TILE_WATER">
@@ -6710,6 +6742,10 @@ Would you like to install the mash-up pack or texture pack now?</value>
 		<value>{*PLAYER*} went up in flames</value>
 	</data>	
 
+	<data name="IDS_DEATH_HOT_FLOOR">
+		<value>{*PLAYER*} discovered the floor was lava</value>
+	</data>	
+
 	<data name="IDS_DEATH_ONFIRE">
 		<value>{*PLAYER*} burned to death</value>
 	</data>	
@@ -6820,6 +6856,10 @@ Would you like to install the mash-up pack or texture pack now?</value>
 
 	<data name="IDS_DEATH_INFIRE_PLAYER">
 		<value>{*PLAYER*} walked into fire whilst fighting {*SOURCE*}</value>
+	</data>	
+
+	<data name="IDS_DEATH_HOT_FLOOR_PLAYER">
+		<value>{*PLAYER*} walked into the danger zone due to {*SOURCE*}</value>
 	</data>	
 
 	<data name="IDS_DEATH_ONFIRE_PLAYER">

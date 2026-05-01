@@ -5,6 +5,11 @@
 #include "Minecraft.h"
 #include "IUIScene_StartGame.h"
 
+// to the next person that has a game crash here at startup
+// check your prestitchedtexturemap.cpp file
+// if you have smth like bone_block and bone_top then it will crash
+// i dont know why it does it here out of all places but it does
+
 IUIScene_StartGame::IUIScene_StartGame(int iPad, UILayer *parentLayer) : UIScene(iPad, parentLayer)
 {
 	m_bIgnoreInput = false;
