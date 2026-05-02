@@ -41,6 +41,7 @@ enum ePARTICLE_TYPE
 	eParticleType_angryVillager,
 	eParticleType_happyVillager,
 	eParticleType_fireworksspark,
+	eParticleType_mobAppearance,
 
 	// 4J-JEV: In the java, the particle name was used to sneak parameters in for the Terrain and IconCrack particle constructors.
 	
