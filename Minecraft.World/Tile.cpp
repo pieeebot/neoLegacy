@@ -287,6 +287,45 @@ void Tile::ReleaseThreadStorage()
 	ThreadStorage *tls = static_cast<ThreadStorage *>(TlsGetValue(Tile::tlsIdxShape));
 	delete tls;
 }
+
+Tile::BlockStateDefinition::BlockStateDefinition(Tile *ownerTile)
+{
+	owner = ownerTile;
+}
+
+void Tile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int Tile::defaultBlockState()
+{
+	return m_defaultBlockState;
+}
+
+Tile::BlockStateDefinition *Tile::getBlockStateDefinition()
+{
+	return m_blockStateDefinition;
+}
+
+int Tile::convertBlockStateToLegacyData(BlockState *state)
+{
+	(void)state;
+	return 0;
+}
+
+int Tile::getBlockState()
+{
+	return m_defaultBlockState;
+}
+
+Tile::BlockState Tile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	(void)level; (void)x; (void)y; (void)z;
+	return BlockState(defaultBlockState());
+}
+
 class TallGrass2TileItem : public ColoredTileItem
 {
 public:
@@ -658,6 +697,9 @@ void Tile::_init(int id, Material *material, bool isSolidRender)
 	friction = 0.6f;
 	_isTicking = false;
 	_isEntityTile = false;
+
+	m_blockStateDefinition = nullptr;
+	m_defaultBlockState = 0;
 
 	/*	4J - TODO
 	if (Tile.tiles[id] != null)

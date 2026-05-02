@@ -14,6 +14,32 @@ HugeMushroomTile::HugeMushroomTile(int id, Material *material, int type) : Tile(
 	iconInside = nullptr;
 }
 
+void HugeMushroomTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int HugeMushroomTile::defaultBlockState()
+{
+	return 0;
+}
+
+int HugeMushroomTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0xF) : 0;
+}
+
+Tile::BlockState HugeMushroomTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0xF);
+}
+
+Tile::BlockState HugeMushroomTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return getBlockState(level->getData(x, y, z));
+}
+
 Icon *HugeMushroomTile::getTexture(int face, int data)
 {
 	// 123

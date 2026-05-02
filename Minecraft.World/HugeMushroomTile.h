@@ -21,6 +21,11 @@ private:
 	Icon *iconInside;
 public:
 	HugeMushroomTile(int id, Material *material, int type);
+	virtual void createBlockStateDefinition() override;
+	virtual int defaultBlockState() override;
+	virtual int convertBlockStateToLegacyData(BlockState *state) override;
+	virtual Tile::BlockState getBlockState(int data);
+	virtual Tile::BlockState getBlockState(LevelSource *level, int x, int y, int z) override;
 	Icon *getTexture(int face, int data);
 	int getResourceCount(Random *random);
 	int getResource(int data, Random *random, int playerBonusLevel);

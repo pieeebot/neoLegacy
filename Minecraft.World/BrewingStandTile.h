@@ -14,6 +14,11 @@ private:
 public:
 	BrewingStandTile(int id);
 	~BrewingStandTile();
+	virtual void createBlockStateDefinition() override;
+	virtual int defaultBlockState() override;
+	virtual int convertBlockStateToLegacyData(BlockState *state) override;
+	virtual Tile::BlockState getBlockState(LevelSource *level, int x, int y, int z) override;
+	virtual Tile::BlockState getBlockState(int data);
 	virtual bool isSolidRender(bool isServerLevel = false);
 	virtual int getRenderShape();
 	virtual shared_ptr<TileEntity> newTileEntity(Level *level);

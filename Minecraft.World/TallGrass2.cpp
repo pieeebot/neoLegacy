@@ -53,6 +53,32 @@ TallGrass2::TallGrass2(int id) : Bush(id, Material::replaceable_plant)
 	this->updateDefaultShape();
 }
 
+void TallGrass2::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int TallGrass2::defaultBlockState()
+{
+	return 0;
+}
+
+int TallGrass2::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0xF) : 0;
+}
+
+Tile::BlockState TallGrass2::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0xF);
+}
+
+Tile::BlockState TallGrass2::getBlockState(LevelSource* level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0xF);
+}
+
 
 void TallGrass2::updateDefaultShape()
 {

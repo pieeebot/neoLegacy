@@ -13,6 +13,32 @@ BrewingStandTile::BrewingStandTile(int id) : BaseEntityTile(id, Material::metal,
 	iconBase = nullptr;
 }
 
+void BrewingStandTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int BrewingStandTile::defaultBlockState()
+{
+	return 0;
+}
+
+int BrewingStandTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0x7) : 0;
+}
+
+Tile::BlockState BrewingStandTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0x7);
+}
+
+Tile::BlockState BrewingStandTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0x7);
+}
+
 BrewingStandTile::~BrewingStandTile()
 {
 	delete random;

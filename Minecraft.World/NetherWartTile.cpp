@@ -15,6 +15,32 @@ NetherWartTile::NetherWartTile(int id) : Bush(id)
 	updateDefaultShape();
 }
 
+void NetherWartTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int NetherWartTile::defaultBlockState()
+{
+	return 0;
+}
+
+int NetherWartTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0x3) : 0;
+}
+
+Tile::BlockState NetherWartTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0x3);
+}
+
+Tile::BlockState NetherWartTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0x3);
+}
+
 // 4J Added override
 void NetherWartTile::updateDefaultShape()
 {

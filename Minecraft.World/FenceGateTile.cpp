@@ -10,6 +10,32 @@ FenceGateTile::FenceGateTile(int id) : DirectionalTile(id, Material::wood, isSol
 {
 }
 
+void FenceGateTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int FenceGateTile::defaultBlockState()
+{
+	return 0;
+}
+
+int FenceGateTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0x7) : 0;
+}
+
+Tile::BlockState FenceGateTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0x7);
+}
+
+Tile::BlockState FenceGateTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z));
+}
+
 Icon *FenceGateTile::getTexture(int face, int data)
 {
 	return icon;

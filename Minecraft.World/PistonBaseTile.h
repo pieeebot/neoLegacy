@@ -32,6 +32,11 @@ private:
 
 public:
 	PistonBaseTile(int id, bool isSticky);
+	virtual void createBlockStateDefinition() override;
+	virtual int defaultBlockState() override;
+	virtual int convertBlockStateToLegacyData(BlockState *state) override;
+	virtual Tile::BlockState getBlockState(int data);
+	virtual Tile::BlockState getBlockState(LevelSource *level, int x, int y, int z) override;
 
 	Icon *getPlatformTexture();
 	virtual void updateShape(float x0, float y0, float z0, float x1, float y1, float z1);

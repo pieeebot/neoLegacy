@@ -66,6 +66,32 @@ JukeboxTile::JukeboxTile(int id) : BaseEntityTile(id, Material::wood)
 	iconTop = nullptr;
 }
 
+void JukeboxTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int JukeboxTile::defaultBlockState()
+{
+	return 0;
+}
+
+int JukeboxTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0x1) : 0;
+}
+
+Tile::BlockState JukeboxTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0x1);
+}
+
+Tile::BlockState JukeboxTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0x1);
+}
+
 Icon *JukeboxTile::getTexture(int face, int data)
 {
 	if (face == Facing::UP)

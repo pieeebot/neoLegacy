@@ -24,6 +24,11 @@ protected:
 
 public:
 	virtual void         updateDefaultShape() override;
+	virtual void         createBlockStateDefinition() override;
+	virtual int          defaultBlockState() override;
+	virtual int          convertBlockStateToLegacyData(BlockState *state) override;
+	virtual Tile::BlockState getBlockState(LevelSource* level, int x, int y, int z) override;
+	virtual Tile::BlockState getBlockState(int data);
 	virtual Icon* getTexture(int face, int data) override;
 	virtual Icon* getTexture(LevelSource* level, int x, int y, int z, int face) override;
 	virtual void         registerIcons(IconRegister* iconRegister) override;

@@ -8,6 +8,11 @@ private:
 	Icon* icon;
 public:
 	FenceGateTile(int id);
+	virtual void createBlockStateDefinition() override;
+	virtual int defaultBlockState() override;
+	virtual int convertBlockStateToLegacyData(BlockState *state) override;
+	virtual Tile::BlockState getBlockState(LevelSource *level, int x, int y, int z) override;
+	virtual Tile::BlockState getBlockState(int data);
 	Icon *getTexture(int face, int data);
 	virtual bool mayPlace(Level *level, int x, int y, int z);
 	virtual AABB *getAABB(Level *level, int x, int y, int z);

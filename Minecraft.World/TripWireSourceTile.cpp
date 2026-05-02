@@ -10,6 +10,32 @@ TripWireSourceTile::TripWireSourceTile(int id) : Tile(id, Material::decoration, 
 	this->setTicking(true);
 }
 
+void TripWireSourceTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int TripWireSourceTile::defaultBlockState()
+{
+	return 0;
+}
+
+int TripWireSourceTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0xF) : 0;
+}
+
+Tile::BlockState TripWireSourceTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0xF);
+}
+
+Tile::BlockState TripWireSourceTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0xF);
+}
+
 AABB *TripWireSourceTile::getAABB(Level *level, int x, int y, int z)
 {
 	return nullptr;

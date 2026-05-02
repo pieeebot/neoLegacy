@@ -13,6 +13,32 @@ PistonExtensionTile::PistonExtensionTile(int id) : Tile(id, Material::piston,isS
 	setDestroyTime(0.5f);
 }
 
+void PistonExtensionTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int PistonExtensionTile::defaultBlockState()
+{
+	return 0;
+}
+
+int PistonExtensionTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0xF) : 0;
+}
+
+Tile::BlockState PistonExtensionTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0xF);
+}
+
+Tile::BlockState PistonExtensionTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0xF);
+}
+
 void PistonExtensionTile::setOverrideTopTexture(Icon *overrideTopTexture)
 {
 	this->overrideTopTexture = overrideTopTexture;

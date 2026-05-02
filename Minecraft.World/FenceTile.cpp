@@ -10,6 +10,37 @@ FenceTile::FenceTile(int id, const wstring &texture, Material *material) : Tile(
 	this->texture = texture;
 }
 
+void FenceTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int FenceTile::defaultBlockState()
+{
+	return 0;
+}
+
+int FenceTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0xF) : 0;
+}
+
+Tile::BlockState FenceTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0xF);
+}
+
+Tile::BlockState FenceTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	int state = 0;
+	if (connectsTo(level, x, y, z - 1)) state |= 0x1;
+	if (connectsTo(level, x, y, z + 1)) state |= 0x2;
+	if (connectsTo(level, x + 1, y, z)) state |= 0x4;
+	if (connectsTo(level, x - 1, y, z)) state |= 0x8;
+	return Tile::BlockState(state);
+}
+
 static const int fences[] = {
 	Tile::fence_Id, Tile::netherFence_Id, Tile::spruceFence_Id,
 	Tile::birchFence_Id, Tile::jungleFence_Id, Tile::acaciaFence_Id, Tile::darkFence_Id

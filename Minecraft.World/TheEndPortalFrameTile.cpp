@@ -13,6 +13,32 @@ TheEndPortalFrameTile::TheEndPortalFrameTile(int id) : Tile(id, Material::glass,
 	iconEye = nullptr;
 }
 
+void TheEndPortalFrameTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int TheEndPortalFrameTile::defaultBlockState()
+{
+	return 0;
+}
+
+int TheEndPortalFrameTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0x7) : 0;
+}
+
+Tile::BlockState TheEndPortalFrameTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0x7);
+}
+
+Tile::BlockState TheEndPortalFrameTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0x7);
+}
+
 Icon *TheEndPortalFrameTile::getTexture(int face, int data)
 {
 	if (face == Facing::UP)

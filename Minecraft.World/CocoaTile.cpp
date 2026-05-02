@@ -17,6 +17,32 @@ CocoaTile::CocoaTile(int id) : DirectionalTile(id, Material::plant, isSolidRende
 	setTicking(true);
 }
 
+void CocoaTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int CocoaTile::defaultBlockState()
+{
+	return 0;
+}
+
+int CocoaTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? state->value : 0;
+}
+
+Tile::BlockState CocoaTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0xF);
+}
+
+Tile::BlockState CocoaTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0xF);
+}
+
 Icon *CocoaTile::getTexture(int face, int data)
 {
 	return icons[2];

@@ -65,6 +65,30 @@ protected:
 	};
 	static DWORD tlsIdxShape;
 public:
+	class BlockState {
+	public:
+		int value;
+		BlockState(int v = 0) : value(v) {}
+	};
+
+	class BlockStateDefinition {
+	public:
+		Tile *owner;
+		BlockStateDefinition(Tile *ownerTile);
+	};
+
+	// create blockstate definition 
+	virtual void createBlockStateDefinition();
+	// return default tile blockstate
+	virtual int defaultBlockState();
+	// return blockstate definition
+	virtual BlockStateDefinition *getBlockStateDefinition();
+	// convert blockstate to legacy bitmask
+	virtual int convertBlockStateToLegacyData(BlockState *state);
+	// defaultblockstate part 2
+	virtual int getBlockState();
+	// return blockstate for tile at world position
+	virtual BlockState getBlockState(LevelSource *level, int x, int y, int z);
 	// Each new thread that needs to use Vec3 pools will need to call one of the following 2 functions, to either create its own
 	// local storage, or share the default storage already allocated by the main thread
 	static void CreateNewThreadStorage();
@@ -653,6 +677,9 @@ protected:
 	bool _isEntityTile;
 	int m_iMaterial;
 	int m_iBaseItemType;
+
+	BlockStateDefinition *m_blockStateDefinition;
+	int m_defaultBlockState;
 
 	// 4J Stu - Removed this in favour of a TLS version
 	//double xx0, yy0, zz0, xx1, yy1, zz1;

@@ -11,6 +11,38 @@ TripWireTile::TripWireTile(int id) : Tile(id, Material::decoration, isSolidRende
 	this->setTicking(true);
 }
 
+void TripWireTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int TripWireTile::defaultBlockState()
+{
+	return 0;
+}
+
+int TripWireTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0xF) : 0;
+}
+
+Tile::BlockState TripWireTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0xF);
+}
+
+Tile::BlockState TripWireTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	int data = level->getData(x, y, z);
+	int state = 0;
+	if (shouldConnectTo(level, x, y, z, data, Direction::NORTH)) state |= 0x1;
+	if (shouldConnectTo(level, x, y, z, data, Direction::SOUTH)) state |= 0x2;
+	if (shouldConnectTo(level, x, y, z, data, Direction::EAST)) state |= 0x4;
+	if (shouldConnectTo(level, x, y, z, data, Direction::WEST)) state |= 0x8;
+	return Tile::BlockState(state);
+}
+
 int TripWireTile::getTickDelay(Level *level)
 {
 	// 4J:	Increased (x2); quick update caused problems with shared

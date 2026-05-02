@@ -11,6 +11,32 @@ FlowerPotTile::FlowerPotTile(int id) : Tile(id, Material::decoration, isSolidRen
 	sendTileData();
 }
 
+void FlowerPotTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int FlowerPotTile::defaultBlockState()
+{
+	return 0;
+}
+
+int FlowerPotTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0xF) : 0;
+}
+
+Tile::BlockState FlowerPotTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0xF);
+}
+
+Tile::BlockState FlowerPotTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0xF);
+}
+
 void FlowerPotTile::updateDefaultShape()
 {
 	float size = 6.0f / 16.0f;

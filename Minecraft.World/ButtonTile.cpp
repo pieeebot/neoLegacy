@@ -13,6 +13,32 @@ ButtonTile::ButtonTile(int id, bool sensitive) : Tile(id, Material::decoration, 
     this->sensitive = sensitive;
 }
 
+void ButtonTile::createBlockStateDefinition()
+{
+    if (!m_blockStateDefinition)
+        m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int ButtonTile::defaultBlockState()
+{
+    return 0;
+}
+
+int ButtonTile::convertBlockStateToLegacyData(BlockState *state)
+{
+    return state ? (state->value & 0xF) : 0;
+}
+
+Tile::BlockState ButtonTile::getBlockState(int data)
+{
+    return Tile::BlockState(data & 0xF);
+}
+
+Tile::BlockState ButtonTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+    return Tile::BlockState(level->getData(x, y, z) & 0xF);
+}
+
 Icon *ButtonTile::getTexture(int face, int data)
 {
     if(id == Tile::button_wood_Id) return Tile::wood->getTexture(Facing::UP);

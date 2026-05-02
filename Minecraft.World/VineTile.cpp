@@ -13,6 +13,32 @@ VineTile::VineTile(int id) : Tile(id, Material::replaceable_plant, isSolidRender
 	setTicking(true);
 }
 
+void VineTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int VineTile::defaultBlockState()
+{
+	return 0;
+}
+
+int VineTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0xF) : 0;
+}
+
+Tile::BlockState VineTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0xF);
+}
+
+Tile::BlockState VineTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0xF);
+}
+
 void VineTile::updateDefaultShape()
 {
 	setShape(0, 0, 0, 1, 1, 1);

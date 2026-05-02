@@ -17,6 +17,32 @@ TreeTile2::TreeTile2(int id) : RotatedPillarTile(id, Material::wood)
 {
 }
 
+void TreeTile2::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int TreeTile2::defaultBlockState()
+{
+	return 0;
+}
+
+int TreeTile2::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & (MASK_TYPE | MASK_FACING)) : 0;
+}
+
+Tile::BlockState TreeTile2::getBlockState(int data)
+{
+	return Tile::BlockState(data & (MASK_TYPE | MASK_FACING));
+}
+
+Tile::BlockState TreeTile2::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & (MASK_TYPE | MASK_FACING));
+}
+
 int TreeTile2::getResourceCount(Random* random)
 {
 	return 1;

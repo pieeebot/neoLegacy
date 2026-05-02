@@ -20,6 +20,11 @@ protected:
 	CactusTile(int id);
 
 public:
+	virtual void createBlockStateDefinition() override;
+	virtual int defaultBlockState() override;
+	virtual int convertBlockStateToLegacyData(BlockState *state) override;
+	virtual Tile::BlockState getBlockState(LevelSource *level, int x, int y, int z) override;
+	virtual Tile::BlockState getBlockState(int data);
 	virtual void tick(Level *level, int x, int y, int z, Random *random);
 	virtual AABB *getAABB(Level *level, int x, int y, int z);
 	virtual AABB *getTileAABB(Level *level, int x, int y, int z);

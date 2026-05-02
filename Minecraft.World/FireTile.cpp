@@ -38,6 +38,41 @@ FireTile::~FireTile()
 	delete [] burnOdds;
 }
 
+void FireTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int FireTile::defaultBlockState()
+{
+	return 0;
+}
+
+int FireTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & AGE_MASK) : 0;
+}
+
+Tile::BlockState FireTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & AGE_MASK);
+}
+
+Tile::BlockState FireTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	int age = level->getData(x, y, z) & AGE_MASK;
+	int state = age;
+
+	if (canBurn(level, x + 1, y, z)) state |= EAST_BIT;
+	if (canBurn(level, x - 1, y, z)) state |= WEST_BIT;
+	if (canBurn(level, x, y, z + 1)) state |= SOUTH_BIT;
+	if (canBurn(level, x, y, z - 1)) state |= NORTH_BIT;
+	if (canBurn(level, x, y + 1, z)) state |= UP_BIT;
+
+	return Tile::BlockState(state);
+}
+
 void FireTile::init()
 {
 	setFlammable(Tile::wood_Id, FLAME_HARD, BURN_MEDIUM);

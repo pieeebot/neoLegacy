@@ -24,6 +24,35 @@ StemTile::StemTile(int id, Tile *fruit) : Bush(id)
 	iconAngled = nullptr;
 }
 
+void StemTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int StemTile::defaultBlockState()
+{
+	return 0;
+}
+
+int StemTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0x7) : 0;
+}
+
+Tile::BlockState StemTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0x7);
+}
+
+Tile::BlockState StemTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	int age = level->getData(x, y, z) & 0x7;
+	int connectDir = getConnectDir(level, x, y, z);
+	int facingCode = connectDir >= 0 ? connectDir + 1 : 0;
+	return Tile::BlockState(age | ((facingCode & 0x7) << 3));
+}
+
 bool StemTile::mayPlaceOn(int tile)
 {
 	return tile == Tile::farmland_Id;

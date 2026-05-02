@@ -53,6 +53,32 @@ PistonBaseTile::PistonBaseTile(int id, bool isSticky) : Tile(id, Material::pisto
 	iconPlatform = nullptr;
 }
 
+void PistonBaseTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int PistonBaseTile::defaultBlockState()
+{
+	return 0;
+}
+
+int PistonBaseTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0xF) : 0;
+}
+
+Tile::BlockState PistonBaseTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0xF);
+}
+
+Tile::BlockState PistonBaseTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0xF);
+}
+
 Icon *PistonBaseTile::getPlatformTexture()
 {
 	return iconPlatform;

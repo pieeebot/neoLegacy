@@ -16,6 +16,32 @@ ReedTile::ReedTile(int id) : Tile( id, Material::plant,isSolidRender() )
 	this->setTicking(true);
 }
 
+void ReedTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int ReedTile::defaultBlockState()
+{
+	return 0;
+}
+
+int ReedTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0xF) : 0;
+}
+
+Tile::BlockState ReedTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0xF);
+}
+
+Tile::BlockState ReedTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0xF);
+}
+
 // 4J Added override
 void ReedTile::updateDefaultShape()
 {

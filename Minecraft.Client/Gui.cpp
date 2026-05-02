@@ -28,7 +28,13 @@
 #include "../Minecraft.World/net.minecraft.world.h"
 #include "../Minecraft.World/LevelChunk.h"
 #include "../Minecraft.World/Biome.h"
+#include "../Minecraft.World/HitResult.h"
 #include <Common/UI/UI.h>
+#include "../Minecraft.World/Tile.h"
+#include "../Minecraft.World/BlockStateDecoderRegistry.h"
+#include "../Minecraft.World/BlockStateDecoder.h"
+#include <map>
+#include <cwctype>
 
 ResourceLocation Gui::PUMPKIN_BLUR_LOCATION = ResourceLocation(TN__BLUR__MISC_PUMPKINBLUR);
 
@@ -1157,6 +1163,94 @@ void Gui::render(float a, bool mouseFree, int xMouse, int yMouse)
             lines.push_back(L"Facing: " + std::wstring(cardinals[direction]) + L" (" + angleString + L")");
 
 			// We have to limit y to 256 as we don't get any information past that
+			// target block state
+			if (minecraft->hitResult != nullptr && minecraft->hitResult->type == HitResult::TILE)
+			{
+				int hx = minecraft->hitResult->x;
+				int hy = minecraft->hitResult->y;
+				int hz = minecraft->hitResult->z;
+				if (minecraft->level != NULL && minecraft->level->hasChunkAt(hx, hy, hz))
+				{
+					int tid = minecraft->level->getTile(hx, hy, hz);
+					if (tid >= 0 && tid < Tile::TILE_NUM_COUNT)
+					{
+						Tile *t = Tile::tiles[tid];
+						if (t != nullptr)
+						{
+							Tile::BlockState st = t->getBlockState(minecraft->level, hx, hy, hz);
+							// check registry so we dont end up with random integers
+							std::wstring decoded = BlockStateDecoderRegistry::decode(tid, st.value);
+				
+							if (decoded.empty()) {
+								if (tid == Tile::door_wood_Id || tid == Tile::door_iron_Id || tid == Tile::spruce_door_Id || tid == Tile::birch_door_Id || tid == Tile::jungle_door_Id || tid == Tile::acacia_door_Id || tid == Tile::dark_oak_door_Id) {
+									decoded = BlockStateDecoder::doorPropsToString(BlockStateDecoder::decodeDoor(st.value));
+								}
+							}
+
+							if (!decoded.empty())
+							{
+								std::map<std::wstring, std::wstring> props;
+								size_t start = 0;
+								while (start < decoded.size()) {
+									size_t pos = decoded.find(L'\n', start);
+									std::wstring line = (pos == std::wstring::npos) ? decoded.substr(start) : decoded.substr(start, pos - start);
+									size_t colon = line.find(L':');
+									if (colon != std::wstring::npos) {
+										std::wstring key = line.substr(0, colon);
+										std::wstring val = line.substr(colon + 1);
+										auto trim = [](std::wstring &s) {
+											size_t i = 0;
+											while (i < s.size() && iswspace(s[i])) ++i;
+											if (i) s.erase(0, i);
+											// right
+											if (!s.empty()) {
+												size_t j = s.size() - 1;
+												while (j != (size_t)-1 && iswspace(s[j])) --j;
+												s.erase(j + 1);
+											}
+										};
+										trim(key);
+										trim(val);
+										props[key] = val;
+									}
+									if (pos == std::wstring::npos) break;
+									start = pos + 1;
+								}
+								lines.push_back(L"State:");
+								if (props.find(L"age") != props.end()) lines.push_back(L"age: " + props[L"age"]);
+								if (props.find(L"facing") != props.end()) lines.push_back(L"facing: " + props[L"facing"]);
+								if (props.find(L"north") != props.end()) lines.push_back(L"north: " + props[L"north"]);
+								if (props.find(L"south") != props.end()) lines.push_back(L"south: " + props[L"south"]);
+								if (props.find(L"east") != props.end()) lines.push_back(L"east: " + props[L"east"]);
+								if (props.find(L"west") != props.end()) lines.push_back(L"west: " + props[L"west"]);
+								if (props.find(L"type") != props.end()) lines.push_back(L"type: " + props[L"type"]);
+								if (props.find(L"variant") != props.end()) lines.push_back(L"variant: " + props[L"variant"]);
+								if (props.find(L"axis") != props.end()) lines.push_back(L"axis: " + props[L"axis"]);
+								if (props.find(L"facing") != props.end()) lines.push_back(L"facing: " + props[L"facing"]);
+								if (props.find(L"hinge") != props.end()) lines.push_back(L"hinge: " + props[L"hinge"]);
+								if (props.find(L"half") != props.end()) lines.push_back(L"half: " + props[L"half"]);
+								if (props.find(L"shape") != props.end()) lines.push_back(L"shape: " + props[L"shape"]);
+								if (props.find(L"up") != props.end()) lines.push_back(L"up: " + props[L"up"]);
+								if (props.find(L"extended") != props.end()) lines.push_back(L"extended: " + props[L"extended"]);
+								if (props.find(L"open") != props.end()) lines.push_back(L"open: " + props[L"open"]);
+								if (props.find(L"attached") != props.end()) lines.push_back(L"attached: " + props[L"attached"]);
+								if (props.find(L"powered") != props.end()) lines.push_back(L"powered: " + props[L"powered"]);
+								if (props.find(L"delay") != props.end()) lines.push_back(L"delay: " + props[L"delay"]);
+								if (props.find(L"enabled") != props.end()) lines.push_back(L"enabled: " + props[L"enabled"]);
+								if (props.find(L"eye") != props.end()) lines.push_back(L"eye: " + props[L"eye"]);
+								if (props.find(L"bottle_0") != props.end()) lines.push_back(L"bottle_0: " + props[L"bottle_0"]);
+								if (props.find(L"bottle_1") != props.end()) lines.push_back(L"bottle_1: " + props[L"bottle_1"]);
+								if (props.find(L"bottle_2") != props.end()) lines.push_back(L"bottle_2: " + props[L"bottle_2"]);
+								if (props.find(L"has_record") != props.end()) lines.push_back(L"has_record: " + props[L"has_record"]);
+							}
+							else
+							{
+								lines.push_back(L"Target BlockState: " + std::to_wstring(st.value));
+							}
+						}
+					}
+				}
+			}
             if (minecraft->level != NULL && minecraft->level->hasChunkAt(xBlockPos, fmod(yBlockPos, 256), zBlockPos))
             {
                 LevelChunk *chunkAt = minecraft->level->getChunkAt(xBlockPos, zBlockPos);

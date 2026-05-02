@@ -17,6 +17,11 @@ protected:
 	RotatedPillarTile(int id, Material *material);
 
 public:
+	virtual void createBlockStateDefinition();
+	virtual int defaultBlockState();
+	virtual int convertBlockStateToLegacyData(BlockState *state);
+	virtual Tile::BlockState getBlockState(LevelSource *level, int x, int y, int z);
+	virtual Tile::BlockState getBlockState(int data);
 	virtual int getRenderShape();
 	virtual int getPlacedOnFaceDataValue(Level *level, int x, int y, int z, int face, float clickX, float clickY, float clickZ, int itemValue);
 	virtual Icon *getTexture(int face, int data);

@@ -8,6 +8,32 @@ LeverTile::LeverTile(int id) : Tile(id, Material::decoration,isSolidRender())
 {
 }
 
+void LeverTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int LeverTile::defaultBlockState()
+{
+	return 0;
+}
+
+int LeverTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0xF) : 0;
+}
+
+Tile::BlockState LeverTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0xF);
+}
+
+Tile::BlockState LeverTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0xF);
+}
+
 AABB *LeverTile::getAABB(Level *level, int x, int y, int z)
 {
 	return nullptr;
