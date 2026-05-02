@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Command.h"
-
 class GameType;
+class GameCommandPacket;
 
 class GameModeCommand : public Command
 {
