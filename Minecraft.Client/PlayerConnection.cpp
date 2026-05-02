@@ -1055,18 +1055,18 @@ void PlayerConnection::handleCommand(const wstring& message)
 		if (arg2.empty())
 		{
 			target = player;
-			destination = server.getPlayers()->getPlayer(arg1);
+			destination = server->getPlayers()->getPlayer(arg1);
 		}
 		else
 		{
-			target = server.getPlayers()->getPlayer(arg1);
-			destination = server.getPlayers()->getPlayer(arg2);
+			target = server->getPlayers()->getPlayer(arg1);
+			destination = server->getPlayers()->getPlayer(arg2);
 		}
 
 		if (target && destination)
 		{
-			shared_ptr<GameCommandPacket> packet = TeleportCommand::preparePacket(target->getUID(), destination->getUID());
-			server.getCommandDispatcher()->performCommand(player, eGameCommand_Teleport, packet->data);
+			shared_ptr<GameCommandPacket> packet = TeleportCommand::preparePacket(target->getXuid(), destination->getXuid());
+			server->getCommandDispatcher()->performCommand(player, eGameCommand_Teleport, packet->data);
 		}
 		else
 		{
@@ -1083,7 +1083,7 @@ void PlayerConnection::handleCommand(const wstring& message)
 			ss >> timeVal;
 			bool night = (timeVal == L"night");
 			shared_ptr<GameCommandPacket> packet = TimeCommand::preparePacket(night);
-			server.getCommandDispatcher()->performCommand(player, eGameCommand_Time, packet->data);
+			server->getCommandDispatcher()->performCommand(player, eGameCommand_Time, packet->data);
 		}
 		else
 		{
@@ -1092,12 +1092,12 @@ void PlayerConnection::handleCommand(const wstring& message)
 	}
 	else if (cmd == L"kill")
 	{
-		server.getCommandDispatcher()->performCommand(player, eGameCommand_Kill, byteArray());
+		server->getCommandDispatcher()->performCommand(player, eGameCommand_Kill, byteArray());
 	}
 	else if (cmd == L"toggledownfall")
 	{
 		shared_ptr<GameCommandPacket> packet = ToggleDownfallCommand::preparePacket();
-		server.getCommandDispatcher()->performCommand(player, eGameCommand_ToggleDownfall, packet->data);
+		server->getCommandDispatcher()->performCommand(player, eGameCommand_ToggleDownfall, packet->data);
 	}
 }
 
