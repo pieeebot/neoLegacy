@@ -1037,7 +1037,7 @@ void PlayerConnection::handleCommand(const wstring& message)
 	if (FourKitBridge::HandlePlayerCommand(player->entityId, commandLine))
 		return;
 #endif
-	wstringstream ss(message);
+	wstringstream ss(message.substr(1));
 	wstring cmd;
 	ss >> cmd;
 	if (cmd == L"tp" || cmd == L"teleport")
