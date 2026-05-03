@@ -85,8 +85,8 @@ body:
         - label: 1080p
         - label: 720p
         - label: 480p
-      validations:
-        required: true
+    validations:
+      required: true
 
   - type: checkboxes
     id: operatingsys
@@ -99,16 +99,14 @@ body:
         - label: Debian(-based)
         - label: Arch(-based)
         - label: Gentoo(-based)
-      validations:
-        required: true
+    validations:
+      required: true
 
   - type: input
     id: launcher
     attributes:
       label: Launcher
-      attributes:
-        label: Launcher
-        placeholder: e.g. Emerald Launcher
+      placeholder: e.g. Emerald Launcher
       validations:
         required: true
 
