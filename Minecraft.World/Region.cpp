@@ -246,7 +246,9 @@ Material *Region::getMaterial(int x, int y, int z)
 {
 	int t = getTile(x, y, z);
 	if (t == 0) return Material::air;
-	return Tile::tiles[t]->material;
+	Tile *tile = Tile::tiles[t];
+	if (tile == nullptr) return Material::air;
+	return tile->material;
 }
 
 

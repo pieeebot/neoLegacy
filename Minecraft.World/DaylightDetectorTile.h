@@ -12,6 +12,12 @@ private:
 public:
 	DaylightDetectorTile(int id, bool inverted);
 
+	virtual void createBlockStateDefinition() override;
+	virtual int defaultBlockState() override;
+	virtual int convertBlockStateToLegacyData(BlockState *state) override;
+	virtual Tile::BlockState getBlockState(int data);
+	virtual Tile::BlockState getBlockState(LevelSource *level, int x, int y, int z) override;
+
 	virtual void updateDefaultShape(); // 4J Added override
 	virtual void updateShape(LevelSource *level, int x, int y, int z, int forceData = -1, shared_ptr<TileEntity> forceEntity = shared_ptr<TileEntity>());
 	virtual int getSignal(LevelSource *level, int x, int y, int z, int dir);

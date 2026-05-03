@@ -64,6 +64,10 @@ shared_ptr<ItemInstance> MerchantRecipe::getSellItem()
 
 bool MerchantRecipe::isSame(MerchantRecipe *other)
 {
+	if (!other || !buyA || !sell || !other->buyA || !other->sell)
+	{
+		return false;
+	}
 	if (buyA->id != other->buyA->id || sell->id != other->sell->id)
 	{
 		return false;
@@ -74,7 +78,11 @@ bool MerchantRecipe::isSame(MerchantRecipe *other)
 bool MerchantRecipe::isSameSameButBetter(MerchantRecipe *other)
 {
 	// same deal, but cheaper
-	return isSame(other) && (buyA->count < other->buyA->count || (buyB != nullptr && buyB->count < other->buyB->count));
+	if (!isSame(other) || !buyA || !other || !other->buyA)
+	{
+		return false;
+	}
+	return buyA->count < other->buyA->count || (buyB != nullptr && buyB->count < other->buyB->count);
 }
 
 int MerchantRecipe::getUses()
@@ -110,9 +118,9 @@ void MerchantRecipe::enforceDeprecated()
 void MerchantRecipe::load(CompoundTag *tag)
 {
 	CompoundTag *buyTag = tag->getCompound(L"buy");
-	buyA = ItemInstance::fromTag(buyTag);
+	buyA = buyTag ? ItemInstance::fromTag(buyTag) : nullptr;
 	CompoundTag *sellTag = tag->getCompound(L"sell");
-	sell = ItemInstance::fromTag(sellTag);
+	sell = sellTag ? ItemInstance::fromTag(sellTag) : nullptr;
 	if (tag->contains(L"buyB"))
 	{
 		buyB = ItemInstance::fromTag(tag->getCompound(L"buyB"));
@@ -134,8 +142,14 @@ void MerchantRecipe::load(CompoundTag *tag)
 CompoundTag *MerchantRecipe::createTag()
 {
 	CompoundTag *tag = new CompoundTag();
-	tag->putCompound(L"buy", buyA->save(new CompoundTag(L"buy")));
-	tag->putCompound(L"sell", sell->save(new CompoundTag(L"sell")));
+	if (buyA != nullptr)
+	{
+		tag->putCompound(L"buy", buyA->save(new CompoundTag(L"buy")));
+	}
+	if (sell != nullptr)
+	{
+		tag->putCompound(L"sell", sell->save(new CompoundTag(L"sell")));
+	}
 	if (buyB != nullptr)
 	{
 		tag->putCompound(L"buyB", buyB->save(new CompoundTag(L"buyB")));

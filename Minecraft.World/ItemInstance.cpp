@@ -13,6 +13,7 @@
 #include "Item.h"
 #include "ItemInstance.h"
 #include "HtmlString.h"
+#include "../Minecraft.Client/Common/Consoles_App.h"
 
 const wstring ItemInstance::ATTRIBUTE_MODIFIER_FORMAT = L"#.###";
 
@@ -79,9 +80,22 @@ ItemInstance::ItemInstance(int id, int count, int damage)
 
 shared_ptr<ItemInstance> ItemInstance::fromTag(CompoundTag *itemTag)
 {
+	if (!itemTag)
+	{
+		app.DebugPrintf("[ItemInstance] NULL itemTag\n");
+		return nullptr;
+	}
+
 	shared_ptr<ItemInstance> itemInstance = shared_ptr<ItemInstance>(new ItemInstance());
 	itemInstance->load(itemTag);
-	return itemInstance->getItem() != nullptr ? itemInstance : nullptr;
+
+	Item *item = itemInstance->getItem();
+	if (item == nullptr)
+	{
+		app.DebugPrintf("[ItemInstance] Missing item while loading: id=%d count=%d damage=%d\n", itemInstance->id, itemInstance->count, itemInstance->auxValue);
+	}
+
+	return item != nullptr ? itemInstance : nullptr;
 }
 
 ItemInstance::~ItemInstance()
@@ -105,6 +119,11 @@ shared_ptr<ItemInstance> ItemInstance::remove(int count)
 
 Item *ItemInstance::getItem() const
 {
+	if (id < 0 || id >= Item::items.length)
+	{
+		return nullptr;
+	}
+
 	return Item::items[id];
 }
 

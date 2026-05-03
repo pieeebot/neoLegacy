@@ -2096,6 +2096,9 @@ void LevelChunk::setBiomes(byteArray biomes)
 // 4J - optimisation brought forward from 1.8.2
 int LevelChunk::getTopRainBlock(int x, int z)
 {
+	// check if sent data is not malformed causing a crash
+	if (x < 0 || x >= 16 || z < 0 || z >= 16) return 0;
+	
 	int slot = x | (z << 4);
 	int h = rainHeights[slot];
 
@@ -2106,7 +2109,8 @@ int LevelChunk::getTopRainBlock(int x, int z)
 		while (y > 0 && h == -1)
 		{
 			int t = getTile(x, y, z);
-			Material *m = t == 0 ? Material::air : Tile::tiles[t]->material;
+			Tile *tile = (t == 0) ? nullptr : Tile::tiles[t];
+			Material *m = (tile == nullptr) ? Material::air : tile->material;
 			if (!m->blocksMotion() && !m->isLiquid())
 			{
 				y--;

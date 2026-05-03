@@ -76,10 +76,11 @@ bool IUIScene_TradingMenu::handleKeyDown(int iPad, int iAction, bool bRepeat)
 					// Do we have the ingredients?
 					shared_ptr<ItemInstance> buyAItem = activeRecipe->getBuyAItem();
 					shared_ptr<ItemInstance> buyBItem = activeRecipe->getBuyBItem();
+					shared_ptr<ItemInstance> sellItem = activeRecipe->getSellItem();
 					shared_ptr<MultiplayerLocalPlayer> player = Minecraft::GetInstance()->localplayers[getPad()];
 					int buyAMatches = player->inventory->countMatches(buyAItem);
 					int buyBMatches = player->inventory->countMatches(buyBItem);
-					if( (buyAItem != nullptr && buyAMatches >= buyAItem->count) && (buyBItem == nullptr || buyBMatches >= buyBItem->count) )
+					if( sellItem != nullptr && (buyAItem != nullptr && buyAMatches >= buyAItem->count) && (buyBItem == nullptr || buyBMatches >= buyBItem->count) )
 					{
 						// 4J-JEV: Fix for PS4 #7111: [PATCH 1.12] Trading Librarian villagers for multiple �Enchanted Books� will cause the title to crash.
 						int actualShopItem = m_activeOffers.at(selectedShopItem).second;
@@ -91,7 +92,7 @@ bool IUIScene_TradingMenu::handleKeyDown(int iPad, int iAction, bool bRepeat)
 						player->inventory->removeResources(buyBItem);
 
 						// Add the item we have purchased
-						shared_ptr<ItemInstance> result = activeRecipe->getSellItem()->copy();
+						shared_ptr<ItemInstance> result = sellItem->copy();
 						if(!player->inventory->add( result ) )
 						{
 							player->drop(result);
@@ -238,6 +239,7 @@ void IUIScene_TradingMenu::updateDisplay()
 		if( selectedShopItem < m_activeOffers.size() )
 		{
 			MerchantRecipe *activeRecipe = m_activeOffers.at(selectedShopItem).first;
+			shared_ptr<ItemInstance> sellItem = activeRecipe ? activeRecipe->getSellItem() : nullptr;
 
 			wstring wsTemp;
 
@@ -245,11 +247,11 @@ void IUIScene_TradingMenu::updateDisplay()
 			wsTemp = app.GetString(IDS_VILLAGER_OFFERS_ITEM);
 			wsTemp = replaceAll(wsTemp,L"{*VILLAGER_TYPE*}",m_merchant->getDisplayName());
 			size_t iPos=wsTemp.find(L"%s");
-			wsTemp.replace(iPos,2,activeRecipe->getSellItem()->getHoverName());
+			wsTemp.replace(iPos,2,sellItem != nullptr ? sellItem->getHoverName() : L"");
 
 			setTitle(wsTemp.c_str());
 
-			vector<HtmlString> *offerDescription = GetItemDescription(activeRecipe->getSellItem());
+			vector<HtmlString> *offerDescription = GetItemDescription(sellItem);
 			setOfferDescription(offerDescription);
 
 			shared_ptr<ItemInstance> buyAItem = activeRecipe->getBuyAItem();
@@ -270,8 +272,8 @@ void IUIScene_TradingMenu::updateDisplay()
 			int buyAMatches = player->inventory->countMatches(buyAItem);
 			if(buyAMatches > 0)
 			{
-				setRequest1RedBox(buyAMatches < buyAItem->count);
-				canMake = buyAMatches > buyAItem->count;
+				setRequest1RedBox(buyAItem == nullptr || buyAMatches < buyAItem->count);
+				canMake = buyAItem != nullptr && buyAMatches > buyAItem->count;
 			}
 			else
 			{
@@ -282,8 +284,8 @@ void IUIScene_TradingMenu::updateDisplay()
 			int buyBMatches = player->inventory->countMatches(buyBItem);
 			if(buyBMatches > 0)
 			{
-				setRequest2RedBox(buyBMatches < buyBItem->count);
-				canMake = canMake && buyBMatches > buyBItem->count;
+				setRequest2RedBox(buyBItem == nullptr || buyBMatches < buyBItem->count);
+				canMake = canMake && buyBItem != nullptr && buyBMatches > buyBItem->count;
 			}
 			else
 			{
@@ -369,6 +371,11 @@ void IUIScene_TradingMenu::setTradeItem(int index, shared_ptr<ItemInstance> item
 
 vector<HtmlString> *IUIScene_TradingMenu::GetItemDescription(shared_ptr<ItemInstance> item)
 {
+	if (item == nullptr)
+	{
+		return new vector<HtmlString>();
+	}
+
 	bool advanced = false;
 	if (const Minecraft* pMinecraft = Minecraft::GetInstance())
 	{

@@ -186,17 +186,18 @@ static std::wstring jukeboxPropsToString(int composite)
 	return ss.str();
 }
 
-static std::wstring daylightDetectorPropsToString(int composite)
+static std::wstring daylightDetectorPropsToString(bool inverted)
 {
 	std::wstringstream ss;
-	ss << L"power: " << (composite & 0xF);
+	ss << L"inverted: " << (inverted ? L"true" : L"false");
 	return ss.str();
 }
 
 static std::wstring snowPropsToString(int composite)
 {
 	std::wstringstream ss;
-	int layers = (composite & 0x7) + 1;
+	int layers = composite & 0x7;
+	if (layers == 0) layers = 8;
 	ss << L"layers: " << layers;
 	return ss.str();
 }
@@ -605,12 +606,6 @@ static bool registerPlantDecoders()
 	registerDecoder(Tile::sapling_Id, [](int composite)->std::wstring { return saplingPropsToString(composite); });
 	registerDecoder(Tile::tallgrass_Id, [](int composite)->std::wstring { return tallGrassPropsToString(composite); });
 	registerDecoder(Tile::tallgrass2_Id, [](int composite)->std::wstring { return tallGrass2PropsToString(composite); });
-	registerDecoder(Tile::fenceGate_Id, [](int composite)->std::wstring { return fenceGatePropsToString(composite); });
-	registerDecoder(Tile::spruceGate_Id, [](int composite)->std::wstring { return fenceGatePropsToString(composite); });
-	registerDecoder(Tile::birchGate_Id, [](int composite)->std::wstring { return fenceGatePropsToString(composite); });
-	registerDecoder(Tile::jungleGate_Id, [](int composite)->std::wstring { return fenceGatePropsToString(composite); });
-	registerDecoder(Tile::darkGate_Id, [](int composite)->std::wstring { return fenceGatePropsToString(composite); });
-	registerDecoder(Tile::acaciaGate_Id, [](int composite)->std::wstring { return fenceGatePropsToString(composite); });
 	registerDecoder(Tile::fence_Id, [](int composite)->std::wstring { return fencePropsToString(composite); });
 	registerDecoder(Tile::netherFence_Id, [](int composite)->std::wstring { return fencePropsToString(composite); });
 	registerDecoder(Tile::spruceFence_Id, [](int composite)->std::wstring { return fencePropsToString(composite); });
@@ -642,8 +637,14 @@ static bool registerPlantDecoders()
 	registerDecoder(Tile::hugeMushroom_red_Id, [](int composite)->std::wstring { return hugeMushroomPropsToString(composite); });
 	registerDecoder(Tile::hopper_Id, [](int composite)->std::wstring { return hopperPropsToString(composite); });
 	registerDecoder(Tile::jukebox_Id, [](int composite)->std::wstring { return jukeboxPropsToString(composite); });
-	registerDecoder(Tile::daylightDetector_Id, [](int composite)->std::wstring { return daylightDetectorPropsToString(composite); });
-	registerDecoder(Tile::invertedDaylightDetector_Id, [](int composite)->std::wstring { return daylightDetectorPropsToString(composite); });
+	registerDecoder(Tile::fenceGate_Id, [](int composite)->std::wstring { return fenceGatePropsToString(composite); });
+	registerDecoder(Tile::spruceGate_Id, [](int composite)->std::wstring { return fenceGatePropsToString(composite); });
+	registerDecoder(Tile::birchGate_Id, [](int composite)->std::wstring { return fenceGatePropsToString(composite); });
+	registerDecoder(Tile::jungleGate_Id, [](int composite)->std::wstring { return fenceGatePropsToString(composite); });
+	registerDecoder(Tile::darkGate_Id, [](int composite)->std::wstring { return fenceGatePropsToString(composite); });
+	registerDecoder(Tile::acaciaGate_Id, [](int composite)->std::wstring { return fenceGatePropsToString(composite); });
+	registerDecoder(Tile::daylightDetector_Id, [](int composite)->std::wstring { (void)composite; return daylightDetectorPropsToString(false); });
+	registerDecoder(Tile::invertedDaylightDetector_Id, [](int composite)->std::wstring { (void)composite; return daylightDetectorPropsToString(true); });
 	registerDecoder(Tile::snow_Id, [](int composite)->std::wstring { return snowPropsToString(composite); });
 	registerDecoder(Tile::topSnow_Id, [](int composite)->std::wstring { return snowPropsToString(composite); });
 	registerDecoder(Tile::cauldron_Id, [](int composite)->std::wstring { return cauldronPropsToString(composite); });

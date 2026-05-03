@@ -181,6 +181,7 @@ void Chunk::makeCopyForRebuild(Chunk *source)
 
 void Chunk::rebuild()
 {
+	if (this == nullptr) return;
 	PIXBeginNamedEvent(0,"Rebuilding chunk %d, %d, %d", x, y, z);
 #if defined __PS3__ && !defined DISABLE_SPU_CODE
 	rebuild_SPU();
@@ -404,6 +405,10 @@ void Chunk::rebuild()
 						}
 
 						Tile *tile = Tile::tiles[tileId];
+						if (tile == nullptr)
+						{
+							continue;
+						}
 						if (currentLayer == 0 && tile->isEntityTile())
 						{
 							shared_ptr<TileEntity> et = region->getTileEntity(x, y, z);

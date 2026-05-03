@@ -34,6 +34,7 @@
 #include "../Minecraft.World/BlockStateDecoderRegistry.h"
 #include "../Minecraft.World/BlockStateDecoder.h"
 #include <map>
+#include <set>
 #include <cwctype>
 
 ResourceLocation Gui::PUMPKIN_BLUR_LOCATION = ResourceLocation(TN__BLUR__MISC_PUMPKINBLUR);
@@ -1190,6 +1191,14 @@ void Gui::render(float a, bool mouseFree, int xMouse, int yMouse)
 							if (!decoded.empty())
 							{
 								std::map<std::wstring, std::wstring> props;
+								std::set<std::wstring> shownProps;
+								auto appendProp = [&](const std::wstring &key) {
+									auto it = props.find(key);
+									if (it != props.end()) {
+										lines.push_back(key + L": " + it->second);
+										shownProps.insert(key);
+									}
+								};
 								size_t start = 0;
 								while (start < decoded.size()) {
 									size_t pos = decoded.find(L'\n', start);
@@ -1217,31 +1226,35 @@ void Gui::render(float a, bool mouseFree, int xMouse, int yMouse)
 									start = pos + 1;
 								}
 								lines.push_back(L"State:");
-								if (props.find(L"age") != props.end()) lines.push_back(L"age: " + props[L"age"]);
-								if (props.find(L"facing") != props.end()) lines.push_back(L"facing: " + props[L"facing"]);
-								if (props.find(L"north") != props.end()) lines.push_back(L"north: " + props[L"north"]);
-								if (props.find(L"south") != props.end()) lines.push_back(L"south: " + props[L"south"]);
-								if (props.find(L"east") != props.end()) lines.push_back(L"east: " + props[L"east"]);
-								if (props.find(L"west") != props.end()) lines.push_back(L"west: " + props[L"west"]);
-								if (props.find(L"type") != props.end()) lines.push_back(L"type: " + props[L"type"]);
-								if (props.find(L"variant") != props.end()) lines.push_back(L"variant: " + props[L"variant"]);
-								if (props.find(L"axis") != props.end()) lines.push_back(L"axis: " + props[L"axis"]);
-								if (props.find(L"facing") != props.end()) lines.push_back(L"facing: " + props[L"facing"]);
-								if (props.find(L"hinge") != props.end()) lines.push_back(L"hinge: " + props[L"hinge"]);
-								if (props.find(L"half") != props.end()) lines.push_back(L"half: " + props[L"half"]);
-								if (props.find(L"shape") != props.end()) lines.push_back(L"shape: " + props[L"shape"]);
-								if (props.find(L"up") != props.end()) lines.push_back(L"up: " + props[L"up"]);
-								if (props.find(L"extended") != props.end()) lines.push_back(L"extended: " + props[L"extended"]);
-								if (props.find(L"open") != props.end()) lines.push_back(L"open: " + props[L"open"]);
-								if (props.find(L"attached") != props.end()) lines.push_back(L"attached: " + props[L"attached"]);
-								if (props.find(L"powered") != props.end()) lines.push_back(L"powered: " + props[L"powered"]);
-								if (props.find(L"delay") != props.end()) lines.push_back(L"delay: " + props[L"delay"]);
-								if (props.find(L"enabled") != props.end()) lines.push_back(L"enabled: " + props[L"enabled"]);
-								if (props.find(L"eye") != props.end()) lines.push_back(L"eye: " + props[L"eye"]);
-								if (props.find(L"bottle_0") != props.end()) lines.push_back(L"bottle_0: " + props[L"bottle_0"]);
-								if (props.find(L"bottle_1") != props.end()) lines.push_back(L"bottle_1: " + props[L"bottle_1"]);
-								if (props.find(L"bottle_2") != props.end()) lines.push_back(L"bottle_2: " + props[L"bottle_2"]);
-								if (props.find(L"has_record") != props.end()) lines.push_back(L"has_record: " + props[L"has_record"]);
+								appendProp(L"age");
+								appendProp(L"facing");
+								appendProp(L"north");
+								appendProp(L"south");
+								appendProp(L"east");
+								appendProp(L"west");
+								appendProp(L"type");
+								appendProp(L"variant");
+								appendProp(L"axis");
+								appendProp(L"hinge");
+								appendProp(L"half");
+								appendProp(L"shape");
+								appendProp(L"up");
+								appendProp(L"extended");
+								appendProp(L"open");
+								appendProp(L"attached");
+								appendProp(L"powered");
+								appendProp(L"delay");
+								appendProp(L"enabled");
+								appendProp(L"eye");
+								appendProp(L"bottle_0");
+								appendProp(L"bottle_1");
+								appendProp(L"bottle_2");
+								appendProp(L"has_record");
+								for (const auto &entry : props) {
+									if (shownProps.find(entry.first) == shownProps.end()) {
+										lines.push_back(entry.first + L": " + entry.second);
+									}
+								}
 							}
 							else
 							{

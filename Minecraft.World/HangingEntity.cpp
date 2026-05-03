@@ -299,9 +299,11 @@ void HangingEntity::readAdditionalSaveData(CompoundTag *tag)
 			break;
 		}
 	}
-	xTile = tag->getInt(L"TileX");
-	yTile = tag->getInt(L"TileY");
-	zTile = tag->getInt(L"TileZ");
+	
+	xTile = static_cast<int>(floor(x + 0.5f));
+	yTile = static_cast<int>(floor(y + 0.5f));
+	zTile = static_cast<int>(floor(z + 0.5f));
+	
 	setDir(dir);
 }
 

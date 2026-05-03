@@ -13,9 +13,36 @@ const int TopSnowTile::HEIGHT_MASK = 7; // max 8 steps
 
 TopSnowTile::TopSnowTile(int id) : Tile(id, Material::topSnow,isSolidRender())
 {
+	m_defaultBlockState = 1;
 	setShape(0, 0, 0, 1, 2 / 16.0f, 1);
 	setTicking(true);
 	updateShape(0);
+}
+
+void TopSnowTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int TopSnowTile::defaultBlockState()
+{
+	return 1;
+}
+
+int TopSnowTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state && state->value > 0 ? ((state->value - 1) & HEIGHT_MASK) : 0;
+}
+
+Tile::BlockState TopSnowTile::getBlockState(int data)
+{
+	return Tile::BlockState((data & HEIGHT_MASK) + 1);
+}
+
+Tile::BlockState TopSnowTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState((level->getData(x, y, z) & HEIGHT_MASK) + 1);
 }
 
 void TopSnowTile::registerIcons(IconRegister *iconRegister)
