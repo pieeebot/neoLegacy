@@ -1043,65 +1043,261 @@ void PlayerConnection::handleCommand(const wstring& message)
 	wstringstream ss(message.substr(1));
 	wstring cmd;
 	ss >> cmd;
-	if (cmd == L"tp" || cmd == L"teleport")
-	{
-		wstring arg1, arg2;
-		ss >> arg1 >> arg2;
-		shared_ptr<ServerPlayer> target;
-		shared_ptr<ServerPlayer> destination;
-		if (arg1.empty())
-		{
-			warn(L"Usage: /tp [player] <target_player>");
-			return;
-		}
+if (cmd == L"tp" || cmd == L"teleport")
+{
+    if (!player->hasPermission(eGameCommand_Teleport))
+    {
+        warn(L"You do not have permission to use this command.");
+        return;
+    }
 
-		if (arg2.empty())
-		{
-			target = player;
-			destination = server->getPlayers()->getPlayer(arg1);
-		}
-		else
-		{
-			target = server->getPlayers()->getPlayer(arg1);
-			destination = server->getPlayers()->getPlayer(arg2);
-		}
+    wstring arg1, arg2, arg3, arg4, arg5, arg6;
+    ss >> arg1 >> arg2 >> arg3 >> arg4 >> arg5 >> arg6;
+    shared_ptr<ServerPlayer> target;
+    shared_ptr<ServerPlayer> destination;
+    if (arg1.empty())
+    {
+        warn(L"Usage: /tp [player] <target_player>");
+        warn(L"Usage: /tp [player] <x> <y> <z> [y_rot] [x_rot]");
+        return;
+    }
 
-		if (target && destination)
-		{
-			shared_ptr<GameCommandPacket> packet = TeleportCommand::preparePacket(target->getXuid(), destination->getXuid());
-			server->getCommandDispatcher()->performCommand(player, eGameCommand_Teleport, packet->data);
-		}
-		else
-		{
-			warn(L"Player not found.");
-		}
-	}
-	else if (cmd == L"time")
-	{
-		wstring action;
-		ss >> action;
-		if (action == L"set")
-		{
-			wstring timeVal;
-			ss >> timeVal;
-			bool night = (timeVal == L"night");
-			shared_ptr<GameCommandPacket> packet = TimeCommand::preparePacket(night);
-			server->getCommandDispatcher()->performCommand(player, eGameCommand_Time, packet->data);
-		}
-		else
-		{
-			warn(L"Usage: /time set <day|night>");
-		}
-	}
+    auto isCoord = [](const wstring& s) -> bool {
+        if (s.empty()) return false;
+        for (size_t i = 0; i < s.size(); i++)
+            if (!iswdigit(s[i]) && s[i] != L'-' && s[i] != L'.') return false;
+        return true;
+    };
+
+    bool arg2IsCoord = isCoord(arg2);
+    if (!arg2IsCoord && !arg2.empty())
+    {
+        target = server->getPlayers()->getPlayer(arg1);
+        destination = server->getPlayers()->getPlayer(arg2);
+        if (target && destination)
+        {
+            shared_ptr<GameCommandPacket> packet = TeleportCommand::preparePacket(
+                target->getXuid(), destination->getXuid());
+            server->getCommandDispatcher()->performCommand(
+                player, eGameCommand_Teleport, packet->data);
+        }
+        else
+        {
+            warn(L"Player not found.");
+        }
+    }
+    else
+    {
+        wstring sx, sy, sz, sYRot, sXRot;
+        shared_ptr<ServerPlayer> tpTarget;
+        if (arg2IsCoord)
+        {
+            tpTarget = player;
+            sx    = arg1;
+            sy    = arg2;
+            sz    = arg3;
+            sYRot = arg4;
+            sXRot = arg5;
+        }
+        else
+        {
+            tpTarget = server->getPlayers()->getPlayer(arg1);
+            sx    = arg2;
+            sy    = arg3;
+            sz    = arg4;
+            sYRot = arg5;
+            sXRot = arg6;
+        }
+
+        if (!tpTarget)
+        {
+            warn(L"Player not found.");
+            return;
+        }
+
+        if (sx.empty() || sy.empty() || sz.empty())
+        {
+            warn(L"Usage: /tp [player] <x> <y> <z> [y_rot] [x_rot]");
+            return;
+        }
+
+        float x = stof(sx);
+        float y = stof(sy);
+        float z = stof(sz);
+        byte yRot = sYRot.empty()
+            ? static_cast<byte>(tpTarget->yRot)
+            : static_cast<byte>(stoi(sYRot) & 0xFF);
+        byte xRot = sXRot.empty()
+            ? static_cast<byte>(tpTarget->xRot)
+            : static_cast<byte>(stoi(sXRot) & 0xFF);
+
+        TeleportEntityPacket packet(
+            tpTarget->entityId,
+            static_cast<int>(x),
+            static_cast<int>(y),
+            static_cast<int>(z),
+            yRot,
+            xRot
+        );
+		DataOutputStream ds(OutputStream::createMemoryStream());
+		packet.write(&ds);
+		shared_ptr<GameCommandPacket> gamePacket = make_shared<GameCommandPacket>(eGameCommand_Teleport, ds.getData());
+        server->getCommandDispatcher()->performCommand(tpTarget, eGameCommand_Teleport, gamePacket->data);
+    }
+} else if (cmd == L"time")
+{
+    if (!player->hasPermission(eGameCommand_Time))
+    {
+        warn(L"You do not have permission to use this command.");
+        return;
+    }
+
+    wstring action;
+    ss >> action;
+    if (action.empty())
+    {
+        warn(L"Usage: /time <set|add|query> ...");
+        warn(L"  /time set <day|night|noon|midnight|sunrise|sunset|0-24000>");
+        warn(L"  /time add <amount>");
+        warn(L"  /time query <daytime|gametime|day>");
+        return;
+    }
+
+    if (action == L"set")
+    {
+        wstring timeVal;
+        ss >> timeVal;
+        if (timeVal.empty())
+        {
+            warn(L"Usage: /time set <day|night|noon|midnight|sunrise|sunset|0-24000>");
+            return;
+        }
+
+        static const unordered_map<wstring, int> namedTimes = {
+            { L"day",       1000  },
+            { L"noon",      6000  },
+            { L"sunset",   12000  },
+            { L"night",    13000  },
+            { L"midnight", 18000  },
+            { L"sunrise",  23000  },
+        };
+
+        int ticks = -1;
+        auto it = namedTimes.find(timeVal);
+        if (it != namedTimes.end())
+        {
+            ticks = it->second;
+        }
+        else
+        {
+            try {
+                size_t pos;
+                ticks = stoi(timeVal, &pos);
+                if (pos != timeVal.size() || ticks < 0 || ticks > 24000)
+                {
+                    warn(L"Time value must be between 0 and 24000, or a named time.");
+                    return;
+                }
+            }
+            catch (...) {
+                warn(L"Unknown time value: " + timeVal);
+                warn(L"Usage: /time set <day|night|noon|midnight|sunrise|sunset|0-24000>");
+                return;
+            }
+        }
+
+        shared_ptr<GameCommandPacket> packet = TimeCommand::preparePacket(ticks);
+        server->getCommandDispatcher()->performCommand(player, eGameCommand_Time, packet->data);
+        info(L"Time set to " + timeVal + L" (" + to_wstring(ticks) + L" ticks).");
+    }
+    else if (action == L"add")
+    {
+        wstring amountStr;
+        ss >> amountStr;
+        if (amountStr.empty())
+        {
+            warn(L"Usage: /time add <amount>");
+            return;
+        }
+
+        try {
+            size_t pos;
+            int amount = stoi(amountStr, &pos);
+            if (pos != amountStr.size() || amount < 1)
+            {
+                warn(L"Amount must be a positive integer.");
+                return;
+            }
+
+            int currentTicks = server->getCommandSenderWorld()->getTimeOfDay(0) * 1000;
+            int newTicks = (currentTicks + amount) % 24000;
+            shared_ptr<GameCommandPacket> packet = TimeCommand::preparePacket(newTicks);
+            server->getCommandDispatcher()->performCommand(player, eGameCommand_Time, packet->data);
+            info(L"Added " + to_wstring(amount) + L" ticks. Time is now " + to_wstring(newTicks) + L".");
+        }
+        catch (...) {
+            warn(L"Invalid amount: " + amountStr);
+        }
+    }
+    else if (action == L"query")
+    {
+        wstring queryType;
+        ss >> queryType;
+        if (queryType.empty())
+        {
+            warn(L"Usage: /time query <daytime|gametime|day>");
+            return;
+        }
+
+        int currentTicks = server->getCommandSenderWorld()->getTimeOfDay(0) * 1000;
+        if (queryType == L"daytime")
+        {
+            info(L"The current daytime is " + to_wstring(currentTicks % 24000) + L" ticks.");
+        }
+        else if (queryType == L"gametime")
+        {
+            info(L"The total game time is " + to_wstring(currentTicks) + L" ticks.");
+        }
+        else if (queryType == L"day")
+        {
+            info(L"The current day is " + to_wstring(currentTicks / 24000) + L".");
+        }
+        else
+        {
+            warn(L"Unknown query type: " + queryType);
+            warn(L"Usage: /time query <daytime|gametime|day>");
+        }
+    }
+    else
+    {
+        warn(L"Unknown action: " + action);
+        warn(L"Usage: /time <set|add|query> ...");
+    }
+}
 	else if (cmd == L"kill")
 	{
+		if (!player->hasPermission(eGameCommand_Kill))
+		{
+			warn(L"You do not have permission to use this command.");
+			return;
+		}
 		server->getCommandDispatcher()->performCommand(player, eGameCommand_Kill, byteArray());
 	}
 	else if (cmd == L"toggledownfall")
 	{
+		if (!player->hasPermission(eGameCommand_ToggleDownfall))
+		{
+			warn(L"You do not have permission to use this command.");
+			return;
+		}
 		shared_ptr<GameCommandPacket> packet = ToggleDownfallCommand::preparePacket();
 		server->getCommandDispatcher()->performCommand(player, eGameCommand_ToggleDownfall, packet->data);
 	} else if (cmd == L"gamemode") {
+		if (!player->hasPermission(eGameCommand_GameMode))
+		{
+			warn(L"You do not have permission to use this command.");
+			return;
+		}
     	wstring modeStr, targetName;
     	ss >> modeStr >> targetName;
     	if (modeStr.empty()) {
@@ -1135,6 +1331,11 @@ void PlayerConnection::handleCommand(const wstring& message)
     	shared_ptr<GameCommandPacket> packet = GameModeCommand::preparePacket(target, mode);
     	server->getCommandDispatcher()->performCommand(player, eGameCommand_GameMode, packet->data);
 	} else if (cmd == L"give") {
+		if (!player->hasPermission(eGameCommand_Give))
+		{
+			warn(L"You do not have permission to use this command.");
+			return;
+		}
     	wstring targetName, itemStr, amountStr, auxStr;
     	ss >> targetName >> itemStr >> amountStr >> auxStr;
     	if (targetName.empty() || itemStr.empty()) {

@@ -15,4 +15,5 @@ protected:
 
 public:
 	static shared_ptr<GameCommandPacket> preparePacket(bool night);
+	static shared_ptr<GameCommandPacket> preparePacket(int ticks);
 };
