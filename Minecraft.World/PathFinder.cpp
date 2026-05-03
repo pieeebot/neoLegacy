@@ -246,6 +246,7 @@ int PathFinder::isFree(Entity *entity, int x, int y, int z, Node *size, bool avo
 					}
 				}
 
+				if (tile == nullptr) continue; // tu31 tutorial world fix
 				if (tile->isPathfindable(entity->level, xx, yy, zz)) continue;
 				if (canOpenDoors && tileId == Tile::door_wood_Id) continue;
 

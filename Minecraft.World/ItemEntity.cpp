@@ -112,6 +112,8 @@ void ItemEntity::tick()
 	{
 		friction = 0.6f * 0.98f;
 		int t = level->getTile( Mth::floor(x),  Mth::floor(bb->y0) - 1,  Mth::floor(z) );
+		Tile *tile = Tile::tiles[t];
+		if (tile == nullptr & t != 0) return; // tu31 tutorial world fix
 		if (t > 0)
 		{
 			friction = Tile::tiles[t]->friction * 0.98f;

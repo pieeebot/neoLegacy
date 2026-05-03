@@ -14,6 +14,197 @@
 #include "ItemInstance.h"
 #include "HtmlString.h"
 #include "../Minecraft.Client/Common/Consoles_App.h"
+#include <cwctype>
+#include <unordered_map>
+#include <fstream>
+#include <string>
+#include <filesystem>
+#include "../Minecraft.Server/vendor/nlohmann/json.hpp"
+
+using nlohmann::json;
+namespace fs = std::filesystem;
+
+namespace
+{
+wstring NormalizeItemNameId(const wstring &rawName)
+{
+	if (rawName.empty())
+	{
+		return rawName;
+	}
+
+	wstring normalized = rawName;
+	for (size_t i = 0; i < normalized.size(); ++i)
+	{
+		normalized[i] = static_cast<wchar_t>(towlower(normalized[i]));
+	}
+
+	size_t namespaceSep = normalized.find(L':');
+	if (namespaceSep != wstring::npos && namespaceSep + 1 < normalized.size())
+	{
+		normalized = normalized.substr(namespaceSep + 1);
+	}
+
+	return normalized;
+}
+
+wstring ToSnakeCase(const wstring &value)
+{
+	if (value.empty())
+	{
+		return value;
+	}
+
+	wstring out;
+	out.reserve(value.size() * 2);
+	for (size_t i = 0; i < value.size(); ++i)
+	{
+		const wchar_t c = value[i];
+		if (c >= L'A' && c <= L'Z')
+		{
+			if (i > 0)
+			{
+				out.push_back(L'_');
+			}
+			out.push_back(static_cast<wchar_t>(towlower(c)));
+		}
+		else
+		{
+			out.push_back(c);
+		}
+	}
+
+	return NormalizeItemNameId(out);
+}
+
+void AddNameAlias(unordered_map<wstring, int> &nameToId, const wchar_t *name, int id)
+{
+	nameToId[NormalizeItemNameId(name)] = id;
+}
+
+bool TryLoadExternalItemIdAliases(unordered_map<wstring, int> &nameToId)
+{
+	static bool attempted = false;
+	static bool loaded = false;
+	if (attempted)
+	{
+		return loaded;
+	}
+	attempted = true;
+
+	// todo: convert canidatePaths to single path now that we know where the mapping file is
+
+	// const vector<string> candidatePaths = {
+	// 	"Common/Localization/itemId.json"
+	// };
+
+	static const string path = "Common/Localization/itemId.json";
+
+	app.DebugPrintf("[ItemInstance] Trying to load from: %s\n", path.c_str());
+		
+	if (!fs::exists(path))
+	{
+		app.DebugPrintf("[ItemInstance] File does not exist: %s\n", path.c_str());
+		return false;
+	}
+
+	app.DebugPrintf("[ItemInstance] File exists, reading data...\n");
+	
+	ifstream file(path.c_str(), ios::in);
+	if (!file.good())
+	{
+		app.DebugPrintf("[ItemInstance] Failed to open file: %s\n", path.c_str());
+		return false;
+	}
+	try
+	{
+		json j = json::parse(file);
+		if (!j.is_object())
+		{
+			app.DebugPrintf("[ItemInstance] ItemId alias JSON is not a valid object: %s\n", path.c_str());
+			return false;
+		}
+		for (const auto &entry : j.items())
+		{
+			const string &key = entry.key();
+			const auto &value = entry.value();
+			if (!value.is_number_integer())
+			{
+				continue;
+			}
+			wstring wkey(key.begin(), key.end());
+			nameToId[NormalizeItemNameId(wkey)] = value.get<int>();
+		}
+		loaded = true;
+		app.DebugPrintf("[ItemInstance] SUCCESS: Loaded %zu item id aliases from %s\n", j.size(), path.c_str());
+	}
+	catch (const exception &e)
+	{
+		app.DebugPrintf("[ItemInstance] Parsing failed: %s (error: %s)\n", path.c_str(), e.what());
+		return false;
+	}
+
+	if (!loaded)
+	{
+		app.DebugPrintf("[ItemInstance] FAILED: No valid ItemId aliases were found.\n");
+	}
+
+	return loaded;
+}
+
+int ResolveLegacyItemIdFromStringName(const wstring &rawName)
+{
+	static unordered_map<wstring, int> sNameToId;
+	static bool sInitialized = false;
+
+	if (!sInitialized)
+	{
+		sInitialized = true;
+		TryLoadExternalItemIdAliases(sNameToId);
+	}
+
+	const wstring name = NormalizeItemNameId(rawName);
+	auto it = sNameToId.find(name);
+	if (it != sNameToId.end())
+	{
+		return it->second;
+	}
+
+	return -1;
+}
+
+int ParseNumericItemId(const wstring &idString, bool &parsed)
+{
+	parsed = false;
+	if (idString.empty())
+	{
+		return 0;
+	}
+
+	try
+	{
+		size_t parseEnd = 0;
+		long parsedValue = std::stol(idString, &parseEnd, 10);
+		if (parseEnd == idString.size())
+		{
+			parsed = true;
+			return static_cast<int>(parsedValue);
+		}
+	}
+	catch (...)
+	{
+	}
+
+	return 0;
+}
+
+int ByteSwapShortToInt(short value)
+{
+	unsigned short raw = static_cast<unsigned short>(value);
+	unsigned short swapped = static_cast<unsigned short>((raw >> 8) | (raw << 8));
+	return static_cast<int>(swapped);
+}
+}
 
 const wstring ItemInstance::ATTRIBUTE_MODIFIER_FORMAT = L"#.###";
 
@@ -174,7 +365,62 @@ CompoundTag *ItemInstance::save(CompoundTag *compoundTag)
 void ItemInstance::load(CompoundTag *compoundTag)
 {
 	popTime = 0;
-	id = compoundTag->getShort(L"id");
+	id = 0;
+	Tag *idTag = compoundTag->get(L"id");
+	if (idTag != nullptr)
+	{
+		switch (idTag->getId())
+		{
+		case Tag::TAG_Int:
+			id = compoundTag->getInt(L"id");
+			break;
+		case Tag::TAG_Short:
+		{
+			short rawId = compoundTag->getShort(L"id");
+			id = rawId;
+
+			if ((id < 0 || id >= Item::items.length || Item::items[id] == nullptr) && rawId != 0)
+			{
+				int swappedId = ByteSwapShortToInt(rawId);
+				if (swappedId >= 0 && swappedId < Item::items.length && Item::items[swappedId] != nullptr)
+				{
+					app.DebugPrintf("[ItemInstance] Recovered byte-swapped short item id: raw=%d swapped=%d\n", id, swappedId);
+					id = swappedId;
+				}
+			}
+			break;
+		}
+		case Tag::TAG_String:
+		{
+			wstring idString = compoundTag->getString(L"id");
+
+			int mappedId = ResolveLegacyItemIdFromStringName(idString);
+			if (mappedId >= 0)
+			{
+				id = mappedId;
+				break;
+			}
+
+			bool parsedNumeric = false;
+			id = ParseNumericItemId(idString, parsedNumeric);
+			if (!parsedNumeric)
+			{
+				app.DebugPrintf("[ItemInstance] Unsupported string item id '%ls' (expected numeric legacy id)\n", idString.c_str());
+				id = 0;
+			}
+			break;
+		}
+		default:
+			app.DebugPrintf("[ItemInstance] Unsupported item id tag type %d\n", idTag->getId());
+			id = 0;
+			break;
+		}
+	}
+	else
+	{
+		app.DebugPrintf("[ItemInstance] Missing item id tag\n");
+	}
+
 	count = compoundTag->getByte(L"Count");
 	auxValue = compoundTag->getShort(L"Damage");
 	if (auxValue < 0)

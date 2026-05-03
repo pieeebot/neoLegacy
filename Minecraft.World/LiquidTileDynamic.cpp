@@ -207,7 +207,9 @@ void LiquidTileDynamic::trySpreadTo(Level *level, int x, int y, int z, int fromX
 				}
 				else
 				{
-					Tile::tiles[old]->spawnResources(level, x, y, z, level->getData(x, y, z), 0);
+					Tile *tile = Tile::tiles[old];
+					if (tile == nullptr) return; // tu31 tutorial world fix
+					tile->spawnResources(level, x, y, z, level->getData(x, y, z), 0);
 				}
 			}
 		}
@@ -317,8 +319,9 @@ bool LiquidTileDynamic::isWaterBlocking(Level *level, int x, int y, int z)
 	{
 		return true;
 	}
-	if (t == 0) return false;
-	Material *m = Tile::tiles[t]->material;
+	Tile *tile = Tile::tiles[t];
+	if (t == 0 || tile == nullptr) return false; // tu31 tutorial world fix
+	Material *m = tile->material;
 	if (m == Material::portal) return true;
 	if (m->blocksMotion()) return true;
 	return false;
