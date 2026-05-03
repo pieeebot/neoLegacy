@@ -8,6 +8,7 @@
 TerrainParticle::TerrainParticle(Level *level, double x, double y, double z, double xa, double ya, double za, Tile *tile, int face, int data, Textures *textures) : Particle(level, x, y, z, xa, ya, za)
 {
     this->tile = tile;
+    if (tile == nullptr) return; // tu31 tutorial world fix
     this->setTex(textures, tile->getTexture(0, data));		// 4J - change brought forward from 1.8.2 to fix purple particles on door damage
     this->gravity = tile->gravity;
     rCol = gCol = bCol = 0.6f;
@@ -16,6 +17,7 @@ TerrainParticle::TerrainParticle(Level *level, double x, double y, double z, dou
 
 shared_ptr<TerrainParticle> TerrainParticle::init(int x, int y, int z, int data)	// 4J - added data parameter
 {
+    if (tile == nullptr) return nullptr; // tu31 tutorial world fix
     if (tile == Tile::grass) return dynamic_pointer_cast<TerrainParticle>( shared_from_this() );
     int col = tile->getColor(level, x, y, z, data);	// 4J - added data parameter
     rCol *= ((col >> 16) & 0xff) / 255.0f;
@@ -26,6 +28,7 @@ shared_ptr<TerrainParticle> TerrainParticle::init(int x, int y, int z, int data)
 
 shared_ptr<TerrainParticle> TerrainParticle::init(int data)
 {
+    if (tile == nullptr) return nullptr; // tu31 tutorial world fix
 	if (tile == Tile::grass) return dynamic_pointer_cast<TerrainParticle>( shared_from_this() );
 	int col = tile->getColor(data);
 	rCol *= ((col >> 16) & 0xff) / 255.0f;

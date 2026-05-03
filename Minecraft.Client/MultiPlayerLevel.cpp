@@ -721,13 +721,15 @@ void MultiPlayerLevel::animateTickDoWork()
 			int y = cy + random->nextInt(8);
 			int z = cz + random->nextInt(8);
 			int t = getTile(x, y, z);
+			Tile *tile = Tile::tiles[t];
+			if (tile == nullptr) return; // tu31 tutorial world fix
 			if (random->nextInt(8) > y && t == 0 && dimension->hasBedrockFog())			// 4J - test for bedrock fog brought forward from 1.2.3
 			{
 				addParticle(eParticleType_depthsuspend, x + random->nextFloat(), y + random->nextFloat(), z + random->nextFloat(), 0, 0, 0);
 			}
 			else if (t > 0)
 			{
-				Tile::tiles[t]->animateTick(this, x, y, z, animateRandom);
+				tile->animateTick(this, x, y, z, animateRandom);
 			}
 		}
 	}

@@ -1518,7 +1518,7 @@ HitResult *Level::clip(Vec3 *a, Vec3 *b, bool liquid, bool solidOnly)
 			// No collision
 
 		}
-		else if (t > 0 && tile->mayPick(data, liquid))
+		else if (t > 0 && tile != nullptr && tile->mayPick(data, liquid))
 		{
 			HitResult *r = tile->clip(this, xTile0, yTile0, zTile0, a, b);
 			if (r != nullptr) return r;
@@ -1620,7 +1620,7 @@ HitResult *Level::clip(Vec3 *a, Vec3 *b, bool liquid, bool solidOnly)
 			// No collision
 
 		}
-		else if (t > 0 && tile->mayPick(data, liquid))
+		else if (t > 0 && tile != nullptr && tile->mayPick(data, liquid))
 		{
 			HitResult *r = tile->clip(this, xTile0, yTile0, zTile0, a, b);
 			if (r != nullptr) return r;
@@ -3993,7 +3993,9 @@ int Level::getDirectSignal(int x, int y, int z, int dir)
 {
 	int t = getTile(x, y, z);
 	if (t == 0) return Redstone::SIGNAL_NONE;
-	return Tile::tiles[t]->getDirectSignal(this, x, y, z, dir);
+	Tile *tile = Tile::tiles[t];
+	if (tile == nullptr) return Redstone::SIGNAL_NONE; // tu31 tutorial world fix
+	return tile->getDirectSignal(this, x, y, z, dir);
 }
 
 int Level::getDirectSignalTo(int x, int y, int z)
@@ -4026,8 +4028,9 @@ int Level::getSignal(int x, int y, int z, int dir)
 		return getDirectSignalTo(x, y, z);
 	}
 	int t = getTile(x, y, z);
-	if (t == 0) return Redstone::SIGNAL_NONE;
-	return Tile::tiles[t]->getSignal(this, x, y, z, dir);
+	Tile *tile = Tile::tiles[t];
+	if (t == 0 || tile == nullptr) return Redstone::SIGNAL_NONE;
+	return tile->getSignal(this, x, y, z, dir);
 }
 
 bool Level::hasNeighborSignal(int x, int y, int z)

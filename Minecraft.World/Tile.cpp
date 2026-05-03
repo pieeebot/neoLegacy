@@ -1230,7 +1230,9 @@ bool Tile::mayPlace(Level *level, int x, int y, int z, int face)
 bool Tile::mayPlace(Level *level, int x, int y, int z)
 {
 	int t = level->getTile(x, y, z);
-	return t == 0 || Tile::tiles[t]->material->isReplaceable();
+	Tile *tile = Tile::tiles[t];
+	if (tile == nullptr && t != 0) return false;
+	return t == 0 || tile->material->isReplaceable();
 }
 
 // 4J-PB - Adding a TestUse for tooltip display

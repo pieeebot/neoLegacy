@@ -502,6 +502,9 @@ int PistonBaseTile::getNewFacing(Level *level, int x, int y, int z, shared_ptr<L
 
 bool PistonBaseTile::isPushable(int block, Level *level, int cx, int cy, int cz, bool allowDestroyable)
 {
+	Tile *tile = Tile::tiles[block];
+	if (tile == nullptr) return false; // tu31 tutorial world fix
+
 	// special case for obsidian
 	if (block == Tile::obsidian_Id)
 	{
@@ -518,17 +521,17 @@ bool PistonBaseTile::isPushable(int block, Level *level, int cx, int cy, int cz,
 	}
 	else
 	{
-		if (Tile::tiles[block]->getDestroySpeed(level, cx, cy, cz) == Tile::INDESTRUCTIBLE_DESTROY_TIME)
+		if (tile->getDestroySpeed(level, cx, cy, cz) == Tile::INDESTRUCTIBLE_DESTROY_TIME)
 		{
 			return false;
 		}
 
-		if (Tile::tiles[block]->getPistonPushReaction() == Material::PUSH_BLOCK)
+		if (tile->getPistonPushReaction() == Material::PUSH_BLOCK)
 		{
 			return false;
 		}
 
-		if (Tile::tiles[block]->getPistonPushReaction() == Material::PUSH_DESTROY)
+		if (tile->getPistonPushReaction() == Material::PUSH_DESTROY)
 		{
 			if(!allowDestroyable)
 			{
@@ -538,7 +541,7 @@ bool PistonBaseTile::isPushable(int block, Level *level, int cx, int cy, int cz,
 		}
 	}
 
-	if( Tile::tiles[block]->isEntityTile() )	// 4J - java uses instanceof EntityTile here
+	if( tile->isEntityTile() )	// 4J - java uses instanceof EntityTile here
 	{
 		// may not push tile entities
 		return false;
