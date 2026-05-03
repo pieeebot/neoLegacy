@@ -235,7 +235,7 @@ jobs:
       run: |
         VERSION=v$(cat BUMP)
         gh release create $VERSION-Dedicated-Server artifacts/* \
-          --title "$(VERSION) Server" \
+          --title "$VERSION Server" \
           --notes "Dedicated Server runtime for Windows64.
 
         Two flavours are attached:
