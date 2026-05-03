@@ -110,8 +110,6 @@ void GuardianRenderer::render(shared_ptr<Entity> _mob, double x, double y, doubl
     float time = (float)mob->tickCount + a;
     float texVOff = -time * 0.2f - floor(-time * 0.1f);
     float eyeHeight = mob->getEyeHeight();
-    if (mob && mob->isElder())
-    eyeHeight = mob->bbHeight * 0.5f * 2.35f;
 
 
    double targetX = target->xo + (target->x - target->xo) * a;
@@ -138,8 +136,8 @@ void GuardianRenderer::render(shared_ptr<Entity> _mob, double x, double y, doubl
     glDisable(GL_LIGHTING);
     glDisable(GL_CULL_FACE);
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glDepthMask(true);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    glDepthMask(false);
 
     glPushMatrix();
     glTranslatef((float)x, (float)y + eyeHeight, (float)z);
@@ -214,9 +212,20 @@ void GuardianRenderer::render(shared_ptr<Entity> _mob, double x, double y, doubl
 
     glDepthMask(true);
     glDisable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_LIGHTING);
     glEnable(GL_CULL_FACE);
     glPopMatrix();
+}
+
+
+void GuardianRenderer::scale(shared_ptr<LivingEntity> mob, float a)
+{
+    shared_ptr<Guardian> guardian = dynamic_pointer_cast<Guardian>(mob);
+    if (guardian && guardian->isElder())
+    {
+        glScalef(2.35f, 2.35f, 2.35f);
+    }
 }
 
 void GuardianRenderer::renderModel(shared_ptr<LivingEntity> mob, float wp, float ws, float bob,
@@ -226,10 +235,11 @@ void GuardianRenderer::renderModel(shared_ptr<LivingEntity> mob, float wp, float
     if (guardian && guardian->isElder())
     {
         glPushMatrix();
-        
-        glTranslatef(0.0f, -2.0f, 0.0f);  
-        glScalef(2.35f, 2.35f, 2.35f);
+
+       
+
         LivingEntityRenderer::renderModel(mob, wp, ws, bob, headRotMinusBodyRot, headRotx, scale);
+
         glPopMatrix();
     }
     else

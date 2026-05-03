@@ -3,6 +3,7 @@
 #include "../Minecraft.World/Mth.h"
 #include "ModelPart.h"
 #include "../Minecraft.World/Guardian.h"
+#include <EntityRenderDispatcher.h>
 
 
 
@@ -70,40 +71,48 @@ void GuardianModel::setupAnim(float time, float r, float bob, float yRot, float 
     float afloat4[] = {-8.0f, -8.0f, -8.0f, -8.0f, 0.0f, 0.0f, 0.0f,  0.0f,  8.0f,  8.0f,  8.0f, 8.0f };
     float afloat5[] = { 8.0f, -8.0f,  0.0f,  0.0f,-8.0f,-8.0f, 8.0f,  8.0f,  8.0f, -8.0f,  0.0f, 0.0f };
 
-    // Body orientation
+    
     guardianBody->yRot = yRot / (180.0f / (float)PI);
     guardianBody->xRot = xRot / (180.0f / (float)PI);
 
 
     guardianEye->z = -8.25f;
 
+    shared_ptr<LivingEntity> eyeTarget = nullptr;
+
     if (guardian->hasTargetedEntity())
     {
-        shared_ptr<LivingEntity> target = guardian->getTargetedEntity();
-        if (target)
-        {
-           
-            double d0 = (guardian->y + guardian->getEyeHeight())
-                      - (target->y   + target->getEyeHeight());
-            guardianEye->y = (d0 > 0.0) ? 0.0f : 1.0f;
+        eyeTarget = guardian->getTargetedEntity();
+    }
 
-          
-            double dx = target->x - guardian->x;
-            double dz = target->z - guardian->z;
-            float  targetYaw = (float)(atan2(dz, dx) * 180.0 / PI) - 90.0f;
-            float  diff      = Mth::wrapDegrees(targetYaw - guardian->yRot);
 
-            float clamped = diff / 45.0f;
-            if (clamped < -2.0f) clamped = -2.0f;
-            if (clamped >  2.0f) clamped =  2.0f;
-            guardianEye->x = clamped;
-        }
+    if (eyeTarget == nullptr && EntityRenderDispatcher::instance != nullptr)
+    {
+        eyeTarget = EntityRenderDispatcher::instance->cameraEntity;
+    }
+
+    if (eyeTarget != nullptr)
+    {
+        double d0 = (guardian->y + guardian->getEyeHeight())
+                  - (eyeTarget->y   + eyeTarget->getEyeHeight());
+        guardianEye->y = (d0 > 0.0) ? 0.0f : 1.0f;
+
+        double dx = eyeTarget->x - guardian->x;
+        double dz = eyeTarget->z - guardian->z;
+        float  targetYaw = (float)(atan2(dz, dx) * 180.0 / PI) - 90.0f;
+        float  diff      = Mth::wrapDegrees(targetYaw - guardian->yRot);
+
+        float clamped = diff / 45.0f;
+        if (clamped < -2.0f) clamped = -2.0f;
+        if (clamped >  2.0f) clamped =  2.0f;
+        guardianEye->x = clamped;
     }
     else
     {
         guardianEye->y = 0.0f;
         guardianEye->x = 0.0f;
     }
+
 
 
     float f1 = (1.0f - guardian->getSpikesAnimation(0.0f)) * 0.55f;

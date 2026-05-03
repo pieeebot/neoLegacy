@@ -202,12 +202,7 @@ float Guardian::getSpikesAnimation(float partialTicks)
 
 
 
-int Guardian::getAmbientSound()  { return -1; }
-int Guardian::getHurtSound()     { return -1; }
-int Guardian::getDeathSound()    { return -1; }
-float Guardian::getSoundVolume() { return 1.0f; }
-int Guardian::getDeathLoot()     { return 0; }
-bool Guardian::makeStepSound()   { return false; }
+
 
 void Guardian::dropDeathLoot(bool wasKilledByPlayer, int playerBonusLevel)
 {
@@ -261,31 +256,36 @@ void Guardian::serverAiStep()
 {
     WaterAnimal::serverAiStep();
 
-    if (isElder() && !level->isClientSide)
+   if (isElder() && !level->isClientSide)
+{
+    bool periodicTick = ((tickCount + entityId) % 1200 == 0);
+
+    auto& players = level->players;
+    for (int i = 0; i < (int)players.size(); i++)
     {
-        if (((tickCount + entityId) % 1200 == 0))
+        shared_ptr<Player> player = players[i];
+        if (!player) continue;
+        if (distanceToSqr(player) >= 2500.0) continue;
+        if (player->abilities.invulnerable) continue;
+
+        MobEffectInstance* existing = player->getEffect(MobEffect::digSlowdown);
+        bool noEffect   = (existing == nullptr);
+        bool weakEffect = (existing != nullptr && existing->getAmplifier() < 2);
+        bool shortEffect= (existing != nullptr && existing->getDuration() < 1200);
+
+
+        bool applyNow = noEffect || weakEffect || (periodicTick && shortEffect);
+
+        if (applyNow)
         {
-            auto& players = level->players;
-            for (int i = 0; i < (int)players.size(); i++)
-            {
-                shared_ptr<Player> player = players[i];
-                if (!player) continue;
+            player->addEffect(new MobEffectInstance(MobEffect::digSlowdown->id, 6000, 2));
 
-                if (distanceToSqr(player) >= 2500.0)
-                    continue;
 
-                if (player->abilities.invulnerable)
-                    continue;
-
-                
-                MobEffectInstance *existing = player->getEffect(MobEffect::digSlowdown);
-                if (existing == nullptr || existing->getAmplifier() < 2 || existing->getDuration() < 1200)
-                {
-                    player->addEffect(new MobEffectInstance(MobEffect::digSlowdown->id, 6000, 2));
-                }
-            }
+            level->broadcastEntityEvent(shared_from_this(), (byte)8);
+            playCurseSound();
         }
     }
+}
 
 
     if (!hasTargetedEntity())
@@ -320,6 +320,7 @@ void Guardian::serverAiStep()
         if (attackTimer == 1)
         {
             level->broadcastEntityEvent(shared_from_this(), 21);
+            playAttackSound();
         }
         else if (attackTimer >= getAttackDuration())
         {
@@ -378,6 +379,15 @@ void Guardian::aiStep()
     {
         updateSize(isElder());
         clientSideTailAnimationO = clientSideTailAnimation;
+
+        if (!isInWater() && onGround)
+        {
+            if (clientSideTouchedGround)
+            {
+                playFlopSound();
+                clientSideTouchedGround = false;
+            }
+        }
 
         if (!isInWater())
         {
@@ -478,4 +488,140 @@ MobGroupData *Guardian::finalizeMobSpawn(MobGroupData *groupData, int extraData)
     if (extraData == 1)
         setElder(true);
     return groupData;
+}
+
+void Guardian::handleEntityEvent(byte eventId)
+{
+
+    if (eventId == 8 && level->isClientSide && isElder())
+    {
+
+        shared_ptr<Player> localPlayer = level->getNearestPlayer(x, y, z, 64.0);
+        if (localPlayer != nullptr)
+        {
+            level->addParticle(
+                eParticleType_mobAppearance,
+                localPlayer->x,
+                localPlayer->bb->y0,
+                localPlayer->z,
+                0.0, 0.0, 0.0);
+        }
+    }
+
+    WaterAnimal::handleEntityEvent(eventId);
+}
+
+int Guardian::getAmbientSound()
+{
+    if (!isInWater())
+    {
+        if (isElder())
+        {
+           
+                return eSoundType_MOB_ELDER_GUARDIAN_IDLE;
+          
+        }
+        else
+        {
+           
+               return eSoundType_MOB_GUARDIAN_LAND_IDLE;
+               
+            
+        }
+    }
+    return -1;
+}
+
+int Guardian::getHurtSound()
+{
+    if (!isInWater())
+    {
+        if (isElder())
+        {
+           
+                 return eSoundType_MOB_ELDER_GUARDIAN_HIT;
+
+            
+        }
+        else
+        {
+           
+            
+                 return eSoundType_MOB_GUARDIAN_LAND_HIT;
+
+           
+        }
+    }
+    else
+    {
+        if (isElder())
+        {
+            
+            
+            
+                return eSoundType_MOB_ELDER_GUARDIAN_HIT;
+            
+        }
+        else
+        {
+            
+                return eSoundType_MOB_GUARDIAN_HIT;
+            
+        }
+    }
+  
+}
+
+int Guardian::getDeathSound()
+{
+    if (!isInWater())
+    {
+        if (isElder())
+            return eSoundType_MOB_ELDER_GUARDIAN_DEATH;
+        else
+            return eSoundType_MOB_GUARDIAN_LAND_DEATH;
+    }
+    else
+    {
+        if (isElder())
+            return eSoundType_MOB_ELDER_GUARDIAN_DEATH;
+        else
+            return eSoundType_MOB_GUARDIAN_DEATH;
+    }
+}
+
+bool Guardian::makeStepSound()
+{
+    return false;
+}
+
+
+void Guardian::playFlopSound()
+{
+    
+            level->playSound(x, y, z, eSoundType_MOB_GUARDIAN_FLOP, getSoundVolume(), 1.0f);
+    
+}
+
+
+void Guardian::playAttackSound()
+{
+   
+    level->playSound(x, y, z, eSoundType_MOB_GUARDIAN_ATTACK_LOOP, getSoundVolume(), 1.0f);
+}
+
+void Guardian::playCurseSound()
+{
+   
+    level->playSound(x, y, z, eSoundType_MOB_ELDER_GUARDIAN_CURSE, getSoundVolume(), 1.0f);
+}
+
+float Guardian::getSoundVolume()
+{
+    return  1.0f;
+}
+
+int Guardian::getDeathLoot()
+{
+    return 0;
 }
