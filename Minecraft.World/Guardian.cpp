@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "com.mojang.nbt.h"
 #include "net.minecraft.world.level.tile.h"
 #include "net.minecraft.world.phys.h"
@@ -16,6 +16,7 @@
 #include "../Minecraft.World/net.minecraft.world.entity.animal.h"
 #include "MobEffect.h"
 #include "MobEffectInstance.h"
+#include <Difficulty.h>
 
 
 void Guardian::_init()
@@ -34,7 +35,7 @@ void Guardian::_init()
     attackTimer  = 0;
 }
 
-Guardian::Guardian(Level *level) : WaterAnimal(level)
+Guardian::Guardian(Level *level) : Monster(level)
 {
     this->defineSynchedData();
     registerAttributes();
@@ -52,7 +53,7 @@ Guardian::Guardian(Level *level) : WaterAnimal(level)
 
 void Guardian::registerAttributes()
 {
-    WaterAnimal::registerAttributes();
+    Monster::registerAttributes();
     getAttributes()->registerAttribute(SharedMonsterAttributes::ATTACK_DAMAGE);
     getAttribute(SharedMonsterAttributes::ATTACK_DAMAGE)->setBaseValue(6.0);
     getAttribute(SharedMonsterAttributes::MOVEMENT_SPEED)->setBaseValue(0.5);
@@ -64,7 +65,7 @@ void Guardian::registerAttributes()
 
 void Guardian::defineSynchedData()
 {
-    WaterAnimal::defineSynchedData();
+    Monster::defineSynchedData();
     entityData->define(16, (byte)0);
     entityData->define(17, 0);
 }
@@ -75,13 +76,13 @@ void Guardian::defineSynchedData()
 
 void Guardian::readAdditionalSaveData(CompoundTag *tag)
 {
-    WaterAnimal::readAdditionalSaveData(tag);
+    Monster::readAdditionalSaveData(tag);
     setElder(tag->getBoolean(L"Elder"));
 }
 
 void Guardian::addAdditonalSaveData(CompoundTag *tag)
 {
-    WaterAnimal::addAdditonalSaveData(tag);
+    Monster::addAdditonalSaveData(tag);
     tag->putBoolean(L"Elder", isElder());
 }
 
@@ -202,13 +203,6 @@ float Guardian::getSpikesAnimation(float partialTicks)
 
 
 
-
-
-void Guardian::dropDeathLoot(bool wasKilledByPlayer, int playerBonusLevel)
-{
-    //loot (prismarine, sponge) 
-}
-
 float Guardian::getEyeHeight()
 {
     return bbHeight * 0.5f;
@@ -254,7 +248,7 @@ void Guardian::lookAt(shared_ptr<Entity> e, float yMax, float xMax)
 
 void Guardian::serverAiStep()
 {
-    WaterAnimal::serverAiStep();
+    Monster::serverAiStep();
 
    if (isElder() && !level->isClientSide)
 {
@@ -348,7 +342,16 @@ void Guardian::serverAiStep()
         {
             float angle = random->nextFloat() * (float)PI * 2.0f;
             tx = Mth::cos(angle) * 0.2f;
-            ty = -0.1f + random->nextFloat() * 0.2f;
+            
+            
+            if (isElder()) {
+                
+                ty = -0.15f + random->nextFloat() * 0.15f; 
+            } else {
+                
+                ty = -0.1f + random->nextFloat() * 0.2f;
+            }
+            
             tz = Mth::sin(angle) * 0.2f;
             noActionTime = 0;
         }
@@ -437,7 +440,7 @@ void Guardian::aiStep()
     xBodyRotO = xBodyRot;
     zBodyRotO = zBodyRot;
 
-    WaterAnimal::aiStep();
+    Monster::aiStep();
 }
 
 void Guardian::updateSize(bool elder)
@@ -458,10 +461,11 @@ void Guardian::travel(float xa, float ya)
             xd *= 0.9f;
             yd *= 0.9f;
             zd *= 0.9f;
+            yd -= 0.02f;
         }
         else
         {
-            WaterAnimal::travel(xa, ya);
+            Monster::travel(xa, ya);
         }
     }
     else
@@ -473,10 +477,11 @@ void Guardian::travel(float xa, float ya)
             xd *= 0.9f;
             yd *= 0.9f;
             zd *= 0.9f;
+            yd -= 0.02f;
         }
         else
         {
-            WaterAnimal::travel(xa, ya);
+            Monster::travel(xa, ya);
         }
     }
     
@@ -484,7 +489,7 @@ void Guardian::travel(float xa, float ya)
 
 MobGroupData *Guardian::finalizeMobSpawn(MobGroupData *groupData, int extraData)
 {
-    WaterAnimal::finalizeMobSpawn(groupData, extraData);
+    Monster::finalizeMobSpawn(groupData, extraData);
     if (extraData == 1)
         setElder(true);
     return groupData;
@@ -508,7 +513,7 @@ void Guardian::handleEntityEvent(byte eventId)
         }
     }
 
-    WaterAnimal::handleEntityEvent(eventId);
+    Monster::handleEntityEvent(eventId);
 }
 
 int Guardian::getAmbientSound()
@@ -621,7 +626,60 @@ float Guardian::getSoundVolume()
     return  1.0f;
 }
 
-int Guardian::getDeathLoot()
+bool Guardian::removeWhenFarAway()
 {
-    return 0;
+    return !isElder();
+}
+
+void Guardian::dropDeathLoot(bool wasKilledByPlayer, int playerBonusLevel)
+{
+    
+    int shards = 2 + random->nextInt(2);
+    spawnAtLocation(Item::prismarine_shard_Id, shards, 0.5f);
+
+    
+    int crystals = random->nextInt(2);
+    if (crystals > 0)
+        spawnAtLocation(Item::prismarine_cystal_Id, crystals, 0.5f);
+
+
+    spawnAtLocation(Item::fish_raw_Id, 1, 0.5f);
+
+
+    if (isElder())
+    {
+        spawnAtLocation(Tile::sponge_Id, 1, 0.5f);
+    }
+
+
+    if (wasKilledByPlayer)
+    {
+        level->addEntity(std::make_shared<ExperienceOrb>(
+            level, x, y, z,
+            isElder() ? 10 : 5));
+    }
+}
+
+bool Guardian::canSpawn()
+{
+    if (level->difficulty == Difficulty::PEACEFUL)
+        return false;
+
+    
+    bool bypassSky = random->nextInt(20) == 0;
+    if (!bypassSky)
+    {
+        int bx = Mth::floor(x);
+        int by = Mth::floor(y);
+        int bz = Mth::floor(z);
+        if (level->canSeeSkyFromBelowWater(bx, by, bz))
+            return false;
+    }
+
+   
+    if (!isInWater())
+        return false;
+
+    
+    return level->isUnobstructed(bb) && level->getCubes(shared_from_this(), bb)->empty();
 }

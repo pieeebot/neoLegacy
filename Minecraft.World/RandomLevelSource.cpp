@@ -15,6 +15,8 @@
 #ifdef __PS3__
 #include "../Minecraft.Client/PS3/SPU_Tasks/PerlinNoise/PerlinNoiseJob.h"
 #include "C4JSpursJob.h"
+#include <OceanMonumentFeature.cpp>
+#include <OceanMonumentFeature.cpp>
 static PerlinNoise_DataIn g_lperlinNoise1_SPU __attribute__((__aligned__(16)));
 static PerlinNoise_DataIn g_lperlinNoise2_SPU __attribute__((__aligned__(16)));
 static PerlinNoise_DataIn g_perlinNoise1_SPU __attribute__((__aligned__(16)));
@@ -841,23 +843,21 @@ wstring RandomLevelSource::gatherStats()
 
 vector<Biome::MobSpawnerData *> *RandomLevelSource::getMobsAt(MobCategory *mobCategory, int x, int y, int z)
 {
-	Biome *biome = level->getBiome(x, z);
-	if (biome == nullptr)
-	{
-		return nullptr;
-	}
-	if (mobCategory == MobCategory::monster)
-	{
-		if (scatteredFeature->isSwamphut(x, y, z))
-		{
-			return scatteredFeature->getSwamphutEnemies();
-		}
-		if (oceanMonument->isInsideFeature(x, y, z))
-        {
+    Biome *biome = level->getBiome(x, z);
+    if (biome == nullptr)
+        return nullptr;
+
+    if (mobCategory == MobCategory::monster)
+    {
+        if (scatteredFeature->isSwamphut(x, y, z))
+            return scatteredFeature->getSwamphutEnemies();
+
+        if (oceanMonument->isInsideBoundingFeature(x, y, z))
             return oceanMonument->getMonumentEnemies();
-        }
-	}
-	return biome->getMobs(mobCategory);
+    }
+
+
+    return biome->getMobs(mobCategory);
 }
 
 TilePos *RandomLevelSource::findNearestMapFeature(Level *level, const wstring& featureName, int x, int y, int z)

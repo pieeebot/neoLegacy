@@ -326,13 +326,13 @@ OceanMonumentPieces::MonumentBuilding::MonumentBuilding(Random* random, int x, i
         p->getBoundingBox()->move(baseX, minY, baseZ);
 
     
-    BoundingBox* wing1BB = new BoundingBox(
+    BoundingBox* wing1BB = BoundingBox::fromCorners(
         getWorldX(1,  1),  getWorldY(1),  getWorldZ(1,  1),
         getWorldX(23, 21), getWorldY(8),  getWorldZ(23, 21));
-    BoundingBox* wing2BB = new BoundingBox(
+    BoundingBox* wing2BB = BoundingBox::fromCorners(
         getWorldX(34, 1),  getWorldY(1),  getWorldZ(34, 1),
         getWorldX(56, 21), getWorldY(8),  getWorldZ(56, 21));
-    BoundingBox* penthouseBB = new BoundingBox(
+    BoundingBox* penthouseBB = BoundingBox::fromCorners(
         getWorldX(22, 22), getWorldY(13), getWorldZ(22, 22),
         getWorldX(35, 35), getWorldY(17), getWorldZ(35, 35));
 
@@ -1612,7 +1612,7 @@ bool OceanMonumentPieces::WingRoom::postProcess(Level* level, Random* random, Bo
         
         generateBox(level, chunkBB,  6, 0, 21,  7, 4, 21, Tile::prismarine_Id, blockPrismarineBricks(),Tile::prismarine_Id, blockPrismarineBricks(), false);
         generateBox(level, chunkBB, 15, 0, 21, 16, 4, 21, Tile::prismarine_Id, blockPrismarineBricks(),Tile::prismarine_Id, blockPrismarineBricks(), false);
-        spawnElderGuardian(level, chunkBB, 11, 2, 16);
+        spawnElderGuardian(level, chunkBB, 11, 5, 16);
     }
     else // wingType == 1
     {

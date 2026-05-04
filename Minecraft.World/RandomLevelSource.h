@@ -2,6 +2,7 @@
 using namespace std;
 
 #include "ChunkSource.h"
+#include "OceanMonumentFeature.h"
 
 class ProgressListener;
 class LargeFeature;
@@ -62,7 +63,7 @@ public:
 public:
 	void buildSurfaces(int xOffs, int zOffs, byteArray blocks, byteArray blockData, BiomeArray biomes);
 
-private:
+public:
 	LargeFeature *caveFeature;
 	StrongholdFeature *strongholdFeature;
 	VillageFeature *villageFeature;
@@ -97,4 +98,5 @@ public:
 	virtual vector<Biome::MobSpawnerData *> *getMobsAt(MobCategory *mobCategory, int x, int y, int z);
 	virtual TilePos *findNearestMapFeature(Level *level, const wstring& featureName, int x, int y, int z);
 	virtual void recreateLogicStructuresForChunk(int chunkX, int chunkZ);
+
 };

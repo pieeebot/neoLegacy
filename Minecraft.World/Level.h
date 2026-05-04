@@ -8,6 +8,7 @@ using namespace std;
 #include "Definitions.h"
 #include "ParticleTypes.h"
 #include "Biome.h"
+#include "BlockPos.h"
 #include "C4JThread.h"
 
 #ifdef __PSVITA__
@@ -51,6 +52,7 @@ class Minecart;
 class EntitySelector;
 class Scoreboard;
 class GameRules;
+class BlockPos;
 
 class Level : public LevelSource
 {
@@ -210,6 +212,7 @@ public:
 	bool reallyHasChunksAt(int x, int y, int z, int r);							// 4J added
 	bool reallyHasChunksAt(int x0, int y0, int z0, int x1, int y1, int z1);		// 4J added
 	BlockPos getHeightmapPos(int x, int z);
+	bool canSeeSkyFromBelowWater(int x, int y, int z);
 public:
 	bool hasChunk(int x, int z);
 	bool reallyHasChunk(int x, int z );	// 4J added
@@ -237,6 +240,7 @@ public:
 	virtual bool isTileToBeTickedAt(int x, int y, int z, int tileId);
 	bool canSeeSky(int x, int y, int z);
 	int getDaytimeRawBrightness(int x, int y, int z);
+	int getDaytimeRawBrightness(const BlockPos& pos);
 	int getRawBrightness(int x, int y, int z);
 	int getRawBrightness(int x, int y, int z, bool propagate);
 	bool isSkyLit(int x, int y, int z);
@@ -560,4 +564,5 @@ public:
 	};
 
 	bool canCreateMore(eINSTANCEOF type, ESPAWN_TYPE spawnType);
+	
 };

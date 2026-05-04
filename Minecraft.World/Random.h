@@ -20,4 +20,7 @@ public:
 	float nextFloat();
 	int64_t nextLong();
 	bool nextBoolean();
+	static int nextInt(Random* r, int n) { return r->nextInt(n); }
+	static bool nextBoolean(Random* r) { return r->nextBoolean(); }
+	static long long nextLong(Random* r) { return r->nextLong(); }
 };

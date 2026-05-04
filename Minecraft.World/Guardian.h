@@ -1,11 +1,11 @@
 #pragma once
 using namespace std;
-#include "WaterAnimal.h"
+#include "Monster.h"
 
 class Level;
 class Player;
 
-class Guardian : public WaterAnimal
+class Guardian : public Monster
 {
 public:
     eINSTANCEOF GetType() { return eTYPE_GUARDIAN; }
@@ -34,12 +34,12 @@ protected:
     virtual int   getHurtSound();
     virtual int   getDeathSound();
     virtual float getSoundVolume();
-    virtual int   getDeathLoot();
     virtual bool  makeStepSound();
     void playFlopSound();
     void playAttackSound();
     void playCurseSound();
     virtual void  dropDeathLoot(bool wasKilledByPlayer, int playerBonusLevel);
+    virtual bool  removeWhenFarAway();
     virtual void  serverAiStep();
 
 public:
@@ -57,6 +57,8 @@ public:
 
     bool isMoving();
     void setMoving(bool moving);
+    virtual bool canSpawn();
+    virtual bool isWaterMob() { return true; }
 
     
     int                        getTargetedEntityId();

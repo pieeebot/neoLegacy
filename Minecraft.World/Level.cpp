@@ -1168,6 +1168,20 @@ int Level::getDaytimeRawBrightness(int x, int y, int z)
 	return getChunk(x >> 4, z >> 4)->getRawBrightness(x & 15, y, z & 15, 0);
 }
 
+int Level::getDaytimeRawBrightness(const BlockPos& pos)
+{
+    int x = pos.getX();
+    int y = pos.getY();
+    int z = pos.getZ();
+
+    if (y < 0)
+        return 0;
+
+    if (y >= maxBuildHeight)        
+        y = maxBuildHeight - 1;     
+
+    return getChunk(x >> 4, z >> 4)->getRawBrightness(x & 15, y, z & 15, 0);
+}
 
 int Level::getRawBrightness(int x, int y, int z)
 {
@@ -4810,4 +4824,42 @@ BlockPos Level::getHeightmapPos(int x, int z)
     }
 
     return BlockPos(x, 0, z);
+}
+
+bool Level::canSeeSkyFromBelowWater(int x, int y, int z)
+{
+    if (y < 63)
+    {
+        int cx = x;
+        int cy = 63;
+        int cz = z;
+
+     
+        if (dimension->isHasCeiling())
+            return false;
+
+        while (true)
+        {
+            cy--;
+            if (cy <= y)
+                break;
+
+            int tileId = getTile(cx, cy, cz);
+
+            if (Tile::lightBlock[tileId] > 0)
+            {
+                Material *mat = nullptr;
+                if (Tile::tiles[tileId] != nullptr)
+                    mat = Tile::tiles[tileId]->material;
+
+                if (mat == nullptr || !mat->isLiquid())
+                    return false;
+            }
+        }
+        return true;
+    }
+    else
+    {
+        return !dimension->isHasCeiling();
+    }
 }

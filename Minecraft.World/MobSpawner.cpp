@@ -14,9 +14,13 @@
 #include "Level.h"
 #include "ChunkPos.h"
 #include "TilePos.h"
+#include "BlockPos.h"
+#include "net.minecraft.world.level.chunk.h"
 #include "../Minecraft.Client/ServerLevel.h"
 #include "MobSpawner.h"
 #include "Dimension.h"
+#include "OceanMonumentFeature.h"
+#include "RandomLevelSource.h"
 
 const int MobSpawner::MIN_SPAWN_DISTANCE = 24;
 
@@ -195,6 +199,7 @@ const int MobSpawner::tick(ServerLevel *level, bool spawnEnemies, bool spawnFrie
 	for (unsigned int i = 0; i < MobCategory::values.length; i++)
 	{
 		MobCategory *mobCategory = MobCategory::values[i];
+		 
 		if ((mobCategory->isFriendly() && !spawnFriendlies) || (!mobCategory->isFriendly() && !spawnEnemies) || (mobCategory->isPersistent() && !spawnPersistent))
 		{
 			continue;
@@ -212,7 +217,8 @@ const int MobSpawner::tick(ServerLevel *level, bool spawnEnemies, bool spawnFrie
 		// 4J - this is now quite different to the java version. We just have global max counts for the level whereas the original has a max per chunk that
 		// scales with the number of chunks to be polled.
 		int categoryCount = level->countInstanceOf( mobCategory->getEnumBaseClass(), mobCategory->isSingleType());
-		if( categoryCount >= mobCategory->getMaxInstancesPerLevel())
+		
+		if( categoryCount >= mobCategory->getMaxInstancesPerLevel() && mobCategory != MobCategory::monster)
 		{
 			continue;
 		}
@@ -235,13 +241,18 @@ const int MobSpawner::tick(ServerLevel *level, bool spawnEnemies, bool spawnFrie
 			   // 4J - don't let this actually create/load a chunk that isn't here already - we'll let the normal updateDirtyChunks etc. processes do that, so it can happen on another thread
 			   if( !level->hasChunk(cp->x,cp->z) ) continue;
 
-			   TilePos start = getRandomPosWithin(level, cp->x, cp->z);
-			   int xStart = start.x;
-			   int yStart = start.y;
-			   int zStart = start.z;
+				
+			   int xStart = cp->x * 16 + level->random->nextInt(16);
+			   int zStart = cp->z * 16 + level->random->nextInt(16);
+			   
+			   int height = level->getChunk(cp->x, cp->z)->getHeightmap(xStart & 15, zStart & 15);
+			   int yMax = (height + 1 + 15) & ~15; 
+			   if (yMax <= 0) yMax = 256;
+			   int yStart = level->random->nextInt(yMax);
 
 			   if (level->isSolidBlockingTile(xStart, yStart, zStart)) continue;
-			   if (level->getMaterial(xStart, yStart, zStart) != mobCategory->getSpawnPositionMaterial()) continue;
+			   if (level->getMaterial(xStart, yStart, zStart) != mobCategory->getSpawnPositionMaterial() &&
+				   !(mobCategory == MobCategory::monster && level->getMaterial(xStart, yStart, zStart) == Material::water)) continue;
 			   int clusterSize = 0;
 
 			   for (int dd = 0; dd < 3; dd++)
@@ -264,11 +275,18 @@ const int MobSpawner::tick(ServerLevel *level, bool spawnEnemies, bool spawnFrie
 					   // 4J - don't let this actually create/load a chunk that isn't here already - we'll let the normal updateDirtyChunks etc. processes do that, so it can happen on another thread
 					   if( !level->hasChunkAt( x, y, z ) ) continue;
 
-					   if (isSpawnPositionOk(mobCategory, level, x, y, z))
+					   BlockPos pos(x, y, z);
+					   if (currentMobType == nullptr)
+					   {
+						   currentMobType = level->getRandomMobSpawnAt(mobCategory, x, y, z);
+					   }
+
+					   if (currentMobType != nullptr && (level->canMobSpawnAt(mobCategory, currentMobType, pos) || isSpawnPositionOk(mobCategory, level, x, y, z)))
 					   {
 						   float xx = x + 0.5f;
 						   float yy = static_cast<float>(y);
 						   float zz = z + 0.5f;
+
 						   if (level->getNearestPlayer(xx, yy, zz, MIN_SPAWN_DISTANCE) != nullptr)
 						   {
 							   continue;
@@ -284,15 +302,6 @@ const int MobSpawner::tick(ServerLevel *level, bool spawnEnemies, bool spawnFrie
 								   continue;
 							   }
 						   }
-
-                            if (currentMobType == nullptr)
-							{
-                                currentMobType = level->getRandomMobSpawnAt(mobCategory, x, y, z);
-                                if (currentMobType == nullptr)
-								{
-                                    break;
-                                }
-                            }
 
 						   shared_ptr<Mob> mob;
 						   // 4J - removed try/catch
@@ -316,18 +325,13 @@ const int MobSpawner::tick(ServerLevel *level, bool spawnEnemies, bool spawnFrie
 
 						   if( ( mobType & eTYPE_ANIMALS_SPAWN_LIMIT_CHECK ) || ( mobType & eTYPE_MONSTER ) )
 						   {
-							   // even more special rule for ghasts, because filling up the nether with 25 of them is a bit unpleasant. In the java version they are
-							   // only limited by the fact that the world fills up with pig zombies (the only other type of enemy mob in the nether) before them - they
-							   // aren't actually even counted properly themselves
 							   if( mobType == eTYPE_GHAST )
 							   {
 								   if( level->countInstanceOf(mobType, true) >= 4 ) continue;
 							   }
 							   else if( mobType == eTYPE_ENDERMAN && level->dimension->id == 1 )
 							   {
-								   // Special rule for the end, as we only have Endermen (plus the dragon). Increase the spawnable counts based on level difficulty
 								   int maxEndermen = mobCategory->getMaxInstancesPerLevel();
-
 								   if( level->difficulty == Difficulty::NORMAL )
 								   {
 									   maxEndermen -= mobCategory->getMaxInstancesPerLevel()/4;
@@ -336,7 +340,6 @@ const int MobSpawner::tick(ServerLevel *level, bool spawnEnemies, bool spawnFrie
 								   {
 									   maxEndermen -= mobCategory->getMaxInstancesPerLevel()/2;
 								   }
-
 								   if( level->countInstanceOf(mobType, true) >= maxEndermen ) continue;
 							   }
 							   else if( level->countInstanceOf(mobType, true) >= ( mobCategory->getMaxInstancesPerLevel() / 2 ) ) continue;
@@ -391,6 +394,16 @@ bool MobSpawner::isSpawnPositionOk(MobCategory *category, Level *level, int x, i
 	}
 #endif
 
+	if (category == MobCategory::monster && level->getMaterial(x, y, z) == Material::water)
+	{
+		
+		if (level->getMaterial(x, y - 1, z)->isLiquid())
+		{
+			return !level->isSolidBlockingTile(x, y + 1, z);
+		}
+		return false;
+	}
+
 	if (category->getSpawnPositionMaterial() == Material::water)
 	{
 		// 4J - changed to spawn water things only in deep water
@@ -403,7 +416,6 @@ bool MobSpawner::isSpawnPositionOk(MobCategory *category, Level *level, int x, i
 			yo++;
 		}
 
-		// 4J - Sometimes deep water could be just a waterfall, so check that it's wide as well
 		bool inEnoughWater = false;
 		if( liquidCount == 5 )
 		{
@@ -425,7 +437,7 @@ bool MobSpawner::isSpawnPositionOk(MobCategory *category, Level *level, int x, i
 		int tt = level->getTile(x, y - 1, z);
 		return tt != Tile::unbreakable_Id && !level->isSolidBlockingTile(x, y, z) && !level->getMaterial(x, y, z)->isLiquid() && !level->isSolidBlockingTile(x, y + 1, z);
 	}
-				}
+}
 
 void MobSpawner::postProcessSpawnMobs(Level *level, Biome *biome, int xo, int zo, int cellWidth, int cellHeight, Random *random)
 {

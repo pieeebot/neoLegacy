@@ -33,7 +33,8 @@ public:
 
     void prescanNearby(int scanRadiusInGridCells = 8);
 
-protected:
+
+public:
     virtual bool isFeatureChunk(int x, int z, bool bIsSuperflat = false) override;
     virtual StructureStart* createStructureStart(int x, int z) override;
 

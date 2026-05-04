@@ -32,6 +32,7 @@ void OceanMonumentFeature::prescanNearby(int scanRadiusInGridCells)
     int validated = 0;
     int halfSizeChunks = this->level->getLevelData()->getXZSize() / 2;
     int halfSizeBlocks = (this->level->getLevelData()->getXZSize() * 16) / 2;
+
     app.DebugPrintf("Ocean Monument pre-scan (HalfSize: %d chunks / %d blocks)\n", halfSizeChunks, halfSizeBlocks);
 
     for (int gz = -scanRadiusInGridCells; gz <= scanRadiusInGridCells; gz++)
@@ -54,18 +55,28 @@ void OceanMonumentFeature::prescanNearby(int scanRadiusInGridCells)
             int blockZ = cz * 16 + 8;
             
             if (Mth::abs(blockX) > halfSizeBlocks || Mth::abs(blockZ) > halfSizeBlocks)
-            {
-                continue; 
-            }
+                continue;
             
             if (this->isFeatureChunk(cx, cz))
             {
                 validated++;
+
+                
+                int64_t key = ChunkPos::hashCode(cx, cz);
+                if (cachedStructures.find(key) == cachedStructures.end())
+                {
+                    StructureStart *start = createStructureStart(cx, cz);
+                    if (start != nullptr)
+                    {
+                        cachedStructures[key] = start;
+                        app.DebugPrintf("prescanNearby: cached MonumentStart at chunk (%d,%d)\n", cx, cz);
+                    }
+                }
             }
         }
     }
 
-    app.DebugPrintf(" Pre-scan done: %d grid slots checked, %d validated monuments found. \n", candidates, validated);
+    app.DebugPrintf(" Pre-scan done: %d grid slots checked, %d validated monuments found.\n", candidates, validated);
 }
 
 bool OceanMonumentFeature::isFeatureChunk(int x, int z, bool bIsSuperflat)
@@ -120,7 +131,22 @@ bool OceanMonumentFeature::isFeatureChunk(int x, int z, bool bIsSuperflat)
 StructureStart* OceanMonumentFeature::createStructureStart(int x, int z)
 {
     if (this->level == nullptr) return nullptr;
-    return new MonumentStart(level, random, x, z);
+    MonumentStart* start = new MonumentStart(level, random, x, z);
+    
+    
+    BoundingBox* bb = start->getBoundingBox();
+    if (bb != nullptr)
+    {
+        app.DebugPrintf("MonumentStart BB: x0=%d y0=%d z0=%d x1=%d y1=%d z1=%d\n",
+            bb->x0, bb->y0, bb->z0,
+            bb->x1, bb->y1, bb->z1);
+    }
+    else
+    {
+        app.DebugPrintf("MonumentStart BB: NULL!\n");
+    }
+    
+    return start;
 }
 
 OceanMonumentFeature::MonumentStart::MonumentStart() {}
@@ -137,7 +163,6 @@ OceanMonumentFeature::MonumentStart::MonumentStart(Level* level, Random* random,
 
     int startX = chunkX * 16 + 8 - 29;
     int startZ = chunkZ * 16 + 8 - 29;
-
     int facing = random->nextInt(4) + 2;
 
     OceanMonumentPieces::MonumentBuilding* building =
@@ -146,3 +171,4 @@ OceanMonumentFeature::MonumentStart::MonumentStart(Level* level, Random* random,
 
     calculateBoundingBox();
 }
+

@@ -144,7 +144,7 @@ public:
 
     class MonumentBuilding : public Piece
     {
-    private:
+    public:
         static const int ARRAY_SIZE = 75; // 5*5*3
         RoomDefinition* entryRoom;  // field_175845_o
         RoomDefinition* coreRoom;   // field_175844_p

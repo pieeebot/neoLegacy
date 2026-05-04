@@ -50,6 +50,7 @@ public:
 	~ServerLevel();
 	void tick();
 	Biome::MobSpawnerData *getRandomMobSpawnAt(MobCategory *mobCategory, int x, int y, int z);
+	bool canMobSpawnAt(MobCategory *mobCategory, Biome::MobSpawnerData *data, const BlockPos& pos);
 	void updateSleepingPlayerList();
 protected:
 	void awakenAllPlayers();

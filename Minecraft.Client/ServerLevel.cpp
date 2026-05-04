@@ -28,6 +28,9 @@
 #include "../Minecraft.World/ItemEntity.h"
 #include "../Minecraft.World/Arrow.h"
 #include "../Minecraft.World/PrimedTnt.h"
+#include "../Minecraft.World/RandomLevelSource.h"
+#include "../Minecraft.World/MobCategory.h"
+#include "../Minecraft.World/OceanMonumentFeature.h"
 #include "../Minecraft.World/FallingTile.h"
 #include "../Minecraft.World/net.minecraft.network.packet.h"
 #include "../Minecraft.World/Mth.h"
@@ -375,6 +378,19 @@ void ServerLevel::tick()
 			(long long)(ts[12] - ts[11]));
 	}
 #endif
+}
+
+bool ServerLevel::canMobSpawnAt(MobCategory *mobCategory, Biome::MobSpawnerData *data, const BlockPos& pos)
+{
+    RandomLevelSource *rls = dynamic_cast<RandomLevelSource*>(getChunkSource());
+    if (rls)
+    {
+        if (mobCategory == MobCategory::monster && rls->oceanMonument->isInsideBoundingFeature(pos.getX(), pos.getY(), pos.getZ()))
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 Biome::MobSpawnerData *ServerLevel::getRandomMobSpawnAt(MobCategory *mobCategory, int x, int y, int z)

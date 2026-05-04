@@ -132,6 +132,9 @@ StructureStart *StructureFeature::getStructureAt(int cellX, int cellY, int cellZ
 				*/
 				list<StructurePiece *> *pieces=pStructureStart->getPieces();
 
+				
+                
+
 				for (auto& piece : *pieces)
 				{
 					if ( piece->getBoundingBox()->isInside(cellX, cellY, cellZ)  )
@@ -154,7 +157,13 @@ bool StructureFeature::isInsideBoundingFeature(int cellX, int cellY, int cellZ)
 		StructureStart *structureStart = it.second;
 		if (structureStart->isValid())
 		{
-			return (structureStart->getBoundingBox()->intersects(cellX, cellZ, cellX, cellZ));
+			BoundingBox* bb = structureStart->getBoundingBox();
+			if (cellX >= bb->x0 && cellX <= bb->x1 &&
+				cellY >= bb->y0 && cellY <= bb->y1 &&
+				cellZ >= bb->z0 && cellZ <= bb->z1)
+			{
+				return true;
+			}
 		}
 	}
 	return false;

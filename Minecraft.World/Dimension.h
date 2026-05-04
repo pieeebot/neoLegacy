@@ -37,7 +37,8 @@ public:
 	virtual ChunkStorage *createStorage(File dir);
 
 	virtual bool isValidSpawn(int x, int z) const;
-
+	
+	virtual bool isHasCeiling() const { return hasCeiling; }
 	virtual float getTimeOfDay(int64_t time, float a) const;
 	virtual int getMoonPhase(int64_t time) const;
 	virtual bool isNaturalDimension();
