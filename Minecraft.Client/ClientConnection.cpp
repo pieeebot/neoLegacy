@@ -561,7 +561,20 @@ void ClientConnection::handleAddEntity(shared_ptr<AddEntityPacket> packet)
 			int iz = (int) z;
 		app.DebugPrintf("ClientConnection ITEM_FRAME xyz %d,%d,%d\n",ix,iy,iz);
 		}
-		e = std::make_shared<ItemFrame>(level, (int)x, (int)y, (int)z, packet->data);
+		{
+			int dir = packet->data & 0xFF;
+			bool placedByPlayer = (packet->data & 0x100) != 0;
+			e = std::make_shared<ItemFrame>(level, (int)x, (int)y, (int)z, dir);
+			shared_ptr<ItemFrame> frame = dynamic_pointer_cast<ItemFrame>(e);
+			if (frame != nullptr)
+			{
+				frame->placedByPlayer = placedByPlayer;
+				if (placedByPlayer)
+				{
+					frame->setDir(dir);
+				}
+			}
+		}
 		packet->data = 0;
 		setRot = false;
 		break;
@@ -815,6 +828,11 @@ void ClientConnection::handleAddGlobalEntity(shared_ptr<AddGlobalEntityPacket> p
 void ClientConnection::handleAddPainting(shared_ptr<AddPaintingPacket> packet)
 {
 	shared_ptr<Painting> painting = std::make_shared<Painting>(level, packet->x, packet->y, packet->z, packet->dir, packet->motive);
+	painting->placedByPlayer = packet->placedByPlayer;
+	if (packet->placedByPlayer)
+	{
+		painting->setDir(packet->dir);
+	}
 	level->putEntity(packet->id, painting);
 	m_trackedEntityIds.insert(packet->id);
 }

@@ -604,6 +604,7 @@ int  CompressedTileStorage::get(int x, int y, int z)
 
 	int block, tile;
 	getBlockAndTile( &block, &tile, x, y, z );
+	if (blockIndices[block] == 0) return 0;
 	int indexType = blockIndices[block] & INDEX_TYPE_MASK;
 
 	if( indexType == INDEX_TYPE_0_OR_8_BIT )

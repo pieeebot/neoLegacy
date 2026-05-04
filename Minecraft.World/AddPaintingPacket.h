@@ -12,6 +12,7 @@ public:
     int x, y, z;
     int dir;
     wstring motive;
+	bool placedByPlayer;
 
 public:
 	AddPaintingPacket();

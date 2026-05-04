@@ -67,6 +67,7 @@ shared_ptr<HangingEntity> HangingEntityItem::createEntity(Level *level, int x, i
 	if (eType == eTYPE_PAINTING) 
 	{
 		shared_ptr<Painting> painting = std::make_shared<Painting>(level, x, y, z, dir);
+		painting->placedByPlayer = true;
 
 #ifndef _CONTENT_PACKAGE
 		if (app.DebugArtToolsOn() && auxValue > 0) 
@@ -84,6 +85,8 @@ shared_ptr<HangingEntity> HangingEntityItem::createEntity(Level *level, int x, i
 	else if (eType == eTYPE_ITEM_FRAME) 
 	{
 		shared_ptr<ItemFrame> itemFrame = std::make_shared<ItemFrame>(level, x, y, z, dir);
+		itemFrame->placedByPlayer = true;
+		itemFrame->setDir(dir);
 
 		return dynamic_pointer_cast<HangingEntity> (itemFrame);
 	} 

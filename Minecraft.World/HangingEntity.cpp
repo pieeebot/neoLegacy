@@ -68,7 +68,7 @@ void HangingEntity::setDir(int dir)
 
 	int offset = 0;
 
-	// set offset to 1 if player is stock world (not auto generated) (FIXME AS IT DOESNT WORK)
+	// set offset to 1 if placed in stock world
 	if (level->isClientSide && !placedByPlayer)
 	{
 		offset = 1;
@@ -90,10 +90,10 @@ void HangingEntity::setDir(int dir)
 	float ss = -(0.5f / 16.0f);
     if (this->GetType() == eTYPE_PAINTING) {
 		fOffs = 0.5f + 1.0f / 16.0f;
-		if (dir == Direction::NORTH) originalZ -= fOffs;
-		if (dir == Direction::WEST) originalX -= fOffs;
-		if (dir == Direction::SOUTH) originalZ += fOffs;
-		if (dir == Direction::EAST) originalX += fOffs;
+		if (dir == Direction::NORTH) originalZ -= fOffs - offset;
+		if (dir == Direction::WEST) originalX -= fOffs - offset;
+		if (dir == Direction::SOUTH) originalZ += fOffs - offset;
+		if (dir == Direction::EAST) originalX += fOffs - offset;
 		if (dir == Direction::NORTH) originalX -= offs(getWidth());
 		if (dir == Direction::WEST) originalZ += offs(getWidth());
 		if (dir == Direction::SOUTH) originalX += offs(getWidth());
@@ -127,11 +127,10 @@ void HangingEntity::tick()
 	if (checkInterval++ == 20 * 5 && !level->isClientSide)
 	{
 		checkInterval = 0;
-		if (!removed && !survives())
+		if (!removed && !survives() && placedByPlayer)
 		{
-			// TODO: apply same non-player placed checks here
-			// remove();
-			// dropItem(nullptr);
+			remove();
+			dropItem(nullptr);
 		}
 	}
 }
@@ -297,39 +296,38 @@ void HangingEntity::readAdditionalSaveData(CompoundTag *tag)
         setPos(xTile, yTile, zTile);
     }
 
-    if (tag->contains(L"Direction"))
-    {
-        dir = tag->getByte(L"Direction");
-        setDir(dir);
-        return;
-    }
-
-    if (tag->contains(L"Facing"))
-    {
-        int f = tag->getByte(L"Facing");
-        dir = Direction::from2DDataValue(f);
-
-        setDir(dir);
-        return;
-    }
-
-    // fallback for legacy system
-    if (tag->contains(L"Dir"))
-    {
-        switch (tag->getByte(L"Dir"))
-        {
-        case 0: dir = Direction::NORTH; break;
-        case 1: dir = Direction::WEST;  break;
-        case 2: dir = Direction::SOUTH; break;
-        case 3: dir = Direction::EAST;  break;
-        }
-
-        setDir(dir);
-    }
-
 	if (tag->contains(L"PlacedByPlayer"))
 	{
 		placedByPlayer = tag->getByte(L"PlacedByPlayer") == 1;
+	}
+
+	bool hasDir = false;
+	if (tag->contains(L"Direction"))
+	{
+		dir = tag->getByte(L"Direction");
+		hasDir = true;
+	}
+	else if (tag->contains(L"Facing"))
+	{
+		int f = tag->getByte(L"Facing");
+		dir = Direction::from2DDataValue(f);
+		hasDir = true;
+	}
+	else if (tag->contains(L"Dir"))
+	{
+		switch (tag->getByte(L"Dir"))
+		{
+		case 0: dir = Direction::NORTH; break;
+		case 1: dir = Direction::WEST;  break;
+		case 2: dir = Direction::SOUTH; break;
+		case 3: dir = Direction::EAST;  break;
+		}
+		hasDir = true;
+	}
+
+	if (hasDir)
+	{
+		setDir(dir);
 	}
 }
 
