@@ -6,8 +6,8 @@
 #include "net.minecraft.world.damagesource.h"
 #include "com.mojang.nbt.h"
 #include "HangingEntity.h"
-
-
+#include "../Minecraft.Client/Minecraft.h"
+#include "Level.h"
 
 void HangingEntity::_init(Level *level)
 {
@@ -58,6 +58,7 @@ void HangingEntity::setDir(int dir)
 	float x = xTile + 0.5f;
 	float y = yTile + 0.5f;
 	float z = zTile + 0.5f;
+	
     float originalX = x;
 	float originalZ = z;
 	float fOffs = 0.5f + 1.0f / 16.0f;
@@ -65,10 +66,18 @@ void HangingEntity::setDir(int dir)
 		fOffs = 0.5f + 1.0f / 32.0f;
 	}
 
-	if (dir == Direction::NORTH) z -= fOffs;
-	if (dir == Direction::WEST) x -= fOffs;
-	if (dir == Direction::SOUTH) z += fOffs;
-	if (dir == Direction::EAST) x += fOffs;
+	int offset = 0;
+
+	// set offset to 1 if player is stock world (not auto generated) (FIXME AS IT DOESNT WORK)
+	if (level->isClientSide && !placedByPlayer)
+	{
+		offset = 1;
+	}
+
+	if (dir == Direction::NORTH) z -= fOffs - offset;
+	if (dir == Direction::WEST) x -= fOffs - offset;
+	if (dir == Direction::SOUTH) z += fOffs - offset;
+	if (dir == Direction::EAST) x += fOffs - offset;
 
 	if (dir == Direction::NORTH) x -= offs(getWidth());
 	if (dir == Direction::WEST) z += offs(getWidth());
@@ -120,8 +129,9 @@ void HangingEntity::tick()
 		checkInterval = 0;
 		if (!removed && !survives())
 		{
-			remove();
-			dropItem(nullptr);
+			// TODO: apply same non-player placed checks here
+			// remove();
+			// dropItem(nullptr);
 		}
 	}
 }
@@ -252,6 +262,7 @@ void HangingEntity::push(double xa, double ya, double za)
 
 void HangingEntity::addAdditonalSaveData(CompoundTag *tag)
 {
+	tag->putByte(L"PlacedByPlayer", placedByPlayer ? 1 : 0);
 	tag->putByte(L"Direction", static_cast<byte>(dir));
 	tag->putInt(L"TileX", xTile);
 	tag->putInt(L"TileY", yTile);
@@ -277,34 +288,49 @@ void HangingEntity::addAdditonalSaveData(CompoundTag *tag)
 
 void HangingEntity::readAdditionalSaveData(CompoundTag *tag)
 {
-	if (tag->contains(L"Direction"))
+    if (tag->contains(L"TileX") && tag->contains(L"TileY") && tag->contains(L"TileZ"))
+    {
+        xTile = tag->getInt(L"TileX");
+        yTile = tag->getInt(L"TileY");
+        zTile = tag->getInt(L"TileZ");
+
+        setPos(xTile, yTile, zTile);
+    }
+
+    if (tag->contains(L"Direction"))
+    {
+        dir = tag->getByte(L"Direction");
+        setDir(dir);
+        return;
+    }
+
+    if (tag->contains(L"Facing"))
+    {
+        int f = tag->getByte(L"Facing");
+        dir = Direction::from2DDataValue(f);
+
+        setDir(dir);
+        return;
+    }
+
+    // fallback for legacy system
+    if (tag->contains(L"Dir"))
+    {
+        switch (tag->getByte(L"Dir"))
+        {
+        case 0: dir = Direction::NORTH; break;
+        case 1: dir = Direction::WEST;  break;
+        case 2: dir = Direction::SOUTH; break;
+        case 3: dir = Direction::EAST;  break;
+        }
+
+        setDir(dir);
+    }
+
+	if (tag->contains(L"PlacedByPlayer"))
 	{
-		dir = tag->getByte(L"Direction");
+		placedByPlayer = tag->getByte(L"PlacedByPlayer") == 1;
 	}
-	else
-	{
-		switch (tag->getByte(L"Dir"))
-		{
-		case 0:
-			dir = Direction::NORTH;
-			break;
-		case 1:
-			dir = Direction::WEST;
-			break;
-		case 2:
-			dir = Direction::SOUTH;
-			break;
-		case 3:
-			dir = Direction::EAST;
-			break;
-		}
-	}
-	
-	xTile = static_cast<int>(floor(x + 0.5f));
-	yTile = static_cast<int>(floor(y + 0.5f));
-	zTile = static_cast<int>(floor(z + 0.5f));
-	
-	setDir(dir);
 }
 
 bool HangingEntity::repositionEntityAfterLoad()

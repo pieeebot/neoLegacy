@@ -18,6 +18,7 @@
 #include "../Minecraft.World/net.minecraft.h"
 #include "CompassTexture.h"
 #include "Minimap.h"
+#include "../Minecraft.World/Level.h"
 
 ResourceLocation ItemFrameRenderer::MAP_BACKGROUND_LOCATION = ResourceLocation(TN_MISC_MAPBG);
 
@@ -41,7 +42,22 @@ void ItemFrameRenderer::render(shared_ptr<Entity>  _itemframe, double x, double 
 	int yt = itemFrame->yTile;
 	int zt = itemFrame->zTile + Direction::STEP_Z[itemFrame->dir];
 
-	glTranslatef(static_cast<float>(xt) - xOffs, static_cast<float>(yt) - yOffs, static_cast<float>(zt) - zOffs);
+	float back = 0.0f;
+
+	// set offset to 1 if the item frame is not placed by the player (FIXME AS IT DOESNT WORK PROPERLY)
+	if (itemFrame->level->isClientSide && !itemFrame->placedByPlayer)
+	{
+		back = 1.0f;
+	}
+
+	int dx = Direction::STEP_X[itemFrame->dir];
+	int dz = Direction::STEP_Z[itemFrame->dir];
+
+	glTranslatef(
+		static_cast<float>(xt) - xOffs - dx * back,
+		static_cast<float>(yt) - yOffs,
+		static_cast<float>(zt) - zOffs - dz * back
+	);
 
 	drawFrame(itemFrame);
 	drawItem(itemFrame);

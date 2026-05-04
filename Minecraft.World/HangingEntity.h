@@ -20,6 +20,7 @@ protected:
 public:
 	int dir;
 	int xTile, yTile, zTile;
+	bool placedByPlayer = false;
 
 	HangingEntity(Level *level);
 	HangingEntity(Level *level, int xTile, int yTile, int zTile, int dir);
@@ -39,6 +40,8 @@ public:
 	virtual void addAdditonalSaveData(CompoundTag *tag);
 	virtual void readAdditionalSaveData(CompoundTag *tag);
 
+	int getDirection();
+    void getPos(Vec3i& out);
 	virtual int getWidth()=0;
 	virtual int getHeight()=0;
 	virtual void dropItem(shared_ptr<Entity> causedBy)=0;
