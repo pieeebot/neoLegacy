@@ -257,13 +257,105 @@ UIScene_LoadMenu::UIScene_LoadMenu(int iPad, void *initData, UILayer *parentLaye
 #endif
 #endif
 #ifdef _WINDOWS64
-		if (params->saveDetails != nullptr && params->saveDetails->UTF8SaveName[0] != '\0')
+		if (params->saveDetails != nullptr && params->saveDetails->UTF8SaveFilename[0] != '\0')
 		{
 			wchar_t wSaveName[128];
 			ZeroMemory(wSaveName, sizeof(wSaveName));
 			MultiByteToWideChar(CP_UTF8, 0, params->saveDetails->UTF8SaveName, -1, wSaveName, 127);
 			m_levelName = wstring(wSaveName);
 			m_labelGameName.init(m_levelName);
+
+			wchar_t wFilename[MAX_SAVEFILENAME_LENGTH];
+			ZeroMemory(wFilename, sizeof(wFilename));
+			mbstowcs(wFilename, params->saveDetails->UTF8SaveFilename, MAX_SAVEFILENAME_LENGTH - 1);
+			wstring filePath = wstring(L"Windows64\\GameHDD\\") + wstring(wFilename) + wstring(L"\\saveData.ms");
+
+			HANDLE hFile = CreateFileW(filePath.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN, nullptr);
+			if (hFile != INVALID_HANDLE_VALUE)
+			{
+				DWORD fileSize = GetFileSize(hFile, nullptr);
+				unsigned char* rawData = new unsigned char[fileSize];
+				DWORD bytesRead = 0;
+				ReadFile(hFile, rawData, fileSize, &bytesRead, nullptr);
+				CloseHandle(hFile);
+
+				unsigned char* saveData = rawData;
+				unsigned int saveSize = fileSize;
+				bool freeSaveData = false;
+
+				if (*(unsigned int*)rawData == 0)
+				{
+					unsigned int decompSize = *(unsigned int*)(rawData + 4);
+					if (decompSize > 0 && decompSize <= 128 * 1024 * 1024)
+					{
+						saveData = new unsigned char[decompSize];
+						Compression::getCompression()->Decompress(saveData, &decompSize, rawData + 8, fileSize - 8);
+						saveSize = decompSize;
+						freeSaveData = true;
+					}
+				}
+
+				if (saveSize >= 12)
+				{
+					unsigned int headerOffset = *(unsigned int*)saveData;
+					unsigned int numEntries = *(unsigned int*)(saveData + 4);
+					const unsigned int entrySize = sizeof(FileEntrySaveData);
+
+					if (headerOffset < saveSize && numEntries > 0 && numEntries < 10000 && headerOffset + numEntries * entrySize <= saveSize)
+					{
+						FileEntrySaveData* table = (FileEntrySaveData*)(saveData + headerOffset);
+						for (unsigned int i = 0; i < numEntries; i++)
+						{
+							if (wcscmp(table[i].filename, L"level.dat") == 0)
+							{
+								unsigned int off = table[i].startOffset;
+								unsigned int len = table[i].length;
+								if (off >= 12 && off + len <= saveSize && len > 0 && len < 4 * 1024 * 1024)
+								{
+									byteArray ba;
+									ba.data = (byte*)(saveData + off);
+									ba.length = len;
+									CompoundTag* root = NbtIo::decompress(ba);
+									if (root != nullptr)
+									{
+										CompoundTag* dataTag = root->getCompound(L"Data");
+										if (dataTag != nullptr)
+										{
+											int savedGameType = dataTag->getInt(L"GameType");
+											switch (savedGameType)
+											{
+											case 1:
+												m_sliderGamemode.init(app.GetString(IDS_GAMEMODE_CREATIVE), eControl_GameMode, 0, 2, 1);
+												m_bGameModeCreative = true;
+												m_iGameModeId = GameType::CREATIVE->getId();
+												break;
+#ifdef _ADVENTURE_MODE_ENABLED
+											case 2:
+												m_sliderGamemode.init(app.GetString(IDS_GAMEMODE_ADVENTURE), eControl_GameMode, 0, 2, 2);
+												m_bGameModeCreative = false;
+												m_iGameModeId = GameType::ADVENTURE->getId();
+												break;
+#endif
+											default:
+												m_sliderGamemode.init(app.GetString(IDS_GAMEMODE_SURVIVAL), eControl_GameMode, 0, 2, 0);
+												m_bGameModeCreative = false;
+												m_iGameModeId = GameType::SURVIVAL->getId();
+												break;
+											}
+										}
+										delete root;
+									}
+								}
+								break;
+							}
+						}
+					}
+				}
+
+				if (freeSaveData) delete[] saveData;
+				delete[] rawData;
+			}
+			m_bRetrievingSaveThumbnail = false;
 		}
 		if (params->saveDetails != nullptr)
 		{
@@ -432,7 +524,7 @@ void UIScene_LoadMenu::updateTooltips()
 void UIScene_LoadMenu::updateComponents()
 {
 	m_parentLayer->showComponent(m_iPad,eUIComponent_Panorama,true);
-	m_parentLayer->showComponent(m_iPad,eUIComponent_Logo,false);
+	m_parentLayer->showComponent(m_iPad,eUIComponent_Logo,true);
 }
 
 wstring UIScene_LoadMenu::getMoviePath()
@@ -1924,7 +2016,7 @@ void UIScene_LoadMenu::handleGainFocus(bool navBack)
 	{
 		m_checkboxOnline.setChecked(m_MoreOptionsParams.bOnlineGame == TRUE);
 	}
-	SetFocusToElement(eControl_GameMode);
+	SetFocusToElement(eControl_LoadWorld);
 }
 
 #ifdef __ORBIS__
