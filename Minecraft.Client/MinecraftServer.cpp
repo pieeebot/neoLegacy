@@ -559,8 +559,10 @@ MinecraftServer::MinecraftServer()
 	m_bLoaded = false;
 	stopped = false;
 	tickCount = 0;
+#ifndef MINECRAFT_SERVER_BUILD
 	wstring progressStatus;
 	progress = 0;
+#endif
 	motd = L"";
 
 	m_isServerPaused = false;
@@ -736,8 +738,10 @@ bool MinecraftServer::initServer(int64_t seed, NetworkGameInitData *initData, DW
 		pLevelType = LevelType::lvl_normal;
 	}
 
+#ifndef MINECRAFT_SERVER_BUILD
 	ProgressRenderer *mcprogress = Minecraft::GetInstance()->progressRenderer;
 	mcprogress->progressStart(IDS_PROGRESS_INITIALISING_SERVER);
+#endif
 
 	if( findSeed )
 	{
@@ -876,7 +880,9 @@ void MinecraftServer::postProcessTerminate(ProgressRenderer *mcprogress)
 
 			if( postProcessItemCount )
 			{
+#ifndef MINECRAFT_SERVER_BUILD
 				mcprogress->progressStagePercentage((postProcessItemCount - postProcessItemRemaining) * 100 / postProcessItemCount);
+#endif
 			}
 			CompressedTileStorage::tick();
 			SparseLightStorage::tick();
@@ -1030,7 +1036,7 @@ bool MinecraftServer::loadLevel(LevelStorageSource *storageSource, const wstring
 
 		players->setLevel(levels);
 	}
-
+#ifndef MINECRAFT_SERVER_BUILD
 	if( levels[0]->isNew )
 	{
 		mcprogress->progressStage(IDS_PROGRESS_GENERATING_SPAWN_AREA);
@@ -1039,6 +1045,7 @@ bool MinecraftServer::loadLevel(LevelStorageSource *storageSource, const wstring
 	{
 		mcprogress->progressStage(IDS_PROGRESS_LOADING_SPAWN_AREA);
 	}
+#endif
 	app.SetGameHostOption( eGameHostOption_HasBeenInCreative, gameType == GameType::CREATIVE || levels[0]->getHasBeenInCreative() );
 	app.SetGameHostOption( eGameHostOption_Structures, levels[0]->isGenerateMapFeatures() );
 
@@ -1151,7 +1158,12 @@ bool MinecraftServer::loadLevel(LevelStorageSource *storageSource, const wstring
 					{
 						delete spawnPos;
 						m_postUpdateTerminate = true;
+#ifndef MINECRAFT_SERVER_BUILD
 						postProcessTerminate(mcprogress);
+#else
+						postProcessTerminate(nullptr);
+#endif
+
 						return false;
 					}
 					//					printf(">>>%d %d %d\n",i,x,z);
@@ -1161,7 +1173,9 @@ bool MinecraftServer::loadLevel(LevelStorageSource *storageSource, const wstring
 					{
 						int pos = (x + r) * twoRPlusOne + (z + 1);
 						//                        setProgress(L"Preparing spawn area", (pos) * 100 / total);
+#ifndef MINECRAFT_SERVER_BUILD
 						mcprogress->progressStagePercentage((pos+r) * 100 / total);
+#endif
 						//                        lastTime = now;
 					}
 					static int count = 0;
@@ -1203,7 +1217,11 @@ bool MinecraftServer::loadLevel(LevelStorageSource *storageSource, const wstring
 	// Wait for post processing, then lighting threads, to end (post-processing may make more lighting changes)
 	m_postUpdateTerminate = true;
 
+#ifndef MINECRAFT_SERVER_BUILD
 	postProcessTerminate(mcprogress);
+#else
+	postProcessTerminate(nullptr);
+#endif
 
 
 	// stronghold position?
@@ -1245,14 +1263,22 @@ bool MinecraftServer::loadLevel(LevelStorageSource *storageSource, const wstring
 
 	if( levels[1]->isNew )
 	{
+#ifndef MINECRAFT_SERVER_BUILD
 		levels[1]->save(true, mcprogress);
+#else
+		levels[1]->save(true, nullptr);
+#endif
 	}
 
 	if( s_bServerHalted || !g_NetworkManager.IsInSession() ) return false;
 
 	if( levels[2]->isNew )
 	{
+#ifndef MINECRAFT_SERVER_BUILD
 		levels[2]->save(true, mcprogress);
+#else
+		levels[2]->save(true, nullptr);
+#endif
 	}
 
 	if( s_bServerHalted || !g_NetworkManager.IsInSession() ) return false;
@@ -1264,7 +1290,11 @@ bool MinecraftServer::loadLevel(LevelStorageSource *storageSource, const wstring
 
 	if( levels[0]->isNew )
 	{
+#ifndef MINECRAFT_SERVER_BUILD
 		levels[0]->save(true, mcprogress);
+#else
+		levels[0]->save(true, nullptr);
+#endif
 	}
 
 	if( s_bServerHalted || !g_NetworkManager.IsInSession() ) return false;
@@ -1366,15 +1396,19 @@ void MinecraftServer::overwriteHellBordersForNewWorldSize(ServerLevel* level, in
 
 void MinecraftServer::setProgress(const wstring& status, int progress)
 {
+#ifndef MINECRAFT_SERVER_BUILD
 	progressStatus = status;
 	this->progress = progress;
+#endif
 	//    logger.info(status + ": " + progress + "%");
 }
 
 void MinecraftServer::endProgress()
 {
+#ifndef MINECRAFT_SERVER_BUILD
 	progressStatus = L"";
 	this->progress = 0;
+#endif
 }
 
 void MinecraftServer::saveAllChunks()
@@ -1392,8 +1426,11 @@ void MinecraftServer::saveAllChunks()
 		ServerLevel *level = levels[levels.length - 1 - i];
 		if( level )	// 4J - added check as level can be nullptr if we end up in stopServer really early on due to network failure
 		{
+#ifndef MINECRAFT_SERVER_BUILD
 			level->save(true, Minecraft::GetInstance()->progressRenderer);
-
+#else
+			level->save(true, nullptr);
+#endif
 			// Only close the level storage when we have saved the last level, otherwise we need to recreate the region files
 			// when saving the next levels
 			if( i == (levels.length - 1))
@@ -1524,7 +1561,11 @@ void MinecraftServer::stopServer(bool didInit)
 		{
 			if (players != nullptr)
 			{
+#ifndef MINECRAFT_SERVER_BUILD
 				players->saveAll(Minecraft::GetInstance()->progressRenderer, true);
+#else
+				players->saveAll(nullptr, true);
+#endif
 			}
 			// 4J Stu - Save the levels in reverse order so we don't overwrite the level.dat
 			// with the data from the nethers leveldata.
@@ -1542,7 +1583,11 @@ void MinecraftServer::stopServer(bool didInit)
 			app.m_gameRules.unloadCurrentGameRules();
 			if( levels[0] != nullptr )		// This can be null if stopServer happens very quickly due to network error
 			{
+#ifndef MINECRAFT_SERVER_BUILD
 				levels[0]->saveToDisc(Minecraft::GetInstance()->progressRenderer, false);
+#else
+				levels[0]->saveToDisc(nullptr, false);
+#endif
 			}
 		}
 	}
@@ -2005,7 +2050,11 @@ void MinecraftServer::run(int64_t seed, void *lpParameter)
                     app.EnterSaveNotificationSection();
                     if (players != nullptr)
                     {
-                        players->saveAll(Minecraft::GetInstance()->progressRenderer);
+#ifndef MINECRAFT_SERVER_BUILD
+						players->saveAll(Minecraft::GetInstance()->progressRenderer);
+#else
+						players->saveAll(nullptr);
+#endif
                     }
 
                     players->broadcastAll(std::make_shared<UpdateProgressPacket>(20));
@@ -2017,7 +2066,11 @@ void MinecraftServer::run(int64_t seed, void *lpParameter)
                         // with the data from the nethers leveldata.
                         // Fix for #7418 - Functional: Gameplay: Saving after sleeping in a bed will place player at nighttime when restarting.
                         ServerLevel *level = levels[levels.length - 1 - j];
+#ifndef MINECRAFT_SERVER_BUILD
 						level->save(true, Minecraft::GetInstance()->progressRenderer, (eAction==eXuiServerAction_AutoSaveGame));
+#else
+						level->save(true, nullptr, (eAction == eXuiServerAction_AutoSaveGame));
+#endif
 
                         players->broadcastAll(std::make_shared<UpdateProgressPacket>(33 + (j * 33)));
                     }
@@ -2025,7 +2078,11 @@ void MinecraftServer::run(int64_t seed, void *lpParameter)
                     {
                         saveGameRules();
 
-						levels[0]->saveToDisc(Minecraft::GetInstance()->progressRenderer, (eAction==eXuiServerAction_AutoSaveGame));
+#ifndef MINECRAFT_SERVER_BUILD
+						levels[0]->saveToDisc(Minecraft::GetInstance()->progressRenderer, (eAction == eXuiServerAction_AutoSaveGame));
+#else
+						levels[0]->saveToDisc(nullptr, (eAction == eXuiServerAction_AutoSaveGame));
+#endif
                     }
                     app.LeaveSaveNotificationSection();
                     break;

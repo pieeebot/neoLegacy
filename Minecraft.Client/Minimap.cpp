@@ -8,15 +8,18 @@
 #include "../Minecraft.World/net.minecraft.world.level.saveddata.h"
 #include "../Minecraft.World/net.minecraft.world.level.material.h"
 
+#ifndef MINECRAFT_SERVER_BUILD
 #ifdef __ORBIS__
 short Minimap::LUT[256];	// 4J added
 #else
 int Minimap::LUT[256];	// 4J added
 #endif
 bool Minimap::genLUT = true;		// 4J added
+#endif
 
 Minimap::Minimap(Font *font, Options *options, Textures *textures, bool optimised)
 {
+#ifndef MINECRAFT_SERVER_BUILD
 #ifdef __PS3__
 	// we're using the RSX now to upload textures to vram, so we need the main ram textures allocated from io space
 	this->pixels = intArray((int*)RenderManager.allocIOMem(w*h*sizeof(int)), 16*16);
@@ -39,7 +42,6 @@ Minimap::Minimap(Font *font, Options *options, Textures *textures, bool optimise
 	{
         pixels[i] = 0x00000000;
 	}
-
 	// 4J added - generate the colour mapping that we'll be needing as a LUT to minimise processing we actually need to do during normal rendering
 	if( genLUT )
 	{
@@ -47,10 +49,13 @@ Minimap::Minimap(Font *font, Options *options, Textures *textures, bool optimise
 	}
 	renderCount = 0;	// 4J added
 	m_optimised = optimised;
+#endif
 }
 
 void Minimap::reloadColours()
 {
+#ifndef MINECRAFT_SERVER_BUILD
+
 	ColourTable *colourTable = Minecraft::GetInstance()->getColourTable();
 	// 4J note that this code has been extracted pretty much as it was in Minimap::render, although with some byte order changes
 	for( int i = 0; i < (14 * 4); i++ )	// 14 material colours currently, 4 brightnesses of each
@@ -95,11 +100,13 @@ void Minimap::reloadColours()
 
 	}
 	genLUT = false;
+#endif
 }
 
 // 4J added entityId
 void Minimap::render(shared_ptr<Player> player, Textures *textures, shared_ptr<MapItemSavedData> data, int entityId)
 {
+#ifndef MINECRAFT_SERVER_BUILD
 	// 4J - only update every 8 renders, as an optimisation
 	// We don't want to use this for ItemFrame renders of maps, as then we can't have different maps together
 	if( !m_optimised || ( renderCount & 7 ) == 0 )
@@ -252,5 +259,6 @@ void Minimap::render(shared_ptr<Player> player, Textures *textures, shared_ptr<M
 	}
 //#endif
     glPopMatrix();
+#endif
 
 }

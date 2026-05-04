@@ -803,7 +803,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW, FALSE);    // adjust the size
 
 	g_hWnd = CreateWindowW(	L"MinecraftClass",
-		L"Minecraft",
+		L"Minecraft: neoLegacy",
 		WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT,
 		0,
