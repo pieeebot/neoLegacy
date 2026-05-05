@@ -63,6 +63,7 @@ body:
     id: itsrevela
     attributes:
       label: Is this reproducable in itsRevela/LCE-Revelations? (https://github.com/itsRevela/LCE-Revelations)
+      description: If this was a "no idea" or similar, it will be rejected.
     validations:
       required: true
 
@@ -73,6 +74,39 @@ body:
       options:
         - label: Release
         - label: Debug
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: screenres
+    attributes:
+      label: Screen Resolution(s)
+      options:
+        - label: 1080p
+        - label: 720p
+        - label: 480p
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: operatingsys
+    attributes:
+      label: Operating System(s)
+      options:
+        - label: Windows 11
+        - label: Windows 10
+        - label: Windows 8.1 (not very supported)
+        - label: Debian(-based)
+        - label: Arch(-based)
+        - label: Gentoo(-based)
+    validations:
+      required: true
+
+  - type: input
+    id: launcher
+    attributes:
+      label: Launcher
+      placeholder: e.g. Emerald Launcher
     validations:
       required: true
 

@@ -35,4 +35,7 @@ public:
 	virtual void writeUTF(const wstring& a);
 	virtual void writePlayerUID(PlayerUID player);
 	virtual void flush();
+
+	//neo: added for future use cases, dont ask.
+	virtual OutputStream* getChildOutputStream();
 };

@@ -4,6 +4,8 @@
 get_filename_component(_MS_SRC "${CMAKE_CURRENT_LIST_DIR}/../.." ABSOLUTE)
 
 set(_MINECRAFT_SERVER_COMMON_ROOT
+  "${_MS_SRC}/../Minecraft.Client/MobAppearanceParticle.h"
+  "${_MS_SRC}/../Minecraft.Client/MobAppearanceParticle.cpp"
   "${_MS_SRC}/../Minecraft.Client/AbstractTexturePack.cpp"
   "${_MS_SRC}/../Minecraft.Client/AchievementPopup.cpp"
   "${_MS_SRC}/../Minecraft.Client/AchievementScreen.cpp"

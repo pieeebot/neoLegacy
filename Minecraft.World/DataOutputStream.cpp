@@ -274,3 +274,9 @@ void DataOutputStream::writePlayerUID(PlayerUID player)
 	writeLong(player);
 #endif // PS3
 }
+
+//neo: added
+OutputStream* DataOutputStream::getChildOutputStream()
+{
+	return stream;
+}

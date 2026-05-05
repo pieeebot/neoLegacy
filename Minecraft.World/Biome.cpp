@@ -551,10 +551,10 @@ int Biome::getRandomDoublePlantType(Random *random)
 {
     
     int type = random->nextInt(10);
-    if (type < 7) return 0; 
+    if (type < 7) return 2; 
     if (type == 7) return 3; 
     if (type == 8) return 4; 
-    return 2; 
+    return 5; 
 }
 Biome* Biome::getBiome(uint32_t id) {
    
