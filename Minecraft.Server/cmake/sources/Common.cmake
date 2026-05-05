@@ -4,6 +4,8 @@
 get_filename_component(_MS_SRC "${CMAKE_CURRENT_LIST_DIR}/../.." ABSOLUTE)
 
 set(_MINECRAFT_SERVER_COMMON_ROOT
+  "${_MS_SRC}/../Minecraft.Client/MobAppearanceParticle.h"
+  "${_MS_SRC}/../Minecraft.Client/MobAppearanceParticle.cpp"
   "${_MS_SRC}/../Minecraft.Client/AbstractTexturePack.cpp"
   "${_MS_SRC}/../Minecraft.Client/AchievementPopup.cpp"
   "${_MS_SRC}/../Minecraft.Client/AchievementScreen.cpp"
@@ -250,6 +252,10 @@ set(_MINECRAFT_SERVER_COMMON_ROOT
   "${_MS_SRC}/../Minecraft.Client/Common/UI/UIScene_AchievementsMenu.h" 
   "${_MS_SRC}/../Minecraft.Client/Common/UI/UIControl_AchievementsList.cpp" 
   "${_MS_SRC}/../Minecraft.Client/Common/UI/UIControl_AchievementsList.h"
+  "${_MS_SRC}/../Minecraft.Client/Common/UI/IUIScene_ClassicCraftingMenu.cpp"
+  "${_MS_SRC}/../Minecraft.Client/Common/UI/IUIScene_ClassicCraftingMenu.h"
+  "${_MS_SRC}/../Minecraft.Client/Common/UI/UIScene_ClassicCraftingMenu.cpp"
+  "${_MS_SRC}/../Minecraft.Client/Common/UI/UIScene_ClassicCraftingMenu.h"
   "${_MS_SRC}/../Minecraft.Client/Common/UI/UIString.cpp"
   "${_MS_SRC}/../Minecraft.Client/Common/UI/UITTFFont.cpp"
   "${_MS_SRC}/../Minecraft.Client/Common/zlib/adler32.c"
@@ -416,6 +422,7 @@ set(_MINECRAFT_SERVER_COMMON_ROOT
   "${_MS_SRC}/../Minecraft.Client/ScrolledSelectionList.cpp"
   "${_MS_SRC}/../Minecraft.Client/SelectWorldScreen.cpp"
   "${_MS_SRC}/../Minecraft.Client/ServerChunkCache.cpp"
+  "${_MS_SRC}/../Minecraft.Client/ServerChunkCache.h"
   "${_MS_SRC}/../Minecraft.Client/ServerCommandDispatcher.cpp"
   "${_MS_SRC}/../Minecraft.Client/ServerConnection.cpp"
   "${_MS_SRC}/../Minecraft.Client/ServerLevel.cpp"

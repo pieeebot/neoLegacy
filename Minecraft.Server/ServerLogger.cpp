@@ -15,6 +15,8 @@ static volatile LONG g_minLogLevel = (LONG)eServerLogLevel_Info;
 static FILE *g_logFile = NULL;
 static std::once_flag g_logFileOnce;
 
+bool g_serverPerfTrace = false;
+
 static void OpenLogFile()
 {
 	if (g_logFile != NULL)

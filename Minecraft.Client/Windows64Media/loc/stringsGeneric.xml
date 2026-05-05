@@ -1473,6 +1473,10 @@ Can also be used for low-level lighting.</value>
 		<value>Collected by getting a Skeleton to kill a Creeper. Can be played in a jukebox.</value>
 	</data>	
 
+	<data name="IDS_DESC_BARRIER">
+		<value>An invisible, but solid block.</value>
+	</data>	
+
 	<data name="IDS_DESC_WATER">
 		<value>Extinguishes fire and helps crops grow. Can be collected in a bucket.</value>
 	</data>	
@@ -2999,6 +3003,10 @@ Can also be used for low-level lighting.</value>
 
 	<data name="IDS_TILE_BEDROCK">
 		<value>Bedrock</value>
+	</data>	
+
+	<data name="IDS_TILE_BARRIER">
+		<value>Barrier</value>
 	</data>	
 
 	<data name="IDS_TILE_WATER">
@@ -7926,6 +7934,14 @@ Would you like to install the mash-up pack or texture pack now?</value>
 		<value>Reduces health of the affected players, animals and monsters over time.</value>
 	</data>	
 
+	<data name="IDS_POTION_DESC_WATERBREATHING">
+		<value>Allows affected players to breathe normally underwater.</value>
+	</data>	
+
+	<data name="IDS_POTION_DESC_JUMPBOOST">
+		<value>Increases the jump height of the affected player.</value>
+	</data>	
+
 	<data name="IDS_POTION_EFFECTS_WHENDRANK">
 		<value>When Applied:</value>
 	</data>	
@@ -8005,6 +8021,10 @@ Would you like to install the mash-up pack or texture pack now?</value>
 	<data name="IDS_ENCHANTMENT_WATER_WORKER">
 		<value>Aqua Affinity</value>
 	</data>	
+	
+	<data name="IDS_ENCHANTMENT_WATER_WALKER">
+		<value>Depth Strider</value>
+	</data>
 
 	<data name="IDS_ENCHANTMENT_DIGGING">
 		<value>Efficiency</value>

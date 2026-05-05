@@ -272,7 +272,23 @@ const WCHAR *ConsoleSoundEngine::wchSoundNames[eSoundType_MAX]=
 	L"item.armor.equip_generic6",
 
 	L"damage.critical",				//eSoundType_DAMAGE_CRITICAL,
-	L"item.elytra.flying"			// eSoundType_ITEM_ELYTRA_FLYING
+	L"item.elytra.flying",			// eSoundType_ITEM_ELYTRA_FLYING
+
+	L"mob.guardian.attack_loop",        
+	L"mob.guardian.guardian_death",             
+	L"mob.guardian.guardian_hit",               
+
+	L"mob.guardian.flop",             
+
+	L"mob.guardian.land_death",        
+	L"mob.guardian.land_hit",          
+	L"mob.guardian.land_idle",         
+
+	L"mob.guardian.curse",        
+	L"mob.guardian.elder_death",        
+	L"mob.guardian.elder_hit",         
+	L"mob.guardian.elder_idle"       
+
 
 };
 

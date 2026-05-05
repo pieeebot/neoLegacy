@@ -2623,7 +2623,7 @@ void Player::startUsingItem(shared_ptr<ItemInstance> instance, int duration)
 	{
 		setUsingItemFlag(true);
 	}
-
+	//if (GenericStats::itemsUsed(instance->getItem()->id)->id < 0) return;
 	// 4J-JEV, hook for ItemUsed event, and ironbelly achievement.
 	awardStat(GenericStats::itemsUsed(instance->getItem()->id),
 		GenericStats::param_itemsUsed(dynamic_pointer_cast<Player>(shared_from_this()),instance));

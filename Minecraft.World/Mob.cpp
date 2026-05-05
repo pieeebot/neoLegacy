@@ -741,6 +741,9 @@ int Mob::getEquipmentSlotForItem(shared_ptr<ItemInstance> item)
 	{
 		return SLOT_HELM;
 	}
+	if (item->id == Item::elytra_Id) {
+		return SLOT_CHEST;
+	}
 
 	ArmorItem *armorItem = dynamic_cast<ArmorItem *>(item->getItem());
 	if (armorItem != nullptr)

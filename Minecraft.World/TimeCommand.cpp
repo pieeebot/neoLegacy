@@ -83,3 +83,13 @@ shared_ptr<GameCommandPacket> TimeCommand::preparePacket(bool night)
 
 	return std::make_shared<GameCommandPacket>(eGameCommand_Time, baos.toByteArray());
 }
+
+shared_ptr<GameCommandPacket> TimeCommand::preparePacket(int ticks)
+{
+	ByteArrayOutputStream baos;
+	DataOutputStream dos(&baos);
+
+	dos.writeInt(ticks);
+
+	return std::make_shared<GameCommandPacket>(eGameCommand_Time, baos.toByteArray());
+}

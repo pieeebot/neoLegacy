@@ -44,7 +44,6 @@ FileInputStream::FileInputStream(const File &file)
 	if( m_fileHandle == INVALID_HANDLE_VALUE )
 	{
 		// TODO 4J Stu - Any form of error/exception handling
-		//__debugbreak();
 		app.FatalLoadError();
 	}
 }

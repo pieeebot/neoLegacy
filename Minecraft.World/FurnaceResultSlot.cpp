@@ -77,7 +77,7 @@ void FurnaceResultSlot::checkTakeAchievements(shared_ptr<ItemInstance> carried)
 		}
 	}
 
-#ifdef _DURANGO
+
 	if (!player->level->isClientSide && removeCount > 0)
 	{
 		player->awardStat(
@@ -85,11 +85,9 @@ void FurnaceResultSlot::checkTakeAchievements(shared_ptr<ItemInstance> carried)
 			GenericStats::param_itemsSmelted(carried->id, carried->getAuxValue(), removeCount)
 			);
 	}
-#else
 	if (carried->id == Item::ironIngot_Id) player->awardStat(GenericStats::acquireIron(), GenericStats::param_acquireIron());
 	if (carried->id == Item::fish_cooked_Id) player->awardStat(GenericStats::cookFish(), GenericStats::param_cookFish());
 	//if (carried->id == Item::porkChop_cooked_Id) GenericStats::itemsCrafted(Item::porkChop_cooked_Id);
-#endif
 
 	removeCount = 0;
 }

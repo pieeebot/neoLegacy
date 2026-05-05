@@ -69,6 +69,34 @@ shared_ptr<ItemInstance> BrewingStandMenu::quickMoveStack(shared_ptr<Player> pla
 	Slot *PotionSlot2 = slots.at(BOTTLE_SLOT_START+1);
 	Slot *PotionSlot3 = slots.at(BOTTLE_SLOT_START+2);
 
+	auto canShiftIntoIngredient = [&](shared_ptr<ItemInstance> stackToMove) -> bool
+	{
+		if (stackToMove == nullptr || !ingredientSlot->mayPlace(stackToMove))
+		{
+			return false;
+		}
+
+		if (!IngredientSlot->hasItem())
+		{
+			return true;
+		}
+
+		shared_ptr<ItemInstance> ingredientStack = IngredientSlot->getItem();
+		if (ingredientStack == nullptr || ingredientStack->id != stackToMove->id)
+		{
+			return false;
+		}
+
+		Item *ingredientBase = Item::items[ingredientStack->id];
+		if (dynamic_cast<FishFoodItem*>(ingredientBase) != nullptr)
+		{
+			// pufferfish only
+			return stackToMove->getAuxValue() == 3;
+		}
+
+		return true;
+	};
+
 	if (slot != nullptr && slot->hasItem())
 	{
 		shared_ptr<ItemInstance> stack = slot->getItem();
@@ -99,8 +127,7 @@ shared_ptr<ItemInstance> BrewingStandMenu::quickMoveStack(shared_ptr<Player> pla
 		else if (slotIndex >= INV_SLOT_START && slotIndex < INV_SLOT_END)
 		{
 			// 4J-PB - if the item is an ingredient, quickmove it into the ingredient slot
-			if( (Item::items[stack->id]->hasPotionBrewingFormula() || (stack->id == Item::netherwart_seeds_Id) ) &&
-				(!IngredientSlot->hasItem() || (stack->id==IngredientSlot->getItem()->id) ) )
+			if (canShiftIntoIngredient(stack))
 			{
 				if(!moveItemStackTo(stack, INGREDIENT_SLOT, INGREDIENT_SLOT+1, false))
 				{
@@ -123,8 +150,7 @@ shared_ptr<ItemInstance> BrewingStandMenu::quickMoveStack(shared_ptr<Player> pla
 		else if (slotIndex >= USE_ROW_SLOT_START && slotIndex < USE_ROW_SLOT_END)
 		{
 			// 4J-PB - if the item is an ingredient, quickmove it into the ingredient slot
-			if((Item::items[stack->id]->hasPotionBrewingFormula() || (stack->id == Item::netherwart_seeds_Id)) &&
-				(!IngredientSlot->hasItem() || (stack->id==IngredientSlot->getItem()->id) ))
+			if (canShiftIntoIngredient(stack))
 			{
 				if(!moveItemStackTo(stack, INGREDIENT_SLOT, INGREDIENT_SLOT+1, false))
 				{
@@ -202,8 +228,6 @@ bool BrewingStandMenu::PotionSlot::mayPlaceItem(shared_ptr<ItemInstance> item)
 	return item != nullptr && (item->id == Item::potion_Id || item->id == Item::glassBottle_Id);
 }
 
-
-
 BrewingStandMenu::IngredientsSlot::IngredientsSlot(shared_ptr<Container> container, int slot, int x, int y) : Slot(container, slot, x ,y)
 {
 }
@@ -214,7 +238,14 @@ bool BrewingStandMenu::IngredientsSlot::mayPlace(shared_ptr<ItemInstance> item)
 	{
 		if (PotionBrewing::SIMPLIFIED_BREWING)
 		{
-			return Item::items[item->id]->hasPotionBrewingFormula();
+			Item* base = Item::items[item->id];
+
+			if (FishFoodItem* fish = dynamic_cast<FishFoodItem*>(base))
+			{
+				return item->getAuxValue() == 3;
+			}
+
+			return base->hasPotionBrewingFormula();
 		}
 		else
 		{

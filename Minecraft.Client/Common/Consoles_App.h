@@ -103,7 +103,7 @@ public:
 	*/
 	static const int GAME_DEFINED_PROFILE_DATA_BYTES = 2*972; // per user
 #else
-	static const int GAME_DEFINED_PROFILE_DATA_BYTES = 2*972; // per user
+	static const int GAME_DEFINED_PROFILE_DATA_BYTES = 3*972; // per user
 #endif
 	unsigned int uiGameDefinedDataChangedBitmask;
 

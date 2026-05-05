@@ -3,7 +3,7 @@
 on:
   push:
     branches:
-      - main
+      - experimental
   workflow_dispatch:
 
 permissions:
@@ -255,7 +255,7 @@ jobs:
         - \`neoLegacyServerWindows64-FourKit.zip\`: server with the FourKit plugin host, bundled .NET 10 runtime, and an empty \`plugins/\` folder ready for plugin authors to drop DLLs into.
 
         Pick the flavour you want and extract it to a folder where you'd like to keep the server runtime." \
-          --latest=false
+          --latest=false --prerelease=true
 
   release-client:
     name: Release Client
@@ -333,7 +333,7 @@ jobs:
         run: |
           gh release create Nightly artifacts/* \
             --title "Client: ${{ steps.sha.outputs.short }}" \
-            --notes-file notes.md
+            --notes-file notes.md --prerelease=true
 
   cleanup:
     needs: [release-client, release-server]

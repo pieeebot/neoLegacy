@@ -234,6 +234,34 @@ if(TARGET Minecraft.Server)
   add_dependencies(Minecraft.Server GenerateStringIdLookup)
 endif()
 
+set(_item_map_inputs
+  "${CMAKE_CURRENT_SOURCE_DIR}/Minecraft.World/Tile.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/Minecraft.World/Item.h"
+)
+
+#neo: added ItemNameMap generation
+add_custom_command(
+  OUTPUT  "${CMAKE_BINARY_DIR}/generated/ItemNameMap.h"
+  COMMAND ${CMAKE_COMMAND}
+            "-DINPUT_FILES=${_item_map_inputs}"
+            "-DOUTPUT_FILE=${CMAKE_BINARY_DIR}/generated/ItemNameMap.h"
+            -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/GenerateItemNameMap.cmake"
+  DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/Minecraft.World/Tile.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Minecraft.World/Item.h"
+  COMMENT "Generating ItemNameMap.h"
+)
+
+add_custom_target(GenerateItemNameMap ALL
+  DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/generated/ItemNameMap.h"
+)
+
+add_dependencies(Minecraft.Client GenerateItemNameMap)
+add_dependencies(Minecraft.World GenerateItemNameMap)
+if(PLATFORM_NAME STREQUAL "Windows64")
+  add_dependencies(Minecraft.Server GenerateItemNameMap)
+endif()
+
 target_include_directories(Minecraft.Client PRIVATE
   "${CMAKE_CURRENT_BINARY_DIR}/generated"
 )

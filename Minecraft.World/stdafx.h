@@ -126,6 +126,7 @@ typedef XUID GameSessionUID;
 #include "TilePos.h"
 #include "ChunkPos.h"
 #include "compression.h"
+#include "Debug.h"
 #include "PerformanceTimer.h"
 
 

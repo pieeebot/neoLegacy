@@ -11,6 +11,7 @@
 #include "MobSkinTextureProcessor.h"
 #include "MobSkinMemTextureProcessor.h"
 #include "GameRenderer.h"
+#include "BarrierParticle.h"
 #include "BubbleParticle.h"
 #include "SmokeParticle.h"
 #include "NoteParticle.h"
@@ -27,6 +28,7 @@
 #include "BreakingItemParticle.h"
 #include "SnowShovelParticle.h"
 #include "BreakingItemParticle.h"
+#include "MobAppearanceParticle.h"
 #include "HeartParticle.h"
 #include "HugeExplosionParticle.h"
 #include "HugeExplosionSeedParticle.h"
@@ -42,6 +44,7 @@
 #include "Lighting.h"
 #include "Options.h"
 #include "MultiPlayerChunkCache.h"
+#include "../Minecraft.World/BlockPos.h"
 #include "../Minecraft.World/ParticleTypes.h"
 #include "../Minecraft.World/IntCache.h"
 #include "../Minecraft.World/IntBuffer.h"
@@ -63,6 +66,7 @@
 #include "FrustumCuller.h"
 #include "../Minecraft.World/BasicTypeContainers.h"
 #include "Common/UI/UIScene_SettingsGraphicsMenu.h"	
+#include <unordered_set>
 
 //#define DISABLE_SPU_CODE
 
@@ -137,8 +141,9 @@ LevelRenderer::LevelRenderer(Minecraft *mc, Textures *textures)
 	culledEntities = 0;
 	chunkFixOffs = 0;
 	frame = 0;
+#ifndef MINECRAFT_SERVER_BUILD
 	repeatList = MemoryTracker::genLists(1);
-
+#endif
 	destroyProgress = 0.0f;
 
 	totalChunks= offscreenChunks= occludedChunks= renderedChunks= emptyChunks = 0;
@@ -167,7 +172,7 @@ LevelRenderer::LevelRenderer(Minecraft *mc, Textures *textures)
 
 	this->mc = mc;
 	this->textures = textures;
-
+#ifndef MINECRAFT_SERVER_BUILD
 	chunkLists = MemoryTracker::genLists(getGlobalChunkCount() * CHUNK_RENDER_LAYERS);		// One render list per chunk render layer.
 	globalChunkFlags = new unsigned char[getGlobalChunkCount()];
 	memset(globalChunkFlags, 0, getGlobalChunkCount());
@@ -257,6 +262,7 @@ LevelRenderer::LevelRenderer(Minecraft *mc, Textures *textures)
 		t->end();
 		glEndList();
 	}
+#endif
 
 	Chunk::levelRenderer = this;
 
@@ -532,6 +538,7 @@ void LevelRenderer::allChanged(int playerIndex)
 
 void LevelRenderer::renderEntities(Vec3 *cam, Culler *culler, float a)
 {
+#ifndef MINECRAFT_SERVER_BUILD
 	if (mc == nullptr || mc->player == nullptr)
 	{
 		return;
@@ -658,6 +665,7 @@ void LevelRenderer::renderEntities(Vec3 *cam, Culler *culler, float a)
 	LeaveCriticalSection(&m_csRenderableTileEntities);
 
 	mc->gameRenderer->turnOffLightLayer(a);		// 4J - brought forward from 1.8.2
+#endif
 }
 
 wstring LevelRenderer::gatherStats1()
@@ -818,6 +826,7 @@ void LevelRenderer::renderChunksDirect(int layer, double alpha)
 
 #ifdef __PSVITA__
 #include <stdlib.h>
+
 
 // this is need to sort the chunks by depth
 typedef struct
@@ -1053,6 +1062,15 @@ void LevelRenderer::tick()
 				++it;
 			}
 		}
+	}
+
+	if (mc && mc->player)
+	{
+		doBarrierParticles(
+			mc->player->x,
+			mc->player->y,
+			mc->player->z
+		);
 	}
 }
 
@@ -2847,7 +2865,7 @@ shared_ptr<Particle> LevelRenderer::addParticleInternal(ePARTICLE_TYPE eParticle
 	// 4J - the java code doesn't distance cull these two particle types, we need to implement this behaviour differently as our distance check is
 	// mixed up with other things
 	bool distCull = true;
-	if ( (eParticleType == eParticleType_hugeexplosion) || (eParticleType == eParticleType_largeexplode) || (eParticleType == eParticleType_dragonbreath) || (eParticleType == eParticleType_wake))
+	if ( (eParticleType == eParticleType_hugeexplosion) || (eParticleType == eParticleType_largeexplode) || (eParticleType == eParticleType_dragonbreath) || (eParticleType == eParticleType_wake)||(eParticleType == eParticleType_mobAppearance))
 	{
 		distCull = false;
 	}
@@ -3060,6 +3078,13 @@ shared_ptr<Particle> LevelRenderer::addParticleInternal(ePARTICLE_TYPE eParticle
 	case eParticleType_dragonbreath:
 		particle = std::make_shared<DragonBreathParticle>(lev, x, y, z, xa, ya, za);
 		break;
+	case eParticleType_barrier:
+		particle = std::make_shared<BarrierParticle>(lev, x, y, z, xa, ya, za);
+		break;
+		case eParticleType_mobAppearance:
+        particle = std::make_shared<MobAppearanceParticle>(lev, x, y, z);
+        break;
+
 	default:
 		if( ( eParticleType >= eParticleType_iconcrack_base ) &&  ( eParticleType <= eParticleType_iconcrack_last )  )
 		{
@@ -3079,6 +3104,76 @@ shared_ptr<Particle> LevelRenderer::addParticleInternal(ePARTICLE_TYPE eParticle
 	}
 
 	return particle;
+}
+
+void LevelRenderer::doBarrierParticles(int posX, int posY, int posZ)
+{
+	// get currently selected item
+	shared_ptr<ItemInstance> held = mc->player->getSelectedItem();
+
+	bool isCreative = false;
+	if (mc->gameMode != nullptr) {
+		isCreative = (mc->gameMode->getLocalPlayerMode() == GameType::CREATIVE);
+	} else {
+		int lp = mc->getLocalPlayerIdx();
+		if (lp >= 0 && lp < XUSER_MAX_COUNT && mc->localgameModes[lp] != nullptr)
+			isCreative = (mc->localgameModes[lp]->getLocalPlayerMode() == GameType::CREATIVE);
+	}
+
+	bool holdingBarrier = isCreative && held != nullptr && held->id == Tile::barrier_Id;
+
+	if (!holdingBarrier)
+		return;
+
+	Random random;
+	BlockPos pos;
+
+	// track spawned particle position(s)
+	std::unordered_set<int> spawnedPositions;
+
+	for (int i = 0; i < 667; i++)
+	{
+		spawnBarrierParticles(posX, posY, posZ, 16, random, holdingBarrier, pos, spawnedPositions);
+		spawnBarrierParticles(posX, posY, posZ, 32, random, holdingBarrier, pos, spawnedPositions);
+	}
+}
+
+void LevelRenderer::spawnBarrierParticles(
+	int x, int y, int z,
+	int radius,
+	Random& random,
+	bool holdingBarrier,
+	BlockPos& pos,
+	std::unordered_set<int> &spawnedPositions)
+{
+    if (!holdingBarrier)
+        return;
+
+	int bx = x + random.nextInt(radius * 2) - radius;
+	int by = y + random.nextInt(radius * 2) - radius;
+	int bz = z + random.nextInt(radius * 2) - radius;
+
+	pos.set(bx, by, bz);
+
+	int tileId = mc->level->getTile(pos.getX(), pos.getY(), pos.getZ());
+
+	// spawn particles
+	if (tileId == Tile::barrier_Id)
+	{
+		int key = pos.hashCode();
+		if (spawnedPositions.find(key) == spawnedPositions.end()) {
+			spawnedPositions.insert(key);
+			mc->particleEngine->add(
+				std::make_shared<BarrierParticle>(
+					mc->level,
+					bx + 0.5,
+					by + 0.5,
+					bz + 0.5,
+					0, 0, 0
+				)
+			);
+		}
+	}
 }
 
 void LevelRenderer::entityAdded(shared_ptr<Entity> entity)
@@ -3869,7 +3964,9 @@ int LevelRenderer::rebuildChunkThreadProc(LPVOID lpParam)
 	AABB::CreateNewThreadStorage();
 	IntCache::CreateNewThreadStorage();
 	Tesselator::CreateNewThreadStorage(1024*1024);
+#ifndef MINECRAFT_SERVER_BUILD
 	RenderManager.InitialiseContext();
+#endif
 	Chunk::CreateNewThreadStorage();
 	Tile::CreateNewThreadStorage();
 

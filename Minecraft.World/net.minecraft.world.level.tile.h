@@ -3,6 +3,7 @@
 #include "Tile.h"
 #include "AirTile.h"
 #include "AnvilTile.h"
+#include "BarrierTile.h"
 #include "BaseEntityTile.h"
 #include "BasePressurePlateTile.h"
 #include "BaseRailTile.h"

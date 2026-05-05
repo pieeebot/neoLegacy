@@ -1250,4 +1250,38 @@ public static partial class FourKitHost
             return 0;
         }
     }
+
+    [UnmanagedCallersOnly]
+    public static void FireChunkLoad(int dimId, int chunkX, int chunkZ, int isNewChunk)
+    {
+        try
+        {
+            var world = FourKit.getWorld(dimId);
+            var chunk = new Chunk.Chunk(world, chunkX, chunkZ);
+            var evt = new Event.World.ChunkLoadEvent(chunk, isNewChunk != 0);
+            FourKit.FireEvent(evt);
+        }
+        catch (Exception ex)
+        {
+            ServerLog.Error("fourkit", $"FireChunkLoad error: {ex}");
+        }
+    }
+
+    [UnmanagedCallersOnly]
+    public static int FireChunkUnload(int dimId, int chunkX, int chunkZ)
+    {
+        try
+        {
+            var world = FourKit.getWorld(dimId);
+            var chunk = new Chunk.Chunk(world, chunkX, chunkZ);
+            var evt = new Event.World.ChunkUnloadEvent(chunk);
+            FourKit.FireEvent(evt);
+            return evt.isCancelled() ? 1 : 0;
+        }
+        catch (Exception ex)
+        {
+            ServerLog.Error("fourkit", $"FireChunkUnload error: {ex}");
+            return 0;
+        }
+    }
 }

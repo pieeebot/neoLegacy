@@ -251,7 +251,7 @@ void ItemInHandRenderer::renderItem(shared_ptr<LivingEntity> mob, shared_ptr<Ite
 	}*/
 
 	Tile *tile = Tile::tiles[item->id];
-    if (item->getIconType() == Icon::TYPE_TERRAIN && tile != nullptr && TileRenderer::canRender(tile->getRenderShape()))
+    if ((item->getIconType() == Icon::TYPE_TERRAIN && tile != nullptr && TileRenderer::canRender(tile->getRenderShape())) && item->id != AirTile::barrier_Id)
 	{
 		MemSect(31);
         minecraft->textures->bindTexture(minecraft->textures->getTextureLocation(Icon::TYPE_TERRAIN));
@@ -302,7 +302,6 @@ void ItemInHandRenderer::renderItem(shared_ptr<LivingEntity> mob, shared_ptr<Ite
 
         float xo = 0.0f;
         float yo = 0.3f;
-		
 
 		// Re position height of held item if skin is small
         if (mob->getAnimOverrideBitmask() & (1 << HumanoidModel::eAnim_SmallModel))

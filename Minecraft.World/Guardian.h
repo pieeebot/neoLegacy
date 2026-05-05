@@ -36,6 +36,9 @@ protected:
     virtual float getSoundVolume();
     virtual int   getDeathLoot();
     virtual bool  makeStepSound();
+    void playFlopSound();
+    void playAttackSound();
+    void playCurseSound();
     virtual void  dropDeathLoot(bool wasKilledByPlayer, int playerBonusLevel);
     virtual void  serverAiStep();
 
@@ -66,6 +69,7 @@ public:
     float getTailAnimation(float partialTicks);
     float getSpikesAnimation(float partialTicks);
     float getAttackAnimationScale(float partialTicks);
+    virtual void handleEntityEvent(byte eventId) override;
 
 protected:
     void lookAt(shared_ptr<Entity> e, float yMax, float xMax);
@@ -76,4 +80,5 @@ private:
     float tx, ty, tz;
     int   attackTimer;
     shared_ptr<LivingEntity> targetedEntity;
+
 };

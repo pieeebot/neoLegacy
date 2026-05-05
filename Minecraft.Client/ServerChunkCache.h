@@ -53,6 +53,9 @@ public:
 
 #endif
 	virtual LevelChunk **getCache() { return cache; }		// 4J added
+#ifdef MINECRAFT_SERVER_BUILD
+	void regenerateChunk(int x, int z);
+#endif
 
 	// 4J-JEV Added; Remove chunk from the toDrop queue.
 #ifdef _LARGE_WORLDS	

@@ -41,6 +41,7 @@
 #include "PlayerChunkMap.h"
 #if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
 #include "../Minecraft.Server/FourKitBridge.h"
+#include "../Minecraft.Server/ServerLogger.h"
 #endif
 
 WeighedTreasureArray ServerLevel::RANDOM_BONUS_ITEMS;
@@ -197,6 +198,14 @@ ServerLevel::~ServerLevel()
 
 void ServerLevel::tick()
 {
+#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
+	// ts[N] = wall-clock at substep N. Logged when level total exceeds
+	// LEVEL_SLOW_THRESHOLD_MS to pinpoint the dominant substep.
+	const int64_t LEVEL_SLOW_THRESHOLD_MS = 50;
+	int64_t ts[13];
+	ts[0] = System::currentTimeMillis();
+#endif
+
 	Level::tick();
 	if (getLevelData()->isHardcore() && difficulty < 3)
 	{
@@ -218,6 +227,9 @@ void ServerLevel::tick()
 		}
 		awakenAllPlayers();
 	}
+#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
+	ts[1] = System::currentTimeMillis();
+#endif
 
 	PIXBeginNamedEvent(0,"Mob spawner tick");
 	// for Minecraft 1.8, spawn friendlies really rarely	- 4J - altered from once every 400 ticks to 40 ticks as we depend on this a more than the original since we don't have chunk post-process spawning
@@ -233,6 +245,9 @@ void ServerLevel::tick()
 		mobSpawner->tick(this, finalSpawnEnemies, finalSpawnFriendlies, finalSpawnPersistent);
 	}
 	PIXEndNamedEvent();
+#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
+	ts[2] = System::currentTimeMillis();
+#endif
 	PIXBeginNamedEvent(0,"Chunk source tick");
 	chunkSource->tick();
 	PIXEndNamedEvent();
@@ -248,6 +263,9 @@ void ServerLevel::tick()
 			}
 		}
 	}
+#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
+	ts[3] = System::currentTimeMillis();
+#endif
 
 	//4J - temporarily disabling saves as they are causing gameplay to generally stutter quite a lot
 
@@ -263,6 +281,9 @@ void ServerLevel::tick()
 		save(false, nullptr);
 		PIXEndNamedEvent();
 	}
+#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
+	ts[4] = System::currentTimeMillis();
+#endif
 
 	// 4J : WESTY : Changed so that time update goes through stats tracking update code.
 	//levelData->setTime(time);
@@ -278,19 +299,31 @@ void ServerLevel::tick()
 			setDayTime(levelData->getDayTime() + 1);
 		}
 	}
+#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
+	ts[5] = System::currentTimeMillis();
+#endif
 
 	PIXBeginNamedEvent(0,"Tick pending ticks");
 	// if (tickCount % 5 == 0) {
 	tickPendingTicks(false);
 	PIXEndNamedEvent();
+#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
+	ts[6] = System::currentTimeMillis();
+#endif
 
 	PIXBeginNamedEvent(0,"Tick tiles");
 	MemSect(18);
 	tickTiles();
 	MemSect(0);
 	PIXEndNamedEvent();
+#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
+	ts[7] = System::currentTimeMillis();
+#endif
 
 	chunkMap->tick();
+#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
+	ts[8] = System::currentTimeMillis();
+#endif
 
 	PIXBeginNamedEvent(0,"Tick villages");
 	//MemSect(18);
@@ -298,18 +331,50 @@ void ServerLevel::tick()
 	villageSiege->tick();
 	//MemSect(0);
 	PIXEndNamedEvent();
+#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
+	ts[9] = System::currentTimeMillis();
+#endif
 
 	PIXBeginNamedEvent(0,"Tick portal forcer");
 	portalForcer->tick(getGameTime());
 	PIXEndNamedEvent();
+#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
+	ts[10] = System::currentTimeMillis();
+#endif
 
 	// repeat after tile ticks
 	PIXBeginNamedEvent(0,"runTileEvents");
 	runTileEvents();
 	PIXEndNamedEvent();
+#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
+	ts[11] = System::currentTimeMillis();
+#endif
 
 	// 4J Added
 	runQueuedSendTileUpdates();
+#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
+	ts[12] = System::currentTimeMillis();
+	int64_t levelTotal = ts[12] - ts[0];
+	if (levelTotal > LEVEL_SLOW_THRESHOLD_MS)
+	{
+		ServerRuntime::LogInfof("perf",
+			"L%d substep total=%lldms base=%lld spawn=%lld chunkSrc=%lld save=%lld time=%lld pending=%lld tiles=%lld chunkMap=%lld villages=%lld portal=%lld evt=%lld sendTU=%lld",
+			dimension->id,
+			(long long)levelTotal,
+			(long long)(ts[1]  - ts[0]),
+			(long long)(ts[2]  - ts[1]),
+			(long long)(ts[3]  - ts[2]),
+			(long long)(ts[4]  - ts[3]),
+			(long long)(ts[5]  - ts[4]),
+			(long long)(ts[6]  - ts[5]),
+			(long long)(ts[7]  - ts[6]),
+			(long long)(ts[8]  - ts[7]),
+			(long long)(ts[9]  - ts[8]),
+			(long long)(ts[10] - ts[9]),
+			(long long)(ts[11] - ts[10]),
+			(long long)(ts[12] - ts[11]));
+	}
+#endif
 }
 
 Biome::MobSpawnerData *ServerLevel::getRandomMobSpawnAt(MobCategory *mobCategory, int x, int y, int z)

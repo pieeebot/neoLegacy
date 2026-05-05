@@ -1,4 +1,5 @@
 #pragma once
+#include "Debug.h"
 using namespace std;
 class InputStream;
 
@@ -264,6 +265,7 @@ enum eINSTANCEOF
 	eType_NETHERPORTALPARTICLE,
 	eType_REDDUSTPARTICLE,
 	eType_SMOKEPARTICLE,
+	eType_BARRIERPARTICLE,
 	eType_SNOWSHOVELPARTICLE,
 	eType_SPLASHPARTICLE,
 	eType_TAKEANIMATIONPARTICLE,
@@ -611,7 +613,7 @@ public:
 
 		if ( (m_falsePositives.size() > 0) || (m_falseNegatives.size() > 0) )
 		{
-			__debugbreak();
+			DEBUG_BREAK();
 		}
 	}
 };

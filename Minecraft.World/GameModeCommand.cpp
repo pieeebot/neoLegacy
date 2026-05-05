@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include "net.minecraft.commands.h"
 #include "GameModeCommand.h"
+#include "../Minecraft.Client/MinecraftServer.h"
+#include "../Minecraft.Client/ServerPlayer.h"
+#include "../Minecraft.Client/PlayerList.h"
+#include "LevelSettings.h"
+#include "net.minecraft.network.packet.h"
 
 EGameCommand GameModeCommand::getId()
 {
@@ -14,37 +19,34 @@ int GameModeCommand::getPermissionLevel()
 
 void GameModeCommand::execute(shared_ptr<CommandSender> source, byteArray commandData)
 {
-	//if (args.length > 0) {
-	//	GameType newMode = getModeForString(source, args[0]);
-	//	Player player = args.length >= 2 ? convertToPlayer(source, args[1]) : convertSourceToPlayer(source);
+	ByteArrayInputStream bais(commandData);
+	DataInputStream dis(&bais);
+	PlayerUID uid = dis.readPlayerUID();
+	int modeId = dis.readInt();
+	shared_ptr<ServerPlayer> player = MinecraftServer::getInstance()->getPlayers()->getPlayer(uid);
+	if (player != nullptr)
+	{
+		GameType *newMode = GameType::byId(modeId);
+		if (newMode != nullptr)
+		{
+			player->setGameMode(newMode);
+			player->resetLastActionTime();
+			source->sendMessage(L"Set " + player->getName() + L"'s game mode to " + newMode->getName());
+		}
+	}
+}
 
-	//	player.setGameMode(newMode);
-	//	player.fallDistance = 0; // reset falldistance so flying people do not die :P
-
-	//	ChatMessageComponent mode = ChatMessageComponent.forTranslation("gameMode." + newMode.getName());
-
-	//	if (player != source) {
-	//		logAdminAction(source, AdminLogCommand.LOGTYPE_DONT_SHOW_TO_SELF, "commands.gamemode.success.other", player.getAName(), mode);
-	//	} else {
-	//		logAdminAction(source, AdminLogCommand.LOGTYPE_DONT_SHOW_TO_SELF, "commands.gamemode.success.self", mode);
-	//	}
-
-	//	return;
-	//}
-
-	//throw new UsageException("commands.gamemode.usage");
+shared_ptr<GameCommandPacket> GameModeCommand::preparePacket(shared_ptr<Player> player, int gameMode)
+{
+	if (player == nullptr) return nullptr;
+	ByteArrayOutputStream baos;
+	DataOutputStream dos(&baos);
+	dos.writePlayerUID(player->getXuid());
+	dos.writeInt(gameMode);
+	return std::make_shared<GameCommandPacket>(eGameCommand_GameMode, baos.toByteArray());
 }
 
 GameType *GameModeCommand::getModeForString(shared_ptr<CommandSender> source, const wstring &name)
 {
-	return nullptr;
-	//if (name.equalsIgnoreCase(GameType.SURVIVAL.getName()) || name.equalsIgnoreCase("s")) {
-	//	return GameType.SURVIVAL;
-	//} else if (name.equalsIgnoreCase(GameType.CREATIVE.getName()) || name.equalsIgnoreCase("c")) {
-	//	return GameType.CREATIVE;
-	//} else if (name.equalsIgnoreCase(GameType.ADVENTURE.getName()) || name.equalsIgnoreCase("a")) {
-	//	return GameType.ADVENTURE;
-	//} else {
-	//	return LevelSettings.validateGameType(convertArgToInt(source, name, 0, GameType.values().length - 2));
-	//}
+	return GameType::byName(name);
 }

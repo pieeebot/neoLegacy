@@ -1132,4 +1132,60 @@ public void onClick(InventoryClickEvent e)
 
 > **Cancellable:** Yes
 
+
+---
+
+@section chunk_events Chunk Events
+
+@subsection chunkloadevent ChunkLoadEvent
+
+\ref Minecraft.Server.FourKit.Event.World.ChunkLoadEvent "ChunkLoadEvent" is fired when a chunk is loaded. If the chunk is newly generated it will not yet be populated when this event fires.
+
+```csharp
+[EventHandler]
+public void onChunkLoad(ChunkLoadEvent e)
+{
+    if (e.isNewChunk())
+    {
+        Console.WriteLine($"New chunk generated at {e.getChunk().getX()}, {e.getChunk().getZ()}");
+    }
+}
+```
+
+| Method | Description |
+|--------|-------------|
+| `getChunk()` | The `Chunk` that was loaded. |
+| `isNewChunk()` | True if this chunk was newly generated. Note that new chunks will not yet be populated at this time. |
+
+> **Cancellable:** No
+
+---
+
+@subsection chunkunloadevent ChunkUnloadEvent
+
+\ref Minecraft.Server.FourKit.Event.World.ChunkUnloadEvent "ChunkUnloadEvent" is fired when a chunk is about to be unloaded. You can cancel it to prevent the chunk from being unloaded.
+
+```csharp
+[EventHandler]
+public void onChunkUnload(ChunkUnloadEvent e)
+{
+    // keep chunks near world origin loaded
+    Chunk chunk = e.getChunk();
+    if (Math.Abs(chunk.getX()) <= 2 && Math.Abs(chunk.getZ()) <= 2)
+    {
+        e.setCancelled(true);
+    }
+}
+```
+
+| Method | Description |
+|--------|-------------|
+| `getChunk()` | The `Chunk` that is about to be unloaded. |
+| `isCancelled()` | Whether the unload is cancelled. |
+| `setCancelled(bool)` | Cancel or allow the chunk unload. |
+
+> **Cancellable:** Yes
+
+---
+
 <h1>Page currently under construction</h1>

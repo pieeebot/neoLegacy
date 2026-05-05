@@ -141,8 +141,10 @@ Minecraft::Minecraft(Component *mouseComponent, Canvas *parent, MinecraftApplet 
 	user = nullptr;
 	parent = nullptr;
 	pause = false;
+#ifndef MINECRAFT_SERVER_BUILD
 	textures = nullptr;
 	font = nullptr;
+#endif
 	screen = nullptr;
 	localPlayerIdx = 0;
 	rightClickDelay = 0;
@@ -151,8 +153,9 @@ Minecraft::Minecraft(Component *mouseComponent, Canvas *parent, MinecraftApplet 
 	InitializeCriticalSection( &ProgressRenderer::s_progress );
 	InitializeCriticalSection(&m_setLevelCS);
 	//m_hPlayerRespawned = CreateEvent(nullptr, FALSE, FALSE, nullptr);
-
+#ifndef MINECRAFT_SERVER_BUILD
 	progressRenderer = nullptr;
+#endif
 	gameRenderer = nullptr;
 	bgLoader = nullptr;
 
@@ -166,8 +169,12 @@ Minecraft::Minecraft(Component *mouseComponent, Canvas *parent, MinecraftApplet 
 	orgWidth = orgHeight = 0;
 	achievementPopup = new AchievementPopup(this);
 	gui = nullptr;
+#ifndef MINECRAFT_SERVER_BUILD
 	noRender = false;
 	humanoidModel = new HumanoidModel(0);
+#else
+	noRender = true;
+#endif
 	hitResult = nullptr;
 	options = nullptr;
 	soundEngine = new SoundEngine();
@@ -338,12 +345,13 @@ void Minecraft::init()
 	options = new Options(this, workingDirectory);
 	skins = new TexturePackRepository(workingDirectory, this);
 	skins->addDebugPacks();
+#ifndef MINECRAFT_SERVER_BUILD
 	textures = new Textures(skins, options);
 	//renderLoadingScreen();
 
 	font = new Font(options, L"font/Default.png", textures, false, &DEFAULT_FONT_LOCATION, 23, 20, 8, 8, SFontData::Codepoints);
 	altFont = new Font(options, L"font/alternate.png", textures, false, &ALT_FONT_LOCATION, 16, 16, 8, 8);
-
+#endif
 	//if (options.languageCode != null) {
 	//	Language.getInstance().loadLanguage(options.languageCode);
 	//	//            font.setEnforceUnicodeSheet("true".equalsIgnoreCase(I18n.get("language.enforceUnicode")));
@@ -357,7 +365,9 @@ void Minecraft::init()
 	//FoliageColor::init(textures->loadTexturePixels(L"misc/foliagecolor.png"));
 
 	gameRenderer = new GameRenderer(this);
+#ifndef MINECRAFT_SERVER_BUILD
 	EntityRenderDispatcher::instance->itemInHandRenderer = new ItemInHandRenderer(this,false);
+#endif
 
 	for( int i=0 ; i<4 ; ++i )
 		stats[i] = new StatsCounter();
@@ -384,6 +394,7 @@ void Minecraft::init()
 		e.printStackTrace();
 	}
 #endif
+#ifndef MINECRAFT_SERVER_BUILD
 
 	MemSect(31);
 	checkGlError(L"Pre startup");
@@ -407,12 +418,17 @@ void Minecraft::init()
 	MemSect(31);
 	checkGlError(L"Startup");
 	MemSect(0);
-
+#endif
 	//    openGLCapabilities = new OpenGLCapabilities();	// 4J - removed
-
+#ifndef MINECRAFT_SERVER_BUILD
 	levelRenderer = new LevelRenderer(this, textures);
+#else
+	levelRenderer = new LevelRenderer(this, nullptr);
+#endif
 	//textures->register(&TextureAtlas::LOCATION_BLOCKS, new TextureAtlas(Icon::TYPE_TERRAIN, TN_TERRAIN));
 	//textures->register(&TextureAtlas::LOCATION_ITEMS, new TextureAtlas(Icon::TYPE_ITEM, TN_GUI_ITEMS));
+#ifndef MINECRAFT_SERVER_BUILD
+
 	textures->stitch();
 
 	glViewport(0, 0, width, height);
@@ -423,6 +439,7 @@ void Minecraft::init()
 	checkGlError(L"Post startup");
 	MemSect(0);
 	gui = new Gui(this);
+
 
 	if (connectToIp != L"")	// 4J - was nullptr comparison
 	{
@@ -435,6 +452,7 @@ void Minecraft::init()
 	progressRenderer = new ProgressRenderer(this);
 
 	RenderManager.CBuffLockStaticCreations();
+#endif
 }
 
 void Minecraft::renderLoadingScreen()
@@ -1262,11 +1280,14 @@ void Minecraft::run_middle()
 
 	if(running)
 	{
+#ifndef MINECRAFT_SERVER_BUILD
 		if (reloadTextures)
 		{
 			reloadTextures = false;
 			textures->reloadAll();
 		}
+#endif
+
 
 		//while (running)
 		{
@@ -2340,13 +2361,18 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 	// soundEngine.playMusicTick();
 
 	if (!pause && level != nullptr) gameMode->tick();
+#ifndef MINECRAFT_SERVER_BUILD
 	MemSect(31);
 	glBindTexture(GL_TEXTURE_2D, textures->loadTexture(TN_TERRAIN)); //L"/terrain.png"));
 	MemSect(0);
+#endif
+
 	if( bFirst )
 	{
 		PIXBeginNamedEvent(0,"Texture tick");
+#ifndef MINECRAFT_SERVER_BUILD
 		if (!pause) textures->tick(bUpdateTextures);
+#endif
 		PIXEndNamedEvent();
 	}
 
@@ -3845,78 +3871,6 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 			//options->thirdPersonView = !options->thirdPersonView;
 		}
 
-#ifdef _WINDOWS64
-		if(player->ullButtonsPressed&(1LL<<MINECRAFT_ACTION_SCREENSHOT))
-		{
-			extern ID3D11Device* g_pd3dDevice;
-			extern ID3D11DeviceContext* g_pImmediateContext;
-			extern IDXGISwapChain* g_pSwapChain;
-
-			ID3D11Texture2D* pBackBuffer = nullptr;
-			HRESULT hr = g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&pBackBuffer);
-			if (SUCCEEDED(hr))
-			{
-				D3D11_TEXTURE2D_DESC desc;
-				pBackBuffer->GetDesc(&desc);
-				desc.Usage = D3D11_USAGE_STAGING;
-				desc.BindFlags = 0;
-				desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
-				desc.MiscFlags = 0;
-
-				ID3D11Texture2D* pStaging = nullptr;
-				hr = g_pd3dDevice->CreateTexture2D(&desc, nullptr, &pStaging);
-				if (SUCCEEDED(hr))
-				{
-					g_pImmediateContext->CopyResource(pStaging, pBackBuffer);
-
-					// Build path next to the executable
-					wchar_t exePath[MAX_PATH];
-					GetModuleFileNameW(NULL, exePath, MAX_PATH);
-					wchar_t* lastSlash = wcsrchr(exePath, L'\\');
-					if (lastSlash) *(lastSlash + 1) = L'\0';
-					wstring screenshotDirPath = wstring(exePath) + L"screenshots";
-					CreateDirectoryW(screenshotDirPath.c_str(), NULL);
-
-					SYSTEMTIME st;
-					GetLocalTime(&st);
-					wchar_t filename[128];
-					swprintf_s(filename, L"%04d-%02d-%02d_%02d.%02d.%02d.png",
-						st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond);
-					wstring screenshotPath = screenshotDirPath + L"\\" + filename;
-
-					D3D11_MAPPED_SUBRESOURCE mapped;
-					hr = g_pImmediateContext->Map(pStaging, 0, D3D11_MAP_READ, 0, &mapped);
-					if (SUCCEEDED(hr))
-					{
-						// Copy RGBA rows (back buffer is R8G8B8A8_UNORM, already RGBA)
-						unsigned char* rgba = new unsigned char[desc.Width * desc.Height * 4];
-						for (UINT row = 0; row < desc.Height; row++)
-						{
-							unsigned char* src = (unsigned char*)mapped.pData + row * mapped.RowPitch;
-							unsigned char* dst = rgba + row * desc.Width * 4;
-							memcpy(dst, src, desc.Width * 4);
-						}
-						g_pImmediateContext->Unmap(pStaging, 0);
-
-						// Save PNG via stb_image_write
-						string narrowPath(screenshotPath.begin(), screenshotPath.end());
-						int writeResult = stbi_write_png(narrowPath.c_str(), desc.Width, desc.Height, 4, rgba, desc.Width * 4);
-						delete[] rgba;
-
-						// Local chat message — only on success
-						if (writeResult)
-						{
-							wstring msg = L"Saved screenshot to " + wstring(filename);
-							gui->addMessage(msg, iPad);
-						}
-					}
-					pStaging->Release();
-				}
-				pBackBuffer->Release();
-			}
-		}
-#endif
-
 		if((player->ullButtonsPressed&(1LL<<MINECRAFT_ACTION_GAME_INFO)) && gameMode->isInputAllowed(MINECRAFT_ACTION_GAME_INFO))
 		{
 			ui.NavigateToScene(iPad,eUIScene_InGameInfoMenu);
@@ -4432,12 +4386,13 @@ void Minecraft::setLevel(MultiPlayerLevel *level, int message /*=-1*/, shared_pt
 	EnterCriticalSection(&m_setLevelCS);
 	bool playerAdded = false;
 	this->cameraTargetPlayer = nullptr;
-
+#ifdef MINECRAFT_SERVER_BUILD
 	if(progressRenderer != nullptr)
 	{
 		this->progressRenderer->progressStart(message);
 		this->progressRenderer->progressStage(-1);
 	}
+#endif
 
 	// Stop menu music and transition to game music for the new level
 	soundEngine->playStreaming(L"", 0, 0, 0, 1, 1);
@@ -4660,11 +4615,14 @@ void Minecraft::setLevel(MultiPlayerLevel *level, int message /*=-1*/, shared_pt
 
 void Minecraft::prepareLevel(int title)
 {
+#ifndef MINECRAFT_SERVER_BUILD
 	if(progressRenderer != nullptr)
 	{
 		this->progressRenderer->progressStart(title);
 		this->progressRenderer->progressStage(IDS_PROGRESS_BUILDING_TERRAIN);
 	}
+#endif
+
 	int r = 128;
 	if (gameMode->isCutScene()) r = 64;
 	int pp = 0;
@@ -4688,7 +4646,7 @@ void Minecraft::prepareLevel(int title)
 		spcc->centerOn(spawnPos->x >> 4, spawnPos->z >> 4);
 	}
 #endif
-
+#ifndef MINECRAFT_SERVER_BUILD
 	for (int x = -r; x <= r; x += 16)
 	{
 		for (int z = -r; z <= r; z += 16)
@@ -4704,7 +4662,8 @@ void Minecraft::prepareLevel(int title)
 	{
 		if(progressRenderer != nullptr) this->progressRenderer->progressStage(IDS_PROGRESS_SIMULATING_WORLD);
 		max = 2000;
-}
+	}
+#endif
 }
 
 wstring Minecraft::gatherStats1()
@@ -4964,8 +4923,10 @@ void Minecraft::main()
 	useLomp = true;
 
 	MinecraftWorld_RunStaticCtors();
+#ifndef MINECRAFT_SERVER_BUILD
 	EntityRenderDispatcher::staticCtor();
 	TileEntityRenderDispatcher::staticCtor();
+#endif
 	User::staticCtor();
 	Tutorial::staticCtor();
 	ColourTable::staticCtor();
@@ -4994,7 +4955,7 @@ void Minecraft::main()
 			app.DebugPrintf("<xs:enumeration value=\"%d\"><xs:annotation><xs:documentation>%ls</xs:documentation></xs:annotation></xs:enumeration>\n", i, app.GetString( Tile::tiles[i]->getDescriptionId() ));
 		}
 	}
-	__debugbreak();
+	DEBUG_BREAK();
 #endif
 
 	// 4J-PB - Can't call this for the first 5 seconds of a game - MS rule

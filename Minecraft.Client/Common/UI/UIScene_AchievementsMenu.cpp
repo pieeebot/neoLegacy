@@ -15,20 +15,11 @@ UIScene_AchievementsMenu::UIScene_AchievementsMenu(int iPad, void* _initData, UI
 {
 	// Setup all the Iggy references we need for this scene
 	initialiseMovie();
-	
-	/*RECT rc;
-	GetClientRect(g_hWnd, &rc);
-	POINT center;
-	center.x = rc.left;
-	center.y = rc.top;
-	ClientToScreen(g_hWnd, &center);
-	SetCursorPos(center.x, center.y);*/
 
 	m_labelAchievements.init(L"Achievements");
-	//m_labelDesc.init(L"");
 	m_labelName.init(L"");
 	m_achievementsList.init(0);
-	for (int i = 0; i < Achievements::achievements->size(); i++) { //Achievements::achievements->size()
+	for (int i = 0; i < Achievements::achievements->size(); i++) {
 		std::wstring path;
 		if (app.hasArchiveFile(L"Graphics\\TexturePackIcon.png"))
 		{
@@ -43,7 +34,7 @@ UIScene_AchievementsMenu::UIScene_AchievementsMenu(int iPad, void* _initData, UI
 		}
 
 
-		std::string result = "Graphics\\Achievements\\" "TROP" + Achievements::achievements->at(i)->iconInt + ".png"; //media\\
+		std::string result = "Graphics\\Achievements\\" "TROP" + Achievements::achievements->at(i)->iconInt + ".png";
 		
 		m_achievementsList.addnewItem(i+1, path);
 
@@ -125,17 +116,35 @@ void UIScene_AchievementsMenu::handleInput(int iPad, int key, bool repeat, bool 
 		break;
 	case ACTION_MENU_Y:
 		if (pressed) {
-			showDescription = !showDescription;
+			if (!g_KBMInput.IsKBMActive()) {
+				showDescription = !showDescription;
 
-			if (showDescription) {
-				SetAchievementDescription(app.GetString(Achievements::achievements->at(m_achievementsList.m_iCurrentSelection - 1)->descID));
+				if (showDescription) {
+					SetAchievementDescription(app.GetString(Achievements::achievements->at(m_achievementsList.m_iCurrentSelection - 1)->descID));
+				}
+				else {
+					SetAchievementDescription(L"");
+				}
 			}
-			else {
-				SetAchievementDescription(L"");
-			}
+			sendInputToMovie(key, repeat, pressed, released);
+			handled = true;
 		}
-		sendInputToMovie(key, repeat, pressed, released);
-		handled = true;
+		break;
+	case ACTION_MENU_X:
+		if (pressed) {
+			if (g_KBMInput.IsKBMActive()) {
+				showDescription = !showDescription;
+
+				if (showDescription) {
+					SetAchievementDescription(app.GetString(Achievements::achievements->at(m_achievementsList.m_iCurrentSelection - 1)->descID));
+				}
+				else {
+					SetAchievementDescription(L"");
+				}
+			}
+			sendInputToMovie(key, repeat, pressed, released);
+			handled = true;
+		}
 		break;
 	case ACTION_MENU_UP:
 		if (pressed) {
@@ -174,8 +183,6 @@ void UIScene_AchievementsMenu::handleInput(int iPad, int key, bool repeat, bool 
 		handled = true;
 		break;
 	}
-
-	//m_achievementsList.updateChildFocus(static_cast<int>(childId));
 };
 
 void UIScene_AchievementsMenu::getMouseToSWFScale(float& scaleX, float& scaleY)
@@ -202,9 +209,6 @@ void UIScene_AchievementsMenu::getMouseToSWFScale(float& scaleX, float& scaleY)
 void UIScene_AchievementsMenu::tick()
 {
 	UIScene::tick();
-	//ShowCursor(FALSE);
-	//m_cursorPath1.setVisible(g_KBMInput.IsKBMActive());
-	//g_KBMInput.SetMouseGrabbed(false);
 	
 
 	if (m_achievementsList.m_iCurrentSelection != selection && m_achievementsList.m_iCurrentSelection != 0) {
@@ -217,35 +221,6 @@ void UIScene_AchievementsMenu::tick()
 			SetAchievementDescription(L"");
 		}
 	}
-
-	// Apply mouse delta
-	/*int deltaX = g_KBMInput.GetMouseDeltaX();
-	int deltaY = g_KBMInput.GetMouseDeltaY();
-
-	if (deltaX != 0 || deltaY != 0)
-	{
-		float scaleX, scaleY;
-		getMouseToSWFScale(scaleX, scaleY);
-		m_pointerPos.x += static_cast<float>(deltaX) * scaleX / 2;
-		m_pointerPos.y += static_cast<float>(deltaY) * scaleY / 2;
-
-		if (m_pointerPos.x < 0.0f) m_pointerPos.x = 0.0f;
-		if (m_pointerPos.x > static_cast<float>(m_movieWidth))  m_pointerPos.x = static_cast<float>(m_movieWidth);
-		if (m_pointerPos.y < 0.0f) m_pointerPos.y = 0.0f;
-		if (m_pointerPos.y > static_cast<float>(m_movieHeight)) m_pointerPos.y = static_cast<float>(m_movieHeight);
-	}
-
-	IggyEvent mouseEvent;
-	S32 width, height;
-	m_parentLayer->getRenderDimensions(width, height);
-	S32 x = static_cast<S32>(m_pointerPos.x * (static_cast<F32>(width) / static_cast<F32>(m_movieWidth)));
-	aX = x;
-	S32 y = static_cast<S32>(m_pointerPos.y * (static_cast<F32>(height) / static_cast<F32>(m_movieHeight)));
-	aY = y;
-	IggyMakeEventMouseMove(&mouseEvent, x, y);
-	IggyEventResult result;
-	IggyPlayerDispatchEventRS(getMovie(), &mouseEvent, &result);*/
-
 	selection = m_achievementsList.m_iCurrentSelection;
 }
 
@@ -260,11 +235,6 @@ void UIScene_AchievementsMenu::handleFocusChange(F64 controlId, F64 childId)
 	{
 	case 0:
 		m_achievementsList.updateChildFocus(static_cast<int>(childId));
-		//m_achievementsList.setCurrentSelection(static_cast<int>(childId));
-		//m_labelName.setLabel(app.GetString(Achievements::achievements->at(static_cast<int>(childId) - 1)->nameID));
-		//SetAchievementDescription(app.GetString(Achievements::achievements->at(static_cast<int>(childId) - 1)->descID));
-		
-		//m_labelName.setLabel(app.GetString(IDS_ACHIEVEMENTS);
 		break;
 	};
 	updateTooltips();

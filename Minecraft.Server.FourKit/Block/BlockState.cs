@@ -93,6 +93,15 @@ public class BlockState
     public int getZ() => _z;
 
     /// <summary>
+    /// Gets the chunk which contains this block.
+    /// </summary>
+    /// <returns>Containing Chunk.</returns>
+    public Chunk.Chunk getChunk()
+    {
+        return _world.getChunkAt(_x >> 4, _z >> 4);
+    }
+
+    /// <summary>
     /// Gets the location of this block.
     /// </summary>
     /// <returns>Location.</returns>
@@ -191,7 +200,16 @@ public class BlockState
         if (!force && currentType != _typeId)
             return false;
 
-        NativeBridge.SetTile(_world.getDimensionId(), _x, _y, _z, _typeId, _data);
+        NativeBridge.SetTile(_world.getDimensionId(), _x, _y, _z, _typeId, _data, applyPhysics ? 3 : 2);
         return true;
+    }
+
+    /// <summary>
+    /// Gets the light level between 0-15.
+    /// </summary>
+    /// <returns>Light level.</returns>
+    public byte getLightLevel()
+    {
+        return getBlock().getLightLevel();
     }
 }

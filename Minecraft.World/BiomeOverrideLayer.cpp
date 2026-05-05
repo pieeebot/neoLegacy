@@ -32,7 +32,7 @@ BiomeOverrideLayer::BiomeOverrideLayer(int seedMixup) : Layer(seedMixup)
 	{
 
 #ifdef _DURANGO
-		__debugbreak();	// TODO
+		DEBUG_BREAK();	// TODO
 		DWORD bytesRead,dwFileSize = 0;
 #else
 		DWORD bytesRead,dwFileSize = GetFileSize(file,nullptr);
@@ -40,7 +40,7 @@ BiomeOverrideLayer::BiomeOverrideLayer(int seedMixup) : Layer(seedMixup)
 		if(dwFileSize > m_biomeOverride.length)
 		{
 			app.DebugPrintf("Biomemap binary is too large!!\n");
-			__debugbreak();
+			DEBUG_BREAK();
 		}
 		BOOL bSuccess = ReadFile(file,m_biomeOverride.data,dwFileSize,&bytesRead,nullptr);
 

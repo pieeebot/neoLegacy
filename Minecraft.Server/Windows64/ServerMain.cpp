@@ -37,6 +37,7 @@
 #include "../../Minecraft.World/ConsoleSaveFileOriginal.h"
 #include "../../Minecraft.World/net.minecraft.world.level.tile.h"
 #include "../../Minecraft.World/Random.h"
+#include "../../Minecraft.World/MobCategory.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -165,6 +166,7 @@ static void PrintUsage()
 	ServerRuntime::LogInfo("usage", "  -maxplayers <1-8>     Public slots (default: server.properties:max-players)");
 	ServerRuntime::LogInfo("usage", "  -seed <int64>         World seed (overrides server.properties:level-seed)");
 	ServerRuntime::LogInfo("usage", "  -loglevel <level>     debug|info|warn|error (default: server.properties:log-level)");
+	ServerRuntime::LogInfo("usage", "  -perftrace            Enable noisy [perf] sampling output (histograms, per-iter samples)");
 	ServerRuntime::LogInfo("usage", "  -help                 Show this help");
 }
 
@@ -270,6 +272,10 @@ static bool ParseCommandLine(int argc, char **argv, DedicatedServerConfig *confi
 				LogError("startup", "Invalid -loglevel value. Use debug/info/warn/error.");
 				return false;
 			}
+		}
+		else if (_stricmp(arg, "-perftrace") == 0)
+		{
+			ServerRuntime::g_serverPerfTrace = true;
 		}
 		else
 		{
@@ -482,39 +488,11 @@ int main(int argc, char **argv)
 		config.worldHellScale);
 #endif
 
-	LogStartupStep("registering hidden window class");
-	HINSTANCE hInstance = GetModuleHandle(NULL);
-	MyRegisterClass(hInstance);
-
-	LogStartupStep("creating hidden window");
-	if (!InitInstance(hInstance, SW_HIDE))
-	{
-		LogError("startup", "Failed to create window instance.");
-		
-		return 2;
-	}
-	ShowWindow(g_hWnd, SW_HIDE);
-
-	LogStartupStep("initializing graphics device wrappers");
-	if (FAILED(InitDevice()))
-	{
-		LogError("startup", "Failed to initialize D3D device.");
-		CleanupDevice();
-		
-		return 2;
-	}
-
 	LogStartupStep("loading media/string tables");
 	app.loadMediaArchive();
-	RenderManager.Initialise(g_pd3dDevice, g_pSwapChain);
 	app.loadStringTable();
-	ui.init(g_pd3dDevice, g_pImmediateContext, g_pRenderTargetView, g_pDepthStencilView, g_iScreenWidth, g_iScreenHeight);
 
 	InputManager.Initialise(1, 3, MINECRAFT_ACTION_MAX, ACTION_MAX_MENU);
-	g_KBMInput.Init();
-	DefineActions();
-	InputManager.SetJoypadMapVal(0, 0);
-	InputManager.SetKeyRepeatRate(0.3f, 0.2f);
 
 	ProfileManager.Initialise(
 		TITLEID_MINECRAFT,
@@ -557,9 +535,17 @@ int main(int argc, char **argv)
 	{
 		LogError("startup", "Minecraft initialization failed.");
 		CleanupDevice();
-		
+
 		return 3;
 	}
+
+	MobCategory::monster->setMaxInstancesPerLevel(serverProperties.maxMonsters);
+	MobCategory::creature->setMaxInstancesPerLevel(serverProperties.maxAnimals);
+	MobCategory::ambient->setMaxInstancesPerLevel(serverProperties.maxAmbient);
+	MobCategory::waterCreature->setMaxInstancesPerLevel(serverProperties.maxWaterAnimals);
+	MobCategory::creature_wolf->setMaxInstancesPerLevel(serverProperties.maxWolves);
+	MobCategory::creature_chicken->setMaxInstancesPerLevel(serverProperties.maxChickens);
+	MobCategory::creature_mushroomcow->setMaxInstancesPerLevel(serverProperties.maxMushroomCows);
 
 	app.InitGameSettings();
 
@@ -737,7 +723,7 @@ int main(int argc, char **argv)
 			break;
 		}
 
-		if (autosaveRequested && app.GetXuiServerAction(kServerActionPad) == eXuiServerAction_Idle)
+		if (autosaveRequested && app.GetXuiServerAction(kServerActionPad) == eXuiServerAction_Idle && !ConsoleSaveFileOriginal::hasPendingBackgroundSave())
 		{
 			LogWorldIO("autosave completed");
 			autosaveRequested = false;
@@ -749,7 +735,7 @@ int main(int argc, char **argv)
 		}
 
 		DWORD now = GetTickCount();
-		if ((LONG)(now - nextAutosaveTick) >= 0)
+		if ((LONG)(now - nextAutosaveTick) >= 0 && !IsShutdownRequested() && !app.m_bShutdown)
 		{
 			if (app.GetXuiServerAction(kServerActionPad) == eXuiServerAction_Idle)
 			{
@@ -772,12 +758,28 @@ int main(int argc, char **argv)
 	MinecraftServer *server = MinecraftServer::getInstance();
 	if (server != NULL)
 	{
+		// Drain any in-flight autosave before requesting the exit save so the
+		// async autosave can't overwrite the exit save with an older snapshot,
+		// and so m_saveOnExit gets set (prior logic skipped it when a save was
+		// pending, causing silent data loss on restart).
+		if (ConsoleSaveFileOriginal::hasPendingBackgroundSave())
+		{
+			LogWorldIO("Draining pending autosave before exit save...");
+			const DWORD kDrainTimeoutMs = 30000;
+			DWORD drainStart = GetTickCount();
+			while (ConsoleSaveFileOriginal::hasPendingBackgroundSave())
+			{
+				if ((LONG)(GetTickCount() - drainStart) > (LONG)kDrainTimeoutMs)
+				{
+					LogWorldIO("Autosave drain timed out; continuing with exit save");
+					break;
+				}
+				TickCoreSystems();
+				Sleep(10);
+			}
+		}
 		server->setSaveOnExit(true);
-	}
-	if (server != NULL)
-	{
-		LogWorldIO("requesting save before shutdown");
-		LogWorldIO("using saveOnExit for shutdown");
+		LogWorldIO("requesting exit save");
 	}
 
 	MinecraftServer::HaltServer();

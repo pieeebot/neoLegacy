@@ -58,11 +58,11 @@ public static partial class FourKitHost
     }
 
     [UnmanagedCallersOnly]
-    public static void SetInventoryCallbacks(IntPtr getPlayerInventory, IntPtr setPlayerInventorySlot, IntPtr getContainerContents, IntPtr setContainerSlot, IntPtr getContainerViewerEntityIds, IntPtr closeContainer, IntPtr openVirtualContainer, IntPtr getItemMeta, IntPtr setItemMeta, IntPtr setHeldItemSlot)
+    public static void SetInventoryCallbacks(IntPtr getPlayerInventory, IntPtr setPlayerInventorySlot, IntPtr getContainerContents, IntPtr setContainerSlot, IntPtr getContainerViewerEntityIds, IntPtr closeContainer, IntPtr openVirtualContainer, IntPtr getItemMeta, IntPtr setItemMeta, IntPtr setHeldItemSlot, IntPtr getCarriedItem, IntPtr setCarriedItem, IntPtr getEnderChestContents, IntPtr setEnderChestSlot)
     {
         try
         {
-            NativeBridge.SetInventoryCallbacks(getPlayerInventory, setPlayerInventorySlot, getContainerContents, setContainerSlot, getContainerViewerEntityIds, closeContainer, openVirtualContainer, getItemMeta, setItemMeta, setHeldItemSlot);
+            NativeBridge.SetInventoryCallbacks(getPlayerInventory, setPlayerInventorySlot, getContainerContents, setContainerSlot, getContainerViewerEntityIds, closeContainer, openVirtualContainer, getItemMeta, setItemMeta, setHeldItemSlot, getCarriedItem, setCarriedItem, getEnderChestContents, setEnderChestSlot);
         }
         catch (Exception ex)
         {
@@ -119,6 +119,73 @@ public static partial class FourKitHost
         catch (Exception ex)
         {
             ServerLog.Error("fourkit", $"SetVehicleCallbacks error: {ex}");
+        }
+    }
+
+    [UnmanagedCallersOnly]
+    public static void SetChunkCallbacks(IntPtr isChunkLoaded, IntPtr loadChunk, IntPtr unloadChunk, IntPtr getLoadedChunks, IntPtr isChunkInUse, IntPtr getChunkSnapshot, IntPtr unloadChunkRequest, IntPtr regenerateChunk, IntPtr refreshChunk)
+    {
+        try
+        {
+            NativeBridge.SetChunkCallbacks(isChunkLoaded, loadChunk, unloadChunk, getLoadedChunks, isChunkInUse, getChunkSnapshot, unloadChunkRequest, regenerateChunk, refreshChunk);
+        }
+        catch (Exception ex)
+        {
+            ServerLog.Error("fourkit", $"SetChunkCallbacks error: {ex}");
+        }
+    }
+
+    [UnmanagedCallersOnly]
+    public static void SetBlockInfoCallbacks(IntPtr getSkyLight, IntPtr getBlockLight, IntPtr getBiomeId, IntPtr setBiomeId)
+    {
+        try
+        {
+            NativeBridge.SetBlockInfoCallbacks(getSkyLight, getBlockLight, getBiomeId, setBiomeId);
+        }
+        catch (Exception ex)
+        {
+            ServerLog.Error("fourkit", $"SetBlockInfoCallbacks error: {ex}");
+        }
+    }
+
+    [UnmanagedCallersOnly]
+    public static void SetWorldEntityCallbacks(IntPtr getWorldEntities, IntPtr getChunkEntities)
+    {
+        try
+        {
+            NativeBridge.SetWorldEntityCallbacks(getWorldEntities, getChunkEntities);
+        }
+        catch (Exception ex)
+        {
+            ServerLog.Error("fourkit", $"SetWorldEntityCallbacks error: {ex}");
+        }
+    }
+
+    [UnmanagedCallersOnly]
+    public static void SetSubscriptionCallbacks(IntPtr setHandlerMask)
+    {
+        try
+        {
+            NativeBridge.SetSubscriptionCallbacks(setHandlerMask);
+            // Flush the mask accumulated during plugin onEnable.
+            FourKit.ResyncHandlerMask();
+        }
+        catch (Exception ex)
+        {
+            ServerLog.Error("fourkit", $"SetSubscriptionCallbacks error: {ex}");
+        }
+    }
+
+    [UnmanagedCallersOnly]
+    public static void SetServerCallbacks(IntPtr getServerTickCount)
+    {
+        try
+        {
+            NativeBridge.SetServerCallbacks(getServerTickCount);
+        }
+        catch (Exception ex)
+        {
+            ServerLog.Error("fourkit", $"SetServerCallbacks error: {ex}");
         }
     }
 }

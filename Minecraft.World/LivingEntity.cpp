@@ -1504,13 +1504,34 @@ void LivingEntity::travel(float xa, float ya)
 	if (isInWater() && !(thisPlayer && thisPlayer->abilities.flying) )
 	{
 		double yo = y;
-		moveRelative(xa, ya, useNewAi() ? 0.04f : 0.02f);
-		move(xd, yd, zd);
+			
+	    int waterWalkerLever = EnchantmentHelper::getWaterWalker(dynamic_pointer_cast<LivingEntity>(shared_from_this()));
+	    if (waterWalkerLever > 3)
+	    {
+	        waterWalkerLever = 3;
+	    }
+		
+	    float waterFriction = 0.8f;
+	    float waterSpeed = useNewAi() ? 0.04f : 0.02f;
+		
+	    if (!onGround)
+	    {
+	        waterWalkerLever *= 0.5f;
+	    }
+		
+	    if (waterWalkerLever > 0)
+	    {
+	        waterFriction += (0.5f - waterFriction) * waterWalkerLever / 3.0f;
+	        waterSpeed += (getSpeed() * 1.0f - waterSpeed) * waterWalkerLever / 3.0f;
+	    }
+		
+	    moveRelative(xa, ya, waterSpeed);
+	    move(xd, yd, zd);
 
-		xd *= 0.80f;
-		yd *= 0.80f;
-		zd *= 0.80f;
-		yd -= 0.02;
+	    xd *= waterFriction;
+	    yd *= 0.8;
+	    zd *= waterFriction;
+	    yd -= 0.02;
 
 		if (horizontalCollision && isFree(xd, yd + 0.6f - y + yo, zd))
 		{

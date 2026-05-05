@@ -12,6 +12,9 @@
 #include "../Minecraft.World/compression.h"
 #include "../Minecraft.World/OldChunkStorage.h"
 #include "../Minecraft.World/Tile.h"
+#ifdef MINECRAFT_SERVER_BUILD
+#include "../Minecraft.Server/FourKitBridge.h"
+#endif
 
 ServerChunkCache::ServerChunkCache(ServerLevel *level, ChunkStorage *storage, ChunkSource *source)
 {
@@ -125,7 +128,10 @@ LevelChunk *ServerChunkCache::create(int x, int z, bool asyncPostProcess)	// 4J 
 	{
 		EnterCriticalSection(&m_csLoadCreate);
         chunk = load(x, z);
-        if (chunk == nullptr)
+#ifdef MINECRAFT_SERVER_BUILD
+		bool isNewChunk = (chunk == nullptr);
+#endif
+		if (chunk == nullptr)
 		{
             if (source == nullptr)
 			{
@@ -204,6 +210,10 @@ LevelChunk *ServerChunkCache::create(int x, int z, bool asyncPostProcess)	// 4J 
 			if( hasChunk( x - 1, z ) && hasChunk( x + 1, z ) && hasChunk ( x, z - 1 ) && hasChunk( x, z + 1 ) ) chunk->checkChests( this, x, z );
 
 			LeaveCriticalSection(&m_csLoadCreate);
+
+#ifdef MINECRAFT_SERVER_BUILD
+			FourKitBridge::FireChunkLoad(level->dimension->id, x, z, isNewChunk);
+#endif
 		}
 		else
 		{
@@ -349,6 +359,38 @@ void ServerChunkCache::overwriteHellLevelChunkFromSource(int x, int z, int minVa
 	save(playerChunk);
 }
 
+#endif
+
+#ifdef MINECRAFT_SERVER_BUILD
+void ServerChunkCache::regenerateChunk(int x, int z)
+{
+	if (!source)
+		return;
+
+	LevelChunk *freshChunk = source->getChunk(x, z);
+	if (!freshChunk)
+		return;
+
+	LevelChunk *cachedChunk = nullptr;
+	if (hasChunk(x, z))
+		cachedChunk = getChunk(x, z);
+
+	if (cachedChunk && cachedChunk != emptyChunk)
+	{
+		for (int lx = 0; lx < 16; lx++)
+			for (int ly = 0; ly < 128; ly++)
+				for (int lz = 0; lz < 16; lz++)
+					cachedChunk->setTileAndData(lx, ly, lz, freshChunk->getTile(lx, ly, lz), freshChunk->getData(lx, ly, lz));
+		save(cachedChunk);
+	}
+	else
+	{
+		save(freshChunk);
+	}
+
+	freshChunk->unload(false);
+	delete freshChunk;
+}
 #endif
 
 // 4J Added //
@@ -914,15 +956,19 @@ bool ServerChunkCache::tick()
 					// player's tick is called to remove them from the chunk they used to be in, and add them to their current chunk. This will only be a temporary state and
 					// we should be able to unload the chunk on the next call to this tick.
 					if( !chunk->containsPlayer() )
-					{
+                    {
+#ifdef MINECRAFT_SERVER_BUILD
+						if (!FourKitBridge::FireChunkUnload(level->dimension->id, chunk->x, chunk->z))
+						{
+#endif
 						save(chunk);
 						saveEntities(chunk);
 						chunk->unload(true);
 
 						//loadedChunks.remove(cp);
 						//loadedChunkList.remove(chunk);
-                        auto it = std::find(m_loadedChunkList.begin(), m_loadedChunkList.end(), chunk);
-                        if(it != m_loadedChunkList.end()) m_loadedChunkList.erase(it);
+						auto it = std::find(m_loadedChunkList.begin(), m_loadedChunkList.end(), chunk);
+						if(it != m_loadedChunkList.end()) m_loadedChunkList.erase(it);
 
 						int ix = chunk->x + XZOFFSET;
 						int iz = chunk->z + XZOFFSET;
@@ -930,6 +976,9 @@ bool ServerChunkCache::tick()
 						delete m_unloadedCache[idx];
 						m_unloadedCache[idx] = chunk;
 						cache[idx] = nullptr;
+#ifdef MINECRAFT_SERVER_BUILD
+						}
+#endif
 					}
 					else
 					{

@@ -35,6 +35,8 @@ public:
 	static const wstring MOD_NETHERWART;
 	static const wstring MOD_GUNPOWDER;
 	static const wstring MOD_GOLDENCARROT;
+	static const wstring MOD_RABBITS_FOOT;
+	static const wstring MOD_PUFFERFISH;
 
 	static const int BITS_FOR_MAX_NORMAL_EFFECT = 0xF;
 	static const int BITS_FOR_DURATION = (1 << 5);

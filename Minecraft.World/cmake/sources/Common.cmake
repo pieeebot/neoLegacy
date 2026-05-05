@@ -106,6 +106,7 @@ set(_MINECRAFT_WORLD_COMMON_CONSOLEJAVALIBS_INPUTOUTPUTSTREAM
 source_group("ConsoleJavaLibs/InputOutputStream" FILES ${_MINECRAFT_WORLD_COMMON_CONSOLEJAVALIBS_INPUTOUTPUTSTREAM})
 
 set(_MINECRAFT_WORLD_COMMON_HEADER_FILES
+  "${CMAKE_CURRENT_SOURCE_DIR}/Debug.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/LevelObjectInputStream.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/Minecraft.World.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/ParticleTypes.h"
@@ -432,8 +433,8 @@ set(_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_NETWORK_PACKET
   "${CMAKE_CURRENT_SOURCE_DIR}/UseItemPacket.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/XZPacket.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/XZPacket.h"
-  "${CMAKE_CURRENT_SOURCE_DIR}/net.minecraft.network.packet.h"
-   "${CMAKE_CURRENT_SOURCE_DIR}/../Minecraft.Client/ParticleType.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/net.minecraft.network.packet.h" 
+  "${CMAKE_CURRENT_SOURCE_DIR}/../Minecraft.Client/ParticleType.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/../Minecraft.Client/ParticleType.cpp"
 )
 source_group("net/minecraft/network/packet" FILES ${_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_NETWORK_PACKET})
@@ -852,9 +853,8 @@ set(_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_WORLD_ENTITY_ITEM
   "${CMAKE_CURRENT_SOURCE_DIR}/MinecartTNT.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/MinecartTNT.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/PrimedTnt.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/PrimedTnt.h"
-
-   "${CMAKE_CURRENT_SOURCE_DIR}/ArmorStand.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/PrimedTnt.h" 
+  "${CMAKE_CURRENT_SOURCE_DIR}/ArmorStand.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/ArmorStand.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/net.minecraft.world.entity.item.h"
 )
@@ -1267,6 +1267,8 @@ set(_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_WORLD_ITEM_ENCHANTMENT
   "${CMAKE_CURRENT_SOURCE_DIR}/UntouchingEnchantment.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/WaterWorkerEnchantment.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/WaterWorkerEnchantment.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/WaterWalkerEnchantment.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/WaterWalkerEnchantment.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/net.minecraft.world.item.enchantment.h"
 )
 source_group("net/minecraft/world/item/enchantment" FILES ${_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_WORLD_ITEM_ENCHANTMENT})
@@ -1771,6 +1773,10 @@ set(_MINECRAFT_WORLD_COMMON_NET_MINECRAFT_WORLD_LEVEL_TILE
   "${CMAKE_CURRENT_SOURCE_DIR}/AirTile.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/AnvilTile.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/AnvilTile.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/../Minecraft.Client/BarrierParticle.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/../Minecraft.Client/BarrierParticle.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/BarrierTile.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/BarrierTile.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/BaseEntityTile.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/BaseEntityTile.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/BasePressurePlateTile.cpp"

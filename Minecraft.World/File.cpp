@@ -239,7 +239,7 @@ bool File::renameTo(File dest)
 	std::string sourcePath = wstringtofilename(getPath());
 	const char *destPath = wstringtofilename(dest.getPath());
 #ifdef _DURANGO
-	__debugbreak();	// TODO
+	DEBUG_BREAK();	// TODO
 	BOOL result = false;
 #else
 	BOOL result = MoveFile(sourcePath.c_str(), destPath);

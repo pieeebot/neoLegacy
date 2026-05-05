@@ -1,8 +1,21 @@
 #pragma once
 
+#include <cstdint>
 
 namespace FourKitBridge
 {
+    // Must match HandlerKind in FourKit.cs.
+    enum HandlerKind : int {
+        kHandlerKind_ChunkLoad   = 0,
+        kHandlerKind_ChunkUnload = 1,
+        kHandlerKind_PlayerMove  = 2,
+    };
+
+    void __cdecl NativeSetHandlerMask(uint32_t mask);
+    bool HasHandlers(int kind);
+
+    int __cdecl NativeGetServerTickCount();
+
     // core
     void __cdecl NativeDamagePlayer(int entityId, float amount);
     void __cdecl NativeSetPlayerHealth(int entityId, float health);
@@ -18,8 +31,8 @@ namespace FourKitBridge
     // World
     int __cdecl NativeGetTileId(int dimId, int x, int y, int z);
     int __cdecl NativeGetTileData(int dimId, int x, int y, int z);
-    void __cdecl NativeSetTile(int dimId, int x, int y, int z, int tileId, int data);
-    void __cdecl NativeSetTileData(int dimId, int x, int y, int z, int data);
+    void __cdecl NativeSetTile(int dimId, int x, int y, int z, int tileId, int data, int flags);
+    void __cdecl NativeSetTileData(int dimId, int x, int y, int z, int data, int flags);
     int __cdecl NativeBreakBlock(int dimId, int x, int y, int z);
     int __cdecl NativeGetHighestBlockY(int dimId, int x, int z);
     void __cdecl NativeGetWorldInfo(int dimId, double *outBuf);
@@ -52,6 +65,12 @@ namespace FourKitBridge
     void __cdecl NativeSetItemMeta(int entityId, int slot, const char *inBuf, int bufSize);
     void __cdecl NativeSetHeldItemSlot(int entityId, int slot);
 
+    // carried item (cursor) & ender chest
+    void __cdecl NativeGetCarriedItem(int entityId, int *outData);
+    void __cdecl NativeSetCarriedItem(int entityId, int itemId, int count, int aux);
+    void __cdecl NativeGetEnderChestContents(int entityId, int *outData);
+    void __cdecl NativeSetEnderChestSlot(int entityId, int slot, int itemId, int count, int aux);
+
     // ent
     void __cdecl NativeSetSneaking(int entityId, int sneak);
     void __cdecl NativeSetVelocity(int entityId, double x, double y, double z);
@@ -78,4 +97,25 @@ namespace FourKitBridge
     int __cdecl NativeGetVehicleId(int entityId);
     int __cdecl NativeGetPassengerId(int entityId);
     void __cdecl NativeGetEntityInfo(int entityId, double *outData);
+
+    // chunk
+    int __cdecl NativeIsChunkLoaded(int dimId, int chunkX, int chunkZ);
+    int __cdecl NativeLoadChunk(int dimId, int chunkX, int chunkZ, int generate);
+    int __cdecl NativeUnloadChunk(int dimId, int chunkX, int chunkZ, int save, int safe);
+    int __cdecl NativeGetLoadedChunks(int dimId, int **coordBuf);
+    int __cdecl NativeIsChunkInUse(int dimId, int chunkX, int chunkZ);
+    void __cdecl NativeGetChunkSnapshot(int dimId, int chunkX, int chunkZ, int *blockIds, int *blockData, int *maxBlockY);
+    int __cdecl NativeUnloadChunkRequest(int dimId, int chunkX, int chunkZ, int safe);
+    int __cdecl NativeRegenerateChunk(int dimId, int chunkX, int chunkZ);
+    int __cdecl NativeRefreshChunk(int dimId, int chunkX, int chunkZ);
+
+    // world entity bs
+    int __cdecl NativeGetWorldEntities(int dimId, int **outBuf);
+    int __cdecl NativeGetChunkEntities(int dimId, int chunkX, int chunkZ, int **outBuf);
+
+    // block info (light, biome)
+    int __cdecl NativeGetSkyLight(int dimId, int x, int y, int z);
+    int __cdecl NativeGetBlockLight(int dimId, int x, int y, int z);
+    int __cdecl NativeGetBiomeId(int dimId, int x, int z);
+    void __cdecl NativeSetBiomeId(int dimId, int x, int z, int biomeId);
 }

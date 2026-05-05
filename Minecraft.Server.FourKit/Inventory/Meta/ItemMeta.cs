@@ -154,7 +154,7 @@ public class ItemMeta
     /// <param name="enchants">The enchantments to set.</param>
     public void setEnchants(Dictionary<EnchantmentType, int>? enchants)
     {
-        enchants = enchants != null ? new Dictionary<EnchantmentType, int>(enchants) : null;
+        _enchants = enchants != null ? new Dictionary<EnchantmentType, int>(enchants) : null;
     }
 
 

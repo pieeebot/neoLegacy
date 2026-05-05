@@ -120,7 +120,7 @@ void Achievements::staticCtor()
 #ifdef _EXTENDED_ACHIEVEMENTS
 	Achievements::eatPorkChop			= (new Achievement(eAward_eatPorkChop,			L"eatPorkChop",			0, 0,	Tile::treeTrunk,	(Achievement *) buildSword))->setAwardLocallyOnly()->postConstruct();
 #else
-	Achievements::eatPorkChop			= (new Achievement(eAward_eatPorkChop,			L"eatPorkChop",			0, 0,	Tile::treeTrunk,	(Achievement *) buildSword, "034", IDS_ACHIEVE_NAME_EAT_PORKCHOP, IDS_ACHIEVE_DESC_EAT_PORKCHOP))->postConstruct();
+	Achievements::eatPorkChop			= (new Achievement(eAward_eatPorkChop,			L"eatPorkChop",			0, 0,	Tile::treeTrunk,	(Achievement *) buildSword, "034", IDS_ACHIEVE_NAME_EAT_PORKCHOP, IDS_ACHIEVE_DESC_EAT_PORKCHOP))->setAwardLocallyOnly()->postConstruct();
 #endif
 	Achievements::play100Days			= (new Achievement(eAward_play100Days,			L"play100Days",			0, 0,	Tile::treeTrunk,	(Achievement *) buildSword, "035", IDS_ACHIEVE_NAME_PLAY_100_DAYS, IDS_ACHIEVE_DESC_PLAY_100_DAYS))->setAwardLocallyOnly()->postConstruct();
 	Achievements::arrowKillCreeper		= (new Achievement(eAward_arrowKillCreeper,		L"arrowKillCreeper",	0, 0,	Tile::treeTrunk,	(Achievement *) buildSword, "036", IDS_ACHIEVE_NAME_ARROW_KILL_CREEPER, IDS_ACHIEVE_DESC_ARROW_KILL_CREEPER))->postConstruct();

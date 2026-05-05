@@ -13,6 +13,8 @@
 #if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
 #include "../Minecraft.Server/Security/SecurityConfig.h"
 #include "../Minecraft.Server/ServerLogManager.h"
+#include "../Minecraft.Server/ServerLogger.h"
+#include "../Minecraft.World/System.h"
 #endif
 
 ServerConnection::ServerConnection(MinecraftServer *server)
@@ -129,16 +131,45 @@ void ServerConnection::tick()
 		vector< shared_ptr<PlayerConnection> > tempPlayers = players;
 		LeaveCriticalSection(&players_cs);
 
-		for (unsigned int i = 0; i < tempPlayers.size(); i++)
+#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
+		// Substep timing for chunk / tick / flush across all players.
+		LARGE_INTEGER scFreq, scA, scB, scC, scD;
+		QueryPerformanceFrequency(&scFreq);
+		int64_t sc_chunkUs = 0;
+		int64_t sc_tickUs  = 0;
+		int64_t sc_flushUs = 0;
+		int64_t sc_loopT0  = System::currentTimeMillis();
+#endif
+
+		// Rotate the per-tick start offset so the chunk-send cap doesn't
+		// starve players at the back of the vector.
+		static unsigned int s_chunkRotationOffset = 0;
+		s_chunkRotationOffset++;
+		size_t playerCount = tempPlayers.size();
+		size_t startIdx = playerCount > 0 ? (s_chunkRotationOffset % playerCount) : 0;
+
+		for (unsigned int k = 0; k < tempPlayers.size(); k++)
 		{
+			unsigned int i = (unsigned int)((startIdx + k) % playerCount);
 			shared_ptr<PlayerConnection> player = tempPlayers[i];
 			shared_ptr<ServerPlayer> serverPlayer = player->getPlayer();
+#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
+			QueryPerformanceCounter(&scA);
+#endif
 			if( serverPlayer )
 			{
 				serverPlayer->updateFrameTick();
 				serverPlayer->doChunkSendingTick(false);
 			}
+#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
+			QueryPerformanceCounter(&scB);
+			sc_chunkUs += (scB.QuadPart - scA.QuadPart) * 1000000 / scFreq.QuadPart;
+#endif
 			player->tick();
+#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
+			QueryPerformanceCounter(&scC);
+			sc_tickUs += (scC.QuadPart - scB.QuadPart) * 1000000 / scFreq.QuadPart;
+#endif
 			if (player->done)
 			{
 				EnterCriticalSection(&players_cs);
@@ -150,7 +181,28 @@ void ServerConnection::tick()
 			{
 				player->connection->flush();
 			}
+#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
+			QueryPerformanceCounter(&scD);
+			sc_flushUs += (scD.QuadPart - scC.QuadPart) * 1000000 / scFreq.QuadPart;
+#endif
 		}
+
+#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
+		int64_t sc_loopTotal = System::currentTimeMillis() - sc_loopT0;
+		if (sc_loopTotal > 50)
+		{
+			ServerRuntime::LogInfof("perf",
+				"conn playerLoop total=%lldms players=%d chunkUs=%lld tickUs=%lld flushUs=%lld | avg chunk=%lld tick=%lld flush=%lld",
+				(long long)sc_loopTotal,
+				(int)tempPlayers.size(),
+				(long long)sc_chunkUs,
+				(long long)sc_tickUs,
+				(long long)sc_flushUs,
+				tempPlayers.size() > 0 ? (long long)(sc_chunkUs / tempPlayers.size()) : 0LL,
+				tempPlayers.size() > 0 ? (long long)(sc_tickUs  / tempPlayers.size()) : 0LL,
+				tempPlayers.size() > 0 ? (long long)(sc_flushUs / tempPlayers.size()) : 0LL);
+		}
+#endif
 	}
 
 }

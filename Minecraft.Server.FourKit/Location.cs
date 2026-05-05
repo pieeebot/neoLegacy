@@ -186,6 +186,15 @@ public class Location
 
     public Location clone() => new Location(LocationWorld, X, Y, Z, Yaw, Pitch);
 
+    /// <summary>
+    /// Gets the chunk at the represented location.
+    /// </summary>
+    /// <returns>Chunk at the represented location.</returns>
+    public Chunk.Chunk getChunk()
+    {
+        return getWorld().getChunkAt(getBlockX() >> 4, getBlockZ() >> 4);
+    }
+
     /// <inheritdoc/>
     public override string ToString() => $"Location(world={LocationWorld.getName()}, x={X}, y={Y}, z={Z}, yaw={Yaw}, pitch={Pitch})";
 }

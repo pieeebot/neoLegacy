@@ -573,7 +573,7 @@ void LocalPlayer::changeDimension(int i)
 			//minecraft.setScreen(new WinScreen());
 #ifndef _CONTENT_PACKAGE
 		app.DebugPrintf("LocalPlayer::changeDimension from 1 to 1 but WinScreen has not been implemented.\n");
-		__debugbreak();
+		DEBUG_BREAK();
 #endif
 		}
 		else
@@ -1063,7 +1063,7 @@ void LocalPlayer::awardStat(Stat *stat, byteArray param)
 		// AWARD : Porkchop, cook and eat a porkchop.
 		{
 			Stat *cookPorkchop, *eatPorkchop;
-			cookPorkchop = GenericStats::itemsCrafted(Item::porkChop_cooked_Id);
+			cookPorkchop = GenericStats::itemsSmelted(Item::porkChop_cooked_Id);
 			eatPorkchop = GenericStats::itemsUsed(Item::porkChop_cooked_Id);
 
 			if ( stat == cookPorkchop || stat == eatPorkchop )
