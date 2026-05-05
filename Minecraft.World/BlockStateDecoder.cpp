@@ -266,6 +266,13 @@ static std::wstring pressurePlatePropsToString(int composite)
 	return ss.str();
 }
 
+static std::wstring facingToString(int facing)
+{
+	static const std::wstring facingNames[] = { L"down", L"up", L"north", L"south", L"west", L"east" };
+	return (facing >= 0 && facing < 6) ? facingNames[facing] : L"unknown";
+}
+
+
 static std::wstring dispenserPropsToString(int composite)
 {
 	int facing = composite & DispenserTile::FACING_MASK;
@@ -508,12 +515,6 @@ static std::wstring hayBlockPropsToString(int composite)
 	return ss.str();
 }
 
-static std::wstring facingToString(int facing)
-{
-	static const std::wstring facingNames[] = { L"down", L"up", L"north", L"south", L"west", L"east" };
-	return (facing >= 0 && facing < 6) ? facingNames[facing] : L"unknown";
-}
-
 static std::wstring pistonBasePropsToString(int composite)
 {
 	int facing = PistonBaseTile::getFacing(composite);
@@ -640,15 +641,6 @@ static bool registerDoorDecoder()
 	registerDecoder(Tile::acacia_door_Id, fn);
 	registerDecoder(Tile::dark_oak_door_Id, fn);
 	return true;
-registerDecoder(Tile::torch_Id, [](int composite)->std::wstring { return torchPropsToString(composite); });
-registerDecoder(Tile::furnace_Id, [](int composite)->std::wstring { return furnacePropsToString(composite); });
-registerDecoder(Tile::furnace_lit_Id, [](int composite)->std::wstring { return furnacePropsToString(composite); });
-registerDecoder(Tile::redStoneOre_Id, [](int composite)->std::wstring { return redstoneOrePropsToString(composite); });
-registerDecoder(Tile::redStoneOre_lit_Id, [](int composite)->std::wstring { return redstoneOrePropsToString(composite); });
-registerDecoder(Tile::redstoneTorch_off_Id, [](int composite)->std::wstring { return redstoneTorchPropsToString(composite); });
-registerDecoder(Tile::redstoneTorch_on_Id, [](int composite)->std::wstring { return redstoneTorchPropsToString(composite); });
-registerDecoder(Tile::redstoneLight_Id, [](int composite)->std::wstring { return redlightPropsToString(composite); });
-registerDecoder(Tile::redstoneLight_lit_Id, [](int composite)->std::wstring { return redlightPropsToString(composite); });
 }
 
 static bool s_doorDecoderRegistered = registerDoorDecoder();
@@ -687,15 +679,6 @@ static bool registerStairDecoder()
 	registerDecoder(Tile::stairs_darkwood_Id, fn);
 	registerDecoder(Tile::stairs_red_sandstone_Id, fn);
 	return true;
-registerDecoder(Tile::torch_Id, [](int composite)->std::wstring { return torchPropsToString(composite); });
-registerDecoder(Tile::furnace_Id, [](int composite)->std::wstring { return furnacePropsToString(composite); });
-registerDecoder(Tile::furnace_lit_Id, [](int composite)->std::wstring { return furnacePropsToString(composite); });
-registerDecoder(Tile::redStoneOre_Id, [](int composite)->std::wstring { return redstoneOrePropsToString(composite); });
-registerDecoder(Tile::redStoneOre_lit_Id, [](int composite)->std::wstring { return redstoneOrePropsToString(composite); });
-registerDecoder(Tile::redstoneTorch_off_Id, [](int composite)->std::wstring { return redstoneTorchPropsToString(composite); });
-registerDecoder(Tile::redstoneTorch_on_Id, [](int composite)->std::wstring { return redstoneTorchPropsToString(composite); });
-registerDecoder(Tile::redstoneLight_Id, [](int composite)->std::wstring { return redlightPropsToString(composite); });
-registerDecoder(Tile::redstoneLight_lit_Id, [](int composite)->std::wstring { return redlightPropsToString(composite); });
 }
 
 static bool s_stairDecoderRegistered = registerStairDecoder();
@@ -794,15 +777,6 @@ static bool registerPlantDecoders()
 	registerDecoder(Tile::redstoneLight_Id, [](int composite)->std::wstring { return redlightPropsToString(composite); });
 	registerDecoder(Tile::redstoneLight_lit_Id, [](int composite)->std::wstring { return redlightPropsToString(composite); });
 	return true;
-registerDecoder(Tile::torch_Id, [](int composite)->std::wstring { return torchPropsToString(composite); });
-registerDecoder(Tile::furnace_Id, [](int composite)->std::wstring { return furnacePropsToString(composite); });
-registerDecoder(Tile::furnace_lit_Id, [](int composite)->std::wstring { return furnacePropsToString(composite); });
-registerDecoder(Tile::redStoneOre_Id, [](int composite)->std::wstring { return redstoneOrePropsToString(composite); });
-registerDecoder(Tile::redStoneOre_lit_Id, [](int composite)->std::wstring { return redstoneOrePropsToString(composite); });
-registerDecoder(Tile::redstoneTorch_off_Id, [](int composite)->std::wstring { return redstoneTorchPropsToString(composite); });
-registerDecoder(Tile::redstoneTorch_on_Id, [](int composite)->std::wstring { return redstoneTorchPropsToString(composite); });
-registerDecoder(Tile::redstoneLight_Id, [](int composite)->std::wstring { return redlightPropsToString(composite); });
-registerDecoder(Tile::redstoneLight_lit_Id, [](int composite)->std::wstring { return redlightPropsToString(composite); });
 }
 
 static bool s_plantDecoderRegistered = registerPlantDecoders();

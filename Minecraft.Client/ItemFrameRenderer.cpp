@@ -139,20 +139,20 @@ void ItemFrameRenderer::drawItem(shared_ptr<ItemFrame> entity)
 
 	glTranslatef((-7.25f / 16.0f) * Direction::STEP_X[entity->dir], -0.18f, (-7.25f / 16.0f) * Direction::STEP_Z[entity->dir]);
 	glRotatef(180 + entity->yRot, 0, 1, 0);
-	glRotatef(-90 * entity->getRotation(), 0, 0, 1);
+	glRotatef(-45.0f * entity->getRotation(), 0, 0, 1);
 
-	switch (entity->getRotation()) 
-	{
-	case 1:
-		glTranslatef(-0.16f, -0.16f, 0);
-		break;
-	case 2:
-		glTranslatef(0, -0.32f, 0);
-		break;
-	case 3:
-		glTranslatef(0.16f, -0.16f, 0);
-		break;
-	}
+	static const float offsets[8][2] = {
+		{ 0.0f, 0.0f },
+		{ -0.08f, -0.08f },
+		{ -0.16f, -0.16f },
+		{ -0.08f, -0.24f },
+		{ 0.0f, -0.32f },
+		{ 0.08f, -0.24f },
+		{ 0.16f, -0.16f },
+		{ 0.08f, -0.08f }
+	};
+	int rotIndex = entity->getRotation() & 0x7;
+	glTranslatef(offsets[rotIndex][0], offsets[rotIndex][1], 0.0f);
 
 	if (itemEntity->getItem()->getItem() == Item::map) 
 	{
