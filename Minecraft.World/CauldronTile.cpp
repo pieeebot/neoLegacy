@@ -19,6 +19,32 @@ CauldronTile::CauldronTile(int id) : Tile(id, Material::metal, isSolidRender())
 	iconBottom = nullptr;
 }
 
+void CauldronTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int CauldronTile::defaultBlockState()
+{
+	return 0;
+}
+
+int CauldronTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0x3) : 0;
+}
+
+Tile::BlockState CauldronTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0x3);
+}
+
+Tile::BlockState CauldronTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0x3);
+}
+
 Icon *CauldronTile::getTexture(int face, int data)
 {
 	if (face == Facing::UP)

@@ -1227,7 +1227,10 @@ void Gui::render(float a, bool mouseFree, int xMouse, int yMouse)
 								}
 								lines.push_back(L"State:");
 								appendProp(L"age");
+								appendProp(L"moisture");
 								appendProp(L"facing");
+								appendProp(L"part");
+								appendProp(L"occupied");
 								appendProp(L"north");
 								appendProp(L"south");
 								appendProp(L"east");
@@ -1241,8 +1244,14 @@ void Gui::render(float a, bool mouseFree, int xMouse, int yMouse)
 								appendProp(L"up");
 								appendProp(L"extended");
 								appendProp(L"open");
+								appendProp(L"in_wall");
 								appendProp(L"attached");
 								appendProp(L"powered");
+								appendProp(L"power");
+								appendProp(L"triggered");
+								appendProp(L"explode");
+								appendProp(L"bites");
+								appendProp(L"mode");
 								appendProp(L"delay");
 								appendProp(L"enabled");
 								appendProp(L"eye");

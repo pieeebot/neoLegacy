@@ -1,3 +1,6 @@
+// extra file dictating the data mappings in the f3 menu
+// e.x. facing: north shows up instead of state: 2
+
 #include "BlockStateDecoder.h"
 #include "BlockStateDecoderRegistry.h"
 
@@ -7,6 +10,7 @@
 #include "FireTile.h"
 #include "ButtonTile.h"
 #include "CropTile.h"
+#include "BedTile.h"
 #include "FenceGateTile.h"
 #include "FenceTile.h"
 #include "DoorTile.h"
@@ -25,6 +29,10 @@
 #include "NotGateTile.h"
 #include "RedlightTile.h"
 #include "JukeboxTile.h"
+#include "CakeTile.h"
+#include "DispenserTile.h"
+#include "TntTile.h"
+#include "BaseRailTile.h"
 #include "NetherStalkTile.h"
 #include "ReedTile.h"
 #include "RepeaterTile.h"
@@ -37,6 +45,7 @@
 #include "TreeTile2.h"
 #include "TheEndPortalFrameTile.h"
 #include "TrapDoorTile.h"
+#include "TripWireTile.h"
 #include "WoodSlabTile.h"
 #include "TallGrass.h"
 #include "TallGrass2.h"
@@ -154,7 +163,7 @@ static std::wstring tallGrassPropsToString(int composite)
 	static const std::wstring typeNames[] = { L"dead_shrub", L"tall_grass", L"fern" };
 	std::wstring typeName = (type >= 0 && type < 3) ? typeNames[type] : L"unknown";
 	std::wstringstream ss;
-	ss << L"type: " << typeName;
+	ss << L"variant: " << typeName;
 	return ss.str();
 }
 
@@ -165,7 +174,7 @@ static std::wstring tallGrass2PropsToString(int composite)
 	static const std::wstring typeNames[] = { L"sunflower", L"lilac", L"tall_grass", L"large_fern", L"rose_bush", L"peony" };
 	std::wstring typeName = (type >= 0 && type < TallGrass2::VARIANT_COUNT) ? typeNames[type] : L"unknown";
 	std::wstringstream ss;
-	ss << L"type: " << typeName << L"\n";
+	ss << L"variant: " << typeName << L"\n";
 	ss << L"half: " << (upper ? L"upper" : L"lower");
 	return ss.str();
 }
@@ -186,10 +195,13 @@ static std::wstring jukeboxPropsToString(int composite)
 	return ss.str();
 }
 
-static std::wstring daylightDetectorPropsToString(bool inverted)
+static std::wstring daylightDetectorPropsToString(int composite, bool inverted)
 {
 	std::wstringstream ss;
-	ss << L"inverted: " << (inverted ? L"true" : L"false");
+	int power = composite & 0xF;
+	ss << L"inverted: " << (inverted ? L"true" : L"false") << L"\n";
+	ss << L"power: " << power << L"\n";
+	ss << L"powered: " << (power > 0 ? L"true" : L"false");
 	return ss.str();
 }
 
@@ -210,8 +222,110 @@ static std::wstring cauldronPropsToString(int composite)
 	return ss.str();
 }
 
-static std::wstring firePropsToString(int composite) {
+static std::wstring bedPropsToString(int composite)
+{
+	int dir = DirectionalTile::getDirection(composite);
+	static const std::wstring dirNames[] = { L"south", L"west", L"north", L"east" };
+	std::wstring facing = (dir >= 0 && dir < 4) ? dirNames[dir] : L"unknown";
+	bool head = (composite & BedTile::HEAD_PIECE_DATA) != 0;
+	bool occupied = (composite & BedTile::OCCUPIED_DATA) != 0;
+	std::wstringstream ss;
+	ss << L"facing: " << facing << L"\n";
+	ss << L"part: " << (head ? L"head" : L"foot") << L"\n";
+	ss << L"occupied: " << (occupied ? L"true" : L"false");
+	return ss.str();
+}
 
+static std::wstring railPropsToString(int composite, bool usesDataBit)
+{
+	int shape = composite & BaseRailTile::RAIL_DIRECTION_MASK;
+	std::wstring shapeName = L"unknown";
+	static const std::wstring shapeNames[] = {
+		L"north_south", L"east_west", L"ascending_east", L"ascending_west",
+		L"ascending_north", L"ascending_south", L"south_east", L"south_west",
+		L"north_west", L"north_east"
+	};
+	if (shape >= 0 && shape < 10) shapeName = shapeNames[shape];
+	std::wstringstream ss;
+	ss << L"shape: " << shapeName;
+	if (usesDataBit)
+	{
+		bool powered = (composite & BaseRailTile::RAIL_DATA_BIT) != 0;
+		ss << L"\n";
+		ss << L"powered: " << (powered ? L"true" : L"false");
+	}
+	return ss.str();
+}
+
+static std::wstring pressurePlatePropsToString(int composite)
+{
+	int power = composite & 0xF;
+	std::wstringstream ss;
+	ss << L"power: " << power << L"\n";
+	ss << L"powered: " << (power > 0 ? L"true" : L"false");
+	return ss.str();
+}
+
+static std::wstring dispenserPropsToString(int composite)
+{
+	int facing = composite & DispenserTile::FACING_MASK;
+	bool triggered = (composite & DispenserTile::TRIGGER_BIT) != 0;
+	std::wstringstream ss;
+	ss << L"facing: " << facingToString(facing) << L"\n";
+	ss << L"triggered: " << (triggered ? L"true" : L"false");
+	return ss.str();
+}
+
+static std::wstring tntPropsToString(int composite)
+{
+	bool explode = (composite & TntTile::EXPLODE_BIT) != 0;
+	std::wstringstream ss;
+	ss << L"explode: " << (explode ? L"true" : L"false");
+	return ss.str();
+}
+
+static std::wstring cakePropsToString(int composite)
+{
+	int bites = composite & 0x7;
+	std::wstringstream ss;
+	ss << L"bites: " << bites;
+	return ss.str();
+}
+
+static std::wstring comparatorPropsToString(int composite)
+{
+	int dir = DirectionalTile::getDirection(composite);
+	static const std::wstring dirNames[] = { L"south", L"west", L"north", L"east" };
+	std::wstring facing = (dir >= 0 && dir < 4) ? dirNames[dir] : L"unknown";
+	bool subtract = (composite & 0x4) != 0;
+	bool powered = (composite & 0x8) != 0;
+	std::wstringstream ss;
+	ss << L"facing: " << facing << L"\n";
+	ss << L"mode: " << (subtract ? L"subtract" : L"compare") << L"\n";
+	ss << L"powered: " << (powered ? L"true" : L"false");
+	return ss.str();
+}
+
+static std::wstring farmPropsToString(int composite)
+{
+	std::wstringstream ss;
+	ss << L"moisture: " << (composite & 0x7);
+	return ss.str();
+}
+
+static std::wstring redstoneDustPropsToString(int composite)
+{
+	std::wstringstream ss;
+	int power = composite & 0xF;
+	ss << L"power: " << power << L"\n";
+	ss << L"powered: " << (power > 0 ? L"true" : L"false");
+	return ss.str();
+}
+
+static std::wstring firePropsToString(int composite) {
+	std::wstringstream ss;
+	ss << L"age: " << (composite & FireTile::AGE_MASK);
+	return ss.str();
 }
 
 static std::wstring torchPropsToString(int composite)
@@ -303,9 +417,13 @@ static std::wstring fenceGatePropsToString(int composite)
 	int dir = DirectionalTile::getDirection(composite);
 	static const std::wstring dirNames[] = { L"south", L"west", L"north", L"east" };
 	std::wstring facing = (dir >= 0 && dir < 4) ? dirNames[dir] : L"unknown";
+	bool powered = (composite & 0x8) != 0;
+	bool inWall = (composite & 0x10) != 0;
 	std::wstringstream ss;
 	ss << L"facing: " << facing << L"\n";
-	ss << L"open: " << (FenceGateTile::isOpen(composite) ? L"true" : L"false");
+	ss << L"open: " << (FenceGateTile::isOpen(composite) ? L"true" : L"false") << L"\n";
+	ss << L"powered: " << (powered ? L"true" : L"false") << L"\n";
+	ss << L"in_wall: " << (inWall ? L"true" : L"false");
 	return ss.str();
 }
 
@@ -488,7 +606,8 @@ static std::wstring tripWirePropsToString(int composite)
 	ss << L"north: " << (((composite & 0x1) != 0) ? L"true" : L"false") << L"\n";
 	ss << L"south: " << (((composite & 0x2) != 0) ? L"true" : L"false") << L"\n";
 	ss << L"east: " << (((composite & 0x4) != 0) ? L"true" : L"false") << L"\n";
-	ss << L"west: " << (((composite & 0x8) != 0) ? L"true" : L"false");
+	ss << L"west: " << (((composite & 0x8) != 0) ? L"true" : L"false") << L"\n";
+	ss << L"powered: " << (((composite & TripWireTile::BLOCKSTATE_POWERED_BIT) != 0) ? L"true" : L"false");
 	return ss.str();
 }
 
@@ -594,6 +713,20 @@ static bool registerPlantDecoders()
 	registerDecoder(Tile::cactus_Id, ageDecoder);
 	registerDecoder(Tile::netherStalk_Id, ageDecoder);
 	registerDecoder(Tile::reeds_Id, ageDecoder);
+	registerDecoder(Tile::bed_Id, [](int composite)->std::wstring { return bedPropsToString(composite); });
+	registerDecoder(Tile::rail_Id, [](int composite)->std::wstring { return railPropsToString(composite, false); });
+	registerDecoder(Tile::goldenRail_Id, [](int composite)->std::wstring { return railPropsToString(composite, true); });
+	registerDecoder(Tile::detectorRail_Id, [](int composite)->std::wstring { return railPropsToString(composite, true); });
+	registerDecoder(Tile::activatorRail_Id, [](int composite)->std::wstring { return railPropsToString(composite, true); });
+	registerDecoder(Tile::dispenser_Id, [](int composite)->std::wstring { return dispenserPropsToString(composite); });
+	registerDecoder(Tile::dropper_Id, [](int composite)->std::wstring { return dispenserPropsToString(composite); });
+	registerDecoder(Tile::tnt_Id, [](int composite)->std::wstring { return tntPropsToString(composite); });
+	registerDecoder(Tile::cake_Id, [](int composite)->std::wstring { return cakePropsToString(composite); });
+	registerDecoder(Tile::pressurePlate_stone_Id, [](int composite)->std::wstring { return pressurePlatePropsToString(composite); });
+	registerDecoder(Tile::pressurePlate_wood_Id, [](int composite)->std::wstring { return pressurePlatePropsToString(composite); });
+	registerDecoder(Tile::weightedPlate_light_Id, [](int composite)->std::wstring { return pressurePlatePropsToString(composite); });
+	registerDecoder(Tile::weightedPlate_heavy_Id, [](int composite)->std::wstring { return pressurePlatePropsToString(composite); });
+	registerDecoder(Tile::farmland_Id, [](int composite)->std::wstring { return farmPropsToString(composite); });
 	registerDecoder(Tile::cocoa_Id, [](int composite)->std::wstring { return cocoaPropsToString(composite); });
 	registerDecoder(Tile::brewingStand_Id, [](int composite)->std::wstring { return brewingStandPropsToString(composite); });
 	registerDecoder(Tile::fire_Id, [](int composite)->std::wstring { return firePropsToString(composite); });
@@ -633,6 +766,9 @@ static bool registerPlantDecoders()
 	registerDecoder(Tile::endPortalFrameTile_Id, [](int composite)->std::wstring { return endPortalFramePropsToString(composite); });
 	registerDecoder(Tile::diode_off_Id, [](int composite)->std::wstring { return repeaterPropsToString(composite, false); });
 	registerDecoder(Tile::diode_on_Id, [](int composite)->std::wstring { return repeaterPropsToString(composite, true); });
+	registerDecoder(Tile::comparator_off_Id, [](int composite)->std::wstring { return comparatorPropsToString(composite); });
+	registerDecoder(Tile::comparator_on_Id, [](int composite)->std::wstring { return comparatorPropsToString(composite); });
+	registerDecoder(Tile::redStoneDust_Id, [](int composite)->std::wstring { return redstoneDustPropsToString(composite); });
 	registerDecoder(Tile::hugeMushroom_brown_Id, [](int composite)->std::wstring { return hugeMushroomPropsToString(composite); });
 	registerDecoder(Tile::hugeMushroom_red_Id, [](int composite)->std::wstring { return hugeMushroomPropsToString(composite); });
 	registerDecoder(Tile::hopper_Id, [](int composite)->std::wstring { return hopperPropsToString(composite); });
@@ -643,8 +779,8 @@ static bool registerPlantDecoders()
 	registerDecoder(Tile::jungleGate_Id, [](int composite)->std::wstring { return fenceGatePropsToString(composite); });
 	registerDecoder(Tile::darkGate_Id, [](int composite)->std::wstring { return fenceGatePropsToString(composite); });
 	registerDecoder(Tile::acaciaGate_Id, [](int composite)->std::wstring { return fenceGatePropsToString(composite); });
-	registerDecoder(Tile::daylightDetector_Id, [](int composite)->std::wstring { (void)composite; return daylightDetectorPropsToString(false); });
-	registerDecoder(Tile::invertedDaylightDetector_Id, [](int composite)->std::wstring { (void)composite; return daylightDetectorPropsToString(true); });
+	registerDecoder(Tile::daylightDetector_Id, [](int composite)->std::wstring { return daylightDetectorPropsToString(composite, false); });
+	registerDecoder(Tile::invertedDaylightDetector_Id, [](int composite)->std::wstring { return daylightDetectorPropsToString(composite, true); });
 	registerDecoder(Tile::snow_Id, [](int composite)->std::wstring { return snowPropsToString(composite); });
 	registerDecoder(Tile::topSnow_Id, [](int composite)->std::wstring { return snowPropsToString(composite); });
 	registerDecoder(Tile::cauldron_Id, [](int composite)->std::wstring { return cauldronPropsToString(composite); });

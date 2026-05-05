@@ -31,6 +31,32 @@ RedStoneDustTile::RedStoneDustTile(int id) : Tile(id, Material::decoration,isSol
 	iconLineOver = nullptr;
 }
 
+void RedStoneDustTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int RedStoneDustTile::defaultBlockState()
+{
+	return 0;
+}
+
+int RedStoneDustTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0xF) : 0;
+}
+
+Tile::BlockState RedStoneDustTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0xF);
+}
+
+Tile::BlockState RedStoneDustTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0xF);
+}
+
 // 4J Added override
 void RedStoneDustTile::updateDefaultShape()
 {

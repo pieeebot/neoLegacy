@@ -16,6 +16,32 @@ BasePressurePlateTile::BasePressurePlateTile(int id, const wstring &tex, Materia
 	//updateShape(getDataForSignal(Redstone::SIGNAL_MAX));
 }
 
+void BasePressurePlateTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int BasePressurePlateTile::defaultBlockState()
+{
+	return 0;
+}
+
+int BasePressurePlateTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0xF) : 0;
+}
+
+Tile::BlockState BasePressurePlateTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0xF);
+}
+
+Tile::BlockState BasePressurePlateTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0xF);
+}
+
 void BasePressurePlateTile::updateShape(LevelSource *level, int x, int y, int z, int forceData, shared_ptr<TileEntity> forceEntity)
 {
 	updateShape(level->getData(x, y, z));

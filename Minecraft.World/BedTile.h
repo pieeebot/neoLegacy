@@ -23,6 +23,11 @@ public:
 	static int HEAD_DIRECTION_OFFSETS[4][2];
 
 	BedTile(int id);
+	virtual void createBlockStateDefinition() override;
+	virtual int defaultBlockState() override;
+	virtual int convertBlockStateToLegacyData(BlockState *state) override;
+	virtual Tile::BlockState getBlockState(LevelSource *level, int x, int y, int z) override;
+	virtual Tile::BlockState getBlockState(int data);
 
 	virtual void updateDefaultShape();
 	virtual bool TestUse(Level *level, int x, int y, int z, shared_ptr<Player> player);

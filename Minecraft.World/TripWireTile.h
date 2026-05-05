@@ -10,6 +10,7 @@ public:
 	static const int MASK_SUSPENDED = 0x2;
 	static const int MASK_ATTACHED = 0x4;
 	static const int MASK_DISARMED = 0x8;
+	static const int BLOCKSTATE_POWERED_BIT = 0x10;
 
 	TripWireTile(int id);
 	virtual void createBlockStateDefinition() override;

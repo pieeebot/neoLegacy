@@ -40,6 +40,7 @@ Tile::BlockState TripWireTile::getBlockState(LevelSource *level, int x, int y, i
 	if (shouldConnectTo(level, x, y, z, data, Direction::SOUTH)) state |= 0x2;
 	if (shouldConnectTo(level, x, y, z, data, Direction::EAST)) state |= 0x4;
 	if (shouldConnectTo(level, x, y, z, data, Direction::WEST)) state |= 0x8;
+	if ((data & MASK_POWERED) == MASK_POWERED) state |= BLOCKSTATE_POWERED_BIT;
 	return Tile::BlockState(state);
 }
 

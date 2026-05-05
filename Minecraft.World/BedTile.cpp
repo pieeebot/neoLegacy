@@ -21,6 +21,32 @@ BedTile::BedTile(int id) : DirectionalTile(id, Material::cloth, isSolidRender())
 	iconTop = nullptr;
 }
 
+void BedTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int BedTile::defaultBlockState()
+{
+	return 0;
+}
+
+int BedTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0xF) : 0;
+}
+
+Tile::BlockState BedTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0xF);
+}
+
+Tile::BlockState BedTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0xF);
+}
+
 // 4J Added override
 void BedTile::updateDefaultShape()
 {

@@ -12,6 +12,31 @@ DropperTile::DropperTile(int id) : DispenserTile(id)
 	DISPENSE_BEHAVIOUR = new DefaultDispenseItemBehavior();
 }
 
+void DropperTile::createBlockStateDefinition()
+{
+	DispenserTile::createBlockStateDefinition();
+}
+
+int DropperTile::defaultBlockState()
+{
+	return DispenserTile::defaultBlockState();
+}
+
+int DropperTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return DispenserTile::convertBlockStateToLegacyData(state);
+}
+
+Tile::BlockState DropperTile::getBlockState(int data)
+{
+	return DispenserTile::getBlockState(data);
+}
+
+Tile::BlockState DropperTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return DispenserTile::getBlockState(level, x, y, z);
+}
+
 void DropperTile::registerIcons(IconRegister *iconRegister)
 {
 	icon = iconRegister->registerIcon(L"furnace_side");

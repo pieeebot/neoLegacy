@@ -16,6 +16,32 @@ TntTile::TntTile(int id) : Tile(id, Material::explosive)
 	iconBottom = nullptr;
 }
 
+void TntTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int TntTile::defaultBlockState()
+{
+	return 0;
+}
+
+int TntTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & EXPLODE_BIT) : 0;
+}
+
+Tile::BlockState TntTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & EXPLODE_BIT);
+}
+
+Tile::BlockState TntTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & EXPLODE_BIT);
+}
+
 Icon *TntTile::getTexture(int face, int data)
 {
 	if (face == Facing::DOWN) return iconBottom;
