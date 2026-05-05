@@ -1265,10 +1265,6 @@ void Gui::render(float a, bool mouseFree, int xMouse, int yMouse)
 									}
 								}
 							}
-							else
-							{
-								lines.push_back(L"Target BlockState: " + std::to_wstring(st.value));
-							}
 						}
 					}
 				}
