@@ -241,7 +241,9 @@ set(_item_map_inputs
   "${CMAKE_CURRENT_SOURCE_DIR}/Minecraft.World/Tile.h"
 )
 
-string(REPLACE ";" "\\;" _item_map_inputs "${_item_map_inputs}")
+if(NOT PLATFORM_NAME STREQUAL "Windows64")
+  string(REPLACE ";" "\\;" _item_map_inputs "${_item_map_inputs}")
+endif()
 
 #neo: added ItemNameMap generation
 add_custom_command(
