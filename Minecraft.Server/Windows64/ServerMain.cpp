@@ -488,39 +488,11 @@ int main(int argc, char **argv)
 		config.worldHellScale);
 #endif
 
-	LogStartupStep("registering hidden window class");
-	HINSTANCE hInstance = GetModuleHandle(NULL);
-	MyRegisterClass(hInstance);
-
-	LogStartupStep("creating hidden window");
-	if (!InitInstance(hInstance, SW_HIDE))
-	{
-		LogError("startup", "Failed to create window instance.");
-		
-		return 2;
-	}
-	ShowWindow(g_hWnd, SW_HIDE);
-
-	LogStartupStep("initializing graphics device wrappers");
-	if (FAILED(InitDevice()))
-	{
-		LogError("startup", "Failed to initialize D3D device.");
-		CleanupDevice();
-		
-		return 2;
-	}
-
 	LogStartupStep("loading media/string tables");
 	app.loadMediaArchive();
-	RenderManager.Initialise(g_pd3dDevice, g_pSwapChain);
 	app.loadStringTable();
-	ui.init(g_pd3dDevice, g_pImmediateContext, g_pRenderTargetView, g_pDepthStencilView, g_iScreenWidth, g_iScreenHeight);
 
 	InputManager.Initialise(1, 3, MINECRAFT_ACTION_MAX, ACTION_MAX_MENU);
-	g_KBMInput.Init();
-	DefineActions();
-	InputManager.SetJoypadMapVal(0, 0);
-	InputManager.SetKeyRepeatRate(0.3f, 0.2f);
 
 	ProfileManager.Initialise(
 		TITLEID_MINECRAFT,

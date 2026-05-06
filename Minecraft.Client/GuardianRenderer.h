@@ -20,7 +20,7 @@ private:
 public:
     GuardianRenderer(Model *model, float shadow);
 
-    
+    void scale(shared_ptr<LivingEntity> mob, float a)override;
   
 
 virtual bool shouldRender(shared_ptr<Entity> mob, float camX, float camY, float camZ) override;

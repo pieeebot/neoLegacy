@@ -2,8 +2,9 @@ name: Stable Release
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - 'BUMP' #neo: this is a file. edit it. contains version number
+      #neo: DO NOT ADD NOTES.md HERE.
   workflow_dispatch:
 
 permissions:
@@ -221,33 +222,21 @@ jobs:
           artifacts/neoLegacyServerWindows64.zip
           artifacts/neoLegacyServerWindows64-FourKit.zip
 
-    - name: Get short SHA
-      id: sha
-      run: echo "short=$(echo '${{ github.sha }}' | cut -c1-7)" >> "$GITHUB_OUTPUT"
-
-    - name: Delete old release
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: gh release delete Stable-Dedicated-Server --yes || true
-
-    - name: Delete old tag
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: gh api repos/${{ github.repository }}/git/refs/tags/Stable-Dedicated-Server --method DELETE || true
-
     - name: Create tag
       run: |
+        VERSION=v$(cat BUMP)
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
-        git tag -f Stable-Dedicated-Server -m "Stable server release ${{ steps.sha.outputs.short }}"
-        git push origin Stable-Dedicated-Server --force
+        git tag -f $VERSION-Dedicated-Server -m "$VERSION server"
+        git push origin $VERSION-Dedicated-Server --force
 
     - name: Create release
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        gh release create Stable-Dedicated-Server artifacts/* \
-          --title "Server: ${{ steps.sha.outputs.short }}" \
+        VERSION=v$(cat BUMP)
+        gh release create $VERSION-Dedicated-Server artifacts/* \
+          --title "$VERSION Server" \
           --notes "Dedicated Server runtime for Windows64.
 
         Two flavours are attached:
@@ -278,62 +267,22 @@ jobs:
           subject-path: |
             artifacts/neoLegacyWindows64.zip
 
-      - name: Get short SHA
-        id: sha
-        run: echo "short=$(echo '${{ github.sha }}' | cut -c1-7)" >> "$GITHUB_OUTPUT"
-
-      - name: Delete old release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release delete Stable --yes || true
-
-      - name: Delete old tag
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh api repos/${{ github.repository }}/git/refs/tags/Stable --method DELETE || true
-
       - name: Create tag
         run: |
+          VERSION=v$(cat BUMP)
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -f Stable -m "Stable release ${{ steps.sha.outputs.short }}"
-          git push origin Stable --force
-
-      - name: Write release notes
-        run: |
-          cat > notes.md <<'NOTES'
-          # Instructions:
-          **Newcomers:**
-          - If this is your first time, download `neoLegacyWindows64.zip` and extract it wherever you would like to keep it.
-          - I would recommend to set your username prior to launch (create a file called `username.txt`, put your desired username into the file, and save).
-          - To play, simply run `Minecraft.Client.exe`.
-          
-          **Steam Deck & Linux:**
-          - Y'all know the drill. Download the `neoLegacyWindows64.zip`, extract it, add the `Minecraft.Client.exe` as a "Non-Steam Game" within the Steam library, turn on compatibility mode with Proton Experimental, and then run it!
-          
-          # Multiplayer instructions:
-          LAN games are natively supported, and any LAN games will appear automatically on the right. However, if you'd like to play with your friends online (and if you don't want to require them to setup a vpn, and/or if you don't want to port forward), I would recommend the following setup. Please keep in mind, you do NOT need to do this to enjoy the game. This is just how I have it setup for me so my friends can join without any hassle:
-          
-          Prerequisites:
-          - Premium playit.gg account, costs about $3 USD per month. This is for setting up the tunnel.
-          - playit.gg agent installed on host PC.
-          
-          How-to:
-          - Ensure your playit.gg agent is connected to your playit.gg account
-          - On the playit.gg website, setup a new tunnel (choose TCP). Ensure the configurable settings are set to the below values, assuming your agent is installed on the same computer as your online neoLegacyMinecraft game is hosted from.
-          - Configurable settings:
-            - Local IP: `127.0.0.1`
-            - Local Port: `25565`
-            - Proxy Protocol: `None`
-          - After creating your tunnel, navigate to the "Tunnels" main page. You'll see the IP address and port for your tunnel. This is what your friends will input when adding your server in order to join your online game!
+          git tag -f $VERSION -m "Stable release $VERSION"
+          git push origin $VERSION --force
 
       - name: Create release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create Stable artifacts/* \
-            --title "Client: ${{ steps.sha.outputs.short }}" \
-            --notes-file notes.md
+          VERSION=v$(cat BUMP)
+          gh release create $VERSION artifacts/* \
+            --title "$VERSION" \
+            --notes-file NOTES.md
 
   cleanup:
     needs: [release-client, release-server]

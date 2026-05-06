@@ -748,6 +748,8 @@ set(_MINECRAFT_CLIENT_COMMON_NET_MINECRAFT_CLIENT_PARTICLE
   "${CMAKE_CURRENT_SOURCE_DIR}/WaterDropParticle.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/ParticleType.h"
   "${CMAKE_CURRENT_SOURCE_DIR}/ParticleType.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/MobAppearanceParticle.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/MobAppearanceParticle.cpp"
 )
 source_group("net/minecraft/client/particle" FILES ${_MINECRAFT_CLIENT_COMMON_NET_MINECRAFT_CLIENT_PARTICLE})
 
