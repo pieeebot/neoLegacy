@@ -18,36 +18,36 @@ FurnaceRecipes *FurnaceRecipes::getInstance()
 
 FurnaceRecipes::FurnaceRecipes()
 {
-	addFurnaceRecipy(Tile::ironOre_Id, new ItemInstance(Item::ironIngot), .7f);
-	addFurnaceRecipy(Tile::goldOre_Id, new ItemInstance(Item::goldIngot), 1);
-	addFurnaceRecipy(Tile::diamondOre_Id, new ItemInstance(Item::diamond), 1);
+	addFurnaceRecipy(Tile::iron_ore_Id, new ItemInstance(Item::iron_ingot), .7f);
+	addFurnaceRecipy(Tile::gold_ore_Id, new ItemInstance(Item::gold_ingot), 1);
+	addFurnaceRecipy(Tile::diamond_ore_Id, new ItemInstance(Item::diamond), 1);
 	addFurnaceRecipy(Tile::sand_Id, new ItemInstance(Tile::glass), .1f);
-	addFurnaceRecipy(Item::porkChop_raw_Id, new ItemInstance(Item::porkChop_cooked), .35f);
-	addFurnaceRecipy(Item::beef_raw_Id, new ItemInstance(Item::beef_cooked), .35f);
-	addFurnaceRecipy(Item::rabbit_raw_Id, new ItemInstance(Item::rabbit_cooked), .35f);
-	addFurnaceRecipy(Item::mutton_raw_Id, new ItemInstance(Item::mutton_cooked), .35f);
-	addFurnaceRecipy(Item::chicken_raw_Id, new ItemInstance(Item::chicken_cooked), .35f);
-	addFurnaceRecipy(Item::fish_raw_Id, new ItemInstance(Item::fish_cooked), .35f);
-	addFurnaceRecipy(new ItemInstance(Item::fish_raw, 1, 1), new ItemInstance(Item::fish_cooked, 1, 1), .35f); // salmon
+	addFurnaceRecipy(Item::porkchop_Id, new ItemInstance(Item::cooked_porkchop), .35f);
+	addFurnaceRecipy(Item::beef_Id, new ItemInstance(Item::cooked_beef), .35f);
+	addFurnaceRecipy(Item::rabbit_Id, new ItemInstance(Item::cooked_rabbit), .35f);
+	addFurnaceRecipy(Item::mutton_Id, new ItemInstance(Item::cooked_mutton), .35f);
+	addFurnaceRecipy(Item::chicken_Id, new ItemInstance(Item::cooked_chicken), .35f);
+	addFurnaceRecipy(Item::fish_Id, new ItemInstance(Item::cooked_fish), .35f);
+	addFurnaceRecipy(new ItemInstance(Item::raw_fish, 1, 1), new ItemInstance(Item::cooked_fish, 1, 1), .35f); // salmon
 
 	addFurnaceRecipy(Tile::cobblestone_Id, new ItemInstance(Tile::stone, 1, 0), .1f);
-	addFurnaceRecipy(Tile::stoneBrick_Id, new ItemInstance(Tile::stoneBrick, 1 , SmoothStoneBrickTile::TYPE_CRACKED), .1f);
+	addFurnaceRecipy(Tile::stonebrick_Id, new ItemInstance(Tile::stoneBrick, 1 , SmoothStoneBrickTile::TYPE_CRACKED), .1f);
 	addFurnaceRecipy(Item::clay_Id, new ItemInstance(Item::brick), .3f);
 	addFurnaceRecipy(Tile::clay_Id, new ItemInstance(Tile::clayHardened), .35f);
-	addFurnaceRecipy(Tile::cactus_Id, new ItemInstance(Item::dye_powder, 1, DyePowderItem::GREEN), .2f);
-	addFurnaceRecipy(Tile::treeTrunk_Id, new ItemInstance(Item::coal, 1, CoalItem::CHAR_COAL), .15f);
-	addFurnaceRecipy(Tile::emeraldOre_Id, new ItemInstance(Item::emerald), 1);
-	addFurnaceRecipy(Item::potato_Id, new ItemInstance(Item::potatoBaked), .35f);
-	addFurnaceRecipy(Tile::netherRack_Id, new ItemInstance(Item::netherbrick), .1f);
+	addFurnaceRecipy(Tile::cactus_Id, new ItemInstance(Item::dye, 1, DyePowderItem::GREEN), .2f);
+	addFurnaceRecipy(Tile::log_Id, new ItemInstance(Item::coal, 1, CoalItem::CHAR_COAL), .15f);
+	addFurnaceRecipy(Tile::emerald_ore_Id, new ItemInstance(Item::emerald), 1);
+	addFurnaceRecipy(Item::potato_Id, new ItemInstance(Item::baked_potato), .35f);
+	addFurnaceRecipy(Tile::netherrack_Id, new ItemInstance(Item::netherbrick), .1f);
 	addFurnaceRecipy(new ItemInstance(Tile::sponge, 1, 1), new ItemInstance(Tile::sponge, 1, 0), .15f);
 
 	// special silk touch related recipes:
-	addFurnaceRecipy(Tile::coalOre_Id, new ItemInstance(Item::coal), .1f);
-	addFurnaceRecipy(Tile::redStoneOre_Id, new ItemInstance(Item::redStone), .7f);
-	addFurnaceRecipy(Tile::lapisOre_Id, new ItemInstance(Item::dye_powder, 1, DyePowderItem::BLUE), .2f);
-	addFurnaceRecipy(Tile::netherQuartz_Id, new ItemInstance(Item::netherQuartz), .2f);
+	addFurnaceRecipy(Tile::coal_ore_Id, new ItemInstance(Item::coal), .1f);
+	addFurnaceRecipy(Tile::redstone_ore_Id, new ItemInstance(Item::redstone), .7f);
+	addFurnaceRecipy(Tile::lapis_ore_Id, new ItemInstance(Item::dye, 1, DyePowderItem::BLUE), .2f);
+	addFurnaceRecipy(Tile::quartz_ore_Id, new ItemInstance(Item::nether_quartz), .2f);
 
-	addFurnaceRecipy(Tile::tree2Trunk_Id, new ItemInstance(Item::coal, 1, CoalItem::CHAR_COAL), .15f);
+	addFurnaceRecipy(Tile::log2_Id, new ItemInstance(Item::coal, 1, CoalItem::CHAR_COAL), .15f);
 }
 
 void FurnaceRecipes::addFurnaceRecipy(int itemId, ItemInstance *result, float value)

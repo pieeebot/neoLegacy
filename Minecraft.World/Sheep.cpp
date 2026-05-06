@@ -66,8 +66,8 @@ Sheep::Sheep(Level *level) : Animal( level )
 	goalSelector.addGoal(8, new RandomLookAroundGoal(this));
 
 	container = std::make_shared<CraftingContainer>(new SheepContainer(), 2, 1);
-	container->setItem(0, std::make_shared<ItemInstance>(Item::dye_powder, 1, 0));
-	container->setItem(1, std::make_shared<ItemInstance>(Item::dye_powder, 1, 0));
+	container->setItem(0, std::make_shared<ItemInstance>(Item::dye, 1, 0));
+	container->setItem(1, std::make_shared<ItemInstance>(Item::dye, 1, 0));
 }
 
 bool Sheep::useNewAi()
@@ -117,11 +117,11 @@ void Sheep::dropDeathLoot(bool wasKilledByPlayer, int playerBonusLevel)
 	{
 		if (isOnFire())
 		{
-			spawnAtLocation(Item::mutton_cooked_Id, 1);
+			spawnAtLocation(Item::cooked_mutton_Id, 1);
 		}
 		else
 		{
-			spawnAtLocation(Item::mutton_raw_Id, 1);
+			spawnAtLocation(Item::mutton_Id, 1);
 		}
 	}
 }
@@ -338,7 +338,7 @@ int Sheep::getOffspringColor(shared_ptr<Animal> animal, shared_ptr<Animal> partn
 	shared_ptr<ItemInstance> instance = Recipes::getInstance()->getItemFor(container, animal->level);
 
 	int color = 0;
-	if (instance != nullptr && instance->getItem()->id == Item::dye_powder_Id)
+	if (instance != nullptr && instance->getItem()->id == Item::dye_Id)
 	{
 		color = instance->getAuxValue();
 	}

@@ -16,7 +16,7 @@ void EnderChestTileEntity::tick()
 
 	if (++tickInterval % 20 * 4 == 0)
 	{
-		level->tileEvent(x, y, z, Tile::enderChest_Id, ChestTile::EVENT_SET_OPEN_COUNT, openCount);
+		level->tileEvent(x, y, z, Tile::ender_chest_Id, ChestTile::EVENT_SET_OPEN_COUNT, openCount);
 	}
 
 	oOpenness = openness;
@@ -74,13 +74,13 @@ void EnderChestTileEntity::setRemoved()
 void EnderChestTileEntity::startOpen()
 {
 	openCount++;
-	level->tileEvent(x, y, z, Tile::enderChest_Id, ChestTile::EVENT_SET_OPEN_COUNT, openCount);
+	level->tileEvent(x, y, z, Tile::ender_chest_Id, ChestTile::EVENT_SET_OPEN_COUNT, openCount);
 }
 
 void EnderChestTileEntity::stopOpen()
 {
 	openCount--;
-	level->tileEvent(x, y, z, Tile::enderChest_Id, ChestTile::EVENT_SET_OPEN_COUNT, openCount);
+	level->tileEvent(x, y, z, Tile::ender_chest_Id, ChestTile::EVENT_SET_OPEN_COUNT, openCount);
 }
 
 bool EnderChestTileEntity::stillValid(shared_ptr<Player> player)

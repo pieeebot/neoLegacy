@@ -32,7 +32,7 @@ void RedStoneOreTile::stepOn(Level *level, int x, int y, int z, shared_ptr<Entit
 // 4J-PB - Adding a TestUse for tooltip display
 bool RedStoneOreTile::TestUse()
 {
-	return id == Tile::redStoneOre_Id;
+	return id == Tile::redstone_ore_Id;
 }
 
 bool RedStoneOreTile::use(Level *level, int x, int y, int z, shared_ptr<Player> player, int clickedFace, float clickX, float clickY, float clickZ, bool soundOnly/*=false*/) // 4J added soundOnly param
@@ -46,23 +46,23 @@ void RedStoneOreTile::interact(Level *level, int x, int y, int z)
 {
 	poofParticles(level, x, y, z);
 	if (level->isClientSide) return;		// 4J added
-	if (id == Tile::redStoneOre_Id)
+	if (id == Tile::redstone_ore_Id)
 	{
-		level->setTileAndUpdate(x, y, z, Tile::redStoneOre_lit_Id);
+		level->setTileAndUpdate(x, y, z, Tile::lit_redstone_ore_Id);
 	}
 }
 
 void RedStoneOreTile::tick(Level *level, int x, int y, int z, Random* random)
 {
-	if (id == Tile::redStoneOre_lit_Id)
+	if (id == Tile::lit_redstone_ore_Id)
 	{
-		level->setTileAndUpdate(x, y, z, Tile::redStoneOre_Id);
+		level->setTileAndUpdate(x, y, z, Tile::redstone_ore_Id);
 	}
 }
 
 int RedStoneOreTile::getResource(int data, Random *random, int playerBonusLevel)
 {
-	return Item::redStone->id;
+	return Item::redstone->id;
 }
 
 int RedStoneOreTile::getResourceCountForLootBonus(int bonusLevel, Random *random)
@@ -119,7 +119,7 @@ void RedStoneOreTile::poofParticles(Level *level, int x, int y, int z)
 
 bool RedStoneOreTile::shouldTileTick(Level *level, int x,int y,int z)
 {
-	return id == Tile::redStoneOre_lit_Id;
+	return id == Tile::lit_redstone_ore_Id;
 }
 
 shared_ptr<ItemInstance> RedStoneOreTile::getSilkTouchItemInstance(int data)

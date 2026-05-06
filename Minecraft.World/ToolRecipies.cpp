@@ -31,33 +31,33 @@ void ToolRecipies::_init()
 
 	ADD_OBJECT(map[0],Tile::wood);
 	ADD_OBJECT(map[0],Tile::cobblestone);
-	ADD_OBJECT(map[0],Item::ironIngot);
+	ADD_OBJECT(map[0],Item::iron_ingot);
 	ADD_OBJECT(map[0],Item::diamond);
-	ADD_OBJECT(map[0],Item::goldIngot);
+	ADD_OBJECT(map[0],Item::gold_ingot);
 
-	ADD_OBJECT(map[1],Item::pickAxe_wood);
-	ADD_OBJECT(map[1],Item::pickAxe_stone);
-	ADD_OBJECT(map[1],Item::pickAxe_iron);
-	ADD_OBJECT(map[1],Item::pickAxe_diamond);
-	ADD_OBJECT(map[1],Item::pickAxe_gold);
+	ADD_OBJECT(map[1],Item::wooden_pickaxe);
+	ADD_OBJECT(map[1],Item::stone_pickaxe);
+	ADD_OBJECT(map[1],Item::iron_pickaxe);
+	ADD_OBJECT(map[1],Item::diamond_pickaxe);
+	ADD_OBJECT(map[1],Item::golden_pickaxe);
 
-	ADD_OBJECT(map[2],Item::shovel_wood);
-	ADD_OBJECT(map[2],Item::shovel_stone);
-	ADD_OBJECT(map[2],Item::shovel_iron);
-	ADD_OBJECT(map[2],Item::shovel_diamond);
-	ADD_OBJECT(map[2],Item::shovel_gold);
+	ADD_OBJECT(map[2],Item::wooden_shovel);
+	ADD_OBJECT(map[2],Item::stone_shovel);
+	ADD_OBJECT(map[2],Item::iron_shovel);
+	ADD_OBJECT(map[2],Item::diamond_shovel);
+	ADD_OBJECT(map[2],Item::golden_shovel);
 
-	ADD_OBJECT(map[3],Item::hatchet_wood);
-	ADD_OBJECT(map[3],Item::hatchet_stone);
-	ADD_OBJECT(map[3],Item::hatchet_iron);
-	ADD_OBJECT(map[3],Item::hatchet_diamond);
-	ADD_OBJECT(map[3],Item::hatchet_gold);
+	ADD_OBJECT(map[3],Item::wooden_axe);
+	ADD_OBJECT(map[3],Item::stone_axe);
+	ADD_OBJECT(map[3],Item::iron_axe);
+	ADD_OBJECT(map[3],Item::diamond_axe);
+	ADD_OBJECT(map[3],Item::golden_axe);
 
-	ADD_OBJECT(map[4],Item::hoe_wood);
-	ADD_OBJECT(map[4],Item::hoe_stone);
-	ADD_OBJECT(map[4],Item::hoe_iron);
-	ADD_OBJECT(map[4],Item::hoe_diamond);
-	ADD_OBJECT(map[4],Item::hoe_gold);
+	ADD_OBJECT(map[4],Item::wooden_hoe);
+	ADD_OBJECT(map[4],Item::stone_hoe);
+	ADD_OBJECT(map[4],Item::iron_hoe);
+	ADD_OBJECT(map[4],Item::diamond_hoe);
+	ADD_OBJECT(map[4],Item::golden_hoe);
 }
 
 void ToolRecipies::addRecipes(Recipes *r) 
@@ -107,7 +107,7 @@ void ToolRecipies::addRecipes(Recipes *r)
 		L"sscig",
         L" #", //
         L"# ", //
-		L'#', Item::ironIngot,
+		L'#', Item::iron_ingot,
 		L'T'
 		);
 }

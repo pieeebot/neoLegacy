@@ -225,7 +225,7 @@ void Ghast::dropDeathLoot(bool wasKilledByPlayer, int playerBonusLevel)
 	int count = random->nextInt(2) + random->nextInt(1 + playerBonusLevel);
 	for (int i = 0; i < count; i++)
 	{
-		spawnAtLocation(Item::ghastTear_Id, 1);
+		spawnAtLocation(Item::ghast_tear_Id, 1);
 	}
 	count = random->nextInt(3) + random->nextInt(1 + playerBonusLevel);
 	for (int i = 0; i < count; i++)

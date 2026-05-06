@@ -53,7 +53,7 @@ void TaigaBiome::decorate(Level *level, Random *random, int xo, int zo)
 {
     if (type == 1 || type == 2)
     {
-        BlockBlobFeature mossyBoulder(Tile::mossyCobblestone_Id, 0);
+        BlockBlobFeature mossyBoulder(Tile::mossy_cobblestone_Id, 0);
         int count = random->nextInt(3);
         for (int i = 0; i < count; ++i)
         {

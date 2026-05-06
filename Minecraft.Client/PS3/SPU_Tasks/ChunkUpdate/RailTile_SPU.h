@@ -25,7 +25,7 @@ public:
 	{
 		bool usesDataBit = false;
 		Icon_SPU* iconTurn = &ms_pTileData->railTile_iconTurn;
-		if(id == goldenRail_Id)
+		if(id == golden_rail_Id)
 		{
 			usesDataBit = true;
 			iconTurn = &ms_pTileData->railTile_iconTurnGolden;
@@ -33,7 +33,7 @@ public:
 
 		if (usesDataBit)
 		{
-// 			if (id == Tile::goldenRail_Id)
+// 			if (id == Tile::golden_rail_Id)
 // 			{
 				if ((data & RAIL_DATA_BIT) == 0)
 				{
@@ -51,7 +51,7 @@ public:
     virtual int getRenderShape() { return Tile_SPU::SHAPE_RAIL; }
 	bool isUsesDataBit()
 	{
-		if(id == goldenRail_Id || id == detectorRail_Id)
+		if(id == golden_rail_Id || id == detector_rail_Id)
 			return true;
 		return false;
 	}

@@ -125,7 +125,7 @@ void NotGateTile::tick(Level *level, int x, int y, int z, Random *random)
 	{
 		if (neighborSignal)
 		{
-			level->setTileAndData(x, y, z, Tile::redstoneTorch_off_Id, level->getData(x, y, z), Tile::UPDATE_ALL);
+			level->setTileAndData(x, y, z, Tile::unlit_redstone_torch_Id, level->getData(x, y, z), Tile::UPDATE_ALL);
 
 			if (isToggledTooFrequently(level, x, y, z, true))
 			{
@@ -149,7 +149,7 @@ void NotGateTile::tick(Level *level, int x, int y, int z, Random *random)
 		{
 			if (!isToggledTooFrequently(level, x, y, z, false))
 			{
-				level->setTileAndData(x, y, z, Tile::redstoneTorch_on_Id, level->getData(x, y, z), Tile::UPDATE_ALL);
+				level->setTileAndData(x, y, z, Tile::redstone_torch_Id, level->getData(x, y, z), Tile::UPDATE_ALL);
 			}
 			else
 			{
@@ -184,7 +184,7 @@ int NotGateTile::getDirectSignal(LevelSource *level, int x, int y, int z, int fa
 
 int NotGateTile::getResource(int data, Random *random, int playerBonusLevel)
 {
-	return Tile::redstoneTorch_on_Id;
+	return Tile::redstone_torch_Id;
 }
 
 bool NotGateTile::isSignalSource()
@@ -226,7 +226,7 @@ void NotGateTile::animateTick(Level *level, int xt, int yt, int zt, Random *rand
 
 int NotGateTile::cloneTileId(Level *level, int x, int y, int z)
 {
-	return Tile::redstoneTorch_on_Id;
+	return Tile::redstone_torch_Id;
 }
 
 void NotGateTile::levelTimeChanged(Level *level, int64_t delta, int64_t newTime)
@@ -244,5 +244,5 @@ void NotGateTile::levelTimeChanged(Level *level, int64_t delta, int64_t newTime)
 
 bool NotGateTile::isMatching(int id)
 {
-	return id == Tile::redstoneTorch_off_Id || id == Tile::redstoneTorch_on_Id;
+	return id == Tile::unlit_redstone_torch_Id || id == Tile::redstone_torch_Id;
 }

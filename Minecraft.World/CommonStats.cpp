@@ -109,9 +109,9 @@ Stat *CommonStats::get_itemsUsed(int itemId)
 {
 #if (defined _EXTENDED_ACHIEVEMENTS) && (!defined _XBOX_ONE)
 	// 4J-JEV: I've done the same thing here, we can't place these items anyway.
-	if (itemId == Item::porkChop_cooked_Id)	return Stats::blocksPlaced[itemId];
+	if (itemId == Item::cooked_porkchop_Id)	return Stats::blocksPlaced[itemId];
 #endif
-	if (itemId == Item::porkChop_cooked_Id)	return Stats::blocksPlaced[itemId];
+	if (itemId == Item::cooked_porkchop_Id)	return Stats::blocksPlaced[itemId];
 	else 									return nullptr;
 	//return nullptr;
 }
@@ -176,7 +176,7 @@ Stat *CommonStats::get_achievement(eAward achievementId)
 	case eAward_diamonds:			return (Stat *) Achievements::diamonds;
 	//case eAward_portal:				return (Stat *) nullptr;						// TODO
 	case eAward_ghast:				return (Stat *) Achievements::ghast;
-	case eAward_blazeRod:			return (Stat *) Achievements::blazeRod;
+	case eAward_blazeRod:			return (Stat *) Achievements::blaze_rod;
 	case eAward_potion:				return (Stat *) Achievements::potion;
 	case eAward_theEnd:				return (Stat *) Achievements::theEnd;
 	case eAward_winGame:			return (Stat *) Achievements::winGame;

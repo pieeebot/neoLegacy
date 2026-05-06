@@ -390,7 +390,7 @@ wstring CScene_TutorialPopup::_SetIcon(int icon, int iAuxVal, bool isFoil, LPCWS
 		}
 		else if(temp.find(L"{*PoweredRailIcon*}")!=wstring::npos)
 		{
-			m_pCraftingPic->SetIcon(m_iPad, Tile::goldenRail_Id,0,1,10,31,false);
+			m_pCraftingPic->SetIcon(m_iPad, Tile::golden_rail_Id,0,1,10,31,false);
 		}
 		else if(temp.find(L"{*StructuresIcon*}")!=wstring::npos)
 		{

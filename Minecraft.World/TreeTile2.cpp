@@ -50,7 +50,7 @@ int TreeTile2::getResourceCount(Random* random)
 
 int TreeTile2::getResource(int data, Random* random, int playerBonusLevel)
 {
-	return Tile::tree2Trunk_Id;
+	return Tile::log2_Id;
 }
 
 void TreeTile2::onRemove(Level* level, int x, int y, int z, int id, int data)

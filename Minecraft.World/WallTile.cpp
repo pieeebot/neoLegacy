@@ -154,7 +154,7 @@ AABB *WallTile::getAABB(Level *level, int x, int y, int z)
 bool WallTile::connectsTo(LevelSource *level, int x, int y, int z)
 {
 	int tile = level->getTile(x, y, z);
-	if (tile == id || tile == Tile::fenceGate_Id)
+	if (tile == id || tile == Tile::fence_gate_Id)
 	{
 		return true;
 	}

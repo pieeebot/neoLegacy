@@ -174,10 +174,10 @@ void SurvivalMode::initLevel(Level *level)
 shared_ptr<Player> SurvivalMode::createPlayer(Level *level)
 {
 	shared_ptr<Player> player = GameMode::createPlayer(level);
-	//        player.inventory.add(new ItemInstance(Item.pickAxe_diamond));
-	//        player.inventory.add(new ItemInstance(Item.hatchet_diamond));
+	//        player.inventory.add(new ItemInstance(Item.diamond_pickaxe));
+	//        player.inventory.add(new ItemInstance(Item.diamond_axe));
 	//        player.inventory.add(new ItemInstance(Tile.torch, 64));
-	//        player.inventory.add(new ItemInstance(Item.porkChop_cooked, 4));
+	//        player.inventory.add(new ItemInstance(Item.cooked_porkchop, 4));
 	//        player.inventory.add(new ItemInstance(Item.bow, 1));
 	//        player.inventory.add(new ItemInstance(Item.arrow, 64));
 	return player;

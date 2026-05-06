@@ -43,7 +43,7 @@ bool HangingEntityItem::useOn(shared_ptr<ItemInstance> instance, shared_ptr<Play
 			{
 				// 4J-JEV: Hook for durango 'BlockPlaced' event.
 				if (eType==eTYPE_PAINTING)			player->awardStat(GenericStats::blocksPlaced(Item::painting_Id), GenericStats::param_blocksPlaced(Item::painting_Id,instance->getAuxValue(),1));
-				else if (eType==eTYPE_ITEM_FRAME)	player->awardStat(GenericStats::blocksPlaced(Item::itemFrame_Id), GenericStats::param_blocksPlaced(Item::itemFrame_Id,instance->getAuxValue(),1));
+				else if (eType==eTYPE_ITEM_FRAME)	player->awardStat(GenericStats::blocksPlaced(Item::item_frame_Id), GenericStats::param_blocksPlaced(Item::item_frame_Id,instance->getAuxValue(),1));
 
 				instance->count--;
 			}

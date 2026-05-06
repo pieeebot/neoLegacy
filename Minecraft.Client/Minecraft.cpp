@@ -2572,28 +2572,28 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 				switch (itemInstance->getItem()->id)
 				{
 					// food
-				case Item::potatoBaked_Id:
+				case Item::baked_potato_Id:
 				case Item::potato_Id:
-				case Item::pumpkinPie_Id:
-				case Item::potatoPoisonous_Id:
-				case Item::carrotGolden_Id:
-				case Item::carrots_Id:
-				case Item::mushroomStew_Id:
+				case Item::pumpkin_pie_Id:
+				case Item::poisonous_potato_Id:
+				case Item::golden_carrot_Id:
+				case Item::carrot_Id:
+				case Item::mushroom_stew_Id:
 				case Item::apple_Id:
 				case Item::bread_Id:
-				case Item::porkChop_raw_Id:
-				case Item::porkChop_cooked_Id:
-				case Item::apple_gold_Id:
-				case Item::fish_raw_Id:
-				case Item::fish_cooked_Id:
+				case Item::porkchop_Id:
+				case Item::cooked_porkchop_Id:
+				case Item::golden_apple_Id:
+				case Item::fish_Id:
+				case Item::cooked_fish_Id:
 				case Item::cookie_Id:
-				case Item::beef_cooked_Id:
-				case Item::beef_raw_Id:
-				case Item::chicken_cooked_Id:
-				case Item::chicken_raw_Id:
-				case Item::melon_Id:
+				case Item::cooked_beef_Id:
+				case Item::beef_Id:
+				case Item::cooked_chicken_Id:
+				case Item::chicken_Id:
+				case Item::melon_block_Id:
 				case Item::rotten_flesh_Id:
-				case Item::spiderEye_Id:
+				case Item::spider_eye_Id:
 					// Check that we are actually hungry so will eat this item
 					{
 						FoodItem *food = static_cast<FoodItem *>(itemInstance->getItem());
@@ -2604,17 +2604,17 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 					}
 					break;
 
-				case Item::bucket_milk_Id:
+				case Item::milk_bucket_Id:
 					*piUse=IDS_TOOLTIPS_DRINK;
 					break;
 
-				case Item::fishingRod_Id:	// use
-				case Item::emptyMap_Id:
+				case Item::fishing_rod_Id:	// use
+				case Item::map_Id:
 					*piUse=IDS_TOOLTIPS_USE;
 					break;
 
 				case Item::egg_Id:			// throw
-				case Item::snowBall_Id:
+				case Item::snowball_Id:
 					*piUse=IDS_TOOLTIPS_THROW;
 					break;
 
@@ -2626,26 +2626,26 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 					}
 					break;
 
-				case Item::sword_wood_Id:
-				case Item::sword_stone_Id:
-				case Item::sword_iron_Id:
-				case Item::sword_diamond_Id:
-				case Item::sword_gold_Id:
+				case Item::wooden_sword_Id:
+				case Item::stone_sword_Id:
+				case Item::iron_sword_Id:
+				case Item::diamond_sword_Id:
+				case Item::golden_sword_Id:
 					*piUse=IDS_TOOLTIPS_BLOCK;
 					break;
 
-				case Item::bucket_empty_Id:
-				case Item::glassBottle_Id:
+				case Item::bucket_Id:
+				case Item::glass_bottle_Id:
 					if (bUseItem) *piUse=IDS_TOOLTIPS_COLLECT;
 					break;
 
-				case Item::bucket_lava_Id:
-				case Item::bucket_water_Id:
+				case Item::lava_bucket_Id:
+				case Item::water_bucket_Id:
 					*piUse=IDS_TOOLTIPS_EMPTY;
 					break;
 
 				case Item::boat_Id:
-				case Tile::waterLily_Id:
+				case Tile::waterlily_Id:
 					if (bUseItem) *piUse=IDS_TOOLTIPS_PLACE;
 					break;
 
@@ -2657,11 +2657,11 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 					}
 					break;
 
-				case Item::enderPearl_Id:
+				case Item::ender_pearl_Id:
 					if (bUseItem) *piUse=IDS_TOOLTIPS_THROW;
 					break;
 
-				case Item::eyeOfEnder_Id:
+				case Item::eye_of_ender_Id:
 					// This will only work if there is a stronghold in this dimension
 					if ( bUseItem && (level->dimension->id==0) && level->getLevelData()->getHasStronghold() )
 					{
@@ -2669,35 +2669,35 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 					}
 					break;
 
-				case Item::expBottle_Id:
+				case Item::experience_bottle_Id:
 					if (bUseItem) *piUse=IDS_TOOLTIPS_THROW;
 					break;
-				case Item::writingBook_Id:
+				case Item::writable_book_Id:
 					*piUse = IDS_TOOLTIPS_OPEN;
 					break;
-				case Item::writtenBook_Id:
+				case Item::written_book_Id:
 					*piUse = IDS_TOOLTIPS_READ;
 					break;
-				case Item::helmet_leather_Id:
-				case Item::helmet_chain_Id:
-				case Item::helmet_iron_Id:
-				case Item::helmet_gold_Id:
-				case Item::helmet_diamond_Id:
-				case Item::chestplate_leather_Id:
-				case Item::chestplate_chain_Id:
-				case Item::chestplate_iron_Id:
-				case Item::chestplate_gold_Id:
-				case Item::chestplate_diamond_Id:
-				case Item::leggings_leather_Id:
-				case Item::leggings_chain_Id:
-				case Item::leggings_iron_Id:
-				case Item::leggings_gold_Id:
-				case Item::leggings_diamond_Id:
-				case Item::boots_leather_Id:
-				case Item::boots_chain_Id:
-				case Item::boots_iron_Id:
-				case Item::boots_gold_Id:
-				case Item::boots_diamond_Id:
+				case Item::leather_helmet_Id:
+				case Item::chainmail_helmet_Id:
+				case Item::iron_helmet_Id:
+				case Item::golden_helmet_Id:
+				case Item::diamond_helmet_Id:
+				case Item::leather_chestplate_Id:
+				case Item::chainmail_chestplate_Id:
+				case Item::iron_chestplate_Id:
+				case Item::golden_chestplate_Id:
+				case Item::diamond_chestplate_Id:
+				case Item::leather_leggings_Id:
+				case Item::chainmail_leggings_Id:
+				case Item::iron_leggings_Id:
+				case Item::golden_leggings_Id:
+				case Item::diamond_leggings_Id:
+				case Item::leather_boots_Id:
+				case Item::chainmail_boots_Id:
+				case Item::iron_boots_Id:
+				case Item::golden_boots_Id:
+				case Item::diamond_boots_Id:
 					*piUse = IDS_TOOLTIPS_EQUIP;
 					break;
 				}
@@ -2742,26 +2742,26 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 							case Tile::cactus_Id:
 							case Tile::sapling_Id:
 							case Tile::reeds_Id:
-							case Tile::flower_Id:
-							case Tile::rose_Id:
+							case Tile::yellow_flower_Id:
+							case Tile::red_flower_Id:
 								*piUse=IDS_TOOLTIPS_PLANT;
 								break;
 
 								// Things to USE
-							case Item::hoe_wood_Id:
-							case Item::hoe_stone_Id:
-							case Item::hoe_iron_Id:
-							case Item::hoe_diamond_Id:
-							case Item::hoe_gold_Id:
+							case Item::wooden_hoe_Id:
+							case Item::stone_hoe_Id:
+							case Item::iron_hoe_Id:
+							case Item::diamond_hoe_Id:
+							case Item::golden_hoe_Id:
 								*piUse=IDS_TOOLTIPS_TILL;
 								break;
 
-							case Item::seeds_wheat_Id:
+							case Item::wheat_seeds_Id:
 							case Item::netherwart_seeds_Id:
 								*piUse=IDS_TOOLTIPS_PLANT;
 								break;
 
-							case Item::dye_powder_Id:
+							case Item::dye_Id:
 								// bonemeal grows various plants
 								if (itemInstance->getAuxValue() == DyePowderItem::WHITE)
 								{
@@ -2772,8 +2772,8 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 									case Tile::grass_Id:
 									case Tile::mushroom_brown_Id:
 									case Tile::mushroom_red_Id:
-									case Tile::melonStem_Id:
-									case Tile::pumpkinStem_Id:
+									case Tile::melon_stem_Id:
+									case Tile::pumpkin_stem_Id:
 									case Tile::carrots_Id:
 									case Tile::potatoes_Id:
 										*piUse=IDS_TOOLTIPS_GROW;
@@ -2786,8 +2786,8 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 								*piUse=IDS_TOOLTIPS_HANG;
 								break;
 
-							case Item::flintAndSteel_Id:
-							case Item::fireball_Id:
+							case Item::flint_and_steel_Id:
+							case Item::fire_charge_Id:
 								*piUse=IDS_TOOLTIPS_IGNITE;
 								break;
 
@@ -2808,18 +2808,18 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 						switch(iTileID)
 						{
 						case Tile::anvil_Id:
-						case Tile::enchantTable_Id:
-						case Tile::brewingStand_Id:
-						case Tile::workBench_Id:
+						case Tile::enchanting_table_Id:
+						case Tile::brewing_stand_Id:
+						case Tile::crafting_table_Id:
 						case Tile::furnace_Id:
-						case Tile::furnace_lit_Id:
-						case Tile::door_wood_Id:
+						case Tile::lit_furnace_Id:
+						case Tile::wooden_door_Id:
 						case Tile::dispenser_Id:
 						case Tile::lever_Id:
-						case Tile::button_stone_Id:
-						case Tile::button_wood_Id:
+						case Tile::stone_button_Id:
+						case Tile::wooden_button_Id:
 						case Tile::trapdoor_Id:
-						case Tile::fenceGate_Id:
+						case Tile::fence_gate_Id:
 						case Tile::beacon_Id:
 							*piAction=IDS_TOOLTIPS_MINE;
 							*piUse=IDS_TOOLTIPS_USE;
@@ -2830,7 +2830,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 							*piUse = (Tile::chest->getContainer(level,x,y,z) != nullptr) ? IDS_TOOLTIPS_OPEN : -1;
 							break;
 
-						case Tile::enderChest_Id:
+						case Tile::ender_chest_Id:
 						case Tile::chest_trap_Id:
 						case Tile::dropper_Id:
 						case Tile::hopper_Id:
@@ -2838,9 +2838,9 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 							*piAction=IDS_TOOLTIPS_MINE;
 							break;
 
-						case Tile::activatorRail_Id:
-						case Tile::goldenRail_Id:
-						case Tile::detectorRail_Id:
+						case Tile::activator_rail_Id:
+						case Tile::golden_rail_Id:
+						case Tile::detector_rail_Id:
 						case Tile::rail_Id:
 							if (bUseItemOn) *piUse=IDS_TOOLTIPS_PLACE;
 							*piAction=IDS_TOOLTIPS_MINE;
@@ -2858,7 +2858,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 							*piUse=IDS_TOOLTIPS_CHANGEPITCH;
 							break;
 
-						case Tile::sign_Id:
+						case Tile::standing_sign_Id:
 							*piAction=IDS_TOOLTIPS_MINE;
 							break;
 
@@ -2868,7 +2868,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 							{
 								int iID=itemInstance->getItem()->id;
 								int currentData = level->getData(x, y, z);
-								if ((iID==Item::glassBottle_Id) && (currentData > 0))
+								if ((iID==Item::glass_bottle_Id) && (currentData > 0))
 								{
 									*piUse=IDS_TOOLTIPS_COLLECT;
 								}
@@ -2899,7 +2899,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 							if (!bUseItemOn && itemInstance!=nullptr)
 							{
 								int iID=itemInstance->getItem()->id;
-								if ( (iID>=Item::record_01_Id) && (iID<=Item::record_12_Id) )
+								if ( (iID>=Item::record_13_Id) && (iID<=Item::record_wait_Id) )
 								{
 									*piUse=IDS_TOOLTIPS_PLAY;
 								}
@@ -2915,7 +2915,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 							}
 							break;
 
-						case Tile::flowerPot_Id:
+						case Tile::flower_pot_Id:
 							if ( !bUseItemOn && (itemInstance != nullptr) && (iData == 0) )
 							{
 								int iID = itemInstance->getItem()->id;
@@ -2923,13 +2923,13 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 								{
 									switch(iID)
 									{
-									case Tile::flower_Id:
-									case Tile::rose_Id:
+									case Tile::yellow_flower_Id:
+									case Tile::red_flower_Id:
 									case Tile::sapling_Id:
 									case Tile::mushroom_brown_Id:
 									case Tile::mushroom_red_Id:
 									case Tile::cactus_Id:
-									case Tile::deadBush_Id:
+									case Tile::deadbush_Id:
 										*piUse=IDS_TOOLTIPS_PLANT;
 										break;
 
@@ -2942,24 +2942,24 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 							*piAction=IDS_TOOLTIPS_MINE;
 							break;
 
-						case Tile::comparator_off_Id:
-						case Tile::comparator_on_Id:
+						case Tile::unpowered_comparator_Id:
+						case Tile::powered_comparator_Id:
 							*piUse=IDS_TOOLTIPS_USE;
 							*piAction=IDS_TOOLTIPS_MINE;
 							break;
 
-						case Tile::diode_off_Id:
-						case Tile::diode_on_Id:
+						case Tile::unpowered_repeater_Id:
+						case Tile::powered_repeater_Id:
 							*piUse=IDS_TOOLTIPS_USE;
 							*piAction=IDS_TOOLTIPS_MINE;
 							break;
 
-						case Tile::redStoneOre_Id:
+						case Tile::redstone_ore_Id:
 							if (bUseItemOn)	*piUse=IDS_TOOLTIPS_USE;
 							*piAction=IDS_TOOLTIPS_MINE;
 							break;
 
-						case Tile::door_iron_Id:
+						case Tile::iron_door_Id:
 							if(*piUse==IDS_TOOLTIPS_PLACE)
 							{
 								*piUse = -1;
@@ -3006,7 +3006,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 
 							switch(heldItemId)
 							{
-							case Item::nameTag_Id:
+							case Item::name_tag_Id:
 								*piUse=IDS_TOOLTIPS_NAME;
 								break;
 
@@ -3043,13 +3043,13 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 							switch (heldItemId)
 							{
 									// Things to USE
-							case Item::nameTag_Id:
+							case Item::name_tag_Id:
 								*piUse=IDS_TOOLTIPS_NAME;
 								break;
 							case Item::lead_Id:
 								if (!animal->isLeashed()) *piUse=IDS_TOOLTIPS_LEASH;
 								break;
-							case Item::bucket_empty_Id:
+							case Item::bucket_Id:
 									*piUse=IDS_TOOLTIPS_MILK;
 									break;
 								default:
@@ -3082,7 +3082,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 							switch(heldItemId)
 							{
 								// Things to USE
-							case Item::nameTag_Id:
+							case Item::name_tag_Id:
 								*piUse=IDS_TOOLTIPS_NAME;
 								break;
 
@@ -3091,7 +3091,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 								break;
 
 								case Item::bowl_Id:
-								case Item::bucket_empty_Id: // You can milk a mooshroom with either a bowl (mushroom soup) or a bucket (milk)!
+								case Item::bucket_Id: // You can milk a mooshroom with either a bowl (mushroom soup) or a bucket (milk)!
 									*piUse=IDS_TOOLTIPS_MILK;
 									break;
 								case Item::shears_Id:
@@ -3157,7 +3157,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 
 							switch(heldItemId)
 							{
-							case Item::nameTag_Id:
+							case Item::name_tag_Id:
 								*piUse=IDS_TOOLTIPS_NAME;
 								break;
 
@@ -3165,7 +3165,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 								if (!sheep->isLeashed()) *piUse=IDS_TOOLTIPS_LEASH;
 								break;
 
-							case Item::dye_powder_Id:
+							case Item::dye_Id:
 								{
 									// convert to tile-based color value (0 is white instead of black)
 									int newColor = ColoredTile::getTileDataForItemAuxValue(heldItem->getAuxValue());
@@ -3217,7 +3217,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 							{
 								if (!pig->isLeashed()) *piUse=IDS_TOOLTIPS_LEASH;
 							}
-							else if (heldItemId == Item::nameTag_Id)
+							else if (heldItemId == Item::name_tag_Id)
 							{
 								*piUse = IDS_TOOLTIPS_NAME;
 							}*/
@@ -3264,7 +3264,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 
 							switch(heldItemId)
 							{
-							case Item::nameTag_Id:
+							case Item::name_tag_Id:
 								*piUse=IDS_TOOLTIPS_NAME;
 								break;
 
@@ -3290,10 +3290,10 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 								}
 
 								break;
-							case Item::enderPearl_Id:
+							case Item::ender_pearl_Id:
 								// Use is throw, so don't change the tips for the wolf
 								break;
-							case Item::dye_powder_Id:
+							case Item::dye_Id:
 								if (wolf->isTame())
 								{
 									if (ColoredTile::getTileDataForItemAuxValue(heldItem->getAuxValue()) != wolf->getCollarColor())
@@ -3360,7 +3360,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 							{
 								if (!ocelot->isLeashed()) *piUse = IDS_TOOLTIPS_LEASH;
 							}
-							else if (heldItemId == Item::nameTag_Id)
+							else if (heldItemId == Item::name_tag_Id)
 							{
 								*piUse = IDS_TOOLTIPS_NAME;
 							}
@@ -3455,10 +3455,10 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 					case eTYPE_ZOMBIE:
 						{
 							shared_ptr<Zombie> zomb = dynamic_pointer_cast<Zombie>(hitResult->entity);
-							static GoldenAppleItem *goldapple = static_cast<GoldenAppleItem *>(Item::apple_gold);
+							static GoldenAppleItem *goldapple = static_cast<GoldenAppleItem *>(Item::golden_apple);
 
 							//zomb->hasEffect(MobEffect::weakness) - not present on client.
-							if ( zomb->isVillager() && zomb->isWeakened() && (heldItemId == Item::apple_gold_Id) && !goldapple->isFoil(heldItem) )
+							if ( zomb->isVillager() && zomb->isWeakened() && (heldItemId == Item::golden_apple_Id) && !goldapple->isFoil(heldItem) )
 							{
 								*piUse=IDS_TOOLTIPS_CURE;
 							}
@@ -3477,18 +3477,18 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 								case Item::wheat_Id:
 								case Item::sugar_Id:
 								case Item::bread_Id:
-								case Tile::hayBlock_Id:
+								case Tile::hay_block_Id:
 								case Item::apple_Id:
 									heldItemIsFood = true;
 									break;
-								case Item::carrotGolden_Id:
-								case Item::apple_gold_Id:
+								case Item::golden_carrot_Id:
+								case Item::golden_apple_Id:
 									heldItemIsLove = true;
 									heldItemIsFood = true;
 									break;
-								case Item::horseArmorDiamond_Id:
-								case Item::horseArmorGold_Id:
-								case Item::horseArmorMetal_Id:
+								case Item::diamond_horse_armor_Id:
+								case Item::golden_horse_armor_Id:
+								case Item::iron_horse_armor_Id:
 									heldItemIsArmour = true;
 									break;
 							}
@@ -3501,7 +3501,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 							{
 								if (!horse->isLeashed()) *piUse=IDS_TOOLTIPS_LEASH;
 							}
-							else if (heldItemId == Item::nameTag_Id)
+							else if (heldItemId == Item::name_tag_Id)
 							{
 								*piUse = IDS_TOOLTIPS_NAME;
 							}
@@ -3591,7 +3591,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 							{
 								if (!mob->isLeashed()) *piUse=IDS_TOOLTIPS_LEASH;
 							}
-							else if (heldItemId == Item::nameTag_Id)
+							else if (heldItemId == Item::name_tag_Id)
 							{
 								*piUse=IDS_TOOLTIPS_NAME;
 							}
@@ -3916,7 +3916,7 @@ void Minecraft::tick(bool bFirst, bool bUpdateTextures)
 				app.LoadCreativeMenu(iPad,player);
 			}
 			// 4J-PB - Microsoft request that we use the 3x3 crafting if someone presses X while at the workbench
-			else if ((hitResult!=nullptr) && (hitResult->type == HitResult::TILE) && (level->getTile(hitResult->x, hitResult->y, hitResult->z) == Tile::workBench_Id))
+			else if ((hitResult!=nullptr) && (hitResult->type == HitResult::TILE) && (level->getTile(hitResult->x, hitResult->y, hitResult->z) == Tile::crafting_table_Id))
 			{
 				//ui.PlayUISFX(eSFX_Press);
 				//app.LoadXuiCrafting3x3Menu(iPad,player,hitResult->x, hitResult->y, hitResult->z);

@@ -836,7 +836,7 @@ byteArray GenericStats::param_itemsSmelted(int id, int aux, int count)
 byteArray GenericStats::param_itemsUsed(shared_ptr<Player> plr, shared_ptr<ItemInstance> itm)
 {
 	if ((plr != nullptr) && (itm != nullptr)) {
-		if (itm->id == Item::porkChop_cooked_Id)	return instance->param_eatPorkChop();
+		if (itm->id == Item::cooked_porkchop_Id)	return instance->param_eatPorkChop();
 		return instance->getParam_itemsUsed(plr, itm);
 	}
 	else									return instance->getParam_noArgs();

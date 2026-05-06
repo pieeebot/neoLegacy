@@ -36,7 +36,7 @@ int EnchantmentHelper::getEnchantmentLevel(int enchantmentId, shared_ptr<ItemIns
 unordered_map<int, int> *EnchantmentHelper::getEnchantments(shared_ptr<ItemInstance> item)
 {
 	unordered_map<int, int> *result = new unordered_map<int, int>();
-	ListTag<CompoundTag> *list = item->id == Item::enchantedBook_Id ? Item::enchantedBook->getEnchantments(item) : item->getEnchantmentTags();
+	ListTag<CompoundTag> *list = item->id == Item::enchanted_book_Id ? Item::enchanted_book->getEnchantments(item) : item->getEnchantmentTags();
 
 	if (list != nullptr)
 	{
@@ -67,15 +67,15 @@ void EnchantmentHelper::setEnchantments(unordered_map<int, int> *enchantments, s
 
 		list->add(tag);
 
-		if (item->id == Item::enchantedBook_Id)
+		if (item->id == Item::enchanted_book_Id)
 		{
-			Item::enchantedBook->addEnchantment(item, new EnchantmentInstance(id, it.second));
+			Item::enchanted_book->addEnchantment(item, new EnchantmentInstance(id, it.second));
 		}
 	}
 
 	if (list->size() > 0)
 	{
-		if (item->id != Item::enchantedBook_Id)
+		if (item->id != Item::enchanted_book_Id)
 		{
 			item->addTagElement(L"ench", list);
 		}
@@ -304,7 +304,7 @@ shared_ptr<ItemInstance> EnchantmentHelper::enchantItem(Random *random, shared_p
 	vector<EnchantmentInstance *> *newEnchantment = EnchantmentHelper::selectEnchantment(random, itemInstance, enchantmentCost);
 	bool isBook = itemInstance->id == Item::book_Id;
 
-	if (isBook) itemInstance->id = Item::enchantedBook_Id;
+	if (isBook) itemInstance->id = Item::enchanted_book_Id;
 
 	if ( newEnchantment )
 	{
@@ -314,7 +314,7 @@ shared_ptr<ItemInstance> EnchantmentHelper::enchantItem(Random *random, shared_p
 			{
 				if (isBook)
 				{
-					Item::enchantedBook->addEnchantment(itemInstance, e);
+					Item::enchanted_book->addEnchantment(itemInstance, e);
 				}
 				else
 				{

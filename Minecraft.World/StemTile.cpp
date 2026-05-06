@@ -243,11 +243,11 @@ int StemTile::cloneTileId(Level *level, int x, int y, int z)
 {
 	if (fruit == Tile::pumpkin)
 	{
-		return Item::seeds_pumpkin_Id;
+		return Item::pumpkin_seeds_Id;
 	}
 	else if (fruit == Tile::melon)
 	{
-		return Item::seeds_melon_Id;
+		return Item::melon_seeds_Id;
 	}
 
 	return 0;

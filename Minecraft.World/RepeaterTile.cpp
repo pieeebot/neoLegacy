@@ -57,12 +57,12 @@ int RepeaterTile::getTurnOnDelay(int data)
 
 DiodeTile *RepeaterTile::getOnTile()
 {
-	return Tile::diode_on;
+	return Tile::powered_repeater;
 }
 
 DiodeTile *RepeaterTile::getOffTile()
 {
-	return Tile::diode_off;
+	return Tile::unpowered_repeater;
 }
 
 int RepeaterTile::getResource(int data, Random *random, int playerBonusLevel)

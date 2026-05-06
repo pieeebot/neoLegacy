@@ -60,7 +60,7 @@ void StoneSlabTile::registerIcons(IconRegister *iconRegister)
 
 int StoneSlabTile::getResource(int data, Random *random, int playerBonusLevel)
 {
-    return Tile::stoneSlabHalf_Id;
+    return Tile::stone_slab_Id;
 }
 
 unsigned int StoneSlabTile::getDescriptionId(int iData)
@@ -78,5 +78,5 @@ int StoneSlabTile::getAuxName(int auxValue)
 
 shared_ptr<ItemInstance> StoneSlabTile::getSilkTouchItemInstance(int data)
 {
-    return make_shared<ItemInstance>(Tile::stoneSlabHalf_Id, 2, data & TYPE_MASK);
+    return make_shared<ItemInstance>(Tile::stone_slab_Id, 2, data & TYPE_MASK);
 }

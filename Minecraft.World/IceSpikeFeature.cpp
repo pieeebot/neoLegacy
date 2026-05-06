@@ -54,7 +54,7 @@ bool IceSpikeFeature::place(Level *level, Random *random, int x, int y, int z)
                     if (level->isEmptyTile(x + ix, y + k, z + iz) || currentTile == Tile::dirt_Id || 
                         currentTile == Tile::snow_Id || currentTile == Tile::ice_Id)
                     {
-                        level->setTileAndData(x + ix, y + k, z + iz, Tile::packedIce_Id, 0, 3);
+                        level->setTileAndData(x + ix, y + k, z + iz, Tile::packed_ice_Id, 0, 3);
                     }
 
                     
@@ -64,7 +64,7 @@ bool IceSpikeFeature::place(Level *level, Random *random, int x, int y, int z)
                         if (level->isEmptyTile(x + ix, y - k, z + iz) || currentTile == Tile::dirt_Id || 
                             currentTile == Tile::snow_Id || currentTile == Tile::ice_Id)
                         {
-                            level->setTileAndData(x + ix, y - k, z + iz, Tile::packedIce_Id, 0, 3);
+                            level->setTileAndData(x + ix, y - k, z + iz, Tile::packed_ice_Id, 0, 3);
                         }
                     }
                 }
@@ -90,12 +90,12 @@ bool IceSpikeFeature::place(Level *level, Random *random, int x, int y, int z)
             {
                 int t = level->getTile(x + rx, curY, z + rz);
                 if (!level->isEmptyTile(x + rx, curY, z + rz) && t != Tile::dirt_Id && 
-                    t != Tile::snow_Id && t != Tile::ice_Id && t != Tile::packedIce_Id)
+                    t != Tile::snow_Id && t != Tile::ice_Id && t != Tile::packed_ice_Id)
                 {
                     break;
                 }
 
-                level->setTileAndData(x + rx, curY, z + rz, Tile::packedIce_Id, 0, 3);
+                level->setTileAndData(x + rx, curY, z + rz, Tile::packed_ice_Id, 0, 3);
                 curY--;
                 depthCounter--;
                 if (depthCounter <= 0)

@@ -189,5 +189,5 @@ bool JukeboxTile::hasAnalogOutputSignal()
 int JukeboxTile::getAnalogOutputSignal(Level *level, int x, int y, int z, int dir)
 {
 	shared_ptr<ItemInstance> record = dynamic_pointer_cast<JukeboxTile::Entity>( level->getTileEntity(x, y, z))->getRecord();
-	return record == nullptr ? Redstone::SIGNAL_NONE : record->id + 1 - Item::record_01_Id;
+	return record == nullptr ? Redstone::SIGNAL_NONE : record->id + 1 - Item::record_13_Id;
 }

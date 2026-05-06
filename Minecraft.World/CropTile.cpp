@@ -144,7 +144,7 @@ int CropTile::getRenderShape()
 
 int CropTile::getBaseSeedId()
 {
-	return Item::seeds_wheat_Id;
+	return Item::wheat_seeds_Id;
 }
 
 int CropTile::getBasePlantId()

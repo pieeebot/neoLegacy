@@ -245,8 +245,8 @@ ServerPlayer::ServerPlayer(MinecraftServer *server, Level *level, const wstring&
 			waterDepth = 0;
 			int yw = yy2;
 			while( ( yw < 128 ) &&
-				(( level->getTile(xx2,yw,zz2) == Tile::water_Id ) ||
-				( level->getTile(xx2,yw,zz2) == Tile::calmWater_Id )) )
+				(( level->getTile(xx2,yw,zz2) == Tile::flowing_water_Id ) ||
+				( level->getTile(xx2,yw,zz2) == Tile::water_Id )) )
 			{
 				yw++;
 				waterDepth++;
@@ -1463,22 +1463,22 @@ bool ServerPlayer::openTrap(shared_ptr<DispenserTileEntity> trap)
 	return true;
 }
 
-bool ServerPlayer::openBrewingStand(shared_ptr<BrewingStandTileEntity> brewingStand)
+bool ServerPlayer::openBrewingStand(shared_ptr<BrewingStandTileEntity> brewing_stand)
 {
 	if(containerMenu == inventoryMenu)
 	{
 		nextContainerCounter();
-		containerMenu = new BrewingStandMenu(inventory, brewingStand);
+		containerMenu = new BrewingStandMenu(inventory, brewing_stand);
 		containerMenu->containerId = containerCounter;
 		containerMenu->addSlotListener(this);
 #if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
-		if (FourKitBridge::FireInventoryOpen(entityId, ContainerOpenPacket::BREWING_STAND, brewingStand->getCustomName(), brewingStand->getContainerSize()))
+		if (FourKitBridge::FireInventoryOpen(entityId, ContainerOpenPacket::BREWING_STAND, brewing_stand->getCustomName(), brewing_stand->getContainerSize()))
 		{
 			doCloseContainer();
 			return true;
 		}
 #endif
-		connection->send(std::make_shared<ContainerOpenPacket>(containerCounter, ContainerOpenPacket::BREWING_STAND, brewingStand->getCustomName(), brewingStand->getContainerSize(), brewingStand->hasCustomName()));
+		connection->send(std::make_shared<ContainerOpenPacket>(containerCounter, ContainerOpenPacket::BREWING_STAND, brewing_stand->getCustomName(), brewing_stand->getContainerSize(), brewing_stand->hasCustomName()));
 		refreshContainer(containerMenu);
 	}
 	else

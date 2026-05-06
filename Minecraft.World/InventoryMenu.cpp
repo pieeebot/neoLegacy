@@ -236,7 +236,7 @@ shared_ptr<ItemInstance> InventoryMenu::clicked(int slotIndex, int buttonNum, in
 	shared_ptr<ItemInstance> out = AbstractContainerMenu::clicked(slotIndex, buttonNum, clickType, player, looped);
 
 
-	static int ironItems[4] = {Item::helmet_iron_Id,Item::chestplate_iron_Id,Item::leggings_iron_Id,Item::boots_iron_Id};
+	static int ironItems[4] = {Item::iron_helmet_Id,Item::iron_chestplate_Id,Item::iron_leggings_Id,Item::iron_boots_Id};
 	for (int i = ARMOR_SLOT_START; i < ARMOR_SLOT_END; i++)
 	{
 		Slot *slot = slots.at(i);

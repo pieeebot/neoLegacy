@@ -342,18 +342,18 @@ void BasicTree::makeTrunk()
     int z = origin[2];
     int startCoord[] = { x, startY, z };
     int endCoord[] = { x, topY, z };
-    limb(startCoord, endCoord, Tile::treeTrunk_Id);
+    limb(startCoord, endCoord, Tile::log_Id);
     if (trunkWidth == 2)
 	{
         startCoord[0] += 1;
         endCoord[0] += 1;
-        limb(startCoord, endCoord, Tile::treeTrunk_Id);
+        limb(startCoord, endCoord, Tile::log_Id);
         startCoord[2] += 1;
         endCoord[2] += 1;
-        limb(startCoord, endCoord, Tile::treeTrunk_Id);
+        limb(startCoord, endCoord, Tile::log_Id);
         startCoord[0] += -1;
         endCoord[0] += -1;
-        limb(startCoord, endCoord, Tile::treeTrunk_Id);
+        limb(startCoord, endCoord, Tile::log_Id);
     }
 }
 
@@ -373,7 +373,7 @@ void BasicTree::makeBranches()
         int localY = baseCoord[1] - origin[1];
         if (trimBranches(localY))
 		{
-            limb(baseCoord, endCoord, Tile::treeTrunk_Id);
+            limb(baseCoord, endCoord, Tile::log_Id);
         }
         idx++;
     }

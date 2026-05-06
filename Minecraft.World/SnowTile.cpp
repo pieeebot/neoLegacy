@@ -12,7 +12,7 @@ SnowTile::SnowTile(int id) : Tile(id, Material::snow)
 
 int SnowTile::getResource(int data, Random *random, int playerBonusLevel)
 {
-	return Item::snowBall->id;
+	return Item::snowball->id;
 }
 
 int SnowTile::getResourceCount(Random *random)

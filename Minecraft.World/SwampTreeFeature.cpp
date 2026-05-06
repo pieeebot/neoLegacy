@@ -39,7 +39,7 @@ bool SwampTreeFeature::place(Level *level, Random *random, int x, int y, int z)
 					int tt = level->getTile(xx, yy, zz);
 					if (tt != 0 && tt != Tile::leaves_Id)
 					{
-						if (tt == Tile::calmWater_Id || tt == Tile::water_Id)
+						if (tt == Tile::water_Id || tt == Tile::flowing_water_Id)
 						{
 							if (yy > y) free = false;
 						}
@@ -83,7 +83,7 @@ bool SwampTreeFeature::place(Level *level, Random *random, int x, int y, int z)
 	for (int hh = 0; hh < treeHeight; hh++)
 	{
 		int t = level->getTile(x, y + hh, z);
-		if (t == 0 || t == Tile::leaves_Id || t == Tile::water_Id || t == Tile::calmWater_Id) placeBlock(level, x, y + hh, z, Tile::treeTrunk_Id);
+		if (t == 0 || t == Tile::leaves_Id || t == Tile::flowing_water_Id || t == Tile::water_Id) placeBlock(level, x, y + hh, z, Tile::log_Id);
 	}
 
 	for (int yy = y - 3 + treeHeight; yy <= y + treeHeight; yy++)

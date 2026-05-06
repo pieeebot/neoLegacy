@@ -197,7 +197,7 @@ bool ItemEntity::hurt(DamageSource *source, float damage)
 	if (level->isClientSide ) return false;
 
 	if (isInvulnerable()) return false;
-	if (getItem() != nullptr && getItem()->id == Item::netherStar_Id && source->isExplosion()) return false;
+	if (getItem() != nullptr && getItem()->id == Item::nether_star_Id && source->isExplosion()) return false;
 	markHurt();
 	health -= damage;
 	if (health <= 0)
@@ -261,7 +261,7 @@ void ItemEntity::playerTouch(shared_ptr<Player> player)
 		//if (item.id == Tile.treeTrunk.id) player.awardStat(Achievements.mineWood);
 		//if (item.id == Item.leather.id) player.awardStat(Achievements.killCow);
 		//if (item.id == Item.diamond.id) player.awardStat(Achievements.diamonds);
-		//if (item.id == Item.blazeRod.id) player.awardStat(Achievements.blazeRod);
+		//if (item.id == Item.blaze_rod.id) player.awardStat(Achievements.blaze_rod);
 		if (item->id == Item::diamond_Id)
 		{
 			player->awardStat(GenericStats::diamonds(), GenericStats::param_diamonds());
@@ -277,7 +277,7 @@ void ItemEntity::playerTouch(shared_ptr<Player> player)
 			}
 
 		}
-		if (item->id == Item::blazeRod_Id)
+		if (item->id == Item::blaze_rod_Id)
 			player->awardStat(GenericStats::blazeRod(), GenericStats::param_blazeRod());
 
 		playSound(eSoundType_RANDOM_POP, 0.2f, ((random->nextFloat() - random->nextFloat()) * 0.7f + 1.0f) * 2.0f);

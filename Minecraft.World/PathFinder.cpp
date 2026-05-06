@@ -53,7 +53,7 @@ Path *PathFinder::findPath(Entity *e, double xt, double yt, double zt, float max
 	{
 		startY = static_cast<int>(e->bb->y0);
 		int tileId = level->getTile((int) Mth::floor(e->x), startY, (int) Mth::floor(e->z));
-		while (tileId == Tile::water_Id || tileId == Tile::calmWater_Id)
+		while (tileId == Tile::flowing_water_Id || tileId == Tile::water_Id)
 		{
 			++startY;
 			tileId = level->getTile((int) Mth::floor(e->x), startY, (int) Mth::floor(e->z));
@@ -217,12 +217,12 @@ int PathFinder::isFree(Entity *entity, int x, int y, int z, Node *size, bool avo
 				int tileId = entity->level->getTile(xx, yy, zz);
 				if(tileId <= 0) continue;
 				if (tileId == Tile::trapdoor_Id) walkable = true;
-				else if (tileId == Tile::water_Id || tileId == Tile::calmWater_Id)
+				else if (tileId == Tile::flowing_water_Id || tileId == Tile::water_Id)
 				{
 					if (avoidWater) return TYPE_WATER;
 					else walkable = true;
 				}
-				else if (!canPassDoors && tileId == Tile::door_wood_Id)
+				else if (!canPassDoors && tileId == Tile::wooden_door_Id)
 				{
 					return TYPE_BLOCKED;
 				}
@@ -248,10 +248,10 @@ int PathFinder::isFree(Entity *entity, int x, int y, int z, Node *size, bool avo
 
 				if (tile == nullptr) continue; // tu31 tutorial world fix
 				if (tile->isPathfindable(entity->level, xx, yy, zz)) continue;
-				if (canOpenDoors && tileId == Tile::door_wood_Id) continue;
+				if (canOpenDoors && tileId == Tile::wooden_door_Id) continue;
 
 				int renderShape = tile->getRenderShape();
-				if (renderShape == Tile::SHAPE_FENCE || tileId == Tile::fenceGate_Id || renderShape == Tile::SHAPE_WALL) return TYPE_FENCE;
+				if (renderShape == Tile::SHAPE_FENCE || tileId == Tile::fence_gate_Id || renderShape == Tile::SHAPE_WALL) return TYPE_FENCE;
 				if (tileId == Tile::trapdoor_Id) return TYPE_TRAP;
 				Material *m = tile->material;
 				if (m == Material::lava)

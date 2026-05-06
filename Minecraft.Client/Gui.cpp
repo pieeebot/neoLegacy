@@ -1183,7 +1183,7 @@ void Gui::render(float a, bool mouseFree, int xMouse, int yMouse)
 							std::wstring decoded = BlockStateDecoderRegistry::decode(tid, st.value);
 				
 							if (decoded.empty()) {
-								if (tid == Tile::door_wood_Id || tid == Tile::door_iron_Id || tid == Tile::spruce_door_Id || tid == Tile::birch_door_Id || tid == Tile::jungle_door_Id || tid == Tile::acacia_door_Id || tid == Tile::dark_oak_door_Id) {
+								if (tid == Tile::wooden_door_Id || tid == Tile::iron_door_Id || tid == Tile::spruce_door_Id || tid == Tile::birch_door_Id || tid == Tile::jungle_door_Id || tid == Tile::acacia_door_Id || tid == Tile::dark_oak_door_Id) {
 									decoded = BlockStateDecoder::doorPropsToString(BlockStateDecoder::decodeDoor(st.value));
 								}
 							}

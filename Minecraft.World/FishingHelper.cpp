@@ -17,27 +17,27 @@ FishingHelper::FishingHelper() : fishingFishArray(4), fishingJunkArray(11), fish
 {
 	fishingTreasuresArray[0] = new CatchWeighedItem(Item::bow_Id, 1, 0, 1);
 	fishingTreasuresArray[1] = new CatchWeighedItem(Item::book_Id, 1, 0, 1);
-	fishingTreasuresArray[2] = new CatchWeighedItem(Item::fishingRod_Id, 1, 0, 1);
-	fishingTreasuresArray[3] = new CatchWeighedItem(Item::nameTag_Id, 1, 0, 1);
+	fishingTreasuresArray[2] = new CatchWeighedItem(Item::fishing_rod_Id, 1, 0, 1);
+	fishingTreasuresArray[3] = new CatchWeighedItem(Item::name_tag_Id, 1, 0, 1);
 	fishingTreasuresArray[4] = new CatchWeighedItem(Item::saddle_Id, 1, 0, 1);
-	fishingTreasuresArray[5] = new CatchWeighedItem(Tile::waterLily_Id, 1, 0, 1);
+	fishingTreasuresArray[5] = new CatchWeighedItem(Tile::waterlily_Id, 1, 0, 1);
 
-	fishingFishArray[0] = new CatchWeighedItem(Item::fish_raw_Id, 1, 0, 60); // Fish
-	fishingFishArray[1] = new CatchWeighedItem(Item::fish_raw_Id, 1, 1, 25); // Salmon
-	fishingFishArray[2] = new CatchWeighedItem(Item::fish_raw_Id, 1, 2, 2); // Clownfish
-	fishingFishArray[3] = new CatchWeighedItem(Item::fish_raw_Id, 1, 3, 13); // Pufferfish
+	fishingFishArray[0] = new CatchWeighedItem(Item::fish_Id, 1, 0, 60); // Fish
+	fishingFishArray[1] = new CatchWeighedItem(Item::fish_Id, 1, 1, 25); // Salmon
+	fishingFishArray[2] = new CatchWeighedItem(Item::fish_Id, 1, 2, 2); // Clownfish
+	fishingFishArray[3] = new CatchWeighedItem(Item::fish_Id, 1, 3, 13); // Pufferfish
 
 	fishingJunkArray[0] = new CatchWeighedItem(Item::leather_Id, 1, 0, 10);
 	fishingJunkArray[1] = new CatchWeighedItem(Item::bone_Id, 1, 0, 10);
 	fishingJunkArray[2] = new CatchWeighedItem(Item::potion_Id, 1, 0, 10); // Water bottle
 	fishingJunkArray[3] = new CatchWeighedItem(Item::bowl_Id, 1, 0, 10);
-	fishingJunkArray[4] = new CatchWeighedItem(Item::boots_leather_Id, 1, 0, 10);
+	fishingJunkArray[4] = new CatchWeighedItem(Item::leather_boots_Id, 1, 0, 10);
 	fishingJunkArray[5] = new CatchWeighedItem(Item::rotten_flesh_Id, 1, 0, 10);
-	fishingJunkArray[6] = new CatchWeighedItem(Tile::tripWireSource_Id, 1, 0, 10);
+	fishingJunkArray[6] = new CatchWeighedItem(Tile::tripwire_hook_Id, 1, 0, 10);
 	fishingJunkArray[7] = new CatchWeighedItem(Item::stick_Id, 1, 0, 5);
 	fishingJunkArray[8] = new CatchWeighedItem(Item::string_Id, 1, 0, 5);
-	fishingJunkArray[9] = new CatchWeighedItem(Item::fishingRod_Id, 1, 0, 2);
-	fishingJunkArray[10] = new CatchWeighedItem(Item::dye_powder_Id, 10, 0, 1); // 10 ink sacs
+	fishingJunkArray[9] = new CatchWeighedItem(Item::fishing_rod_Id, 1, 0, 2);
+	fishingJunkArray[10] = new CatchWeighedItem(Item::dye_Id, 10, 0, 1); // 10 ink sacs
 }
 
 CatchType FishingHelper::getRandCatchType(int luckLevel, int lureLevel, Random* random)
@@ -85,10 +85,10 @@ std::shared_ptr<ItemInstance> FishingHelper::handleCatch(CatchWeighedItem* weigh
 		weighedCatch->getItemId(), weighedCatch->getCount(), weighedCatch->getAuxValue()
 	);
 	
-	if ((itemInstance->id == Item::fishingRod_Id && catchType == CatchType::JUNK) || (itemInstance->id == Item::boots_leather_Id)) {
+	if ((itemInstance->id == Item::fishing_rod_Id && catchType == CatchType::JUNK) || (itemInstance->id == Item::leather_boots_Id)) {
 		itemInstance->setAuxValue((int) ((double) itemInstance->getMaxDamage() * ((double) random->nextInt(901) + 100.0) / 1000.0)); // 10% to 100% damage 
 	}
-	else if (itemInstance->id == Item::fishingRod_Id && catchType == CatchType::TREASURE) {
+	else if (itemInstance->id == Item::fishing_rod_Id && catchType == CatchType::TREASURE) {
 		itemInstance->setAuxValue((int)((double) itemInstance->getMaxDamage() * ((double)random->nextInt(251) / 1000.0))); // 0% to 25% damage
 		EnchantmentHelper::enchantItem(random, itemInstance, 30);
 	}

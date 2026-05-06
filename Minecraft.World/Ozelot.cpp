@@ -43,7 +43,7 @@ Ozelot::Ozelot(Level *level) : TamableAnimal(level)
 	getNavigation()->setAvoidWater(true);
 	goalSelector.addGoal(1, new FloatGoal(this));
 	goalSelector.addGoal(2, sitGoal, false);
-	goalSelector.addGoal(3, temptGoal = new TemptGoal(this, SNEAK_SPEED, Item::fish_raw_Id, true), false);
+	goalSelector.addGoal(3, temptGoal = new TemptGoal(this, SNEAK_SPEED, Item::fish_Id, true), false);
 	goalSelector.addGoal(4, new AvoidPlayerGoal(this, typeid(Player), 16, WALK_SPEED, SPRINT_SPEED));
 	goalSelector.addGoal(5, new FollowOwnerGoal(this, FOLLOW_SPEED, 10, 5));
 	goalSelector.addGoal(6, new OcelotSitOnTileGoal(this, SPRINT_SPEED));
@@ -214,7 +214,7 @@ bool Ozelot::interact(shared_ptr<Player> player)
 	}
 	else
 	{
-		if (temptGoal->isRunning() && item != NULL && item->id == Item::fish_raw_Id && player->distanceToSqr(shared_from_this()) < 3 * 3)
+		if (temptGoal->isRunning() && item != NULL && item->id == Item::fish_Id && player->distanceToSqr(shared_from_this()) < 3 * 3)
 		{
 			// 4J-PB - don't lose the fish in creative mode
 			if (!player->abilities.instabuild) item->count--;
@@ -272,7 +272,7 @@ shared_ptr<AgableMob> Ozelot::getBreedOffspring(shared_ptr<AgableMob> target)
 
 bool Ozelot::isFood(shared_ptr<ItemInstance> itemInstance)
 {
-	return itemInstance != NULL && itemInstance->id == Item::fish_raw_Id;
+	return itemInstance != NULL && itemInstance->id == Item::fish_Id;
 }
 
 bool Ozelot::canMate(shared_ptr<Animal> animal)

@@ -277,7 +277,7 @@ void RedStoneDustTile::neighborChanged(Level *level, int x, int y, int z, int ty
 
 int RedStoneDustTile::getResource(int data, Random *random, int playerBonusLevel)
 {
-	return Item::redStone->id;
+	return Item::redstone->id;
 }
 
 int RedStoneDustTile::getDirectSignal(LevelSource *level, int x, int y, int z, int dir)
@@ -380,9 +380,9 @@ void RedStoneDustTile::animateTick(Level *level, int x, int y, int z, Random *ra
 bool RedStoneDustTile::shouldConnectTo(LevelSource *level, int x, int y, int z, int direction)
 {
 	int t = level->getTile(x, y, z);
-	if (t == Tile::redStoneDust_Id) return true;
+	if (t == Tile::redstone_wire_Id) return true;
 	if (t == 0) return false;
-	if (Tile::diode_off->isSameDiode(t))
+	if (Tile::unpowered_repeater->isSameDiode(t))
 	{
 		int data = level->getData(x, y, z);
 		return direction == (data & DiodeTile::DIRECTION_MASK) || direction == Direction::DIRECTION_OPPOSITE[data & DiodeTile::DIRECTION_MASK];
@@ -400,7 +400,7 @@ bool RedStoneDustTile::shouldReceivePowerFrom(LevelSource *level, int x, int y, 
 	}
 
 	int t = level->getTile(x, y, z);
-	if (t == Tile::diode_on_Id)
+	if (t == Tile::powered_repeater_Id)
 	{
 		int data = level->getData(x, y, z);
 		return direction == (data & DiodeTile::DIRECTION_MASK);
@@ -410,7 +410,7 @@ bool RedStoneDustTile::shouldReceivePowerFrom(LevelSource *level, int x, int y, 
 
 int  RedStoneDustTile::cloneTileId(Level *level, int x, int y, int z)
 {
-	return Item::redStone_Id;
+	return Item::redstone_Id;
 }
 
 void RedStoneDustTile::registerIcons(IconRegister *iconRegister)

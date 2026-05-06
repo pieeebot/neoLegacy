@@ -43,13 +43,13 @@ Tile::BlockState FenceGateTile::getBlockState(LevelSource *level, int x, int y, 
 	{
 		int westTile = level->getTile(x - 1, y, z);
 		int eastTile = level->getTile(x + 1, y, z);
-		inWall = (westTile == Tile::cobbleWall_Id) || (eastTile == Tile::cobbleWall_Id);
+		inWall = (westTile == Tile::cobblestone_wall_Id) || (eastTile == Tile::cobblestone_wall_Id);
 	}
 	else
 	{
 		int northTile = level->getTile(x, y, z - 1);
 		int southTile = level->getTile(x, y, z + 1);
-		inWall = (northTile == Tile::cobbleWall_Id) || (southTile == Tile::cobbleWall_Id);
+		inWall = (northTile == Tile::cobblestone_wall_Id) || (southTile == Tile::cobblestone_wall_Id);
 	}
 
 	if (inWall)
@@ -78,13 +78,13 @@ void FenceGateTile::fillVirtualBlockStateProperties(Tile::BlockState *state, Lev
 	{
 		int westTile = level->getTile(x - 1, y, z);
 		int eastTile = level->getTile(x + 1, y, z);
-		inWall = (westTile == Tile::cobbleWall_Id) || (eastTile == Tile::cobbleWall_Id);
+		inWall = (westTile == Tile::cobblestone_wall_Id) || (eastTile == Tile::cobblestone_wall_Id);
 	}
 	else
 	{
 		int northTile = level->getTile(x, y, z - 1);
 		int southTile = level->getTile(x, y, z + 1);
-		inWall = (northTile == Tile::cobbleWall_Id) || (southTile == Tile::cobbleWall_Id);
+		inWall = (northTile == Tile::cobblestone_wall_Id) || (southTile == Tile::cobblestone_wall_Id);
 	}
 
 	if (inWall)

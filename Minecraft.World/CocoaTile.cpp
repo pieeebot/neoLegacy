@@ -88,7 +88,7 @@ bool CocoaTile::canSurvive(Level *level, int x, int y, int z)
 	z += Direction::STEP_Z[dir];
 	int attachedTo = level->getTile(x, y, z);
 
-	return attachedTo == Tile::treeTrunk_Id && TreeTile::getWoodType(level->getData(x, y, z)) == TreeTile::JUNGLE_TRUNK;
+	return attachedTo == Tile::log_Id && TreeTile::getWoodType(level->getData(x, y, z)) == TreeTile::JUNGLE_TRUNK;
 }
 
 int CocoaTile::getRenderShape()
@@ -185,13 +185,13 @@ void CocoaTile::spawnResources(Level *level, int x, int y, int z, int data, floa
 	}
 	for (int i = 0; i < count; i++)
 	{
-		popResource(level, x, y, z, std::make_shared<ItemInstance>(Item::dye_powder, 1, DyePowderItem::BROWN));
+		popResource(level, x, y, z, std::make_shared<ItemInstance>(Item::dye, 1, DyePowderItem::BROWN));
 	}
 }
 
 int CocoaTile::cloneTileId(Level *level, int x, int y, int z)
 {
-	return Item::dye_powder_Id;
+	return Item::dye_Id;
 }
 
 int CocoaTile::cloneTileData(Level *level, int x, int y, int z)

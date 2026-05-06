@@ -49,19 +49,19 @@ void BiomeDecorator::_init()
     gravelFeature = new SandFeature(6, Tile::gravel_Id);
     dirtOreFeature = new OreFeature(Tile::dirt_Id, 32);
     gravelOreFeature = new OreFeature(Tile::gravel_Id, 32);
-    coalOreFeature = new OreFeature(Tile::coalOre_Id, 16);
-    ironOreFeature = new OreFeature(Tile::ironOre_Id, 8);
-    goldOreFeature = new OreFeature(Tile::goldOre_Id, 8);
-    redStoneOreFeature = new OreFeature(Tile::redStoneOre_Id, 7);
-    diamondOreFeature = new OreFeature(Tile::diamondOre_Id, 7);
-    lapisOreFeature = new OreFeature(Tile::lapisOre_Id, 6);
+    coalOreFeature = new OreFeature(Tile::coal_ore_Id, 16);
+    ironOreFeature = new OreFeature(Tile::iron_ore_Id, 8);
+    goldOreFeature = new OreFeature(Tile::gold_ore_Id, 8);
+    redStoneOreFeature = new OreFeature(Tile::redstone_ore_Id, 7);
+    diamondOreFeature = new OreFeature(Tile::diamond_ore_Id, 7);
+    lapisOreFeature = new OreFeature(Tile::lapis_ore_Id, 6);
 
     graniteOreFeature = new OreFeature(Tile::stone_Id, StoneTile::GRANITE, 33);
     dioriteOreFeature = new OreFeature(Tile::stone_Id, StoneTile::DIORITE, 33);
     andesiteOreFeature = new OreFeature(Tile::stone_Id, StoneTile::ANDESITE, 33);
 
-    yellowFlowerFeature = new FlowerFeature(Tile::flower_Id);
-    roseFlowerFeature = new FlowerFeature(Tile::rose_Id);
+    yellowFlowerFeature = new FlowerFeature(Tile::yellow_flower_Id);
+    roseFlowerFeature = new FlowerFeature(Tile::red_flower_Id);
     brownMushroomFeature = new FlowerFeature(Tile::mushroom_brown_Id);
     redMushroomFeature = new FlowerFeature(Tile::mushroom_red_Id);
     hugeMushroomFeature = new HugeMushroomFeature();
@@ -69,14 +69,14 @@ void BiomeDecorator::_init()
     cactusFeature = new CactusFeature();
     waterlilyFeature = new WaterlilyFeature();
     
-    blueOrchidFeature    = new FlowerFeature(Tile::rose_Id, Rose::BLUE_ORCHID);  
-    alliumFeature        = new FlowerFeature(Tile::rose_Id, Rose::ALLIUM);
-    azureBluetFeature    = new FlowerFeature(Tile::rose_Id, Rose::AZURE_BLUET);
-    oxeyeDaisyFeature    = new FlowerFeature(Tile::rose_Id, Rose::OXEYE_DAISY);
-    tulipRedFeature      = new FlowerFeature(Tile::rose_Id, Rose::RED_TULIP);
-    tulipOrangeFeature   = new FlowerFeature(Tile::rose_Id, Rose::ORANGE_TULIP);
-    tulipWhiteFeature    = new FlowerFeature(Tile::rose_Id, Rose::WHITE_TULIP);
-    tulipPinkFeature     = new FlowerFeature(Tile::rose_Id, Rose::PINK_TULIP);
+    blueOrchidFeature    = new FlowerFeature(Tile::red_flower_Id, Rose::BLUE_ORCHID);  
+    alliumFeature        = new FlowerFeature(Tile::red_flower_Id, Rose::ALLIUM);
+    azureBluetFeature    = new FlowerFeature(Tile::red_flower_Id, Rose::AZURE_BLUET);
+    oxeyeDaisyFeature    = new FlowerFeature(Tile::red_flower_Id, Rose::OXEYE_DAISY);
+    tulipRedFeature      = new FlowerFeature(Tile::red_flower_Id, Rose::RED_TULIP);
+    tulipOrangeFeature   = new FlowerFeature(Tile::red_flower_Id, Rose::ORANGE_TULIP);
+    tulipWhiteFeature    = new FlowerFeature(Tile::red_flower_Id, Rose::WHITE_TULIP);
+    tulipPinkFeature     = new FlowerFeature(Tile::red_flower_Id, Rose::PINK_TULIP);
 
     doublePlantFeature = new DoublePlantFeature(false);
 
@@ -241,7 +241,7 @@ void BiomeDecorator::decorate()
     PIXBeginNamedEvent(0,"Decorate bush/waterlily/mushroom/reeds/pumpkins/cactuses");
 
     DeadBushFeature *deadBushFeature = nullptr;
-    if(deadBushCount > 0) deadBushFeature = new DeadBushFeature(Tile::deadBush_Id);
+    if(deadBushCount > 0) deadBushFeature = new DeadBushFeature(Tile::deadbush_Id);
     for (int i = 0; i < deadBushCount; i++)
     {
         int x = xo + random->nextInt(16) + 8;
@@ -335,7 +335,7 @@ void BiomeDecorator::decorate()
 
     if( liquids )
     {
-        SpringFeature *waterSpringFeature = new SpringFeature(Tile::water_Id);
+        SpringFeature *waterSpringFeature = new SpringFeature(Tile::flowing_water_Id);
         for (int i = 0; i < 50; i++)
         {
             int x = xo + random->nextInt(16) + 8;
@@ -345,7 +345,7 @@ void BiomeDecorator::decorate()
         }
         delete waterSpringFeature;
 
-        SpringFeature *lavaSpringFeature = new SpringFeature(Tile::lava_Id);
+        SpringFeature *lavaSpringFeature = new SpringFeature(Tile::flowing_lava_Id);
         for (int i = 0; i < 20; i++)
         {
             int x = xo + random->nextInt(16) + 8;

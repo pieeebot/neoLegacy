@@ -143,9 +143,9 @@ unsigned int WoolTileItem::getDescriptionId(shared_ptr<ItemInstance> instance)
 		return GLASS_COLOR_DESCS[ColoredTile::getTileDataForItemAuxValue(instance->getAuxValue())];
 	case Tile::stained_glass_pane_Id:
 		return GLASS_PANE_COLOR_DESCS[ColoredTile::getTileDataForItemAuxValue(instance->getAuxValue())];
-	case Tile::clayHardened_colored_Id:
+	case Tile::stained_hardened_clay_Id:
 		return CLAY_COLOR_DESCS[ColoredTile::getTileDataForItemAuxValue(instance->getAuxValue())];
-	case Tile::woolCarpet_Id:
+	case Tile::carpet_Id:
 		return CARPET_COLOR_DESCS[ColoredTile::getTileDataForItemAuxValue(instance->getAuxValue())];
 	case Tile::wool_Id:
 	default:

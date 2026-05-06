@@ -9,17 +9,17 @@ OreTile::OreTile(int id) : Tile(id, Material::stone)
 
 int OreTile::getResource(int data, Random *random, int playerBonusLevel)
 {
-    if (id == Tile::coalOre_Id) return Item::coal_Id;
-    if (id == Tile::diamondOre_Id) return Item::diamond_Id;
-    if (id == Tile::lapisOre_Id) return Item::dye_powder_Id;
-	if (id == Tile::emeraldOre_Id) return Item::emerald_Id;
-	if (id == Tile::netherQuartz_Id) return Item::netherQuartz_Id;
+    if (id == Tile::coal_ore_Id) return Item::coal_Id;
+    if (id == Tile::diamond_ore_Id) return Item::diamond_Id;
+    if (id == Tile::lapis_ore_Id) return Item::dye_Id;
+	if (id == Tile::emerald_ore_Id) return Item::emerald_Id;
+	if (id == Tile::quartz_ore_Id) return Item::quartz_Id;
     return id;
 }
 
 int OreTile::getResourceCount(Random *random)
 {
-    if (id == Tile::lapisOre_Id) return 4 + random->nextInt(5);
+    if (id == Tile::lapis_ore_Id) return 4 + random->nextInt(5);
     return 1;
 }
 
@@ -45,23 +45,23 @@ void OreTile::spawnResources(Level *level, int x, int y, int z, int data, float 
 	if (getResource(data, level->random, playerBonusLevel) != id)
 	{
 		int magicCount = 0;
-		if (id == Tile::coalOre_Id)
+		if (id == Tile::coal_ore_Id)
 		{
 			magicCount = Mth::nextInt(level->random, 0, 2);
 		}
-		else if (id == Tile::diamondOre_Id)
+		else if (id == Tile::diamond_ore_Id)
 		{
 			magicCount = Mth::nextInt(level->random, 3, 7);
 		}
-		else if (id == Tile::emeraldOre_Id)
+		else if (id == Tile::emerald_ore_Id)
 		{
 			magicCount = Mth::nextInt(level->random, 3, 7);
 		}
-		else if (id == Tile::lapisOre_Id)
+		else if (id == Tile::lapis_ore_Id)
 		{
 			magicCount = Mth::nextInt(level->random, 2, 5);
 		}
-		else if (id == Tile::netherQuartz_Id)
+		else if (id == Tile::quartz_ore_Id)
 		{
 			magicCount = Mth::nextInt(level->random, 2, 5);
 		}
@@ -72,6 +72,6 @@ void OreTile::spawnResources(Level *level, int x, int y, int z, int data, float 
 int OreTile::getSpawnResourcesAuxValue(int data)
 {
     // lapis spawns blue dye
-    if (id == Tile::lapisOre_Id) return DyePowderItem::BLUE;
+    if (id == Tile::lapis_ore_Id) return DyePowderItem::BLUE;
     return 0;
 }

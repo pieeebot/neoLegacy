@@ -132,7 +132,7 @@ void Spider::dropDeathLoot(bool wasKilledByPlayer, int playerBonusLevel)
 
 	if (wasKilledByPlayer && (random->nextInt(3) == 0 || random->nextInt(1 + playerBonusLevel) > 0))
 	{
-		spawnAtLocation(Item::spiderEye_Id, 1);
+		spawnAtLocation(Item::spider_eye_Id, 1);
 	}
 }
 

@@ -149,13 +149,13 @@ bool CauldronTile::use(Level *level, int x, int y, int z, shared_ptr<Player> pla
 	int currentData = level->getData(x, y, z);
 	int fillLevel = getFillLevel(currentData);
 
-	if (item->id == Item::bucket_water_Id)
+	if (item->id == Item::water_bucket_Id)
 	{
 		if (fillLevel < 3)
 		{
 			if (!player->abilities.instabuild)
 			{
-				player->inventory->setItem(player->inventory->selected, std::make_shared<ItemInstance>(Item::bucket_empty));
+				player->inventory->setItem(player->inventory->selected, std::make_shared<ItemInstance>(Item::bucket));
 			}
 
 			level->setData(x, y, z, 3, Tile::UPDATE_CLIENTS);
@@ -163,7 +163,7 @@ bool CauldronTile::use(Level *level, int x, int y, int z, shared_ptr<Player> pla
 		}
 		return true;
 	}
-	else if (item->id == Item::glassBottle_Id)
+	else if (item->id == Item::glass_bottle_Id)
 	{
 		if (fillLevel > 0)
 		{

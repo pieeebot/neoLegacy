@@ -88,7 +88,7 @@ void BeaconRenderer::render(shared_ptr<TileEntity> _beacon, double x, double y, 
             
             segments.push_back({curR, curG, curB, 1});
         } 
-        else if (tileID == 0 || tileID == Tile::glass_Id || tileID == Tile::thinGlass_Id) {
+        else if (tileID == 0 || tileID == Tile::glass_Id || tileID == Tile::glass_pane_Id) {
             if (segments.empty()) {
                 segments.push_back({1.0f, 1.0f, 1.0f, 1});
             } else {

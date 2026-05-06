@@ -29,7 +29,7 @@ Icon *WoodSlabTile::getTexture(int face, int data)
 
 int WoodSlabTile::getResource(int data, Random *random, int playerBonusLevel)
 {
-    return Tile::woodSlabHalf_Id;
+    return Tile::wooden_slab_Id;
 }
 
 shared_ptr<ItemInstance> WoodSlabTile::getSilkTouchItemInstance(int data)

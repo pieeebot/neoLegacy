@@ -110,7 +110,7 @@ void DungeonFeature::addTunnel(int xOffs, int zOffs, byteArray blocks, double xC
 				{
 					int p = (xx * 16 + zz) * Level::genDepth + yy;
 					if (yy < 0 || yy >= Level::genDepth) continue;
-					if (blocks[p] == Tile::water_Id || blocks[p] == Tile::calmWater_Id)
+					if (blocks[p] == Tile::flowing_water_Id || blocks[p] == Tile::water_Id)
 					{
 						detectedWater = true;
 					}
@@ -142,7 +142,7 @@ void DungeonFeature::addTunnel(int xOffs, int zOffs, byteArray blocks, double xC
 						{
 							if (yy < 10)
 							{
-								blocks[p] = static_cast<byte>(Tile::lava_Id);
+								blocks[p] = static_cast<byte>(Tile::flowing_lava_Id);
 							}
 							else
 							{

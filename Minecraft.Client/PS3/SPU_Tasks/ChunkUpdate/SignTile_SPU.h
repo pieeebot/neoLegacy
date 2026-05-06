@@ -9,13 +9,13 @@ public:
 	SignTile_SPU(int id) : EntityTile_SPU(id) {}
 	bool onGround()
 	{
-		if(id == wallSign_Id)
+		if(id == wall_standing_sign_Id)
 			return false;
-		// sign_Id
+		// standing_sign_Id
 		return true;
 	}
 
-	Icon_SPU *getTexture(int face, int data){	return TileRef_SPU(wood_Id)->getTexture(face);	}
+	Icon_SPU *getTexture(int face, int data){	return TileRef_SPU(planks_Id)->getTexture(face);	}
 	void updateShape(ChunkRebuildData *level, int x, int y, int z, int forceData = -1, TileEntity* forceEntity = nullptr)	// 4J added forceData, forceEntity param
 	{
 		if (onGround()) return;

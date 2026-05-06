@@ -40,12 +40,12 @@ void SwampBiome::buildSurfaceAtDefault(Level *level, Random *random, byte* chunk
             int index = (localZ * 16 + localX) * Level::genDepth + y;
             if (chunkBlocks[index] != 0) 
             {
-                if (y == 62 && chunkBlocks[index] != static_cast<byte>(Tile::water_Id))
+                if (y == 62 && chunkBlocks[index] != static_cast<byte>(Tile::flowing_water_Id))
                 {
-                    chunkBlocks[index] = static_cast<byte>(Tile::water_Id);
+                    chunkBlocks[index] = static_cast<byte>(Tile::flowing_water_Id);
                     if (d0 < 0.12)
                     {
-                        chunkBlocks[index + 1] = static_cast<byte>(Tile::waterLily_Id);
+                        chunkBlocks[index + 1] = static_cast<byte>(Tile::waterlily_Id);
                     }
                 }
                 break;

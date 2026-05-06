@@ -77,12 +77,12 @@ void ServerLevel::staticCtor()
 	RANDOM_BONUS_ITEMS =  WeighedTreasureArray(20);
 
 	RANDOM_BONUS_ITEMS[0] = new WeighedTreasure(Item::stick_Id, 0, 1, 3, 10);
-	RANDOM_BONUS_ITEMS[1] = new WeighedTreasure(Tile::wood_Id, 0, 1, 3, 10);
-	RANDOM_BONUS_ITEMS[2] = new WeighedTreasure(Tile::treeTrunk_Id, 0, 1, 3, 10);
-	RANDOM_BONUS_ITEMS[3] = new WeighedTreasure(Item::hatchet_stone_Id, 0, 1, 1, 3);
-	RANDOM_BONUS_ITEMS[4] = new WeighedTreasure(Item::hatchet_wood_Id, 0, 1, 1, 5);
-	RANDOM_BONUS_ITEMS[5] = new WeighedTreasure(Item::pickAxe_stone_Id, 0, 1, 1, 3);
-	RANDOM_BONUS_ITEMS[6] = new WeighedTreasure(Item::pickAxe_wood_Id, 0, 1, 1, 5);
+	RANDOM_BONUS_ITEMS[1] = new WeighedTreasure(Tile::planks_Id, 0, 1, 3, 10);
+	RANDOM_BONUS_ITEMS[2] = new WeighedTreasure(Tile::log_Id, 0, 1, 3, 10);
+	RANDOM_BONUS_ITEMS[3] = new WeighedTreasure(Item::stone_axe_Id, 0, 1, 1, 3);
+	RANDOM_BONUS_ITEMS[4] = new WeighedTreasure(Item::wooden_axe_Id, 0, 1, 1, 5);
+	RANDOM_BONUS_ITEMS[5] = new WeighedTreasure(Item::stone_pickaxe_Id, 0, 1, 1, 3);
+	RANDOM_BONUS_ITEMS[6] = new WeighedTreasure(Item::wooden_pickaxe_Id, 0, 1, 1, 5);
 	RANDOM_BONUS_ITEMS[7] = new WeighedTreasure(Item::apple_Id, 0, 2, 3, 5);
 	RANDOM_BONUS_ITEMS[8] = new WeighedTreasure(Item::bread_Id, 0, 2, 3, 3);
 	// 4J-PB - new items
@@ -90,12 +90,12 @@ void ServerLevel::staticCtor()
 	RANDOM_BONUS_ITEMS[10] = new WeighedTreasure(Tile::sapling_Id, 1, 4, 4, 2);
 	RANDOM_BONUS_ITEMS[11] = new WeighedTreasure(Tile::sapling_Id, 2, 4, 4, 2);
 	RANDOM_BONUS_ITEMS[12] = new WeighedTreasure(Tile::sapling_Id, 3, 4, 4, 4);
-	RANDOM_BONUS_ITEMS[13] = new WeighedTreasure(Item::seeds_melon_Id, 0, 1, 2, 3);
-	RANDOM_BONUS_ITEMS[14] = new WeighedTreasure(Item::seeds_pumpkin_Id, 0, 1, 2, 3);
+	RANDOM_BONUS_ITEMS[13] = new WeighedTreasure(Item::melon_seeds_Id, 0, 1, 2, 3);
+	RANDOM_BONUS_ITEMS[14] = new WeighedTreasure(Item::pumpkin_seeds_Id, 0, 1, 2, 3);
 	RANDOM_BONUS_ITEMS[15] = new WeighedTreasure(Tile::cactus_Id, 0, 1, 2, 3);
-	RANDOM_BONUS_ITEMS[16] = new WeighedTreasure(Item::dye_powder_Id, DyePowderItem::BROWN, 1, 2, 2);
+	RANDOM_BONUS_ITEMS[16] = new WeighedTreasure(Item::dye_Id, DyePowderItem::BROWN, 1, 2, 2);
 	RANDOM_BONUS_ITEMS[17] = new WeighedTreasure(Item::potato_Id, 0, 1, 2, 3);
-	RANDOM_BONUS_ITEMS[18] = new WeighedTreasure(Item::carrots_Id, 0, 1, 2, 3);
+	RANDOM_BONUS_ITEMS[18] = new WeighedTreasure(Item::carrot_Id, 0, 1, 2, 3);
 	RANDOM_BONUS_ITEMS[19] = new WeighedTreasure(Tile::mushroom_brown_Id, 0, 1, 2, 2);
 
 };
@@ -590,9 +590,9 @@ void ServerLevel::tickTiles()
 						if (isRaining() && shouldSnow(x + xo, yy, z + zo))
 						{
 			#if defined(_WINDOWS64) && defined(MINECRAFT_SERVER_BUILD)
-							if (!FourKitBridge::FireBlockForm(dimension->id, x + xo, yy, z + zo, Tile::topSnow_Id, 0))
+							if (!FourKitBridge::FireBlockForm(dimension->id, x + xo, yy, z + zo, Tile::snow_layer_Id, 0))
 			#endif
-							setTileAndUpdate(x + xo, yy, z + zo, Tile::topSnow_Id);
+							setTileAndUpdate(x + xo, yy, z + zo, Tile::snow_layer_Id);
 						}
 			if (isRaining())
 			{
@@ -892,7 +892,7 @@ bool ServerLevel::mayInteract(shared_ptr<Player> player, int xt, int yt, int zt,
 	// We'll need to do this in a future update
 
 	// 4J-PB - Let's allow water near the spawn point, but not lava
-	if(content!=Tile::lava_Id)
+	if(content!=Tile::flowing_lava_Id)
 	{
 		// allow this to be used
 		return true;
@@ -1646,13 +1646,13 @@ int ServerLevel::runUpdate(void* lpParam)
 					if( m_updateTileCount[iLev] >= MAX_UPDATES ) break;
 
 					// 4J Stu - Grass and Lava ticks currently take up the majority of all tile updates, so I am limiting them
-					if( (id == Tile::grass_Id && grassTicks >= MAX_GRASS_TICKS) || (id == Tile::calmLava_Id && lavaTicks >= MAX_LAVA_TICKS) ) continue;
+					if( (id == Tile::grass_Id && grassTicks >= MAX_GRASS_TICKS) || (id == Tile::lava_Id && lavaTicks >= MAX_LAVA_TICKS) ) continue;
 
 					// 4J Stu - Added shouldTileTick as some tiles won't even do anything if they are set to tick and use up one of our updates
 					if (Tile::tiles[id] != nullptr && Tile::tiles[id]->isTicking() && Tile::tiles[id]->shouldTileTick(m_level[iLev],x + (cx * 16), y, z + (cz * 16) ) )
 					{
 						if(id == Tile::grass_Id) ++grassTicks;
-						else if(id == Tile::calmLava_Id) ++lavaTicks;
+						else if(id == Tile::lava_Id) ++lavaTicks;
 						m_updateTileX[iLev][m_updateTileCount[iLev]] = x + (cx * 16);
 						m_updateTileY[iLev][m_updateTileCount[iLev]] = y;
 						m_updateTileZ[iLev][m_updateTileCount[iLev]] = z + (cz * 16);

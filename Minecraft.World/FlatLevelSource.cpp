@@ -45,7 +45,7 @@ void FlatLevelSource::prepareHeights(byteArray blocks)
 				int block = 0;
 				if (yc == 0)
 				{
-					block = Tile::unbreakable_Id;
+					block = Tile::bedrock_Id;
 				}
 				else if (yc <= 2)
 				{

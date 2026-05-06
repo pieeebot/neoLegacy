@@ -410,7 +410,7 @@ void Biome::buildSurfaceAtDefault(Level *level, Random *random, byte* chunkBlock
 
         if (y <= 1 + random->nextInt(2))
         {
-            chunkBlocks[index] = static_cast<byte>(Tile::unbreakable_Id);
+            chunkBlocks[index] = static_cast<byte>(Tile::bedrock_Id);
             continue;
         }
 
@@ -444,7 +444,7 @@ void Biome::buildSurfaceAtDefault(Level *level, Random *random, byte* chunkBlock
                     if (this->getTemperature(x, y, z) < 0.15f)
                         topState = static_cast<byte>(Tile::ice_Id);
                     else
-                        topState = static_cast<byte>(Tile::calmWater_Id);
+                        topState = static_cast<byte>(Tile::water_Id);
                     topStateData = 0;
                 }
 
@@ -482,7 +482,7 @@ void Biome::buildSurfaceAtDefault(Level *level, Random *random, byte* chunkBlock
                     }
                     else    
                     {
-                        fillerState     = static_cast<byte>(Tile::sandStone_Id);
+                        fillerState     = static_cast<byte>(Tile::sandstone_Id);
                         fillerStateData = 0;
                     }
                 }
@@ -542,9 +542,9 @@ Feature *Biome::getFlowerFeature(Random *random, int x, int y, int z)
     
     if (random->nextInt(3) > 0)
     {
-        return new FlowerFeature(Tile::flower_Id); 
+        return new FlowerFeature(Tile::yellow_flower_Id); 
     }
-    return new FlowerFeature(Tile::rose_Id); 
+    return new FlowerFeature(Tile::red_flower_Id); 
 }
 
 int Biome::getRandomDoublePlantType(Random *random)

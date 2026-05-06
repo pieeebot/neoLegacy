@@ -120,7 +120,7 @@ void SignTile::neighborChanged(Level *level, int x, int y, int z, int type)
 
 int SignTile::cloneTileId(Level *level, int x, int y, int z)
 {
-	return Item::sign_Id;
+	return Item::standing_sign_Id;
 }
 
 void SignTile::registerIcons(IconRegister *iconRegister)

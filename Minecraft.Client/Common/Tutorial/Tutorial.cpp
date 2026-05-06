@@ -405,19 +405,19 @@ Tutorial::Tutorial(int iPad, bool isFullTutorial /*= false*/) : m_iPad( iPad )
 	int stoneItems[] = {Tile::cobblestone_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Stone)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Stone, this, stoneItems, 1 ) );
 
-	int plankItems[] = {Tile::wood_Id};
+	int plankItems[] = {Tile::planks_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Planks)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Planks, this, plankItems, 1 ) );
 
 	int saplingItems[] = {Tile::sapling_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Sapling)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Sapling, this, saplingItems, 1 ) );
 
-	int unbreakableItems[] = {Tile::unbreakable_Id};
+	int unbreakableItems[] = {Tile::bedrock_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Unbreakable)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Unbreakable, this, unbreakableItems, 1 ) );
 
-	int waterItems[] = {Tile::water_Id, Tile::calmWater_Id};
+	int waterItems[] = {Tile::flowing_water_Id, Tile::water_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Water)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Water, this, waterItems, 2 ) );
 
-	int lavaItems[] = {Tile::lava_Id, Tile::calmLava_Id};
+	int lavaItems[] = {Tile::flowing_lava_Id, Tile::lava_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Lava)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Lava, this, lavaItems, 2 ) );
 
 	int sandItems[] = {Tile::sand_Id};
@@ -426,16 +426,16 @@ Tutorial::Tutorial(int iPad, bool isFullTutorial /*= false*/) : m_iPad( iPad )
 	int gravelItems[] = {Tile::gravel_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Gravel)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Gravel, this, gravelItems, 1 ) );
 
-	int goldOreItems[] = {Tile::goldOre_Id};
+	int goldOreItems[] = {Tile::gold_ore_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Gold_Ore)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Gold_Ore, this, goldOreItems, 1 ) );
 
-	int ironOreItems[] = {Tile::ironOre_Id};
+	int ironOreItems[] = {Tile::iron_ore_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Iron_Ore)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Iron_Ore, this, ironOreItems, 1 ) );
 
-	int coalOreItems[] = {Tile::coalOre_Id};
+	int coalOreItems[] = {Tile::coal_ore_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Coal_Ore)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Coal_Ore, this, coalOreItems, 1 ) );
 
-	int treeTrunkItems[] = {Tile::treeTrunk_Id};
+	int treeTrunkItems[] = {Tile::log_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Tree_Trunk)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Tree_Trunk, this, treeTrunkItems, 1 ) );
 
 	int leavesItems[] = {Tile::leaves_Id};
@@ -444,16 +444,16 @@ Tutorial::Tutorial(int iPad, bool isFullTutorial /*= false*/) : m_iPad( iPad )
 	int glassItems[] = {Tile::glass_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Glass)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Glass, this, glassItems, 1 ) );
 
-	int lapisOreItems[] = {Tile::lapisOre_Id};
+	int lapisOreItems[] = {Tile::lapis_ore_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Lapis_Ore)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Lapis_Ore, this, lapisOreItems, 1 ) );
 
-	int lapisBlockItems[] = {Tile::lapisBlock_Id};
+	int lapisBlockItems[] = {Tile::lapis_block_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Lapis_Block)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Lapis_Block, this, lapisBlockItems, 1 ) );
 
 	int dispenserItems[] = {Tile::dispenser_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Dispenser)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Dispenser, this, dispenserItems, 1 ) );
 
-	int sandstoneItems[] = {Tile::sandStone_Id};
+	int sandstoneItems[] = {Tile::sandstone_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Sandstone))
 	{
 		addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Sandstone, this, sandstoneItems, 1, -1, SandStoneTile::TYPE_DEFAULT ) );
@@ -464,10 +464,10 @@ Tutorial::Tutorial(int iPad, bool isFullTutorial /*= false*/) : m_iPad( iPad )
 	int noteBlockItems[] = {Tile::noteblock_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Note_Block)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Note_Block, this, noteBlockItems, 1 ) );
 
-	int poweredRailItems[] = {Tile::goldenRail_Id};
+	int poweredRailItems[] = {Tile::golden_rail_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Powered_Rail)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Powered_Rail, this, poweredRailItems, 1 ) );
 
-	int detectorRailItems[] = {Tile::detectorRail_Id};
+	int detectorRailItems[] = {Tile::detector_rail_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Detector_Rail)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Detector_Rail, this, detectorRailItems, 1 ) );
 
 	int tallGrassItems[] = {Tile::tallgrass_Id};
@@ -481,19 +481,19 @@ Tutorial::Tutorial(int iPad, bool isFullTutorial /*= false*/) : m_iPad( iPad )
 	int woolItems[] = {Tile::wool_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Wool)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Wool, this, woolItems, 1 ) );
 
-	int flowerItems[] = {Tile::flower_Id, Tile::rose_Id};
+	int flowerItems[] = {Tile::yellow_flower_Id, Tile::red_flower_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Flower)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Flower, this, flowerItems, 2 ) );
 
 	int mushroomItems[] = {Tile::mushroom_brown_Id, Tile::mushroom_red_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Mushroom)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Mushroom, this, mushroomItems, 2 ) );
 
-	int goldBlockItems[] = {Tile::goldBlock_Id};
+	int goldBlockItems[] = {Tile::gold_block_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Gold_Block)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Gold_Block, this, goldBlockItems, 1 ) );
 
-	int ironBlockItems[] = {Tile::ironBlock_Id};
+	int ironBlockItems[] = {Tile::iron_block_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Iron_Block)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Iron_Block, this, ironBlockItems, 1 ) );
 
-	int stoneSlabItems[] = {Tile::stoneSlabHalf_Id, Tile::stoneSlab_Id};
+	int stoneSlabItems[] = {Tile::stone_slab_Id, Tile::double_stone_slab_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Stone_Slab))
 	{
 		addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Stone_Slab, this, stoneSlabItems, 2, -1, StoneSlabTile::STONE_SLAB ) );
@@ -506,14 +506,14 @@ Tutorial::Tutorial(int iPad, bool isFullTutorial /*= false*/) : m_iPad( iPad )
 		addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Stone_Slab, this, stoneSlabItems, 2, -1, StoneSlabTile::QUARTZ_SLAB ) );
 	}
 
-	int woodSlabItems[] = {Tile::woodSlabHalf_Id, Tile::woodSlab_Id};
+	int woodSlabItems[] = {Tile::wooden_slab_Id, Tile::double_wooden_slab_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Stone_Slab))
 	{
 		addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Stone_Slab, this, woodSlabItems, 2, -1, TreeTile::BIRCH_TRUNK ) );
 		addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Stone_Slab, this, woodSlabItems, 2, -1, TreeTile::DARK_TRUNK ) );
 	}
 
-	int redBrickItems[] = {Tile::redBrick_Id};
+	int redBrickItems[] = {Tile::brick_block_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Red_Brick)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Red_Brick, this, redBrickItems, 1 ) );
 
 	int tntItems[] = {Tile::tnt_Id};
@@ -522,7 +522,7 @@ Tutorial::Tutorial(int iPad, bool isFullTutorial /*= false*/) : m_iPad( iPad )
 	int bookshelfItems[] = {Tile::bookshelf_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Bookshelf)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Bookshelf, this, bookshelfItems, 1 ) );
 
-	int mossStoneItems[] = {Tile::mossyCobblestone_Id};
+	int mossStoneItems[] = {Tile::mossy_cobblestone_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Moss_Stone)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Moss_Stone, this, mossStoneItems, 1 ) );
 
 	int obsidianItems[] = {Tile::obsidian_Id};
@@ -531,22 +531,22 @@ Tutorial::Tutorial(int iPad, bool isFullTutorial /*= false*/) : m_iPad( iPad )
 	int torchItems[] = {Tile::torch_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Torch)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Torch, this, torchItems, 1 ) );
 
-	int mobSpawnerItems[] = {Tile::mobSpawner_Id};
+	int mobSpawnerItems[] = {Tile::mob_spawner_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_MobSpawner)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_MobSpawner, this, mobSpawnerItems, 1 ) );
 
 	int chestItems[] = {Tile::chest_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Chest)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Chest, this, chestItems, 1 ) );
 
-	int redstoneItems[] = {Tile::redStoneDust_Id};
-	if(!isHintCompleted(e_Tutorial_Hint_Redstone)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Redstone, this, redstoneItems, 1, Item::redStone_Id ) );
+	int redstoneItems[] = {Tile::redstone_wire_Id};
+	if(!isHintCompleted(e_Tutorial_Hint_Redstone)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Redstone, this, redstoneItems, 1, Item::redstone_Id ) );
 
-	int diamondOreItems[] = {Tile::diamondOre_Id};
+	int diamondOreItems[] = {Tile::diamond_ore_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Diamond_Ore)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Diamond_Ore, this, diamondOreItems, 1 ) );
 
-	int diamondBlockItems[] = {Tile::diamondBlock_Id};
+	int diamondBlockItems[] = {Tile::diamond_block_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Diamond_Block)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Diamond_Block, this, diamondBlockItems, 1 ) );
 
-	int craftingTableItems[] = {Tile::workBench_Id};
+	int craftingTableItems[] = {Tile::crafting_table_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Crafting_Table)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Crafting_Table, this, craftingTableItems, 1 ) );
 
 	int cropsItems[] = {Tile::wheat_Id};
@@ -555,19 +555,19 @@ Tutorial::Tutorial(int iPad, bool isFullTutorial /*= false*/) : m_iPad( iPad )
 	int farmlandItems[] = {Tile::farmland_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Farmland)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Farmland, this, farmlandItems, 1 ) );
 
-	int furnaceItems[] = {Tile::furnace_Id, Tile::furnace_lit_Id};
+	int furnaceItems[] = {Tile::furnace_Id, Tile::lit_furnace_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Furnace)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Furnace, this, furnaceItems, 2 ) );
 
-	int signItems[] = {Tile::sign_Id, Tile::wallSign_Id};
-	if(!isHintCompleted(e_Tutorial_Hint_Sign)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Sign, this, signItems, 2, Item::sign_Id ) );
+	int signItems[] = {Tile::standing_sign_Id, Tile::wall_standing_sign_Id};
+	if(!isHintCompleted(e_Tutorial_Hint_Sign)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Sign, this, signItems, 2, Item::standing_sign_Id ) );
 
-	int doorWoodItems[] = {Tile::door_wood_Id};
-	if(!isHintCompleted(e_Tutorial_Hint_Door_Wood)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Door_Wood, this, doorWoodItems, 1, Item::door_wood->id ) );
+	int doorWoodItems[] = {Tile::wooden_door_Id};
+	if(!isHintCompleted(e_Tutorial_Hint_Door_Wood)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Door_Wood, this, doorWoodItems, 1, Item::wooden_door->id ) );
 
 	int ladderItems[] = {Tile::ladder_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Ladder)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Ladder, this, ladderItems, 1 ) );
 
-	int stairsStoneItems[] = {Tile::stairs_stone_Id,Tile::stairs_bricks_Id,Tile::stairs_stoneBrick_Id,Tile::stairs_wood_Id,Tile::stairs_sprucewood_Id,Tile::stairs_birchwood_Id,Tile::stairs_netherBricks_Id,Tile::stairs_sandstone_Id,Tile::stairs_quartz_Id};
+	int stairsStoneItems[] = {Tile::stone_stairs_Id,Tile::brick_stairs_Id,Tile::stone_brick_stairs_Id,Tile::oak_stairs_Id,Tile::spruce_stairs_Id,Tile::birch_stairs_Id,Tile::nether_brick_stairs_Id,Tile::sandstone_stairs_Id,Tile::quartz_stairs_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Stairs_Stone)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Stairs_Stone, this, stairsStoneItems, 9 ) );
 
 	int railItems[] = {Tile::rail_Id};
@@ -576,19 +576,19 @@ Tutorial::Tutorial(int iPad, bool isFullTutorial /*= false*/) : m_iPad( iPad )
 	int leverItems[] = {Tile::lever_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Lever)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Lever, this, leverItems, 1 ) );
 
-	int pressurePlateItems[] = {Tile::pressurePlate_stone_Id, Tile::pressurePlate_wood_Id};
+	int pressurePlateItems[] = {Tile::stone_pressure_plate_Id, Tile::wooden_pressure_plate_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_PressurePlate)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_PressurePlate, this, pressurePlateItems, 2 ) );
 
-	int doorIronItems[] = {Tile::door_iron_Id};
-	if(!isHintCompleted(e_Tutorial_Hint_Door_Iron)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Door_Iron, this, doorIronItems, 1, Item::door_iron->id ) );
+	int doorIronItems[] = {Tile::iron_door_Id};
+	if(!isHintCompleted(e_Tutorial_Hint_Door_Iron)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Door_Iron, this, doorIronItems, 1, Item::iron_door->id ) );
 
-	int redstoneOreItems[] = {Tile::redStoneOre_Id, Tile::redStoneOre_lit_Id};
+	int redstoneOreItems[] = {Tile::redstone_ore_Id, Tile::lit_redstone_ore_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Redstone_Ore)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Redstone_Ore, this, redstoneOreItems, 2 ) );
 
-	int redstoneTorchItems[] = {Tile::redstoneTorch_off_Id, Tile::redstoneTorch_on_Id};
+	int redstoneTorchItems[] = {Tile::unlit_redstone_torch_Id, Tile::redstone_torch_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Redstone_Torch)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Redstone_Torch, this, redstoneTorchItems, 2 ) );
 
-	int buttonItems[] = {Tile::button_stone_Id, Tile::button_wood_Id};
+	int buttonItems[] = {Tile::stone_button_Id, Tile::wooden_button_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Button)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Button, this, buttonItems, 2 ) );
 
 	int snowItems[] = {Tile::snow_Id};
@@ -612,134 +612,134 @@ Tutorial::Tutorial(int iPad, bool isFullTutorial /*= false*/) : m_iPad( iPad )
 	int pumpkinItems[] = {Tile::pumpkin_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Pumpkin)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Pumpkin, this, pumpkinItems, 1, -1, -1, 0 ) );
 
-	int hellRockItems[] = {Tile::netherRack_Id};
+	int hellRockItems[] = {Tile::netherrack_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Hell_Rock)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Hell_Rock, this, hellRockItems, 1 ) );
 
-	int hellSandItems[] = {Tile::soulsand_Id};
+	int hellSandItems[] = {Tile::soul_sand_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Hell_Sand)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Hell_Sand, this, hellSandItems, 1 ) );
 
 	int glowstoneItems[] = {Tile::glowstone_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Glowstone)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Glowstone, this, glowstoneItems, 1 ) );
 
-	int portalItems[] = {Tile::portalTile_Id};
+	int portalItems[] = {Tile::portal_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Portal)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Portal, this, portalItems, 1 ) );
 
-	int pumpkinLitItems[] = {Tile::litPumpkin_Id};
+	int pumpkinLitItems[] = {Tile::lit_pumpkin_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Pumpkin_Lit)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Pumpkin_Lit, this, pumpkinLitItems, 1, -1, -1, 0  ) );
 
 	int cakeItems[] = {Tile::cake_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Cake)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Cake, this, cakeItems, 1 ) );
 
-	int redstoneRepeaterItems[] = {Tile::diode_on_Id, Tile::diode_off_Id};
+	int redstoneRepeaterItems[] = {Tile::powered_repeater_Id, Tile::unpowered_repeater_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Redstone_Repeater)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Redstone_Repeater, this, redstoneRepeaterItems, 2, Item::repeater_Id ) );
 
 	int trapdoorItems[] = {Tile::trapdoor_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Trapdoor)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Trapdoor, this, trapdoorItems, 1 ) );
 
-	int pistonItems[] = {Tile::pistonBase_Id};
+	int pistonItems[] = {Tile::piston_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Piston)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Piston, this, pistonItems, 1 ) );
 
-	int stickyPistonItems[] = {Tile::pistonStickyBase_Id};
+	int stickyPistonItems[] = {Tile::sticky_piston_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Sticky_Piston)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Sticky_Piston, this, stickyPistonItems, 1 ) );
 
-	int monsterStoneEggItems[] = {Tile::monsterStoneEgg_Id};
-	if(!isHintCompleted(e_Tutorial_Hint_Monster_Stone_Egg)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Monster_Stone_Egg, this, monsterStoneEggItems, 1 ) );
+	int monster_eggItems[] = {Tile::monster_egg_Id};
+	if(!isHintCompleted(e_Tutorial_Hint_Monster_Stone_Egg)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Monster_Stone_Egg, this, monster_eggItems, 1 ) );
 
-	int stoneBrickSmoothItems[] = {Tile::stoneBrick_Id};
+	int stoneBrickSmoothItems[] = {Tile::stonebrick_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Stone_Brick_Smooth)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Stone_Brick_Smooth, this, stoneBrickSmoothItems, 1 ) );
 
-	int hugeMushroomItems[] = {Tile::hugeMushroom_brown_Id,Tile::hugeMushroom_red_Id};
+	int hugeMushroomItems[] = {Tile::brown_mushroom_block_Id,Tile::red_mushroom_block_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Huge_Mushroom)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Huge_Mushroom, this, hugeMushroomItems, 2 ) );
 
-	int ironFenceItems[] = {Tile::ironFence_Id};
-	if(!isHintCompleted(e_Tutorial_Hint_Iron_Fence)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Iron_Fence, this, ironFenceItems, 1 ) );
+	int iron_barsItems[] = {Tile::iron_bars_Id};
+	if(!isHintCompleted(e_Tutorial_Hint_Iron_Fence)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Iron_Fence, this, iron_barsItems, 1 ) );
 
-	int thisGlassItems[] = {Tile::thinGlass_Id};
+	int thisGlassItems[] = {Tile::glass_pane_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Thin_Glass)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Thin_Glass, this, thisGlassItems, 1 ) );
 
-	int melonItems[] = {Tile::melon_Id};
+	int melonItems[] = {Tile::melon_block_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Melon)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Melon, this, melonItems, 1 ) );
 
 	int vineItems[] = {Tile::vine_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Vine)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Vine, this, vineItems, 1 ) );
 
-	int fenceGateItems[] = {Tile::fenceGate_Id};
+	int fenceGateItems[] = {Tile::fence_gate_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Fence_Gate)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Fence_Gate, this, fenceGateItems, 1 ) );
 
-	int mycelItems[] = {Tile::mycel_Id};
+	int mycelItems[] = {Tile::mycelium_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Mycel)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Mycel, this, mycelItems, 1 ) );
 
-	int waterLilyItems[] = {Tile::waterLily_Id};
+	int waterLilyItems[] = {Tile::waterlily_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Water_Lily)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Water_Lily, this, waterLilyItems, 1 ) );
 
-	int netherBrickItems[] = {Tile::netherBrick_Id};
+	int netherBrickItems[] = {Tile::nether_brick_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Nether_Brick)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Nether_Brick, this, netherBrickItems, 1 ) );
 
-	int netherFenceItems[] = {Tile::netherFence_Id};
+	int netherFenceItems[] = {Tile::nether_brick_fence_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Nether_Fence)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Nether_Fence, this, netherFenceItems, 1 ) );
 
-	int netherStalkItems[] = {Tile::netherStalk_Id};
+	int netherStalkItems[] = {Tile::nether_wart_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Nether_Stalk)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Nether_Stalk, this, netherStalkItems, 1 ) );
 
-	int enchantTableItems[] = {Tile::enchantTable_Id};
+	int enchantTableItems[] = {Tile::enchanting_table_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Enchant_Table)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Enchant_Table, this, enchantTableItems, 1 ) );
 
-	int brewingStandItems[] = {Tile::brewingStand_Id};
-	if(!isHintCompleted(e_Tutorial_Hint_Brewing_Stand)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Brewing_Stand, this, brewingStandItems, 1, Item::brewingStand_Id ) );
+	int brewingStandItems[] = {Tile::brewing_stand_Id};
+	if(!isHintCompleted(e_Tutorial_Hint_Brewing_Stand)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Brewing_Stand, this, brewingStandItems, 1, Item::brewing_stand_Id ) );
 
 	int cauldronItems[] = {Tile::cauldron_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Cauldron)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Cauldron, this, cauldronItems, 1, Item::cauldron_Id ) );
 
-	int endPortalItems[] = {Tile::endPortalTile_Id};
+	int endPortalItems[] = {Tile::end_portal_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_End_Portal)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_End_Portal, this, endPortalItems, 1, -2 ) );
 
-	int endPortalFrameItems[] = {Tile::endPortalFrameTile_Id};
+	int endPortalFrameItems[] = {Tile::end_portal_frame_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_End_Portal_Frame)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_End_Portal_Frame, this, endPortalFrameItems, 1 ) );
 
-	int whiteStoneItems[] = {Tile::endStone_Id};
+	int whiteStoneItems[] = {Tile::end_stone_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_White_Stone)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_White_Stone, this, whiteStoneItems, 1 ) );
 
-	int dragonEggItems[] = {Tile::dragonEgg_Id};
+	int dragonEggItems[] = {Tile::dragon_egg_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Dragon_Egg)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Dragon_Egg, this, dragonEggItems, 1 ) );
 
-	int redstoneLampItems[] = {Tile::redstoneLight_Id, Tile::redstoneLight_lit_Id};
+	int redstoneLampItems[] = {Tile::redstone_lamp_Id, Tile::lit_redstone_lamp_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_RedstoneLamp)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_RedstoneLamp, this, redstoneLampItems, 2 ) );
 
 	int cocoaItems[] = {Tile::cocoa_Id};
-	if(!isHintCompleted(e_Tutorial_Hint_Cocoa)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Cocoa, this, cocoaItems, 1, Item::dye_powder_Id, -1, DyePowderItem::BROWN) );
+	if(!isHintCompleted(e_Tutorial_Hint_Cocoa)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Cocoa, this, cocoaItems, 1, Item::dye_Id, -1, DyePowderItem::BROWN) );
 
-	int emeraldOreItems[] = {Tile::emeraldOre_Id};
+	int emeraldOreItems[] = {Tile::emerald_ore_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_EmeraldOre)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_EmeraldOre, this, emeraldOreItems, 1 ) );
 
-	int emeraldBlockItems[] = {Tile::emeraldBlock_Id};
+	int emeraldBlockItems[] = {Tile::emerald_block_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_EmeraldBlock)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_EmeraldBlock, this, emeraldBlockItems, 1 ) );
 
-	int enderChestItems[] = {Tile::enderChest_Id};
+	int enderChestItems[] = {Tile::ender_chest_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_EnderChest)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_EnderChest, this, enderChestItems, 1 ) );
 
-	int tripwireSourceItems[] = {Tile::tripWireSource_Id};
+	int tripwireSourceItems[] = {Tile::tripwire_hook_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_TripwireSource)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_TripwireSource, this, tripwireSourceItems, 1 ) );
 
-	int tripwireItems[] = {Tile::tripWire_Id};
+	int tripwireItems[] = {Tile::tripwire_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Tripwire)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Tripwire, this, tripwireItems, 1, Item::string_Id ) );
 
-	int cobblestoneWallItems[] = {Tile::cobbleWall_Id};
+	int cobblestoneWallItems[] = {Tile::cobblestone_wall_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_CobblestoneWall))
 	{
 		addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_CobblestoneWall, this, cobblestoneWallItems, 1, -1, WallTile::TYPE_NORMAL ) );
 		addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_CobblestoneWall, this, cobblestoneWallItems, 1, -1, WallTile::TYPE_MOSSY ) );
 	}
 
-	int flowerpotItems[] = {Tile::flowerPot_Id};
-	if(!isHintCompleted(e_Tutorial_Hint_Flowerpot)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Flowerpot, this, flowerpotItems, 1, Item::flowerPot_Id ) );
+	int flowerpotItems[] = {Tile::flower_pot_Id};
+	if(!isHintCompleted(e_Tutorial_Hint_Flowerpot)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Flowerpot, this, flowerpotItems, 1, Item::flower_pot_Id ) );
 
 	int anvilItems[] = {Tile::anvil_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Anvil)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Anvil, this, anvilItems, 1 ) );
 
-	int quartzOreItems[] = {Tile::netherQuartz_Id};
+	int quartzOreItems[] = {Tile::quartz_ore_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_QuartzOre)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_QuartzOre, this, quartzOreItems, 1 ) );
 
-	int quartzBlockItems[] = {Tile::quartzBlock_Id};
+	int quartzBlockItems[] = {Tile::quartz_block_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_QuartzBlock))
 	{
 		addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_QuartzBlock, this, quartzBlockItems, 1, -1, QuartzBlockTile::TYPE_DEFAULT ) );
@@ -749,7 +749,7 @@ Tutorial::Tutorial(int iPad, bool isFullTutorial /*= false*/) : m_iPad( iPad )
 		addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_QuartzBlock, this, quartzBlockItems, 1, -1, QuartzBlockTile::TYPE_LINES_Z ) );
 	}
 
-	int carpetItems[] = {Tile::woolCarpet_Id};
+	int carpetItems[] = {Tile::carpet_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_WoolCarpet)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_WoolCarpet, this, carpetItems, 1 ) );
 
 	int potatoItems[] = {Tile::potatoes_Id};
@@ -758,19 +758,19 @@ Tutorial::Tutorial(int iPad, bool isFullTutorial /*= false*/) : m_iPad( iPad )
 	int carrotItems[] = {Tile::carrots_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Carrot)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Carrot, this, carrotItems, 1, -1, -1, 7 ) );
 
-	int commandBlockItems[] = {Tile::commandBlock_Id};
+	int commandBlockItems[] = {Tile::command_block_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_CommandBlock)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_CommandBlock, this, commandBlockItems, 1 ) );
 
 	int beaconItems[] = {Tile::beacon_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Beacon)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Beacon, this, beaconItems, 1 ) );
 
-	int activatorRailItems[] = {Tile::activatorRail_Id};
+	int activatorRailItems[] = {Tile::activator_rail_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Activator_Rail)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Activator_Rail, this, activatorRailItems, 1 ) );
 
-	int redstoneBlockItems[] = {Tile::redstoneBlock_Id};
+	int redstoneBlockItems[] = {Tile::redstone_block_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_RedstoneBlock)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_RedstoneBlock, this, redstoneBlockItems, 1 ) );
 
-	int daylightDetectorItems[] = {Tile::daylightDetector_Id};
+	int daylightDetectorItems[] = {Tile::daylight_detector_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_DaylightDetector)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_DaylightDetector, this, daylightDetectorItems, 1 ) );
 
 	int dropperItems[] = {Tile::dropper_Id};
@@ -779,22 +779,22 @@ Tutorial::Tutorial(int iPad, bool isFullTutorial /*= false*/) : m_iPad( iPad )
 	int hopperItems[] = {Tile::hopper_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Hopper)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Hopper, this, hopperItems, 1 ) );
 
-	int comparatorItems[] = {Tile::comparator_off_Id, Tile::comparator_on_Id};
+	int comparatorItems[] = {Tile::unpowered_comparator_Id, Tile::powered_comparator_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_Comparator)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_Comparator, this, comparatorItems, 2, Item::comparator_Id ) );
 
 	int trappedChestItems[] = {Tile::chest_trap_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_ChestTrap)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_ChestTrap, this, trappedChestItems, 1 ) );
 
-	int hayBlockItems[] = {Tile::hayBlock_Id};
+	int hayBlockItems[] = {Tile::hay_block_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_HayBlock)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_HayBlock, this, hayBlockItems, 1 ) );
 
-	int clayHardenedItems[] = {Tile::clayHardened_Id};
+	int clayHardenedItems[] = {Tile::hardened_clay_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_ClayHardened)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_ClayHardened, this, clayHardenedItems, 1 ) );
 
-	int clayHardenedColoredItems[] = {Tile::clayHardened_colored_Id};
+	int clayHardenedColoredItems[] = {Tile::stained_hardened_clay_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_ClayHardenedColored)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_ClayHardenedColored, this, clayHardenedColoredItems, 1 ) );
 
-	int coalBlockItems[] = {Tile::coalBlock_Id};
+	int coalBlockItems[] = {Tile::coal_block_Id};
 	if(!isHintCompleted(e_Tutorial_Hint_CoalBlock)) addHint(e_Tutorial_State_Gameplay, new LookAtTileHint(e_Tutorial_Hint_CoalBlock, this, coalBlockItems, 1 ) );
 
 	/*
@@ -833,13 +833,13 @@ Tutorial::Tutorial(int iPad, bool isFullTutorial /*= false*/) : m_iPad( iPad )
 	/*
 	* ITEM HINTS
 	*/
-	int shovelItems[] = {Item::shovel_wood->id, Item::shovel_stone->id, Item::shovel_iron->id, Item::shovel_gold->id, Item::shovel_diamond->id};
+	int shovelItems[] = {Item::wooden_shovel->id, Item::stone_shovel->id, Item::iron_shovel->id, Item::golden_shovel->id, Item::diamond_shovel->id};
 	if(!isHintCompleted(e_Tutorial_Hint_Item_Shovel)) addHint(e_Tutorial_State_Gameplay, new DiggerItemHint(e_Tutorial_Hint_Item_Shovel, this, IDS_TUTORIAL_HINT_DIGGER_ITEM_SHOVEL, shovelItems, 5) );
 
-	int hatchetItems[] = {Item::hatchet_wood->id, Item::hatchet_stone->id, Item::hatchet_iron->id, Item::hatchet_gold->id, Item::hatchet_diamond->id};
+	int hatchetItems[] = {Item::wooden_axe->id, Item::stone_axe->id, Item::iron_axe->id, Item::golden_axe->id, Item::diamond_axe->id};
 	if(!isHintCompleted(e_Tutorial_Hint_Item_Hatchet)) addHint(e_Tutorial_State_Gameplay, new DiggerItemHint(e_Tutorial_Hint_Item_Hatchet, this, IDS_TUTORIAL_HINT_DIGGER_ITEM_HATCHET, hatchetItems, 5 ) );
 
-	int pickaxeItems[] = {Item::pickAxe_wood->id, Item::pickAxe_stone->id, Item::pickAxe_iron->id, Item::pickAxe_gold->id, Item::pickAxe_diamond->id};
+	int pickaxeItems[] = {Item::wooden_pickaxe->id, Item::stone_pickaxe->id, Item::iron_pickaxe->id, Item::golden_pickaxe->id, Item::diamond_pickaxe->id};
 	if(!isHintCompleted(e_Tutorial_Hint_Item_Pickaxe)) addHint(e_Tutorial_State_Gameplay, new DiggerItemHint(e_Tutorial_Hint_Item_Pickaxe, this, IDS_TUTORIAL_HINT_DIGGER_ITEM_PICKAXE, pickaxeItems, 5 ) );
 
 	/*
@@ -1993,7 +1993,7 @@ void Tutorial::onSelectedItemChanged(shared_ptr<ItemInstance> item)
 		{
 			switch(item->id)
 			{
-			case Item::fishingRod_Id:
+			case Item::fishing_rod_Id:
 				changeTutorialState(e_Tutorial_State_Fishing);
 				break;
 			default:

@@ -78,7 +78,7 @@ void RepairMenu::createResult()
 
 		if (addition != NULL)
 		{
-			usingBook = addition->id == Item::enchantedBook_Id && Item::enchantedBook->getEnchantments(addition)->size() > 0;
+			usingBook = addition->id == Item::enchanted_book_Id && Item::enchanted_book->getEnchantments(addition)->size() > 0;
 
 			if (result->isDamageableItem() && Item::items[result->id]->isValidRepairItem(input, addition))
 			{

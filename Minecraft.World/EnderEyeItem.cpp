@@ -18,12 +18,12 @@ bool EnderEyeItem::useOn(shared_ptr<ItemInstance> instance, shared_ptr<Player> p
 	int targetType = level->getTile(x, y, z);
 	int targetData = level->getData(x, y, z);
 
-	if (player->mayUseItemAt(x, y, z, face, instance) && targetType == Tile::endPortalFrameTile_Id && !TheEndPortalFrameTile::hasEye(targetData))
+	if (player->mayUseItemAt(x, y, z, face, instance) && targetType == Tile::end_portal_frame_Id && !TheEndPortalFrameTile::hasEye(targetData))
 	{
 		if(bTestUseOnOnly) return true;
 		if (level->isClientSide) return true;
 		level->setData(x, y, z, targetData + TheEndPortalFrameTile::EYE_BIT, Tile::UPDATE_CLIENTS);
-		level->updateNeighbourForOutputSignal(x, y, z, Tile::endPortalFrameTile_Id);
+		level->updateNeighbourForOutputSignal(x, y, z, Tile::end_portal_frame_Id);
 		instance->count--;
 
 		for (int i = 0; i < 16; i++)
@@ -53,7 +53,7 @@ bool EnderEyeItem::useOn(shared_ptr<ItemInstance> instance, shared_ptr<Player> p
 			int testZ = z + Direction::STEP_Z[rightHandDirection] * offset;
 
 			int tile = level->getTile(testX, y, testZ);
-			if (tile == Tile::endPortalFrameTile->id)
+			if (tile == Tile::end_portal_frame->id)
 			{
 				int data = level->getData(testX, y, testZ);
 				if (!TheEndPortalFrameTile::hasEye(data))
@@ -84,7 +84,7 @@ bool EnderEyeItem::useOn(shared_ptr<ItemInstance> instance, shared_ptr<Player> p
 
 				int tile = level->getTile(testX, y, testZ);
 				int data = level->getData(testX, y, testZ);
-				if (tile != Tile::endPortalFrameTile_Id || !TheEndPortalFrameTile::hasEye(data))
+				if (tile != Tile::end_portal_frame_Id || !TheEndPortalFrameTile::hasEye(data))
 				{
 					valid = false;
 					break;
@@ -102,7 +102,7 @@ bool EnderEyeItem::useOn(shared_ptr<ItemInstance> instance, shared_ptr<Player> p
 
 					int tile = level->getTile(testX, y, testZ);
 					int data = level->getData(testX, y, testZ);
-					if (tile != Tile::endPortalFrameTile_Id || !TheEndPortalFrameTile::hasEye(data))
+					if (tile != Tile::end_portal_frame_Id || !TheEndPortalFrameTile::hasEye(data))
 					{
 						valid = false;
 						break;
@@ -122,7 +122,7 @@ bool EnderEyeItem::useOn(shared_ptr<ItemInstance> instance, shared_ptr<Player> p
 						targetX += Direction::STEP_X[direction] * pz;
 						targetZ += Direction::STEP_Z[direction] * pz;
 
-						level->setTileAndData(targetX, y, targetZ, Tile::endPortalTile_Id, 0, Tile::UPDATE_CLIENTS);
+						level->setTileAndData(targetX, y, targetZ, Tile::end_portal_Id, 0, Tile::UPDATE_CLIENTS);
 					}
 				}
 			}
@@ -140,7 +140,7 @@ bool EnderEyeItem::TestUse(shared_ptr<ItemInstance> itemInstance, Level *level, 
 	{
 		int tile = level->getTile(hr->x, hr->y, hr->z);
 		delete hr;
-		if (tile == Tile::endPortalFrameTile_Id)
+		if (tile == Tile::end_portal_frame_Id)
 		{
 			return false;
 		}
@@ -193,7 +193,7 @@ shared_ptr<ItemInstance> EnderEyeItem::use(shared_ptr<ItemInstance> instance, Le
 	{
 		int tile = level->getTile(hr->x, hr->y, hr->z);
 		delete hr;
-		if (tile == Tile::endPortalFrameTile_Id)
+		if (tile == Tile::end_portal_frame_Id)
 		{
 			return instance;
 		}

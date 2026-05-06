@@ -86,7 +86,7 @@ void TheEndLevelRandomLevelSource::prepareHeights(int xOffs, int zOffs, byteArra
 							int tileId = 0;
 							if (val > 0)
 							{
-								tileId = Tile::endStone_Id;
+								tileId = Tile::end_stone_Id;
 							} else {
 							}
 
@@ -119,8 +119,8 @@ void TheEndLevelRandomLevelSource::buildSurfaces(int xOffs, int zOffs, byteArray
 			int runDepth = 1;
 			int run = -1;
 
-			byte top = (byte) Tile::endStone_Id;
-			byte material = (byte) Tile::endStone_Id;
+			byte top = (byte) Tile::end_stone_Id;
+			byte material = (byte) Tile::end_stone_Id;
 
 			for (int y = Level::genDepthMinusOne; y >= 0; y--)
 			{
@@ -139,7 +139,7 @@ void TheEndLevelRandomLevelSource::buildSurfaces(int xOffs, int zOffs, byteArray
 						if (runDepth <= 0)
 						{
 							top = 0;
-							material = static_cast<byte>(Tile::endStone_Id);
+							material = static_cast<byte>(Tile::end_stone_Id);
 						}
 
 						run = runDepth;
@@ -320,10 +320,10 @@ void TheEndLevelRandomLevelSource::calcWaterDepths(ChunkSource *parent, int xt, 
 				if (level->getHeightmap(xp - 1, zp) > 0 || level->getHeightmap(xp + 1, zp) > 0 || level->getHeightmap(xp, zp - 1) > 0 || level->getHeightmap(xp, zp + 1) > 0)
 				{
 					bool hadWater = false;
-					if (hadWater || (level->getTile(xp - 1, y, zp) == Tile::calmWater_Id && level->getData(xp - 1, y, zp) < 7)) hadWater = true;
-					if (hadWater || (level->getTile(xp + 1, y, zp) == Tile::calmWater_Id && level->getData(xp + 1, y, zp) < 7)) hadWater = true;
-					if (hadWater || (level->getTile(xp, y, zp - 1) == Tile::calmWater_Id && level->getData(xp, y, zp - 1) < 7)) hadWater = true;
-					if (hadWater || (level->getTile(xp, y, zp + 1) == Tile::calmWater_Id && level->getData(xp, y, zp + 1) < 7)) hadWater = true;
+					if (hadWater || (level->getTile(xp - 1, y, zp) == Tile::water_Id && level->getData(xp - 1, y, zp) < 7)) hadWater = true;
+					if (hadWater || (level->getTile(xp + 1, y, zp) == Tile::water_Id && level->getData(xp + 1, y, zp) < 7)) hadWater = true;
+					if (hadWater || (level->getTile(xp, y, zp - 1) == Tile::water_Id && level->getData(xp, y, zp - 1) < 7)) hadWater = true;
+					if (hadWater || (level->getTile(xp, y, zp + 1) == Tile::water_Id && level->getData(xp, y, zp + 1) < 7)) hadWater = true;
 					if (hadWater)
 					{
 						for (int x2 = -5; x2 <= 5; x2++)
@@ -335,7 +335,7 @@ void TheEndLevelRandomLevelSource::calcWaterDepths(ChunkSource *parent, int xt, 
 								if (d <= 5)
 								{
 									d = 6 - d;
-									if (level->getTile(xp + x2, y, zp + z2) == Tile::calmWater_Id)
+									if (level->getTile(xp + x2, y, zp + z2) == Tile::water_Id)
 									{
 										int od = level->getData(xp + x2, y, zp + z2);
 										if (od < 7 && od < d)
@@ -348,10 +348,10 @@ void TheEndLevelRandomLevelSource::calcWaterDepths(ChunkSource *parent, int xt, 
 						}
 						if (hadWater)
 						{
-							level->setTileAndData(xp, y, zp, Tile::calmWater_Id, 7, Tile::UPDATE_CLIENTS);
+							level->setTileAndData(xp, y, zp, Tile::water_Id, 7, Tile::UPDATE_CLIENTS);
 							for (int y2 = 0; y2 < y; y2++)
 							{
-								level->setTileAndData(xp, y2, zp, Tile::calmWater_Id, 8, Tile::UPDATE_CLIENTS);
+								level->setTileAndData(xp, y2, zp, Tile::water_Id, 8, Tile::UPDATE_CLIENTS);
 							}
 						}
 					}

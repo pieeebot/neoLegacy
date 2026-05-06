@@ -2684,7 +2684,7 @@ bool Level::containsFireTile(AABB *box)
 				{
 					int t = getTile(x, y, z);
 
-					if (t == Tile::fire_Id || t == Tile::lava_Id || t == Tile::calmLava_Id) return true;
+					if (t == Tile::fire_Id || t == Tile::flowing_lava_Id || t == Tile::lava_Id) return true;
 				}
 	}
 	return false;
@@ -3362,7 +3362,7 @@ bool Level::shouldFreeze(int x, int y, int z, bool checkNeighbors)
 	if (y >= 0 && y < maxBuildHeight && getBrightness(LightLayer::Block, x, y, z) < 10)
 	{
 		int current = getTile(x, y, z);
-		if ((current == Tile::calmWater_Id || current == Tile::water_Id) && getData(x, y, z) == 0)
+		if ((current == Tile::water_Id || current == Tile::flowing_water_Id) && getData(x, y, z) == 0)
 		{
 			if (!checkNeighbors) return true;
 

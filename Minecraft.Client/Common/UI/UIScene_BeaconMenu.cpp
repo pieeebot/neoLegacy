@@ -342,10 +342,10 @@ void UIScene_BeaconMenu::customDraw(IggyCustomDrawCallbackRegion *region)
 			item = std::make_shared<ItemInstance>(Item::diamond);
 			break;
 		case 2:
-			item = std::make_shared<ItemInstance>(Item::goldIngot);
+			item = std::make_shared<ItemInstance>(Item::gold_ingot);
 			break;
 		case 3:
-			item = std::make_shared<ItemInstance>(Item::ironIngot);
+			item = std::make_shared<ItemInstance>(Item::iron_ingot);
 			break;
 		default:
 			assert(false);

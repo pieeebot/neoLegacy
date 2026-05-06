@@ -61,7 +61,7 @@ shared_ptr<Slime> LavaSlime::createChild()
 int LavaSlime::getDeathLoot()
 {
 	// 4J-PB - brought forward the magma cream drops
-	return Item::magmaCream_Id;
+	return Item::magma_cream_Id;
 }
 
 void LavaSlime::dropDeathLoot(bool wasKilledByPlayer, int playerBonusLevel)

@@ -6,7 +6,7 @@
 bool LightGemFeature::place(Level *level, Random *random, int x, int y, int z)
 {
 	if (!level->isEmptyTile(x, y, z)) return false;
-	if (level->getTile(x, y + 1, z) != Tile::netherRack_Id) return false;
+	if (level->getTile(x, y + 1, z) != Tile::netherrack_Id) return false;
 	level->setTileAndData(x, y, z, Tile::glowstone_Id, 0, Tile::UPDATE_CLIENTS);
 
 	for (int i = 0; i < 1500; i++)

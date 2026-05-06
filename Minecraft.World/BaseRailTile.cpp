@@ -381,7 +381,7 @@ bool BaseRailTile::isRail(Level *level, int x, int y, int z)
 
 bool BaseRailTile::isRail(int id)
 {
-	return id == Tile::rail_Id || id == Tile::goldenRail_Id || id == Tile::detectorRail_Id || id == Tile::activatorRail_Id;
+	return id == Tile::rail_Id || id == Tile::golden_rail_Id || id == Tile::detector_rail_Id || id == Tile::activator_rail_Id;
 }
 
 BaseRailTile::BaseRailTile(int id, bool usesDataBit) : Tile(id, Material::decoration, isSolidRender())

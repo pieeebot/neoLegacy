@@ -53,7 +53,7 @@ bool SpikeFeature::place(Level *level, Random *random, int x, int y, int z)
 		shared_ptr<EnderCrystal> enderCrystal = std::make_shared<EnderCrystal>(level);
 		enderCrystal->moveTo(x + 0.5f, y + hh, z + 0.5f, random->nextFloat() * 360, 0);
 		level->addEntity(enderCrystal);
-		level->setTileAndData(x, y + hh, z, Tile::unbreakable_Id, 0, Tile::UPDATE_CLIENTS);
+		level->setTileAndData(x, y + hh, z, Tile::bedrock_Id, 0, Tile::UPDATE_CLIENTS);
 
 		return true;
 }
@@ -138,9 +138,9 @@ bool SpikeFeature::placeWithIndex(Level *level, Random *random, int x, int y, in
 						{
 							if(yy==(y + hh - 1))
 							{
-								placeBlock(level, xx, y + hh, zz, Tile::ironFence_Id, 0);
-								placeBlock(level, xx, y + hh +1, zz, Tile::ironFence_Id, 0);
-								placeBlock(level, xx, y + hh +2, zz, Tile::ironFence_Id, 0);
+								placeBlock(level, xx, y + hh, zz, Tile::iron_bars_Id, 0);
+								placeBlock(level, xx, y + hh +1, zz, Tile::iron_bars_Id, 0);
+								placeBlock(level, xx, y + hh +2, zz, Tile::iron_bars_Id, 0);
 							}
 						}
 					}
@@ -162,7 +162,7 @@ bool SpikeFeature::placeWithIndex(Level *level, Random *random, int x, int y, in
 			{
 				for (int zz = z - 2; zz <= z + 2; zz++)
 				{
-					placeBlock(level, xx, yy, zz, Tile::ironFence_Id, 0);
+					placeBlock(level, xx, yy, zz, Tile::iron_bars_Id, 0);
 				}
 			}
 		}
@@ -171,8 +171,8 @@ bool SpikeFeature::placeWithIndex(Level *level, Random *random, int x, int y, in
 	shared_ptr<EnderCrystal> enderCrystal = std::make_shared<EnderCrystal>(level);
 	enderCrystal->moveTo(x + 0.5f, y + hh, z + 0.5f, random->nextFloat() * 360, 0);
 	level->addEntity(enderCrystal);
-	placeBlock(level, x, y + hh, z, Tile::unbreakable_Id, 0);
-	//level->setTile(x, y + hh, z, Tile::unbreakable_Id);
+	placeBlock(level, x, y + hh, z, Tile::bedrock_Id, 0);
+	//level->setTile(x, y + hh, z, Tile::bedrock_Id);
 
 	return true;
 }

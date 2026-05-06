@@ -120,7 +120,7 @@ void StructureRecipies::addRecipes(Recipes *r)
 		L"#E#", //
 		L"###", //
 
-		L'#', Tile::obsidian, L'E', Item::eyeOfEnder,
+		L'#', Tile::obsidian, L'E', Item::eye_of_ender,
 		L'S');
 
 	r->addShapedRecipy(new ItemInstance(Tile::stoneBrick, 4), //
@@ -153,15 +153,15 @@ void StructureRecipies::addRecipes(Recipes *r)
 		L'S');
 
 	// 4J Stu - Move this into "Recipes" to change the order things are displayed on the crafting menu
-	//r->addShapedRecipy(new ItemInstance(Tile::ironFence, 16), //
+	//r->addShapedRecipy(new ItemInstance(Tile::iron_bars, 16), //
 	//	L"sscig",
 	//	L"###", //
 	//	L"###", //
 
-	//	L'#', Item::ironIngot,
+	//	L'#', Item::iron_ingot,
 	//	L'S');
 
-	r->addShapedRecipy(new ItemInstance(Tile::thinGlass, 16), //
+	r->addShapedRecipy(new ItemInstance(Tile::glass_pane, 16), //
 		L"ssctg",
 		L"###", //
 		L"###", //
@@ -181,7 +181,7 @@ for (int i = 0; i < 16; i++)
         L"#X#",
         L"###",
         L'#', new ItemInstance(Tile::glass),
-        L'X', new ItemInstance(Item::dye_powder, 1, i),
+        L'X', new ItemInstance(Item::dye, 1, i),
         L'D');
     r->addShapedRecipy(new ItemInstance(Tile::stained_glass_pane, 16, ColoredTile::getItemAuxValueForTileData(i)),
         L"ssczg",
@@ -199,7 +199,7 @@ for (int i = 0; i < 16; i++)
         L"#X#",
         L"###",
         L'#', new ItemInstance(Tile::glass),
-        L'X', new ItemInstance(Item::dye_powder, 1, i),
+        L'X', new ItemInstance(Item::dye, 1, i),
         L'D');
     r->addShapedRecipy(new ItemInstance(Tile::stained_glass_pane, 16, ColoredTile::getItemAuxValueForTileData(i)),
         L"ssczg",
@@ -222,7 +222,7 @@ for (int i = 0; i < 16; i++)
 		L" R ", //
 		L"RGR", //
 		L" R ", //
-		L'R', Item::redStone, 'G', Tile::glowstone,
+		L'R', Item::redstone, 'G', Tile::glowstone,
 		L'M');
 
 	r->addShapedRecipy(new ItemInstance(Tile::beacon, 1), //
@@ -231,6 +231,6 @@ for (int i = 0; i < 16; i++)
 		L"GSG", //
 		L"OOO", //
 
-		L'G', Tile::glass, L'S', Item::netherStar, L'O', Tile::obsidian,
+		L'G', Tile::glass, L'S', Item::nether_star, L'O', Tile::obsidian,
 		L'M');
 }

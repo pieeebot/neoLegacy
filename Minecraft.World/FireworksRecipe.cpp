@@ -66,11 +66,11 @@ bool FireworksRecipe::matches(shared_ptr<CraftingContainer> craftSlots, Level *l
 		{
 			sulphurCount++;
 		}
-		else if (item->id == Item::fireworksCharge_Id)
+		else if (item->id == Item::firework_charge_Id)
 		{
 			chargeCount++;
 		}
-		else if (item->id == Item::dye_powder_Id)
+		else if (item->id == Item::dye_Id)
 		{
 			colorCount++;
 		}
@@ -78,7 +78,7 @@ bool FireworksRecipe::matches(shared_ptr<CraftingContainer> craftSlots, Level *l
 		{
 			paperCount++;
 		}
-		else if (item->id == Item::yellowDust_Id)
+		else if (item->id == Item::glowstone_dust_Id)
 		{
 			// glowstone dust gives flickering
 			chargeComponents++;
@@ -88,7 +88,7 @@ bool FireworksRecipe::matches(shared_ptr<CraftingContainer> craftSlots, Level *l
 			// diamonds give trails
 			chargeComponents++;
 		}
-		else if (item->id == Item::fireball_Id)
+		else if (item->id == Item::fire_charge_Id)
 		{
 			// fireball gives larger explosion
 			typeComponents++;
@@ -98,7 +98,7 @@ bool FireworksRecipe::matches(shared_ptr<CraftingContainer> craftSlots, Level *l
 			// burst
 			typeComponents++;
 		}
-		else if (item->id == Item::goldNugget_Id)
+		else if (item->id == Item::gold_nugget_Id)
 		{
 			// star
 			typeComponents++;
@@ -135,7 +135,7 @@ bool FireworksRecipe::matches(shared_ptr<CraftingContainer> craftSlots, Level *l
 			for (int slot = 0; slot < craftSlots->getContainerSize(); slot++)
 			{
 				shared_ptr<ItemInstance> item = craftSlots->getItem(slot);
-				if (item == nullptr || item->id != Item::fireworksCharge_Id) continue;
+				if (item == nullptr || item->id != Item::firework_charge_Id) continue;
 
 				if (item->hasTag() && item->getTag()->contains(FireworksItem::TAG_EXPLOSION))
 				{
@@ -156,7 +156,7 @@ bool FireworksRecipe::matches(shared_ptr<CraftingContainer> craftSlots, Level *l
 	if (sulphurCount == 1 && paperCount == 0 && chargeCount == 0 && colorCount > 0 && typeComponents <= 1)
 	{
 
-		resultItem = std::make_shared<ItemInstance>(Item::fireworksCharge);
+		resultItem = std::make_shared<ItemInstance>(Item::firework_charge);
 		CompoundTag *itemTag = new CompoundTag();
 		CompoundTag *expTag = new CompoundTag(FireworksItem::TAG_EXPLOSION);
 
@@ -168,11 +168,11 @@ bool FireworksRecipe::matches(shared_ptr<CraftingContainer> craftSlots, Level *l
 			shared_ptr<ItemInstance> item = craftSlots->getItem(slot);
 			if (item == nullptr) continue;
 
-			if (item->id == Item::dye_powder_Id)
+			if (item->id == Item::dye_Id)
 			{
 				colors.push_back(DyePowderItem::COLOR_RGB[item->getAuxValue()]);
 			}
-			else if (item->id == Item::yellowDust_Id)
+			else if (item->id == Item::glowstone_dust_Id)
 			{
 				// glowstone dust gives flickering
 				expTag->putBoolean(FireworksItem::TAG_E_FLICKER, true);
@@ -182,7 +182,7 @@ bool FireworksRecipe::matches(shared_ptr<CraftingContainer> craftSlots, Level *l
 				// diamonds give trails
 				expTag->putBoolean(FireworksItem::TAG_E_TRAIL, true);
 			}
-			else if (item->id == Item::fireball_Id)
+			else if (item->id == Item::fire_charge_Id)
 			{
 				type = FireworksItem::TYPE_BIG;
 			}
@@ -190,7 +190,7 @@ bool FireworksRecipe::matches(shared_ptr<CraftingContainer> craftSlots, Level *l
 			{
 				type = FireworksItem::TYPE_BURST;
 			}
-			else if (item->id == Item::goldNugget_Id)
+			else if (item->id == Item::gold_nugget_Id)
 			{
 				type = FireworksItem::TYPE_STAR;
 			}
@@ -224,11 +224,11 @@ bool FireworksRecipe::matches(shared_ptr<CraftingContainer> craftSlots, Level *l
 			shared_ptr<ItemInstance> item = craftSlots->getItem(slot);
 			if (item == nullptr) continue;
 
-			if (item->id == Item::dye_powder_Id)
+			if (item->id == Item::dye_Id)
 			{
 				colors.push_back(DyePowderItem::COLOR_RGB[item->getAuxValue()]);
 			}
-			else if (item->id == Item::fireworksCharge_Id)
+			else if (item->id == Item::firework_charge_Id)
 			{
 				resultItem = item->copy();
 			resultItem->count = 1;
@@ -310,11 +310,11 @@ void FireworksRecipe::updatePossibleRecipes(shared_ptr<CraftingContainer> craftS
 		{
 			sulphurCount++;
 		}
-		else if (item->id == Item::fireworksCharge_Id)
+		else if (item->id == Item::firework_charge_Id)
 		{
 			chargeCount++;
 		}
-		else if (item->id == Item::dye_powder_Id)
+		else if (item->id == Item::dye_Id)
 		{
 			colorCount++;
 		}
@@ -322,7 +322,7 @@ void FireworksRecipe::updatePossibleRecipes(shared_ptr<CraftingContainer> craftS
 		{
 			paperCount++;
 		}
-		else if (item->id == Item::yellowDust_Id)
+		else if (item->id == Item::glowstone_dust_Id)
 		{
 			// glowstone dust gives flickering
 			chargeComponents++;
@@ -332,7 +332,7 @@ void FireworksRecipe::updatePossibleRecipes(shared_ptr<CraftingContainer> craftS
 			// diamonds give trails
 			chargeComponents++;
 		}
-		else if (item->id == Item::fireball_Id)
+		else if (item->id == Item::fire_charge_Id)
 		{
 			// fireball gives larger explosion
 			typeComponents++;
@@ -342,7 +342,7 @@ void FireworksRecipe::updatePossibleRecipes(shared_ptr<CraftingContainer> craftS
 			// burst
 			typeComponents++;
 		}
-		else if (item->id == Item::goldNugget_Id)
+		else if (item->id == Item::gold_nugget_Id)
 		{
 			// star
 			typeComponents++;
@@ -389,28 +389,28 @@ bool FireworksRecipe::isValidIngredient(shared_ptr<ItemInstance> item, bool fire
 	case Item::gunpowder_Id:
 		valid = firework || charge;
 		break;
-	case Item::fireworksCharge_Id:
+	case Item::firework_charge_Id:
 		valid = firework || fade;
 		break;
-	case Item::dye_powder_Id:
+	case Item::dye_Id:
 		valid = charge || fade;
 		break;
 	case Item::paper_Id:
 		valid = firework;
 		break;
-	case Item::yellowDust_Id:
+	case Item::glowstone_dust_Id:
 		valid = charge;
 		break;
 	case Item::diamond_Id:
 		valid = charge;
 		break;
-	case Item::fireball_Id:
+	case Item::fire_charge_Id:
 		valid = charge;
 		break;
 	case Item::feather_Id:
 		valid = charge;
 		break;
-	case Item::goldNugget_Id:
+	case Item::gold_nugget_Id:
 		valid = charge;
 		break;
 	case Item::skull_Id:

@@ -41,7 +41,7 @@ Tile::BlockState ButtonTile::getBlockState(LevelSource *level, int x, int y, int
 
 Icon *ButtonTile::getTexture(int face, int data)
 {
-    if(id == Tile::button_wood_Id) return Tile::wood->getTexture(Facing::UP);
+    if(id == Tile::wooden_button_Id) return Tile::wood->getTexture(Facing::UP);
     else return Tile::stone->getTexture(Facing::UP);
 }
 

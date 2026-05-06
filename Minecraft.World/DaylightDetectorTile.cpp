@@ -116,9 +116,9 @@ bool DaylightDetectorTile::use(Level *level, int x, int y, int z, shared_ptr<Pla
 		{
 			int data = level->getData(x, y, z);
 			if (inverted)
-				level->setTileAndData(x, y, z, Tile::daylightDetector_Id, data, Tile::UPDATE_INVISIBLE);
+				level->setTileAndData(x, y, z, Tile::daylight_detector_Id, data, Tile::UPDATE_INVISIBLE);
 			else
-				level->setTileAndData(x, y, z, Tile::invertedDaylightDetector_Id, data, Tile::UPDATE_INVISIBLE);
+				level->setTileAndData(x, y, z, Tile::daylight_detector_inverted_Id, data, Tile::UPDATE_INVISIBLE);
 
 			updateSignalStrength(level, x, y, z);
 		}

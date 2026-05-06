@@ -20,7 +20,7 @@ bool GroundBushFeature::place(Level *level, Random *random, int x, int y, int z)
 	if (tile == Tile::dirt_Id || tile == Tile::grass_Id)
 	{
 		y++;
-		placeBlock(level, x, y, z, Tile::treeTrunk_Id, trunkTileType);
+		placeBlock(level, x, y, z, Tile::log_Id, trunkTileType);
 
 		for (int yy = y; yy <= y + 2; yy++)
 		{

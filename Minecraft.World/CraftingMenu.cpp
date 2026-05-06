@@ -65,7 +65,7 @@ void CraftingMenu::removed(shared_ptr<Player> player)
 
 bool CraftingMenu::stillValid(shared_ptr<Player> player)
 {
-	if (level->getTile(x, y, z) != Tile::workBench_Id) return false;
+	if (level->getTile(x, y, z) != Tile::crafting_table_Id) return false;
 	if (player->distanceToSqr(x + 0.5, y + 0.5, z + 0.5) > 8 * 8) return false;
 	return true;
 }

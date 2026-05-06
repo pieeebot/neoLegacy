@@ -589,11 +589,11 @@ bool MultiPlayerLevel::doSetTileAndData(int x, int y, int z, int tile, int data)
 	// water changing from static to dynamic for instance. Note that this is only called from a client connection,
 	// and so the thing being notified of any update through tileUpdated is the renderer
 	int prevTile = getTile(x, y, z);
-	bool visuallyImportant = (!( ( ( prevTile == Tile::water_Id ) && ( tile == Tile::calmWater_Id ) )   ||
-		( ( prevTile == Tile::calmWater_Id )  && ( tile == Tile::water_Id ) )	||
-		( ( prevTile == Tile::lava_Id )		&& ( tile == Tile::calmLava_Id ) )	||
-		( ( prevTile == Tile::calmLava_Id )		&& ( tile == Tile::calmLava_Id ) )	||
-		( ( prevTile == Tile::calmLava_Id )	&& ( tile == Tile::lava_Id ) ) ) );
+	bool visuallyImportant = (!( ( ( prevTile == Tile::flowing_water_Id ) && ( tile == Tile::water_Id ) )   ||
+		( ( prevTile == Tile::water_Id )  && ( tile == Tile::flowing_water_Id ) )	||
+		( ( prevTile == Tile::flowing_lava_Id )		&& ( tile == Tile::lava_Id ) )	||
+		( ( prevTile == Tile::lava_Id )		&& ( tile == Tile::lava_Id ) )	||
+		( ( prevTile == Tile::lava_Id )	&& ( tile == Tile::flowing_lava_Id ) ) ) );
 	// If we're the host, need to tell the renderer for updates even if they don't change things as the host
 	// might have been sharing data and so set it already, but the renderer won't know to update
 	if( (Level::setTileAndData(x, y, z, tile, data, Tile::UPDATE_ALL) || g_NetworkManager.IsHost() ) )

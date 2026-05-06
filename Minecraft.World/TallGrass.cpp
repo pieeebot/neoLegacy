@@ -94,7 +94,7 @@ int TallGrass::getColor(LevelSource *level, int x, int y, int z, int data)
 int TallGrass::getResource(int data, Random *random, int playerBonusLevel)
 {
 	if (random->nextInt(8) == 0) {
-		return Item::seeds_wheat->id;
+		return Item::wheat_seeds->id;
 	}
 
 	return -1;

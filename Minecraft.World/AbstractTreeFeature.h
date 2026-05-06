@@ -15,11 +15,11 @@ public:
         return tile == 0
             || tile == Tile::leaves_Id
             || tile == Tile::leaves2_Id
-            || tile == Tile::treeTrunk_Id
-            || tile == Tile::tree2Trunk_Id
+            || tile == Tile::log_Id
+            || tile == Tile::log2_Id
             || tile == Tile::vine_Id
             || tile == Tile::tallgrass_Id
-            || tile == Tile::flower_Id;
+            || tile == Tile::yellow_flower_Id;
     }
 
     void setDirtAt(Level* level, int x, int y, int z)

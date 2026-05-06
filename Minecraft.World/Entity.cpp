@@ -1011,7 +1011,7 @@ void Entity::playStepSound(int xt, int yt, int zt, int t)
 		}
 
 	}
-	if (level->getTile(xt, yt + 1, zt) == Tile::topSnow_Id)
+	if (level->getTile(xt, yt + 1, zt) == Tile::snow_layer_Id)
 	{
 		soundType = Tile::topSnow->soundType;
 		playSound(soundType->getStepSound(), soundType->getVolume() * 0.15f, soundType->getPitch());

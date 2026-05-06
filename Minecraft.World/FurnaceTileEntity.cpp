@@ -320,11 +320,11 @@ int FurnaceTileEntity::getBurnDuration(shared_ptr<ItemInstance> itemInstance)
 
 	if (id == Item::coal->id) return BURN_INTERVAL * 8;
 
-	if (id == Item::bucket_lava->id) return BURN_INTERVAL * 100;
+	if (id == Item::lava_bucket->id) return BURN_INTERVAL * 100;
 
 	if (id == Tile::sapling_Id) return BURN_INTERVAL / 2;
 
-	if (id == Item::blazeRod_Id) return BURN_INTERVAL * 12;
+	if (id == Item::blaze_rod_Id) return BURN_INTERVAL * 12;
 
 	return 0;
 }
@@ -387,7 +387,7 @@ bool FurnaceTileEntity::canTakeItemThroughFace(int slot, shared_ptr<ItemInstance
 {
 	if (face == Facing::DOWN && slot == SLOT_FUEL)
 	{
-		if (item->id != Item::bucket_empty_Id) return false;
+		if (item->id != Item::bucket_Id) return false;
 	}
 
 	return true;

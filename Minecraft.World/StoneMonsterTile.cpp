@@ -66,7 +66,7 @@ int StoneMonsterTile::getResourceCount(Random *random)
 
 bool StoneMonsterTile::isCompatibleHostBlock(int block)
 {
-	return block == Tile::stone_Id || block == Tile::cobblestone_Id || block == Tile::stoneBrick_Id;
+	return block == Tile::stone_Id || block == Tile::cobblestone_Id || block == Tile::stonebrick_Id;
 }
 
 int StoneMonsterTile::getDataForHostBlock(int block)
@@ -75,7 +75,7 @@ int StoneMonsterTile::getDataForHostBlock(int block)
 	{
 		return HOST_COBBLE;
 	}
-	if (block == Tile::stoneBrick_Id)
+	if (block == Tile::stonebrick_Id)
 	{
 		return HOST_STONEBRICK;
 	}

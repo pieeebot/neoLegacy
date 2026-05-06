@@ -25,12 +25,12 @@ Icon *CarrotTile::getTexture(int face, int data)
 
 int CarrotTile::getBaseSeedId()
 {
-	return Item::carrots_Id;
+	return Item::carrot_Id;
 }
 
 int CarrotTile::getBasePlantId()
 {
-	return Item::carrots_Id;
+	return Item::carrot_Id;
 }
 
 void CarrotTile::registerIcons(IconRegister *iconRegister)

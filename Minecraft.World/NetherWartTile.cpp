@@ -50,7 +50,7 @@ void NetherWartTile::updateDefaultShape()
 
 bool NetherWartTile::mayPlaceOn(int tile)
 {
-	return tile == Tile::soulsand_Id;
+	return tile == Tile::soul_sand_Id;
 }
 
 // Brought forward to fix #60073 - TU7: Content: Gameplay: Nether Warts cannot be placed next to each other in the Nether

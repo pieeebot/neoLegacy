@@ -135,14 +135,14 @@ DurangoStatsDebugger *DurangoStatsDebugger::Initialize()
 	sp->addArgs(DsItemEvent::eAcquisitionMethod_Pickedup,	Tile::dirt_Id);				// works
 	sp->addArgs(DsItemEvent::eAcquisitionMethod_Crafted,	Item::milk_Id);				// works.
 	sp->addArgs(DsItemEvent::eAcquisitionMethod_Crafted,	Tile::dirt_Id);				// works.
-	sp->addArgs(DsItemEvent::eAcquisitionMethod_Crafted,	Item::porkChop_cooked_Id);	// BROKEN! (ach 'Pork Chop' configured incorrectly)
+	sp->addArgs(DsItemEvent::eAcquisitionMethod_Crafted,	Item::cooked_porkchop_Id);	// BROKEN! (ach 'Pork Chop' configured incorrectly)
 	sp->addArgs(DsItemEvent::eAcquisitionMethod_Crafted,	Item::cake_Id);				// works. (ach 'The Lie' configured incorrectly)
 	sp->addArgs(DsItemEvent::eAcquisitionMethod_Bought,		Item::emerald_Id);			// fixed (+ach)
-	sp->addArgs(DsItemEvent::eAcquisitionMethod_Crafted,	Item::ironIngot_Id);		// works. (+ach 'Acquired Hardware')
-	sp->addArgs(DsItemEvent::eAcquisitionMethod_Pickedup,	Item::fish_raw_Id);			// works. (+ach 'Delicious Fish')
-	sp->addArgs(DsItemEvent::eAcquisitionMethod_Crafted,	Item::fish_cooked_Id);		// works. (+ach 'Delicious Fish')
-	sp->addArgs(DsItemEvent::eAcquisitionMethod_Crafted,	Item::sign_Id);
-	sp->addArgs(DsItemEvent::eAcquisitionMethod_Crafted,	Item::flowerPot_Id);		// FIXING!
+	sp->addArgs(DsItemEvent::eAcquisitionMethod_Crafted,	Item::iron_ingot_Id);		// works. (+ach 'Acquired Hardware')
+	sp->addArgs(DsItemEvent::eAcquisitionMethod_Pickedup,	Item::fish_Id);			// works. (+ach 'Delicious Fish')
+	sp->addArgs(DsItemEvent::eAcquisitionMethod_Crafted,	Item::cooked_fish_Id);		// works. (+ach 'Delicious Fish')
+	sp->addArgs(DsItemEvent::eAcquisitionMethod_Crafted,	Item::standing_sign_Id);
+	sp->addArgs(DsItemEvent::eAcquisitionMethod_Crafted,	Item::flower_pot_Id);		// FIXING!
 	out->m_stats.push_back(sp);
 
 	sp = new StatParam(L"McItemAcquired.DifficultyLevelId.*.AcquisitionMethodId.*.ItemId.*");
@@ -153,21 +153,21 @@ DurangoStatsDebugger *DurangoStatsDebugger::Initialize()
 	sp = new StatParam(L"McItemUsed.ItemId.*.ItemAux.*");
 	//sp->addArgs(Item::apple_Id, 0); 
 	//sp->addArgs(Item::cake_Id, 0);
-	sp->addArgs(Item::beef_raw_Id, 0);			// works
-	sp->addArgs(Item::porkChop_cooked_Id, 0);	// works
+	sp->addArgs(Item::beef_Id, 0);			// works
+	sp->addArgs(Item::cooked_porkchop_Id, 0);	// works
 	out->m_stats.push_back(sp);
 
 	sp = new StatParam(L"MinHungerWhenEaten.ItemId.*");
 	//sp->addArgs(Item::apple_Id); 
 	//sp->addArgs(Item::cake_Id);
-	sp->addArgs(Item::beef_raw_Id); // works
+	sp->addArgs(Item::beef_Id); // works
 	sp->addArgs(Item::rotten_flesh_Id); // works (+ach IronBelly)
 	out->m_stats.push_back(sp);
 
 	sp = new StatParam(L"BlockBroken.BlockId.*");
 	sp->addArgs( Tile::dirt_Id );
 	sp->addArgs( Tile::rock_Id ); 
-	sp->addArgs( Tile::emeraldOre_Id );
+	sp->addArgs( Tile::emerald_ore_Id );
 	out->m_stats.push_back(sp);
 
 	sp = new StatParam(L"BlockBroken.BlockId.*.BlockAux.*");
@@ -188,21 +188,21 @@ DurangoStatsDebugger *DurangoStatsDebugger::Initialize()
 
 	sp = new StatParam(L"BlockPlaced.BlockId.*");
 	sp->addArgs( Tile::dirt_Id );
-	sp->addArgs( Tile::stoneBrick_Id ); 
+	sp->addArgs( Tile::stonebrick_Id ); 
 	sp->addArgs( Tile::sand_Id );		// works
-	sp->addArgs( Tile::sign_Id );		// fixed
-	sp->addArgs( Tile::wallSign_Id );	// fixed
+	sp->addArgs( Tile::standing_sign_Id );		// fixed
+	sp->addArgs( Tile::wall_standing_sign_Id );	// fixed
 	out->m_stats.push_back(sp);
 
 	sp = new StatParam(L"MobKilled.KillTypeId.*.EnemyRoleId.*.PlayerWeaponId.*"); // BROKEN!
 	sp->addArgs( /*MELEE*/ 0, ioid_Cow, 0 );
-	sp->addArgs( /*MELEE*/ 0, ioid_Cow, Item::sword_stone_Id );
-	sp->addArgs( /*MELEE*/ 0, ioid_Pig, Item::sword_stone_Id );
+	sp->addArgs( /*MELEE*/ 0, ioid_Cow, Item::stone_sword_Id );
+	sp->addArgs( /*MELEE*/ 0, ioid_Pig, Item::stone_sword_Id );
 	out->m_stats.push_back(sp);
 
 	sp = new StatParam(L"MaxKillDistance.KillTypeId.*.EnemyRoleId.*.PlayerWeaponId.*"); // BROKEN!
-	sp->addArgs( /*MELEE*/ 0, ioid_Cow, Item::sword_stone_Id );
-	sp->addArgs( /*MELEE*/ 0, ioid_Pig, Item::sword_stone_Id );
+	sp->addArgs( /*MELEE*/ 0, ioid_Cow, Item::stone_sword_Id );
+	sp->addArgs( /*MELEE*/ 0, ioid_Pig, Item::stone_sword_Id );
 	sp->addArgs( /*RANGE*/ 1, ioid_Creeper, ioid_Arrow );			// FIXING!
 	out->m_stats.push_back(sp);
 

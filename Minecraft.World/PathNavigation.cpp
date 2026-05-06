@@ -237,7 +237,7 @@ int PathNavigation::getSurfaceY()
 	int surface = static_cast<int>(mob->bb->y0);
 	int tileId = level->getTile(Mth::floor(mob->x), surface, Mth::floor(mob->z));
 	int steps = 0;
-	while (tileId == Tile::water_Id || tileId == Tile::calmWater_Id)
+	while (tileId == Tile::flowing_water_Id || tileId == Tile::water_Id)
 	{
 		++surface;
 		tileId = level->getTile(Mth::floor(mob->x), surface, Mth::floor(mob->z));

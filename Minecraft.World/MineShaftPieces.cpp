@@ -14,20 +14,20 @@ WeighedTreasureArray MineShaftPieces::smallTreasureItems;;
 void MineShaftPieces::staticCtor()
 {
 	smallTreasureItems = WeighedTreasureArray(13);
-	smallTreasureItems[0] = new WeighedTreasure(Item::ironIngot_Id, 0, 1, 5, 10);
-	smallTreasureItems[1] = new WeighedTreasure(Item::goldIngot_Id, 0, 1, 3, 5);
-	smallTreasureItems[2] = new WeighedTreasure(Item::redStone_Id, 0, 4, 9, 5);
-	smallTreasureItems[3] = new WeighedTreasure(Item::dye_powder_Id, DyePowderItem::BLUE, 4, 9, 5);
+	smallTreasureItems[0] = new WeighedTreasure(Item::iron_ingot_Id, 0, 1, 5, 10);
+	smallTreasureItems[1] = new WeighedTreasure(Item::gold_ingot_Id, 0, 1, 3, 5);
+	smallTreasureItems[2] = new WeighedTreasure(Item::redstone_Id, 0, 4, 9, 5);
+	smallTreasureItems[3] = new WeighedTreasure(Item::dye_Id, DyePowderItem::BLUE, 4, 9, 5);
 	smallTreasureItems[4] = new WeighedTreasure(Item::diamond_Id, 0, 1, 2, 3);
 	smallTreasureItems[5] = new WeighedTreasure(Item::coal_Id, CoalItem::STONE_COAL, 3, 8, 10);
 	smallTreasureItems[6] = new WeighedTreasure(Item::bread_Id, 0, 1, 3, 15);
-	smallTreasureItems[7] = new WeighedTreasure(Item::pickAxe_iron_Id, 0, 1, 1, 1);
+	smallTreasureItems[7] = new WeighedTreasure(Item::iron_pickaxe_Id, 0, 1, 1, 1);
 	smallTreasureItems[8] = new WeighedTreasure(Tile::rail_Id, 0, 4, 8, 1);
-	smallTreasureItems[9] = new WeighedTreasure(Item::seeds_melon_Id, 0, 2, 4, 10);
-	smallTreasureItems[10] = new WeighedTreasure(Item::seeds_pumpkin_Id, 0, 2, 4, 10);
+	smallTreasureItems[9] = new WeighedTreasure(Item::melon_seeds_Id, 0, 2, 4, 10);
+	smallTreasureItems[10] = new WeighedTreasure(Item::pumpkin_seeds_Id, 0, 2, 4, 10);
 	// very rare for shafts ...
 	smallTreasureItems[11] = new WeighedTreasure(Item::saddle_Id, 0, 1, 1, 3);
-	smallTreasureItems[12] = new WeighedTreasure(Item::horseArmorMetal_Id, 0, 1, 1, 1);
+	smallTreasureItems[12] = new WeighedTreasure(Item::iron_horse_armor_Id, 0, 1, 1, 1);
 }
 
 void MineShaftPieces::loadStatic()
@@ -477,12 +477,12 @@ bool MineShaftPieces::MineShaftCorridor::postProcess(Level *level, Random *rando
 		generateBox(level, chunkBB, x1, y0, z, x1, y1 - 1, z, Tile::fence_Id, 0, false);
 		if (random->nextInt(4) == 0)
 		{
-			generateBox(level, chunkBB, x0, y1, z, x0, y1, z, Tile::wood_Id, 0, false);
-			generateBox(level, chunkBB, x1, y1, z, x1, y1, z, Tile::wood_Id, 0, false);
+			generateBox(level, chunkBB, x0, y1, z, x0, y1, z, Tile::planks_Id, 0, false);
+			generateBox(level, chunkBB, x1, y1, z, x1, y1, z, Tile::planks_Id, 0, false);
 		}
 		else
 		{
-			generateBox(level, chunkBB, x0, y1, z, x1, y1, z, Tile::wood_Id, 0, false);
+			generateBox(level, chunkBB, x0, y1, z, x1, y1, z, Tile::planks_Id, 0, false);
 		}
 		maybeGenerateBlock(level, chunkBB, random, .1f, x0, y1, z - 1, Tile::web_Id, 0);
 		maybeGenerateBlock(level, chunkBB, random, .1f, x1, y1, z - 1, Tile::web_Id, 0);
@@ -498,11 +498,11 @@ bool MineShaftPieces::MineShaftCorridor::postProcess(Level *level, Random *rando
 
 		if (random->nextInt(100) == 0)
 		{
-			createChest(level, chunkBB, random, x1, y0, z - 1, WeighedTreasure::addToTreasure(smallTreasureItems, Item::enchantedBook->createForRandomTreasure(random)), 3 + random->nextInt(4));
+			createChest(level, chunkBB, random, x1, y0, z - 1, WeighedTreasure::addToTreasure(smallTreasureItems, Item::enchanted_book->createForRandomTreasure(random)), 3 + random->nextInt(4));
 		}
 		if (random->nextInt(100) == 0)
 		{
-			createChest(level, chunkBB, random, x0, y0, z + 1, WeighedTreasure::addToTreasure(smallTreasureItems, Item::enchantedBook->createForRandomTreasure(random)), 3 + random->nextInt(4));
+			createChest(level, chunkBB, random, x0, y0, z + 1, WeighedTreasure::addToTreasure(smallTreasureItems, Item::enchanted_book->createForRandomTreasure(random)), 3 + random->nextInt(4));
 		}
 
 		if (spiderCorridor && !hasPlacedSpider)
@@ -513,7 +513,7 @@ bool MineShaftPieces::MineShaftCorridor::postProcess(Level *level, Random *rando
 			if (chunkBB->isInside(x, y, newZ))
 			{
 				hasPlacedSpider = true;
-				level->setTileAndData(x, y, newZ, Tile::mobSpawner_Id, 0, Tile::UPDATE_CLIENTS);
+				level->setTileAndData(x, y, newZ, Tile::mob_spawner_Id, 0, Tile::UPDATE_CLIENTS);
 				shared_ptr<MobSpawnerTileEntity> entity = dynamic_pointer_cast<MobSpawnerTileEntity>( level->getTileEntity(x, y, newZ) );
 				if (entity != nullptr) entity->getSpawner()->setEntityId(L"CaveSpider");
 			}
@@ -528,7 +528,7 @@ bool MineShaftPieces::MineShaftCorridor::postProcess(Level *level, Random *rando
 			int block = getBlock(level, x, -1, z, chunkBB);
 			if (block == 0)
 			{
-				placeBlock(level, Tile::wood_Id, 0, x, -1, z, chunkBB);
+				placeBlock(level, Tile::planks_Id, 0, x, -1, z, chunkBB);
 			}
 		}
 	}
@@ -677,10 +677,10 @@ bool MineShaftPieces::MineShaftCrossing::postProcess(Level *level, Random *rando
 	}
 
 	// support pillars
-	generateBox(level, chunkBB, boundingBox->x0 + 1, boundingBox->y0, boundingBox->z0 + 1, boundingBox->x0 + 1, boundingBox->y1, boundingBox->z0 + 1, Tile::wood_Id, 0, false);
-	generateBox(level, chunkBB, boundingBox->x0 + 1, boundingBox->y0, boundingBox->z1 - 1, boundingBox->x0 + 1, boundingBox->y1, boundingBox->z1 - 1, Tile::wood_Id, 0, false);
-	generateBox(level, chunkBB, boundingBox->x1 - 1, boundingBox->y0, boundingBox->z0 + 1, boundingBox->x1 - 1, boundingBox->y1, boundingBox->z0 + 1, Tile::wood_Id, 0, false);
-	generateBox(level, chunkBB, boundingBox->x1 - 1, boundingBox->y0, boundingBox->z1 - 1, boundingBox->x1 - 1, boundingBox->y1, boundingBox->z1 - 1, Tile::wood_Id, 0, false);
+	generateBox(level, chunkBB, boundingBox->x0 + 1, boundingBox->y0, boundingBox->z0 + 1, boundingBox->x0 + 1, boundingBox->y1, boundingBox->z0 + 1, Tile::planks_Id, 0, false);
+	generateBox(level, chunkBB, boundingBox->x0 + 1, boundingBox->y0, boundingBox->z1 - 1, boundingBox->x0 + 1, boundingBox->y1, boundingBox->z1 - 1, Tile::planks_Id, 0, false);
+	generateBox(level, chunkBB, boundingBox->x1 - 1, boundingBox->y0, boundingBox->z0 + 1, boundingBox->x1 - 1, boundingBox->y1, boundingBox->z0 + 1, Tile::planks_Id, 0, false);
+	generateBox(level, chunkBB, boundingBox->x1 - 1, boundingBox->y0, boundingBox->z1 - 1, boundingBox->x1 - 1, boundingBox->y1, boundingBox->z1 - 1, Tile::planks_Id, 0, false);
 
 	// prevent air floating
 	// note: use world coordinates because the corridor hasn't defined
@@ -692,7 +692,7 @@ bool MineShaftPieces::MineShaftCrossing::postProcess(Level *level, Random *rando
 			int block = getBlock(level, x, boundingBox->y0 - 1, z, chunkBB);
 			if (block == 0)
 			{
-				placeBlock(level, Tile::wood_Id, 0, x, boundingBox->y0 - 1, z, chunkBB);
+				placeBlock(level, Tile::planks_Id, 0, x, boundingBox->y0 - 1, z, chunkBB);
 			}
 		}
 	}

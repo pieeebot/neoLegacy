@@ -89,30 +89,30 @@ void ChunkRebuildData::disableUnseenTiles()
 
 				// Establish whether this tile and its neighbours are all made of rock, dirt, unbreakable tiles, or have already
 				// been determined to meet this criteria themselves and have a tile of 255 set.
-				if( !( ( tileID == Tile_SPU::rock_Id ) || ( tileID == Tile_SPU::dirt_Id ) || ( tileID == Tile_SPU::unbreakable_Id ) || ( flags & e_flag_NoRender) ) ) continue;
+				if( !( ( tileID == Tile_SPU::rock_Id ) || ( tileID == Tile_SPU::dirt_Id ) || ( tileID == Tile_SPU::bedrock_Id ) || ( flags & e_flag_NoRender) ) ) continue;
 				tileID = getTile(iX-1, iY, iZ);
 				flags = getFlags(iX-1, iY, iZ);
-				if( !( ( tileID == Tile_SPU::rock_Id ) || ( tileID == Tile_SPU::dirt_Id ) || ( tileID == Tile_SPU::unbreakable_Id ) || ( flags & e_flag_NoRender) ) ) continue;
+				if( !( ( tileID == Tile_SPU::rock_Id ) || ( tileID == Tile_SPU::dirt_Id ) || ( tileID == Tile_SPU::bedrock_Id ) || ( flags & e_flag_NoRender) ) ) continue;
 				tileID = getTile(iX+1, iY, iZ);
 				flags = getFlags(iX+1, iY, iZ);
-				if( !( ( tileID == Tile_SPU::rock_Id ) || ( tileID == Tile_SPU::dirt_Id ) || ( tileID == Tile_SPU::unbreakable_Id ) || ( flags & e_flag_NoRender) ) ) continue;
+				if( !( ( tileID == Tile_SPU::rock_Id ) || ( tileID == Tile_SPU::dirt_Id ) || ( tileID == Tile_SPU::bedrock_Id ) || ( flags & e_flag_NoRender) ) ) continue;
 				tileID = getTile(iX, iY, iZ-1);
 				flags = getFlags(iX, iY, iZ-1);
-				if( !( ( tileID == Tile_SPU::rock_Id ) || ( tileID == Tile_SPU::dirt_Id ) || ( tileID == Tile_SPU::unbreakable_Id ) || ( flags & e_flag_NoRender) ) ) continue;
+				if( !( ( tileID == Tile_SPU::rock_Id ) || ( tileID == Tile_SPU::dirt_Id ) || ( tileID == Tile_SPU::bedrock_Id ) || ( flags & e_flag_NoRender) ) ) continue;
 				tileID = getTile(iX, iY, iZ+1);
 				flags = getFlags(iX, iY, iZ+1);
-				if( !( ( tileID == Tile_SPU::rock_Id ) || ( tileID == Tile_SPU::dirt_Id ) || ( tileID == Tile_SPU::unbreakable_Id ) || ( flags & e_flag_NoRender) ) ) continue;
+				if( !( ( tileID == Tile_SPU::rock_Id ) || ( tileID == Tile_SPU::dirt_Id ) || ( tileID == Tile_SPU::bedrock_Id ) || ( flags & e_flag_NoRender) ) ) continue;
 				// Treat the bottom of the world differently - we shouldn't ever be able to look up at this, so consider tiles as invisible
 				// if they are surrounded on sides other than the bottom
 				if( iY > 0 )
 				{
 					tileID = getTile(iX, iY-1, iZ);
 					flags = getFlags(iX, iY-1, iZ);
-					if( !( ( tileID == Tile_SPU::rock_Id ) || ( tileID == Tile_SPU::dirt_Id ) || ( tileID == Tile_SPU::unbreakable_Id ) || ( flags & e_flag_NoRender) ) ) continue;
+					if( !( ( tileID == Tile_SPU::rock_Id ) || ( tileID == Tile_SPU::dirt_Id ) || ( tileID == Tile_SPU::bedrock_Id ) || ( flags & e_flag_NoRender) ) ) continue;
 				}
 				tileID = getTile(iX, iY+1, iZ);
 				flags = getFlags(iX, iY+1, iZ);
-				if( !( ( tileID == Tile_SPU::rock_Id ) || ( tileID == Tile_SPU::dirt_Id ) || ( tileID == Tile_SPU::unbreakable_Id ) || ( flags & e_flag_NoRender) ) ) continue;
+				if( !( ( tileID == Tile_SPU::rock_Id ) || ( tileID == Tile_SPU::dirt_Id ) || ( tileID == Tile_SPU::bedrock_Id ) || ( flags & e_flag_NoRender) ) ) continue;
 
 				// This tile is surrounded. Flag it as not requiring to be rendered by setting its id to 255.
 				setFlag(iX, iY, iZ, e_flag_NoRender);
@@ -148,11 +148,11 @@ void ChunkRebuildData::buildMaterials()
 	buildMaterial(Material_SPU::air_Id,					Material::air);					
 	buildMaterial(Material_SPU::grass_Id,				Material::grass);				
 	buildMaterial(Material_SPU::dirt_Id,				Material::dirt);				
-	buildMaterial(Material_SPU::wood_Id,				Material::wood);				
+	buildMaterial(Material_SPU::planks_Id,				Material::wood);				
 	buildMaterial(Material_SPU::stone_Id,				Material::stone);				
 	buildMaterial(Material_SPU::metal_Id,				Material::metal);				
-	buildMaterial(Material_SPU::water_Id,				Material::water);				
-	buildMaterial(Material_SPU::lava_Id,				Material::lava);				
+	buildMaterial(Material_SPU::flowing_water_Id,				Material::water);				
+	buildMaterial(Material_SPU::flowing_lava_Id,				Material::lava);				
 	buildMaterial(Material_SPU::leaves_Id,				Material::leaves);				
 	buildMaterial(Material_SPU::plant_Id,				Material::plant);				
 	buildMaterial(Material_SPU::replaceable_plant_Id,	Material::replaceable_plant);	
@@ -166,7 +166,7 @@ void ChunkRebuildData::buildMaterials()
 	buildMaterial(Material_SPU::explosive_Id,			Material::explosive);			
 	buildMaterial(Material_SPU::coral_Id,				Material::coral);				
 	buildMaterial(Material_SPU::ice_Id,					Material::ice);					
-	buildMaterial(Material_SPU::topSnow_Id,				Material::topSnow);				
+	buildMaterial(Material_SPU::snow_layer_Id,				Material::topSnow);				
 	buildMaterial(Material_SPU::snow_Id,				Material::snow);				
 	buildMaterial(Material_SPU::cactus_Id,				Material::cactus);				
 	buildMaterial(Material_SPU::clay_Id,				Material::clay);				
@@ -186,11 +186,11 @@ int ChunkRebuildData::getMaterialID(Tile* pTile)
 	if(m == Material::air)  			return Material_SPU::air_Id;					
 	if(m == Material::grass)  			return Material_SPU::grass_Id;					
 	if(m == Material::dirt)  			return Material_SPU::dirt_Id;				
-	if(m == Material::wood)  			return Material_SPU::wood_Id;				
+	if(m == Material::wood)  			return Material_SPU::planks_Id;				
 	if(m == Material::stone)  			return Material_SPU::stone_Id;					
 	if(m == Material::metal)  			return Material_SPU::metal_Id;					
-	if(m == Material::water)  			return Material_SPU::water_Id;					
-	if(m == Material::lava)  			return Material_SPU::lava_Id;				
+	if(m == Material::water)  			return Material_SPU::flowing_water_Id;					
+	if(m == Material::lava)  			return Material_SPU::flowing_lava_Id;				
 	if(m == Material::leaves)  			return Material_SPU::leaves_Id;					
 	if(m == Material::plant)  			return Material_SPU::plant_Id;					
 	if(m == Material::replaceable_plant)return Material_SPU::replaceable_plant_Id;		
@@ -204,7 +204,7 @@ int ChunkRebuildData::getMaterialID(Tile* pTile)
 	if(m == Material::explosive)  		return Material_SPU::explosive_Id;				
 	if(m == Material::coral)  			return Material_SPU::coral_Id;					
 	if(m == Material::ice)  			return Material_SPU::ice_Id;					
-	if(m == Material::topSnow)  		return Material_SPU::topSnow_Id;				
+	if(m == Material::topSnow)  		return Material_SPU::snow_layer_Id;				
 	if(m == Material::snow)  			return Material_SPU::snow_Id;				
 	if(m == Material::cactus)  			return Material_SPU::cactus_Id;					
 	if(m == Material::clay)  			return Material_SPU::clay_Id;				
@@ -269,8 +269,8 @@ void ChunkRebuildData::createTileData()
 	setIconSPUFromIcon(&m_tileData.grass_iconSideOverlay, Tile::grass->iconSideOverlay);
 
 	// ThinFence
-	setIconSPUFromIcon(&m_tileData.ironFence_EdgeTexture, static_cast<ThinFenceTile *>(Tile::ironFence)->getEdgeTexture());
-	setIconSPUFromIcon(&m_tileData.thinGlass_EdgeTexture, static_cast<ThinFenceTile *>(Tile::thinGlass)->getEdgeTexture());
+	setIconSPUFromIcon(&m_tileData.iron_bars_EdgeTexture, static_cast<ThinFenceTile *>(Tile::iron_bars)->getEdgeTexture());
+	setIconSPUFromIcon(&m_tileData.glass_pane_EdgeTexture, static_cast<ThinFenceTile *>(Tile::glass_pane)->getEdgeTexture());
 
 	//FarmTile
 	setIconSPUFromIcon(&m_tileData.farmTile_Dry, static_cast<FarmTile *>(Tile::farmland)->iconDry);
@@ -279,7 +279,7 @@ void ChunkRebuildData::createTileData()
 	// DoorTile
 	for(int i=0;i<8; i++)
 	{
-		setIconSPUFromIcon(&m_tileData.doorTile_Icons[i], static_cast<DoorTile *>(Tile::door_wood)->icons[i]);
+		setIconSPUFromIcon(&m_tileData.doorTile_Icons[i], static_cast<DoorTile *>(Tile::wooden_door)->icons[i]);
 		// we're not supporting flipped icons, so manually flip here
 		if(i>=4)
 			m_tileData.doorTile_Icons[i].flipHorizontal();
@@ -830,11 +830,11 @@ int ChunkRebuildData::getRawBrightness(int x, int y, int z, bool propagate)
 		int id = getTile(x, y, z);
 		switch(id)
 		{
-		case Tile_SPU::stoneSlabHalf_Id:
-		case Tile_SPU::woodSlabHalf_Id:
+		case Tile_SPU::stone_slab_Id:
+		case Tile_SPU::wooden_slab_Id:
 		case Tile_SPU::farmland_Id:
-		case Tile_SPU::stairs_stone_Id:
-		case Tile_SPU::stairs_wood_Id:
+		case Tile_SPU::stone_stairs_Id:
+		case Tile_SPU::oak_stairs_Id:
 			{
 				int br = getRawBrightness(x, y + 1, z, false);
 				int br1 = getRawBrightness(x + 1, y, z, false);

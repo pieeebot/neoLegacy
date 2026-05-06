@@ -9,15 +9,15 @@
 void FoodRecipies::addRecipes(Recipes *r) 
 {
 	// 4J-JEV: Bumped up in the list to avoid a colision with the title.
-	r->addShapedRecipy(new ItemInstance(Item::apple_gold, 1, 0), //
+	r->addShapedRecipy(new ItemInstance(Item::golden_apple, 1, 0), //
 		L"ssscicig",
 		L"###", //
 		L"#X#", //
 		L"###", //
-		L'#', Item::goldIngot, L'X', Item::apple,
+		L'#', Item::gold_ingot, L'X', Item::apple,
 		L'F');
 
-	r->addShapedRecipy(new ItemInstance(Item::apple_gold, 1, 1), //
+	r->addShapedRecipy(new ItemInstance(Item::golden_apple, 1, 1), //
 		L"sssctcig",
 		L"###", //
 		L"#X#", //
@@ -25,38 +25,38 @@ void FoodRecipies::addRecipes(Recipes *r)
 		L'#', Tile::goldBlock, L'X', Item::apple,
 		L'F');
 
-	r->addShapedRecipy(new ItemInstance(Item::speckledMelon, 1), //
+	r->addShapedRecipy(new ItemInstance(Item::speckled_melon, 1), //
 		L"ssscicig",
 		L"###", //
 		L"#X#", //
 		L"###", //
 
-		L'#', Item::goldNugget, L'X', Item::melon,
+		L'#', Item::gold_nugget, L'X', Item::melon,
 		L'F');
 	
-	r->addShapelessRecipy(new ItemInstance(Item::mushroomStew), 
+	r->addShapelessRecipy(new ItemInstance(Item::mushroom_stew), 
 		L"ttig", 
 		Tile::mushroom_brown, Tile::mushroom_red, Item::bowl,
 		L'F');
 
-	r->addShapedRecipy(new ItemInstance(Item::rabbitStew), 
+	r->addShapedRecipy(new ItemInstance(Item::rabbit_stew), 
 		L"ssscicictcicig",
 		L" 1 ",//s
 		L"2X3",//s
 		L" 4 ",//s
-		L'1', Item::rabbit_cooked,    // ci
+		L'1', Item::cooked_rabbit,    // ci
 		L'2', Item::carrots,          // ci
 		L'3', Tile::mushroom_brown,   // ct  
 		L'X', Item::potato,           // ci
 		L'4', Item::bowl,             // ci
 		L'F');
 
-	r->addShapedRecipy(new ItemInstance(Item::rabbitStew), 
+	r->addShapedRecipy(new ItemInstance(Item::rabbit_stew), 
 		L"ssscicictcicig",
 		L" 1 ",//s
 		L"2X3",//s
 		L" 4 ",//s
-		L'1', Item::rabbit_cooked,    // ci
+		L'1', Item::cooked_rabbit,    // ci
 		L'2', Item::carrots,          // ci
 		L'3', Tile::mushroom_red,     // ct  
 		L'X', Item::potato,           // ci
@@ -69,7 +69,7 @@ void FoodRecipies::addRecipes(Recipes *r)
 				L"sczcig",
                 L"#X#", //
 
-                L'X', new ItemInstance(Item::dye_powder, 1, DyePowderItem::BROWN),
+                L'X', new ItemInstance(Item::dye, 1, DyePowderItem::BROWN),
 				L'#', Item::wheat,
 				L'F');
 
@@ -96,33 +96,33 @@ void FoodRecipies::addRecipes(Recipes *r)
 		L'M', Tile::pumpkin,
 		L'F');
 
-	r->addShapelessRecipy(new ItemInstance(Item::pumpkinPie), //
+	r->addShapelessRecipy(new ItemInstance(Item::pumpkin_pie), //
 		L"tiig",
 		Tile::pumpkin, Item::sugar, Item::egg,
 		L'F');
 
-	r->addShapedRecipy(new ItemInstance(Item::carrotGolden, 1, 0), //
+	r->addShapedRecipy(new ItemInstance(Item::golden_carrot, 1, 0), //
 		L"ssscicig",
 		L"###", //
 		L"#X#", //
 		L"###", //
 
-		L'#', Item::goldNugget, L'X', Item::carrots,
+		L'#', Item::gold_nugget, L'X', Item::carrots,
 		L'F');
 
-	r->addShapelessRecipy(new ItemInstance(Item::fermentedSpiderEye), //
+	r->addShapelessRecipy(new ItemInstance(Item::fermented_spider_eye), //
 		L"itig",
-		Item::spiderEye, Tile::mushroom_brown, Item::sugar,
+		Item::spider_eye, Tile::mushroom_brown, Item::sugar,
 		L'F');
 
-	r->addShapelessRecipy(new ItemInstance(Item::blazePowder, 2), //
+	r->addShapelessRecipy(new ItemInstance(Item::blaze_powder, 2), //
 		L"ig",
-		Item::blazeRod,
+		Item::blaze_rod,
 		L'F');
 
-	r->addShapelessRecipy(new ItemInstance(Item::magmaCream), //
+	r->addShapelessRecipy(new ItemInstance(Item::magma_cream), //
 		L"iig",
-		Item::blazePowder, Item::slimeBall,
+		Item::blaze_powder, Item::slime_ball,
 		L'F');
 }
 

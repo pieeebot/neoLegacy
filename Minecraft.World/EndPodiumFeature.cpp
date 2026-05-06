@@ -33,8 +33,8 @@ bool EndPodiumFeature::place(Level *level, Random *random, int x, int y, int z)
 						}
 						else
 						{
-							//level->setTile(xx, yy, zz, Tile::unbreakable_Id);
-							placeBlock(level, xx, yy, zz, Tile::unbreakable_Id, 0);
+							//level->setTile(xx, yy, zz, Tile::bedrock_Id);
+							placeBlock(level, xx, yy, zz, Tile::bedrock_Id, 0);
 						}
 					}
 					else if (yy > y)
@@ -46,8 +46,8 @@ bool EndPodiumFeature::place(Level *level, Random *random, int x, int y, int z)
 					{
 						if (d > r - 1 - 0.5)
 						{
-							//level->setTile(xx, yy, zz, Tile::unbreakable_Id);
-							placeBlock(level, xx, yy, zz, Tile::unbreakable_Id, 0);
+							//level->setTile(xx, yy, zz, Tile::bedrock_Id);
+							placeBlock(level, xx, yy, zz, Tile::bedrock_Id, 0);
 						}
 					}
 				}
@@ -55,15 +55,15 @@ bool EndPodiumFeature::place(Level *level, Random *random, int x, int y, int z)
 		}
 	}
 
-	placeBlock(level,x, y + 0, z,	 Tile::unbreakable_Id, 0);
-	placeBlock(level,x, y + 1, z,	 Tile::unbreakable_Id, 0);
-	placeBlock(level,x, y + 2, z,	 Tile::unbreakable_Id, 0);
+	placeBlock(level,x, y + 0, z,	 Tile::bedrock_Id, 0);
+	placeBlock(level,x, y + 1, z,	 Tile::bedrock_Id, 0);
+	placeBlock(level,x, y + 2, z,	 Tile::bedrock_Id, 0);
 	placeBlock(level,x - 1, y + 2, z, Tile::torch_Id, 0);
 	placeBlock(level,x + 1, y + 2, z, Tile::torch_Id, 0);
 	placeBlock(level,x, y + 2, z - 1, Tile::torch_Id, 0);
 	placeBlock(level,x, y + 2, z + 1, Tile::torch_Id, 0);
-	placeBlock(level,x, y + 3, z,	 Tile::unbreakable_Id, 0);
-	//placeBlock(level,x, y + 4, z,	 Tile::dragonEgg_Id, 0);
+	placeBlock(level,x, y + 3, z,	 Tile::bedrock_Id, 0);
+	//placeBlock(level,x, y + 4, z,	 Tile::dragon_egg_Id, 0);
 
 	// 4J-PB - The podium can be floating with nothing under it, so put some whiteStone under it if this is the case
 	for (int yy = y - 5; yy < y - 1; yy++)
@@ -74,7 +74,7 @@ bool EndPodiumFeature::place(Level *level, Random *random, int x, int y, int z)
 			{
 				if(level->isEmptyTile(xx,yy,zz))
 				{
-					placeBlock(level, xx, yy, zz, Tile::endStone_Id, 0);
+					placeBlock(level, xx, yy, zz, Tile::end_stone_Id, 0);
 				}
 			}
 		}

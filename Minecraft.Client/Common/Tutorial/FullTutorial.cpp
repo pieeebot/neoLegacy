@@ -75,7 +75,7 @@ FullTutorial::FullTutorial(int iPad, bool isTrial /*= false*/)
 
 	int mineMappings[] = {MINECRAFT_ACTION_ACTION};
 	addTask(e_Tutorial_State_Gameplay,  new ControllerTask( this, IDS_TUTORIAL_TASK_MINE, false, true,  mineMappings, 1) );
-	addTask(e_Tutorial_State_Gameplay,  new PickupTask( Tile::treeTrunk_Id, 4, -1, this, IDS_TUTORIAL_TASK_CHOP_WOOD ) );
+	addTask(e_Tutorial_State_Gameplay,  new PickupTask( Tile::log_Id, 4, -1, this, IDS_TUTORIAL_TASK_CHOP_WOOD ) );
 
 	int scrollMappings[] = {MINECRAFT_ACTION_LEFT_SCROLL,MINECRAFT_ACTION_RIGHT_SCROLL};
 	//int scrollMappings[] = {ACTION_MENU_LEFT_SCROLL,ACTION_MENU_RIGHT_SCROLL};
@@ -92,9 +92,9 @@ FullTutorial::FullTutorial(int iPad, bool isTrial /*= false*/)
 	addTask(e_Tutorial_State_Gameplay,  new InfoTask(this, IDS_TUTORIAL_TASK_FOOD_BAR_FEED, IDS_TUTORIAL_PROMPT_PRESS_A_TO_CONTINUE, true, ACTION_MENU_A) );
 
 	// While they should only eat the item we give them, includ the ability to complete this task with different items
-	int foodItems[] = {Item::mushroomStew_Id, Item::apple_Id, Item::bread_Id, Item::porkChop_raw_Id, Item::porkChop_cooked_Id,
-						Item::apple_gold_Id, Item::fish_raw_Id, Item::fish_cooked_Id, Item::cookie_Id, Item::beef_cooked_Id,
-						Item::beef_raw_Id, Item::chicken_cooked_Id, Item::chicken_raw_Id, Item::melon_Id, Item::rotten_flesh_Id};
+	int foodItems[] = {Item::mushroom_stew_Id, Item::apple_Id, Item::bread_Id, Item::porkchop_Id, Item::cooked_porkchop_Id,
+						Item::golden_apple_Id, Item::fish_Id, Item::cooked_fish_Id, Item::cookie_Id, Item::cooked_beef_Id,
+						Item::beef_Id, Item::cooked_chicken_Id, Item::chicken_Id, Item::melon_block_Id, Item::rotten_flesh_Id};
 	addTask(e_Tutorial_State_Gameplay,  new CompleteUsingItemTask(this, IDS_TUTORIAL_TASK_FOOD_BAR_EAT_STEAK, foodItems, 15, true) );
 
 	int crftMappings[] = {MINECRAFT_ACTION_CRAFTING};
@@ -103,13 +103,13 @@ FullTutorial::FullTutorial(int iPad, bool isTrial /*= false*/)
 	addTask(e_Tutorial_State_Gameplay, new ProgressFlagTask( &m_progressFlags, FULL_TUTORIAL_PROGRESS_2_X_2_Crafting, ProgressFlagTask::e_Progress_Set_Flag, this ) );
 	addTask(e_Tutorial_State_Gameplay, new StateChangeTask( e_Tutorial_State_2x2Crafting_Menu, this) );
 
-	addTask(e_Tutorial_State_Gameplay,  new CraftTask( Tile::wood_Id, -1, 1, this, IDS_TUTORIAL_TASK_CREATE_PLANKS) );	
-	addTask(e_Tutorial_State_Gameplay,  new CraftTask( Tile::workBench_Id, -1, 1, this, IDS_TUTORIAL_TASK_CREATE_CRAFTING_TABLE) );
+	addTask(e_Tutorial_State_Gameplay,  new CraftTask( Tile::planks_Id, -1, 1, this, IDS_TUTORIAL_TASK_CREATE_PLANKS) );	
+	addTask(e_Tutorial_State_Gameplay,  new CraftTask( Tile::crafting_table_Id, -1, 1, this, IDS_TUTORIAL_TASK_CREATE_CRAFTING_TABLE) );
 
 	//int useMappings[] = {MINECRAFT_ACTION_USE};
 	//addTask(e_Tutorial_State_Gameplay, new ControllerTask( this, IDS_TUTORIAL_TASK_USE, false, false, useMappings, 1) );
 	addTask(e_Tutorial_State_Gameplay, new InfoTask(this, IDS_TUTORIAL_TASK_USE, IDS_TUTORIAL_PROMPT_PRESS_A_TO_CONTINUE, true, ACTION_MENU_A) );
-	addTask(e_Tutorial_State_Gameplay, new UseItemTask( Tile::workBench_Id, this, IDS_TUTORIAL_TASK_PLACE_WORKBENCH, true ) );
+	addTask(e_Tutorial_State_Gameplay, new UseItemTask( Tile::crafting_table_Id, this, IDS_TUTORIAL_TASK_PLACE_WORKBENCH, true ) );
 
 	addTask(e_Tutorial_State_Gameplay, new InfoTask(this, IDS_TUTORIAL_TASK_NIGHT_DANGER, IDS_TUTORIAL_PROMPT_PRESS_A_TO_CONTINUE, true, ACTION_MENU_A) );
 	addTask(e_Tutorial_State_Gameplay, new InfoTask(this, IDS_TUTORIAL_TASK_NEARBY_SHELTER, IDS_TUTORIAL_PROMPT_PRESS_A_TO_CONTINUE, true, ACTION_MENU_A) );
@@ -121,22 +121,22 @@ FullTutorial::FullTutorial(int iPad, bool isTrial /*= false*/)
 
 	// START OF FULL TUTORIAL
 	
-	addTask(e_Tutorial_State_Gameplay, new UseTileTask( Tile::workBench_Id, this, IDS_TUTORIAL_TASK_OPEN_WORKBENCH, false ) );
+	addTask(e_Tutorial_State_Gameplay, new UseTileTask( Tile::crafting_table_Id, this, IDS_TUTORIAL_TASK_OPEN_WORKBENCH, false ) );
 
 	addTask(e_Tutorial_State_Gameplay, new ProgressFlagTask( &m_progressFlags, FULL_TUTORIAL_PROGRESS_3_X_3_Crafting, ProgressFlagTask::e_Progress_Set_Flag, this ) );
 	addTask(e_Tutorial_State_Gameplay, new StateChangeTask( e_Tutorial_State_3x3Crafting_Menu, this) );
 
 	addTask(e_Tutorial_State_Gameplay, new CraftTask( Item::stick->id, -1, 1, this, IDS_TUTORIAL_TASK_CREATE_STICKS) );
 
-	int shovelItems[] = {Item::shovel_wood->id, Item::shovel_stone->id, Item::shovel_iron->id, Item::shovel_gold->id, Item::shovel_diamond->id};
+	int shovelItems[] = {Item::wooden_shovel->id, Item::stone_shovel->id, Item::iron_shovel->id, Item::golden_shovel->id, Item::diamond_shovel->id};
 	int shovelAuxVals[] = {-1,-1,-1,-1,-1};
 	addTask(e_Tutorial_State_Gameplay, new CraftTask( shovelItems, shovelAuxVals, 5, 1, this, IDS_TUTORIAL_TASK_CREATE_WOODEN_SHOVEL) );
 
-	int hatchetItems[] = {Item::hatchet_wood->id, Item::hatchet_stone->id, Item::hatchet_iron->id, Item::hatchet_gold->id, Item::hatchet_diamond->id};
+	int hatchetItems[] = {Item::wooden_axe->id, Item::stone_axe->id, Item::iron_axe->id, Item::golden_axe->id, Item::diamond_axe->id};
 	int hatchetAuxVals[] = {-1,-1,-1,-1,-1};
 	addTask(e_Tutorial_State_Gameplay, new CraftTask( hatchetItems, hatchetAuxVals, 5, 1, this, IDS_TUTORIAL_TASK_CREATE_WOODEN_HATCHET) );
 
-	int pickaxeItems[] = {Item::pickAxe_wood->id, Item::pickAxe_stone->id, Item::pickAxe_iron->id, Item::pickAxe_gold->id, Item::pickAxe_diamond->id};
+	int pickaxeItems[] = {Item::wooden_pickaxe->id, Item::stone_pickaxe->id, Item::iron_pickaxe->id, Item::golden_pickaxe->id, Item::diamond_pickaxe->id};
 	int pickaxeAuxVals[] = {-1,-1,-1,-1,-1};
 	addTask(e_Tutorial_State_Gameplay, new CraftTask( pickaxeItems, pickaxeAuxVals, 5, 1, this, IDS_TUTORIAL_TASK_CREATE_WOODEN_PICKAXE) );
 
@@ -150,8 +150,8 @@ FullTutorial::FullTutorial(int iPad, bool isTrial /*= false*/)
 	addTask(e_Tutorial_State_Gameplay, new StateChangeTask( e_Tutorial_State_Furnace_Menu, this) );
 	addTask(e_Tutorial_State_Gameplay, new CraftTask( Item::coal->id, -1, 1, this, IDS_TUTORIAL_TASK_CREATE_CHARCOAL) );
 	addTask(e_Tutorial_State_Gameplay, new CraftTask( Tile::glass_Id, -1, 1, this, IDS_TUTORIAL_TASK_CREATE_GLASS) );
-	addTask(e_Tutorial_State_Gameplay, new CraftTask( Item::door_wood->id, -1, 1, this, IDS_TUTORIAL_TASK_CREATE_WOODEN_DOOR) );
-	addTask(e_Tutorial_State_Gameplay, new UseItemTask(Item::door_wood->id, this, IDS_TUTORIAL_TASK_PLACE_DOOR) );
+	addTask(e_Tutorial_State_Gameplay, new CraftTask( Item::wooden_door->id, -1, 1, this, IDS_TUTORIAL_TASK_CREATE_WOODEN_DOOR) );
+	addTask(e_Tutorial_State_Gameplay, new UseItemTask(Item::wooden_door->id, this, IDS_TUTORIAL_TASK_PLACE_DOOR) );
 	addTask(e_Tutorial_State_Gameplay, new CraftTask( Tile::torch_Id, -1, 1, this, IDS_TUTORIAL_TASK_CREATE_TORCH) );
 
 	if(app.getGameRuleDefinitions() != nullptr)
@@ -201,12 +201,12 @@ FullTutorial::FullTutorial(int iPad, bool isTrial /*= false*/)
 
 	addTask(e_Tutorial_State_2x2Crafting_Menu, new FullTutorialActiveTask( this, e_Tutorial_Completion_Complete_State) );
 
-	addTask(e_Tutorial_State_2x2Crafting_Menu, new CraftTask( Tile::wood_Id, -1, 1, this, IDS_TUTORIAL_TASK_CRAFT_CREATE_PLANKS) );
+	addTask(e_Tutorial_State_2x2Crafting_Menu, new CraftTask( Tile::planks_Id, -1, 1, this, IDS_TUTORIAL_TASK_CRAFT_CREATE_PLANKS) );
 
 	ProcedureCompoundTask *workbenchCompound = new ProcedureCompoundTask( this );
 	workbenchCompound->AddTask( new XuiCraftingTask( this, IDS_TUTORIAL_TASK_CRAFT_SELECT_STRUCTURES, Recipy::eGroupType_Structure) );
-	workbenchCompound->AddTask( new XuiCraftingTask( this, IDS_TUTORIAL_TASK_CRAFT_SELECT_CRAFTING_TABLE, Tile::workBench_Id) );
-	workbenchCompound->AddTask( new CraftTask( Tile::workBench_Id, -1, 1, this, IDS_TUTORIAL_TASK_CREATE_CRAFTING_TABLE) );
+	workbenchCompound->AddTask( new XuiCraftingTask( this, IDS_TUTORIAL_TASK_CRAFT_SELECT_CRAFTING_TABLE, Tile::crafting_table_Id) );
+	workbenchCompound->AddTask( new CraftTask( Tile::crafting_table_Id, -1, 1, this, IDS_TUTORIAL_TASK_CREATE_CRAFTING_TABLE) );
 	addTask(e_Tutorial_State_2x2Crafting_Menu, workbenchCompound );
 	addTask(e_Tutorial_State_2x2Crafting_Menu, new InfoTask(this, IDS_TUTORIAL_TASK_CRAFT_EXIT_AND_PLACE_TABLE, -1, false, ACTION_MENU_B) );
  
@@ -219,7 +219,7 @@ FullTutorial::FullTutorial(int iPad, bool isTrial /*= false*/)
 	
 	ProcedureCompoundTask *shovelCompound = new ProcedureCompoundTask( this );
 	shovelCompound->AddTask( new XuiCraftingTask( this, IDS_TUTORIAL_TASK_CRAFT_SELECT_TOOLS, Recipy::eGroupType_Tool) );
-	shovelCompound->AddTask( new XuiCraftingTask( this, IDS_TUTORIAL_TASK_CRAFT_SELECT_WOODEN_SHOVEL, Item::shovel_wood->id) );
+	shovelCompound->AddTask( new XuiCraftingTask( this, IDS_TUTORIAL_TASK_CRAFT_SELECT_WOODEN_SHOVEL, Item::wooden_shovel->id) );
 	shovelCompound->AddTask( new CraftTask( shovelItems, shovelAuxVals, 5, 1, this, IDS_TUTORIAL_TASK_CREATE_WOODEN_SHOVEL) );
 	addTask(e_Tutorial_State_3x3Crafting_Menu, shovelCompound );
 	addTask(e_Tutorial_State_3x3Crafting_Menu, new CraftTask( hatchetItems, hatchetAuxVals, 5, 1, this, IDS_TUTORIAL_TASK_CREATE_WOODEN_HATCHET) );
@@ -234,7 +234,7 @@ FullTutorial::FullTutorial(int iPad, bool isTrial /*= false*/)
 	addTask(e_Tutorial_State_3x3Crafting_Menu, new InfoTask(this, IDS_TUTORIAL_TASK_CRAFT_EXIT_AND_PLACE_FURNACE, -1, false, ACTION_MENU_B) );
 
 	// No need to block here, as it's fine if the player wants to do this out of order
-	addTask(e_Tutorial_State_3x3Crafting_Menu, new CraftTask( Item::door_wood->id, -1, 1, this, IDS_TUTORIAL_TASK_CREATE_WOODEN_DOOR) );
+	addTask(e_Tutorial_State_3x3Crafting_Menu, new CraftTask( Item::wooden_door->id, -1, 1, this, IDS_TUTORIAL_TASK_CREATE_WOODEN_DOOR) );
 	addTask(e_Tutorial_State_3x3Crafting_Menu, new CraftTask( Tile::torch_Id, -1, 1, this, IDS_TUTORIAL_TASK_CREATE_TORCH) );
 
 	/*
@@ -445,7 +445,7 @@ FullTutorial::FullTutorial(int iPad, bool isTrial /*= false*/)
 			addTask(e_Tutorial_State_Brewing, new ChoiceTask(this, IDS_TUTORIAL_TASK_BREWING_OVERVIEW, IDS_TUTORIAL_PROMPT_BREWING_OVERVIEW, true, ACTION_MENU_A, ACTION_MENU_B, e_Tutorial_Completion_Complete_State_Gameplay_Constraints, eTelemetryTutorial_Brewing) );
 
 			ProcedureCompoundTask *fillWaterBottleTask = new ProcedureCompoundTask( this );			
-			fillWaterBottleTask->AddTask( new PickupTask( Item::glassBottle_Id, 1, -1, this, IDS_TUTORIAL_TASK_BREWING_GET_GLASS_BOTTLE ) );
+			fillWaterBottleTask->AddTask( new PickupTask( Item::glass_bottle_Id, 1, -1, this, IDS_TUTORIAL_TASK_BREWING_GET_GLASS_BOTTLE ) );
 			fillWaterBottleTask->AddTask( new PickupTask( Item::potion_Id, 1, 0, this, IDS_TUTORIAL_TASK_BREWING_FILL_GLASS_BOTTLE ) );
 			addTask(e_Tutorial_State_Brewing, fillWaterBottleTask);
 

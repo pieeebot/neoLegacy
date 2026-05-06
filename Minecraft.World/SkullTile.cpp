@@ -137,7 +137,7 @@ void SkullTile::checkMobSpawn(Level *level, int x, int y, int z, shared_ptr<Skul
 	if (placedSkull->getSkullType() == SkullTileEntity::TYPE_WITHER && y >= 2 && level->difficulty > Difficulty::PEACEFUL && !level->isClientSide)
 	{
 		// Check wither boss spawn
-		int ss = Tile::soulsand_Id;
+		int ss = Tile::soul_sand_Id;
 
 		// North-south alignment
 		for (int zo = -2; zo <= 0; zo++)
@@ -175,10 +175,10 @@ void SkullTile::checkMobSpawn(Level *level, int x, int y, int z, shared_ptr<Skul
 				else
 				{
 					// 4J: Can't spawn, drop resource instead
-					Tile::tiles[Tile::soulsand_Id]->spawnResources(level, x, y - 1, z + zo, 0, 0);
-					Tile::tiles[Tile::soulsand_Id]->spawnResources(level, x, y - 1, z + zo + 1, 0, 0);
-					Tile::tiles[Tile::soulsand_Id]->spawnResources(level, x, y - 2, z + zo + 1, 0, 0);
-					Tile::tiles[Tile::soulsand_Id]->spawnResources(level, x, y - 1, z + zo + 2, 0, 0);
+					Tile::tiles[Tile::soul_sand_Id]->spawnResources(level, x, y - 1, z + zo, 0, 0);
+					Tile::tiles[Tile::soul_sand_Id]->spawnResources(level, x, y - 1, z + zo + 1, 0, 0);
+					Tile::tiles[Tile::soul_sand_Id]->spawnResources(level, x, y - 2, z + zo + 1, 0, 0);
+					Tile::tiles[Tile::soul_sand_Id]->spawnResources(level, x, y - 1, z + zo + 2, 0, 0);
 					
 					shared_ptr<ItemInstance> itemInstance = std::make_shared<ItemInstance>(Item::skull_Id, 3, SkullTileEntity::TYPE_WITHER);
 					shared_ptr<ItemEntity> itemEntity = std::make_shared<ItemEntity>(level, x, y, z + zo + 1, itemInstance);
@@ -237,10 +237,10 @@ void SkullTile::checkMobSpawn(Level *level, int x, int y, int z, shared_ptr<Skul
 				else
 				{
 					// 4J: Can't spawn, drop resource instead
-					Tile::tiles[Tile::soulsand_Id]->spawnResources(level, x + xo, y - 1, z, 0, 0);
-					Tile::tiles[Tile::soulsand_Id]->spawnResources(level, x + xo + 1, y - 1, z, 0, 0);
-					Tile::tiles[Tile::soulsand_Id]->spawnResources(level, x + xo + 1, y - 2, z, 0, 0);
-					Tile::tiles[Tile::soulsand_Id]->spawnResources(level, x + xo + 2, y - 1, z, 0, 0);
+					Tile::tiles[Tile::soul_sand_Id]->spawnResources(level, x + xo, y - 1, z, 0, 0);
+					Tile::tiles[Tile::soul_sand_Id]->spawnResources(level, x + xo + 1, y - 1, z, 0, 0);
+					Tile::tiles[Tile::soul_sand_Id]->spawnResources(level, x + xo + 1, y - 2, z, 0, 0);
+					Tile::tiles[Tile::soul_sand_Id]->spawnResources(level, x + xo + 2, y - 1, z, 0, 0);
 
 					shared_ptr<ItemInstance> itemInstance = std::make_shared<ItemInstance>(Item::skull_Id, 3, SkullTileEntity::TYPE_WITHER);
 					shared_ptr<ItemEntity> itemEntity = std::make_shared<ItemEntity>(level, x + xo + 1, y, z, itemInstance);

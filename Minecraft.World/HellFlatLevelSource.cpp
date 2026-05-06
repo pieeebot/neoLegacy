@@ -35,7 +35,7 @@ void HellFlatLevelSource::prepareHeights(int xOffs, int zOffs, byteArray blocks)
 				int block = 0;
 				if ( (yc <= 6) || ( yc >= 121 ) )
 				{
-					block = Tile::netherRack_Id;
+					block = Tile::netherrack_Id;
 				}
 
 				blocks[xc << 11 | zc << 7 | yc] = static_cast<byte>(block);
@@ -60,7 +60,7 @@ void HellFlatLevelSource::buildSurfaces(int xOffs, int zOffs, byteArray blocks)
 				{
 					if( z - random->nextInt( 4 ) <= 0 || xOffs < -(m_XZSize/2) )
 					{
-						blocks[offs] = static_cast<byte>(Tile::unbreakable_Id);
+						blocks[offs] = static_cast<byte>(Tile::bedrock_Id);
 						blockSet = true;
 					}
 				}
@@ -68,7 +68,7 @@ void HellFlatLevelSource::buildSurfaces(int xOffs, int zOffs, byteArray blocks)
 				{
 					if( x - random->nextInt( 4 ) <= 0 || zOffs < -(m_XZSize/2))
 					{
-						blocks[offs] = static_cast<byte>(Tile::unbreakable_Id);
+						blocks[offs] = static_cast<byte>(Tile::bedrock_Id);
 						blockSet = true;
 					}
 				}
@@ -76,7 +76,7 @@ void HellFlatLevelSource::buildSurfaces(int xOffs, int zOffs, byteArray blocks)
 				{
 					if( z + random->nextInt(4) >= 15 || xOffs > (m_XZSize/2))
 					{
-						blocks[offs] = static_cast<byte>(Tile::unbreakable_Id);
+						blocks[offs] = static_cast<byte>(Tile::bedrock_Id);
 						blockSet = true;
 					}
 				}
@@ -84,7 +84,7 @@ void HellFlatLevelSource::buildSurfaces(int xOffs, int zOffs, byteArray blocks)
 				{
 					if( x + random->nextInt(4) >= 15 || zOffs > (m_XZSize/2) )
 					{
-						blocks[offs] = static_cast<byte>(Tile::unbreakable_Id);
+						blocks[offs] = static_cast<byte>(Tile::bedrock_Id);
 						blockSet = true;
 					}
 				}
@@ -93,11 +93,11 @@ void HellFlatLevelSource::buildSurfaces(int xOffs, int zOffs, byteArray blocks)
 
 				if (y >= Level::genDepthMinusOne - random->nextInt(5))
 				{
-					blocks[offs] = static_cast<byte>(Tile::unbreakable_Id);
+					blocks[offs] = static_cast<byte>(Tile::bedrock_Id);
 				}
 				else if (y <= 0 + random->nextInt(5))
 				{
-					blocks[offs] = static_cast<byte>(Tile::unbreakable_Id);
+					blocks[offs] = static_cast<byte>(Tile::bedrock_Id);
 				}
 			}
 		}

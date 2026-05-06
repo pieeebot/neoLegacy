@@ -26,13 +26,13 @@ bool DoorItem::useOn(shared_ptr<ItemInstance> instance, shared_ptr<Player> playe
 
 	Tile *tile;
 
-	if (doorType == L"doorWood")        tile = Tile::door_wood;
-	else if (doorType == L"doorIron")      tile = Tile::door_iron;
-	else if (doorType == L"doorSpruce")    tile = Tile::door_spruce;
-	else if (doorType == L"doorBirch")    tile = Tile::door_birch;
-	else if (doorType == L"doorJungle")    tile = Tile::door_jungle;
-	else if (doorType == L"doorAcacia")    tile = Tile::door_acacia;
-	else if (doorType == L"doorDark")    tile = Tile::door_dark;
+	if (doorType == L"doorWood")        tile = Tile::wooden_door;
+	else if (doorType == L"doorIron")      tile = Tile::iron_door;
+	else if (doorType == L"doorSpruce")    tile = Tile::spruce_door;
+	else if (doorType == L"doorBirch")    tile = Tile::birch_door;
+	else if (doorType == L"doorJungle")    tile = Tile::jungle_door;
+	else if (doorType == L"doorAcacia")    tile = Tile::acacia_door;
+	else if (doorType == L"doorDark")    tile = Tile::dark_oak_door;
 
 	if (!player->mayUseItemAt(x, y, z, face, instance) || !player->mayUseItemAt(x, y + 1, z, face, instance)) return false;
 	if (!tile->mayPlace(level, x, y, z)) return false;

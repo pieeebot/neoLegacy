@@ -149,12 +149,12 @@ void BrewingStandTile::onRemove(Level *level, int x, int y, int z, int id, int d
 
 int BrewingStandTile::getResource(int data, Random *random, int playerBonusLevel)
 {
-	return Item::brewingStand_Id;
+	return Item::brewing_stand_Id;
 }
 
 int BrewingStandTile::cloneTileId(Level *level, int x, int y, int z)
 {
-	return Item::brewingStand_Id;
+	return Item::brewing_stand_Id;
 }
 
 bool BrewingStandTile::hasAnalogOutputSignal()

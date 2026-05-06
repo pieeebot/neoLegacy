@@ -51,9 +51,9 @@ void OceanMonumentPieces::loadStatic()
 int OceanMonumentPieces::blockPrismarine()       { return PrismarineTile::TYPE_DEFAULT; }
 int OceanMonumentPieces::blockPrismarineBricks() { return PrismarineTile::TYPE_BRICKS; } // meta BRICKS
 int OceanMonumentPieces::blockDarkPrismarine()   { return PrismarineTile::TYPE_DARK; } // meta DARK
-int OceanMonumentPieces::blockWater()            { return Tile::water_Id; }
-int OceanMonumentPieces::blockSeaLantern()       { return Tile::seaLantern_Id; }
-int OceanMonumentPieces::blockGoldBlock()        { return Tile::goldBlock_Id; }
+int OceanMonumentPieces::blockWater()            { return Tile::flowing_water_Id; }
+int OceanMonumentPieces::blockSeaLantern()       { return Tile::sea_lantern_Id; }
+int OceanMonumentPieces::blockGoldBlock()        { return Tile::gold_block_Id; }
 int OceanMonumentPieces::blockSponge()           { return Tile::sponge_Id; }
 int OceanMonumentPieces::blockAir()              { return 0; }
 

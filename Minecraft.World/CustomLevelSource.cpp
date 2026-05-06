@@ -211,7 +211,7 @@ void CustomLevelSource::prepareHeights(int xOffs, int zOffs, byteArray blocks)
 							}
 							else if (yc * CHUNK_HEIGHT + y < waterHeight)
 							{
-								tileId = static_cast<byte>(Tile::calmWater_Id);
+								tileId = static_cast<byte>(Tile::water_Id);
 							}
 
 							// 4J - more extra code to make sure that the column at the edge of the world is just water & rock, to match the infinite sea that
@@ -221,7 +221,7 @@ void CustomLevelSource::prepareHeights(int xOffs, int zOffs, byteArray blocks)
 							{
 								// This matches code in MultiPlayerChunkCache that makes the geometry which continues at the edge of the world
 								if( yc * CHUNK_HEIGHT + y <= ( level->getSeaLevel() - 10 ) ) tileId = Tile::stone_Id;
-								else if( yc * CHUNK_HEIGHT + y < level->getSeaLevel() ) tileId = Tile::calmWater_Id;
+								else if( yc * CHUNK_HEIGHT + y < level->getSeaLevel() ) tileId = Tile::water_Id;
 							}
 
 							int indexY = (yc * CHUNK_HEIGHT + y);
@@ -293,7 +293,7 @@ void CustomLevelSource::buildSurfaces(int xOffs, int zOffs, byteArray blocks, Bi
 				if (y <= 1 + random->nextInt(2))	// 4J - changed to make the bedrock not have bits you can get stuck in
 					//                if (y <= 0 + random->nextInt(5))
 				{
-					blocks[offs] = static_cast<byte>(Tile::unbreakable_Id);
+					blocks[offs] = static_cast<byte>(Tile::bedrock_Id);
 				}
 				else
 				{
@@ -325,7 +325,7 @@ void CustomLevelSource::buildSurfaces(int xOffs, int zOffs, byteArray blocks, Bi
 							if (y < waterHeight && top == 0)
 							{
 								if (temp < 0.15f) top = static_cast<byte>(Tile::ice_Id);
-								else top = static_cast<byte>(Tile::calmWater_Id);
+								else top = static_cast<byte>(Tile::water_Id);
 							}
 
 							run = runDepth;
@@ -342,7 +342,7 @@ void CustomLevelSource::buildSurfaces(int xOffs, int zOffs, byteArray blocks, Bi
 							if (run == 0 && material == Tile::sand_Id)
 							{
 								run = random->nextInt(4);
-								material = static_cast<byte>(Tile::sandStone_Id);
+								material = static_cast<byte>(Tile::sandstone_Id);
 							}
 						}
 					}
@@ -452,10 +452,10 @@ void CustomLevelSource::calcWaterDepths(ChunkSource *parent, int xt, int zt)
 				if (level->getHeightmap(xp - 1, zp) > 0 || level->getHeightmap(xp + 1, zp) > 0 || level->getHeightmap(xp, zp - 1) > 0 || level->getHeightmap(xp, zp + 1) > 0)
 				{
 					bool hadWater = false;
-					if (hadWater || (level->getTile(xp - 1, y, zp) == Tile::calmWater_Id && level->getData(xp - 1, y, zp) < 7)) hadWater = true;
-					if (hadWater || (level->getTile(xp + 1, y, zp) == Tile::calmWater_Id && level->getData(xp + 1, y, zp) < 7)) hadWater = true;
-					if (hadWater || (level->getTile(xp, y, zp - 1) == Tile::calmWater_Id && level->getData(xp, y, zp - 1) < 7)) hadWater = true;
-					if (hadWater || (level->getTile(xp, y, zp + 1) == Tile::calmWater_Id && level->getData(xp, y, zp + 1) < 7)) hadWater = true;
+					if (hadWater || (level->getTile(xp - 1, y, zp) == Tile::water_Id && level->getData(xp - 1, y, zp) < 7)) hadWater = true;
+					if (hadWater || (level->getTile(xp + 1, y, zp) == Tile::water_Id && level->getData(xp + 1, y, zp) < 7)) hadWater = true;
+					if (hadWater || (level->getTile(xp, y, zp - 1) == Tile::water_Id && level->getData(xp, y, zp - 1) < 7)) hadWater = true;
+					if (hadWater || (level->getTile(xp, y, zp + 1) == Tile::water_Id && level->getData(xp, y, zp + 1) < 7)) hadWater = true;
 					if (hadWater)
 					{
 						for (int x2 = -5; x2 <= 5; x2++)
@@ -467,7 +467,7 @@ void CustomLevelSource::calcWaterDepths(ChunkSource *parent, int xt, int zt)
 								if (d <= 5)
 								{
 									d = 6 - d;
-									if (level->getTile(xp + x2, y, zp + z2) == Tile::calmWater_Id)
+									if (level->getTile(xp + x2, y, zp + z2) == Tile::water_Id)
 									{
 										int od = level->getData(xp + x2, y, zp + z2);
 										if (od < 7 && od < d)
@@ -480,10 +480,10 @@ void CustomLevelSource::calcWaterDepths(ChunkSource *parent, int xt, int zt)
 						}
 						if (hadWater)
 						{
-							level->setTileAndData(xp, y, zp, Tile::calmWater_Id, 7, Tile::UPDATE_CLIENTS);
+							level->setTileAndData(xp, y, zp, Tile::water_Id, 7, Tile::UPDATE_CLIENTS);
 							for (int y2 = 0; y2 < y; y2++)
 							{
-								level->setTileAndData(xp, y2, zp, Tile::calmWater_Id, 8, Tile::UPDATE_CLIENTS);
+								level->setTileAndData(xp, y2, zp, Tile::water_Id, 8, Tile::UPDATE_CLIENTS);
 							}
 						}
 					}
@@ -534,7 +534,7 @@ void CustomLevelSource::postProcess(ChunkSource *parent, int xt, int zt)
 		int y = pprandom->nextInt(Level::maxBuildHeight);
 		int z = zo + pprandom->nextInt(16) + 8;
 
-		LakeFeature *calmWater = new LakeFeature(Tile::calmWater_Id);
+		LakeFeature *calmWater = new LakeFeature(Tile::water_Id);
 		calmWater->place(level, pprandom, x, y, z);
 		delete calmWater;
 	}
@@ -548,7 +548,7 @@ void CustomLevelSource::postProcess(ChunkSource *parent, int xt, int zt)
 		int z = zo + pprandom->nextInt(16) + 8;
 		if (y < level->seaLevel || pprandom->nextInt(10) == 0)
 		{
-			LakeFeature *calmLava = new LakeFeature(Tile::calmLava_Id);
+			LakeFeature *calmLava = new LakeFeature(Tile::lava_Id);
 			calmLava->place(level, pprandom, x, y, z);
 			delete calmLava;
 		}
@@ -592,7 +592,7 @@ void CustomLevelSource::postProcess(ChunkSource *parent, int xt, int zt)
 			}
 			if (level->shouldSnow(x + xo, y, z + zo))
 			{
-				level->setTileAndData(x + xo, y, z + zo, Tile::topSnow_Id,0, Tile::UPDATE_CLIENTS);
+				level->setTileAndData(x + xo, y, z + zo, Tile::snow_layer_Id,0, Tile::UPDATE_CLIENTS);
 			}
 		}
 	}

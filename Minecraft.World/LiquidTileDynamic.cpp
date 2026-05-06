@@ -315,7 +315,7 @@ bool *LiquidTileDynamic::getSpread(Level *level, int x, int y, int z)
 bool LiquidTileDynamic::isWaterBlocking(Level *level, int x, int y, int z)
 {
 	int t = level->getTile(x, y, z);
-	if (t == Tile::door_wood_Id || t == Tile::door_iron_Id || t == Tile::sign_Id || t == Tile::ladder_Id || t == Tile::reeds_Id)
+	if (t == Tile::wooden_door_Id || t == Tile::iron_door_Id || t == Tile::standing_sign_Id || t == Tile::ladder_Id || t == Tile::reeds_Id)
 	{
 		return true;
 	}

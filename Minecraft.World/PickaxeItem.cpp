@@ -25,7 +25,7 @@ void PickaxeItem::staticCtor()
 	diggables.data[15] = Tile::lapisOre;
 	diggables.data[16] = Tile::lapisBlock;
 	diggables.data[17] = Tile::redStoneOre;
-	diggables.data[18] = Tile::redStoneOre_lit;
+	diggables.data[18] = Tile::lit_redstone_ore;
 	diggables.data[19] = Tile::rail;
 	diggables.data[20] = Tile::detectorRail;
 	diggables.data[21] = Tile::goldenRail;
@@ -44,7 +44,7 @@ bool PickaxeItem::canDestroySpecial(Tile *tile)
 	if (tile == Tile::goldBlock || tile == Tile::goldOre) return tier->getLevel() >= 2;
 	if (tile == Tile::ironBlock || tile == Tile::ironOre) return tier->getLevel() >= 1;
 	if (tile == Tile::lapisBlock || tile == Tile::lapisOre) return tier->getLevel() >= 1;
-	if (tile == Tile::redStoneOre || tile == Tile::redStoneOre_lit) return tier->getLevel() >= 2;
+	if (tile == Tile::redStoneOre || tile == Tile::lit_redstone_ore) return tier->getLevel() >= 2;
 	if (tile->material == Material::stone) return true;
 	if (tile->material == Material::metal) return true;
 	if (tile->material == Material::heavyMetal) return true;

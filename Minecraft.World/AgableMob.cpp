@@ -17,7 +17,7 @@ bool AgableMob::mobInteract(shared_ptr<Player> player)
 {
 	shared_ptr<ItemInstance> item = player->inventory->getSelected();
 
-	if (item != nullptr && item->id == Item::spawnEgg_Id)
+	if (item != nullptr && item->id == Item::spawn_egg_Id)
 	{
 		if (!level->isClientSide)
 		{

@@ -50,9 +50,9 @@ bool AddEnchantmentRuleDefinition::enchantItem(shared_ptr<ItemInstance> item)
 	{
 		// 4J-JEV: Ripped code from enchantmenthelpers
 		// Maybe we want to add an addEnchantment method to EnchantmentHelpers
-		if (item->id == Item::enchantedBook_Id)
+		if (item->id == Item::enchanted_book_Id)
 		{
-			Item::enchantedBook->addEnchantment( item, new EnchantmentInstance(m_enchantmentId, m_enchantmentLevel) );
+			Item::enchanted_book->addEnchantment( item, new EnchantmentInstance(m_enchantmentId, m_enchantmentLevel) );
 		}
 		else if (item->isEnchantable())
 		{

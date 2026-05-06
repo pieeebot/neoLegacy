@@ -20,15 +20,15 @@ public:
 		int id = level->getTile(x, y, z);
 		switch (id)
 		{
-		case Tile_SPU::wood_Id:	
-		case Tile_SPU::woodSlab_Id:
-		case Tile_SPU::woodSlabHalf_Id:
+		case Tile_SPU::planks_Id:	
+		case Tile_SPU::double_wooden_slab_Id:
+		case Tile_SPU::wooden_slab_Id:
 		case Tile_SPU::fence_Id:
-		case Tile_SPU::stairs_wood_Id:
-		case Tile_SPU::stairs_birchwood_Id:
-		case Tile_SPU::stairs_sprucewood_Id:
-		case Tile_SPU::stairs_junglewood_Id:
-		case Tile_SPU::treeTrunk_Id:
+		case Tile_SPU::oak_stairs_Id:
+		case Tile_SPU::birch_stairs_Id:
+		case Tile_SPU::spruce_stairs_Id:
+		case Tile_SPU::jungle_stairs_Id:
+		case Tile_SPU::log_Id:
 		case Tile_SPU::leaves_Id:
 		case Tile_SPU::bookshelf_Id:
 		case Tile_SPU::tnt_Id:

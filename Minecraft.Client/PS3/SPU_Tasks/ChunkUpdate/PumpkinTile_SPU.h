@@ -17,7 +17,7 @@ public:
 		if (face == Facing::DOWN) return &ms_pTileData->pumpkinTile_iconTop;
 
 		Icon_SPU* iconFace = &ms_pTileData->pumpkinTile_iconFace;
-		if(id == litPumpkin_Id)
+		if(id == lit_pumpkin_Id)
 			iconFace = &ms_pTileData->pumpkinTile_iconFaceLit;
 
 		if (data == DIR_NORTH && face == Facing::NORTH) return iconFace;

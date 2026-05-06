@@ -19,11 +19,11 @@ bool TilePlanterItem::useOn(shared_ptr<ItemInstance> instance, shared_ptr<Player
 {
 	// 4J-PB - Adding a test only version to allow tooltips to be displayed
 	int currentTile = level->getTile(x, y, z);
-	if (currentTile == Tile::topSnow_Id && (level->getData(x, y, z) & TopSnowTile::HEIGHT_MASK) < 1) 
+	if (currentTile == Tile::snow_layer_Id && (level->getData(x, y, z) & TopSnowTile::HEIGHT_MASK) < 1) 
 	{
 		face = Facing::UP;
 	} 
-	else if (currentTile == Tile::vine_Id || currentTile == Tile::tallgrass_Id || currentTile == Tile::deadBush_Id)
+	else if (currentTile == Tile::vine_Id || currentTile == Tile::tallgrass_Id || currentTile == Tile::deadbush_Id)
 	{
 	}
 	else

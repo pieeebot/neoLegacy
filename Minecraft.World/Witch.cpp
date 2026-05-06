@@ -16,7 +16,7 @@
 AttributeModifier *Witch::SPEED_MODIFIER_DRINKING = (new AttributeModifier(eModifierId_MOB_WITCH_DRINKSPEED, -0.25f, AttributeModifier::OPERATION_ADDITION))->setSerialize(false);
 
 const int Witch::DEATH_LOOT[Witch::DEATH_LOOT_COUNT] = {
-	Item::yellowDust_Id, Item::sugar_Id, Item::redStone_Id, Item::spiderEye_Id, Item::glassBottle_Id, Item::gunpowder_Id, Item::stick_Id, Item::stick_Id,
+	Item::glowstone_dust_Id, Item::sugar_Id, Item::redstone_Id, Item::spider_eye_Id, Item::glass_bottle_Id, Item::gunpowder_Id, Item::stick_Id, Item::stick_Id,
 };
 
 Witch::Witch(Level *level) : Monster(level)

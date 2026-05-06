@@ -16,7 +16,7 @@ bool SnowItem::useOn(shared_ptr<ItemInstance> instance, shared_ptr<Player> playe
 	int currentTile = level->getTile(x, y, z);
 	
 	// Are we adding extra snow to an existing tile?
-	if (currentTile == Tile::topSnow_Id)
+	if (currentTile == Tile::snow_layer_Id)
 	{
 		Tile *snowTile = Tile::tiles[getTileId()];
 		int currentData = level->getData(x, y, z);

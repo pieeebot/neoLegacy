@@ -9,13 +9,13 @@
 #include "net.minecraft.h"
 
 static std::map<wstring, int> doorItemMap = {
-	{ L"doorWood",   Item::door_wood_Id   },
-	{ L"doorIron",   Item::door_iron_Id   },
-	{ L"doorSpruce", Item::door_spruce_Id },
-	{ L"doorBirch",  Item::door_birch_Id  },
-	{ L"doorJungle", Item::door_jungle_Id },
-	{ L"doorAcacia", Item::door_acacia_Id },
-	{ L"doorDark",   Item::door_dark_Id   }
+	{ L"doorWood",   Item::wooden_door_Id   },
+	{ L"doorIron",   Item::iron_door_Id   },
+	{ L"doorSpruce", Item::spruce_door_Id },
+	{ L"doorBirch",  Item::birch_door_Id  },
+	{ L"doorJungle", Item::jungle_door_Id },
+	{ L"doorAcacia", Item::acacia_door_Id },
+	{ L"doorDark",   Item::dark_oak_door_Id   }
 };
 
 DoorTile::DoorTile(int id, Material *material, const wstring& doorType) : Tile(id, material,isSolidRender())
@@ -180,7 +180,7 @@ void DoorTile::attack(Level *level, int x, int y, int z, shared_ptr<Player> play
 // 4J-PB - Adding a TestUse for tooltip display
 bool DoorTile::TestUse()
 {
-	return id == Tile::door_wood_Id;
+	return id == Tile::wooden_door_Id;
 }
 
 bool DoorTile::use(Level *level, int x, int y, int z, shared_ptr<Player> player, int clickedFace, float clickX, float clickY, float clickZ, bool soundOnly/*=false*/) // 4J added soundOnly param

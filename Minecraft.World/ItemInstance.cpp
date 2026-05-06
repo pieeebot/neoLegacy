@@ -14,15 +14,9 @@
 #include "ItemInstance.h"
 #include "HtmlString.h"
 #include "../Minecraft.Client/Common/Consoles_App.h"
+#include "ItemNameMap.h"
 #include <cwctype>
-#include <unordered_map>
-#include <fstream>
 #include <string>
-#include <filesystem>
-#include "../Minecraft.Server/vendor/nlohmann/json.hpp"
-
-using nlohmann::json;
-namespace fs = std::filesystem;
 
 namespace
 {
@@ -77,100 +71,17 @@ wstring ToSnakeCase(const wstring &value)
 	return NormalizeItemNameId(out);
 }
 
-void AddNameAlias(unordered_map<wstring, int> &nameToId, const wchar_t *name, int id)
-{
-	nameToId[NormalizeItemNameId(name)] = id;
-}
-
-bool TryLoadExternalItemIdAliases(unordered_map<wstring, int> &nameToId)
-{
-	static bool attempted = false;
-	static bool loaded = false;
-	if (attempted)
-	{
-		return loaded;
-	}
-	attempted = true;
-
-	// todo: convert canidatePaths to single path now that we know where the mapping file is
-
-	// const vector<string> candidatePaths = {
-	// 	"Common/Localization/itemId.json"
-	// };
-
-	static const string path = "Common/Localization/itemId.json";
-
-	app.DebugPrintf("[ItemInstance] Trying to load from: %s\n", path.c_str());
-		
-	if (!fs::exists(path))
-	{
-		app.DebugPrintf("[ItemInstance] File does not exist: %s\n", path.c_str());
-		return false;
-	}
-
-	app.DebugPrintf("[ItemInstance] File exists, reading data...\n");
-	
-	ifstream file(path.c_str(), ios::in);
-	if (!file.good())
-	{
-		app.DebugPrintf("[ItemInstance] Failed to open file: %s\n", path.c_str());
-		return false;
-	}
-	try
-	{
-		json j = json::parse(file);
-		if (!j.is_object())
-		{
-			app.DebugPrintf("[ItemInstance] ItemId alias JSON is not a valid object: %s\n", path.c_str());
-			return false;
-		}
-		for (const auto &entry : j.items())
-		{
-			const string &key = entry.key();
-			const auto &value = entry.value();
-			if (!value.is_number_integer())
-			{
-				continue;
-			}
-			wstring wkey(key.begin(), key.end());
-			nameToId[NormalizeItemNameId(wkey)] = value.get<int>();
-		}
-		loaded = true;
-		app.DebugPrintf("[ItemInstance] SUCCESS: Loaded %zu item id aliases from %s\n", j.size(), path.c_str());
-	}
-	catch (const exception &e)
-	{
-		app.DebugPrintf("[ItemInstance] Parsing failed: %s (error: %s)\n", path.c_str(), e.what());
-		return false;
-	}
-
-	if (!loaded)
-	{
-		app.DebugPrintf("[ItemInstance] FAILED: No valid ItemId aliases were found.\n");
-	}
-
-	return loaded;
-}
-
 int ResolveLegacyItemIdFromStringName(const wstring &rawName)
 {
-	static unordered_map<wstring, int> sNameToId;
-	static bool sInitialized = false;
-
-	if (!sInitialized)
-	{
-		sInitialized = true;
-		TryLoadExternalItemIdAliases(sNameToId);
-	}
-
 	const wstring name = NormalizeItemNameId(rawName);
-	auto it = sNameToId.find(name);
-	if (it != sNameToId.end())
+	int id = GetItemIdByName(name);
+	if (id >= 0)
 	{
-		return it->second;
+		return id;
 	}
 
-	return -1;
+	const wstring snakeName = ToSnakeCase(rawName);
+	return GetItemIdByName(snakeName);
 }
 
 int ParseNumericItemId(const wstring &idString, bool &parsed)
@@ -281,7 +192,7 @@ shared_ptr<ItemInstance> ItemInstance::fromTag(CompoundTag *itemTag)
 	itemInstance->load(itemTag);
 
 	Item *item = itemInstance->getItem();
-	if (item == nullptr)
+	if (item == nullptr && itemInstance->id != 0) // air is not relevant
 	{
 		app.DebugPrintf("[ItemInstance] Missing item while loading: id=%d count=%d damage=%d\n", itemInstance->id, itemInstance->count, itemInstance->auxValue);
 	}
@@ -416,10 +327,10 @@ void ItemInstance::load(CompoundTag *compoundTag)
 			break;
 		}
 	}
-	else
-	{
-		app.DebugPrintf("[ItemInstance] Missing item id tag\n");
-	}
+//	else
+//	{
+//		app.DebugPrintf("[ItemInstance] Missing item id tag\n");
+//	}
 
 	count = compoundTag->getByte(L"Count");
 	auxValue = compoundTag->getShort(L"Damage");

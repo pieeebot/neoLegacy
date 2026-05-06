@@ -71,7 +71,7 @@ bool HalfSlabTile_SPU::shouldRenderFace(ChunkRebuildData *level, int x, int y, i
 
 bool HalfSlabTile_SPU::isHalfSlab(int tileId) 
 {
-	return tileId == Tile_SPU::stoneSlabHalf_Id || tileId == Tile_SPU::woodSlabHalf_Id;
+	return tileId == Tile_SPU::stone_slab_Id || tileId == Tile_SPU::wooden_slab_Id;
 }
 
 

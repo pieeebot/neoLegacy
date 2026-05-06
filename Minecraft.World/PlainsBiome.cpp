@@ -22,25 +22,25 @@ Feature* PlainsBiome::getFlowerFeature(Random* random, int x, int y, int z)
         {
            int j = random->nextInt(4);
             switch (j) {
-            case 0: return new FlowerFeature(Tile::rose_Id, Rose::ORANGE_TULIP);
-            case 1: return new FlowerFeature(Tile::rose_Id, Rose::RED_TULIP);
-            case 2: return new FlowerFeature(Tile::rose_Id, Rose::PINK_TULIP);
-            case 3: return new FlowerFeature(Tile::rose_Id, Rose::WHITE_TULIP);
+            case 0: return new FlowerFeature(Tile::red_flower_Id, Rose::ORANGE_TULIP);
+            case 1: return new FlowerFeature(Tile::red_flower_Id, Rose::RED_TULIP);
+            case 2: return new FlowerFeature(Tile::red_flower_Id, Rose::PINK_TULIP);
+            case 3: return new FlowerFeature(Tile::red_flower_Id, Rose::WHITE_TULIP);
             }
 
         }else if (random->nextInt(3) > 0)
         {
             int i = random->nextInt(3);
             if (i == 1) {
-                 return new FlowerFeature(Tile::rose_Id,Rose::AZURE_BLUET);
+                 return new FlowerFeature(Tile::red_flower_Id,Rose::AZURE_BLUET);
             } else
-                 return new FlowerFeature(Tile::rose_Id,Rose::OXEYE_DAISY);
+                 return new FlowerFeature(Tile::red_flower_Id,Rose::OXEYE_DAISY);
                 
             
         }
         else
         {
-             return new FlowerFeature(Tile::flower_Id);
+             return new FlowerFeature(Tile::yellow_flower_Id);
         }
     
     return Biome::getFlowerFeature(random, x, y, z);

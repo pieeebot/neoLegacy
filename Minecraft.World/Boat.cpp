@@ -337,7 +337,7 @@ void Boat::tick()
 			remove();
 			for (int i = 0; i < 3; i++)
 			{
-				spawnAtLocation(Tile::wood_Id, 1, 0);
+				spawnAtLocation(Tile::planks_Id, 1, 0);
 			}
 			for (int i = 0; i < 2; i++)
 			{
@@ -395,11 +395,11 @@ void Boat::tick()
 			int yy = Mth::floor(y) + j;
 			int tile = level->getTile(xx, yy, zz);
 
-			if (tile == Tile::topSnow_Id)
+			if (tile == Tile::snow_layer_Id)
 			{
 				level->removeTile(xx, yy, zz);
 			}
-			else if (tile == Tile::waterLily_Id)
+			else if (tile == Tile::waterlily_Id)
 			{
 				level->destroyTile(xx, yy, zz, true);
 			}
