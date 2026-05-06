@@ -268,6 +268,13 @@ Tile* Tile::packedIce = nullptr;
 Tile* Tile::barrier = nullptr;
 TallGrass2* Tile::tallgrass2 = nullptr;
 
+// TU43
+
+MagmaBlockTile* Tile::magmaBlock = nullptr;
+Tile* Tile::netherWartBlock = nullptr;
+Tile* Tile::redNetherBrick = nullptr;
+Tile* Tile::boneBlock = nullptr;
+
 DWORD Tile::tlsIdxShape = TlsAlloc();
 
 Tile::ThreadStorage::ThreadStorage()
@@ -552,6 +559,12 @@ void Tile::staticCtor()
 	Tile::prismarine = (new PrismarineTile(168))->setBaseItemTypeAndMaterial(Item::eBaseItemType_structblock, Item::eMaterial_stone)->setDestroyTime(1.5f)->setExplodeable(10)->setSoundType(SOUND_STONE)->setIconName(L"prismarine")->setDescriptionId(IDS_TILE_PRISMARINE)->setUseDescriptionId(IDS_DESC_PRISMARINE);
 
 	Tile::tallgrass2 = static_cast<TallGrass2*>((new TallGrass2(175))->setDestroyTime(0.0f)->setSoundType(Tile::SOUND_GRASS)->setIconName(L"tallgrass2_tall_grass_upper")->setDescriptionId(IDS_DESC_DOUBLE_TALL_GRASS)->setUseDescriptionId(IDS_DESC_TALL_GRASS)->disableMipmap()->sendTileData(0xFF));
+
+	// TU43
+	Tile::magmaBlock = static_cast<MagmaBlockTile *>((new MagmaBlockTile(213))->setDestroyTime(0.5f)->setSoundType(Tile::SOUND_STONE)->setLightEmission(0.2f)->setIconName(L"magma_block")->setDescriptionId(IDS_TILE_MAGMA_BLOCK)->setUseDescriptionId(IDS_DESC_MAGMA_BLOCK));
+	Tile::netherWartBlock = (new Tile(214, Material::wood))->setBaseItemTypeAndMaterial(Item::eBaseItemType_block, Item::eMaterial_netherstalk)->setDestroyTime(1.0f)->setSoundType(SOUND_WOOD)->setIconName(L"nether_wart_block")->setDescriptionId(IDS_TILE_NETHER_WART_BLOCK)->setUseDescriptionId(IDS_DESC_NETHER_WART_BLOCK);
+	Tile::redNetherBrick = (new Tile(215, Material::stone))->setBaseItemTypeAndMaterial(Item::eBaseItemType_structblock, Item::eMaterial_rednetherbrick)->setDestroyTime(2.0f)->setExplodeable(10)->setSoundType(SOUND_STONE)->setIconName(L"red_nether_brick")->setDescriptionId(IDS_TILE_RED_NETHER_BRICK)->setUseDescriptionId(IDS_DESC_RED_NETHER_BRICK);
+	Tile::boneBlock = (new RotatedPillarTile(216, Material::stone, L"bone_block"))->setBaseItemTypeAndMaterial(Item::eBaseItemType_block, Item::eMaterial_bone)->setDestroyTime(2.0f)->setExplodeable(2)->setSoundType(SOUND_STONE)->setDescriptionId(IDS_TILE_BONE_BLOCK)->sendTileData()->setUseDescriptionId(IDS_DESC_BONE_BLOCK);
 
 	// Special cases for certain items since they can have different icons
 	Item::items[wool_Id]				= ( new WoolTileItem(Tile::wool_Id- 256) )->setIconName(L"cloth")->setDescriptionId(IDS_TILE_CLOTH)->setUseDescriptionId(IDS_DESC_WOOL);
@@ -1846,4 +1859,8 @@ const int Tile::stairs_quartz_Id;
 const int Tile::woolCarpet_Id;
 const int Tile::stairs_acaciawood_Id;
 const int Tile::stairs_darkwood_Id;
+const int Tile::magmaBlock_Id;
+const int Tile::netherWartBlock_Id;
+const int Tile::redNetherBrick_Id;
+const int Tile::boneBlock_Id;
 #endif

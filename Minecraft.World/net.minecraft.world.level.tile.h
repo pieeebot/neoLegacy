@@ -65,6 +65,7 @@
 #include "LiquidTileDynamic.h"
 #include "LiquidTileStatic.h"
 #include "LockedChestTile.h"
+#include "MagmaBlockTile.h"
 #include "MelonTile.h"
 #include "MetalTile.h"
 #include "MobSpawnerTile.h"

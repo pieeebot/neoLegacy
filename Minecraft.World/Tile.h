@@ -44,6 +44,7 @@ class HalfSlabTile;
 class Icon;
 class IconRegister;
 class TallGrass2;
+class MagmaBlockTile;
 
 class ChunkRebuildData;
 
@@ -419,14 +420,11 @@ public:
 	//grass_path		208
 	//end_gateway		209
 	//frosted_ice		212
-	//magma				213
-	//nether_wart_block 214
-	//red_nether_brick  215
-	//bone_block		216
+	static const int magmaBlock_Id = 213;
+	static const int netherWartBlock_Id = 214;
+	static const int redNetherBrick_Id = 215;
+	static const int boneBlock_Id = 216;
 	//structure_void    217
-	// 
-	//
-	
 
 	static Tile *stone;
 	static GrassTile *grass;
@@ -640,6 +638,10 @@ public:
 
 	static TallGrass2* tallgrass2;
 	
+	static MagmaBlockTile* magmaBlock;
+	static Tile* netherWartBlock;
+	static Tile* redNetherBrick;
+	static Tile* boneBlock;
 
 	static void staticCtor();
 
@@ -813,10 +815,10 @@ public:
 	virtual bool hasAnalogOutputSignal();
 	virtual int getAnalogOutputSignal(Level *level, int x, int y, int z, int dir);
 	virtual bool blocksLight() { return Tile::lightBlock[id] > 0; }
+	virtual wstring getIconName();
 
 protected:
 	virtual Tile *setIconName(const wstring &iconName);
-	virtual wstring getIconName();
 
 public:
 	virtual void registerIcons(IconRegister *iconRegister);

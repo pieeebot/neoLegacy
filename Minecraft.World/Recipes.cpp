@@ -655,10 +655,6 @@ Recipes::Recipes()
 		L'#', new ItemInstance(Tile::wood, 1, TreeTile::DARK_TRUNK),
 		L'S');
 
-
-
-
-
 	//iCount=getRecipies()->size();
 
 	addShapedRecipy(new ItemInstance(Item::cake, 1), //
@@ -885,6 +881,16 @@ Recipes::Recipes()
 
 		L'#', Item::netherQuartz,
 		L'S');
+
+	addShapedRecipy(new ItemInstance(Tile::redNetherBrick, 1), //
+		L"sscicig",
+		L"#N", //
+		L"N#", //
+
+		L'N', Item::netherbrick,
+		L'#', Item::netherwart_seeds,
+		L'S');
+
 
 	addShapedRecipy(new ItemInstance(Tile::lever, 1), //
 		L"ssctcig",
@@ -1248,7 +1254,6 @@ Recipes::Recipes()
 
 		L'D', Item::dye_powder, L'C', Item::fireworksCharge,
 		L'D');
-
 
 	// Sort so the largest recipes get checked first!
 	/* 4J-PB - TODO

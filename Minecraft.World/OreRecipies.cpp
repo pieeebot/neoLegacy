@@ -31,6 +31,12 @@ void OreRecipies::_init()
 
 	ADD_OBJECT(map[7],Tile::hayBlock);
 	ADD_OBJECT(map[7],new ItemInstance(Item::wheat, 9));
+
+	ADD_OBJECT(map[8],Tile::netherWartBlock);
+	ADD_OBJECT(map[8],new ItemInstance(Item::netherwart_seeds, 9));
+
+	ADD_OBJECT(map[9],Tile::boneBlock);
+	ADD_OBJECT(map[9],new ItemInstance(Item::dye_powder, 9, DyePowderItem::WHITE));
 }
 void OreRecipies::addRecipes(Recipes *r) 
 {
@@ -47,12 +53,16 @@ void OreRecipies::addRecipes(Recipes *r)
 			L'#', to,
 			L'D');
 
-		r->addShapedRecipy(to, //
+
+		if (i != 8) // skip nether wart recipe
+		{
+			r->addShapedRecipy(to, //
 			L"sctg",
 			L"#", //
 
 			L'#', from,
 			L'D');
+		}
 	}		
 }
 

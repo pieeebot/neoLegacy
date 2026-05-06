@@ -998,7 +998,6 @@ void PreStitchedTextureMap::loadUVs()
 		ADD_ICON(19,	13,	L"glass_pane_top_silver");
 		ADD_ICON(19,	14,	L"glass_pane_top_white");
 		ADD_ICON(19,	15,	L"glass_pane_top_yellow");
-
 		
 		ADD_ICON(20, 5, L"flower_tulip_orange");
 
@@ -1011,7 +1010,6 @@ void PreStitchedTextureMap::loadUVs()
 		ADD_ICON(20, 15, L"red_sandstone_top");
 
 		ADD_ICON(21, 5, L"flower_tulip_pink");
-		
 
 		ADD_ICON(21, 8, L"log_dark");
 		ADD_ICON(21, 9, L"log_dark_top");
@@ -1037,7 +1035,6 @@ void PreStitchedTextureMap::loadUVs()
 
 		ADD_ICON(22, 14, L"red_sandstone_carved");
 		ADD_ICON(22, 15, L"red_sandstone_smooth");
-		
 
 		ADD_ICON(23, 0, L"door_acacia_upper");
 		ADD_ICON(23, 1, L"door_birch_upper");
@@ -1071,5 +1068,10 @@ void PreStitchedTextureMap::loadUVs()
 		ADD_ICON(21, 4, L"tallgrass2_lilac_lower");
 		ADD_ICON(20, 4, L"tallgrass2_lilac_upper");
 
+		ADD_ICON(24, 9, L"magma_block"); // TODO: add animation interpolation
+		ADD_ICON(24, 10, L"nether_wart_block");
+		ADD_ICON(24, 11, L"red_nether_brick");
+		ADD_ICON(26, 0, L"bone_block");
+		ADD_ICON(26, 1, L"bone_block_top"); // hello george
 	}
 }

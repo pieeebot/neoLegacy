@@ -163,7 +163,7 @@ BufferedImage::BufferedImage(const wstring& File, bool filenameHasExtension /*=f
 		const char *pchTextureName=wstringtofilename(name);
 
 #ifndef _CONTENT_PACKAGE
-		app.DebugPrintf("\n--- Loading TEXTURE - %s\n\n",pchTextureName);
+		// app.DebugPrintf("\n--- Loading TEXTURE - %s\n\n",pchTextureName);
 #endif
 
 		D3DXIMAGE_INFO ImageInfo;

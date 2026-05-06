@@ -49,6 +49,8 @@ public:
 		e_ChatDeathAnvil,
 		e_ChatDeathFallingBlock,
 		e_ChatDeathThorns,
+		e_ChatDeathHotFloor,
+		e_ChatDeathHotFloorPlayer,
 
 		e_ChatDeathFellAccidentLadder,
 		e_ChatDeathFellAccidentVines,

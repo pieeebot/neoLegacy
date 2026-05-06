@@ -107,8 +107,8 @@ int Entity::getSmallId()
     if (entityCounter == 0x7ffffff)
     {
         entityCounter = 16384;
-    }
-    return fallbackId;
+	}
+	return fallbackId;
 #else
 	app.DebugPrintf("Out of small entity Ids... possible leak?\n");
 	DEBUG_BREAK();
@@ -932,11 +932,30 @@ void Entity::move(double xa, double ya, double za, bool noEntityCubes)   // 4J -
 				playSound(eSoundType_LIQUID_SWIM, speed, 1 + (random->nextFloat() - random->nextFloat()) * 0.4f);
 			}
 			playStepSound(xt, yt, zt, t);
-			Tile::tiles[t]->stepOn(level, xt, yt, zt, self);
 		}
 	}
 
 	checkInsideTiles();
+
+	if (onGround)
+	{
+		int xt = Mth::floor(x);
+		int yt = Mth::floor(y - 0.2f - heightOffset);
+		int zt = Mth::floor(z);
+		int t = level->getTile(xt, yt, zt);
+		if (t == 0)
+		{
+			int renderShape = level->getTileRenderShape(xt, yt - 1, zt);
+			if (renderShape == Tile::SHAPE_FENCE || renderShape == Tile::SHAPE_WALL || renderShape == Tile::SHAPE_FENCE_GATE)
+			{
+				t = level->getTile(xt, yt - 1, zt);
+			}
+		}
+		if (t > 0)
+		{
+			Tile::tiles[t]->stepOn(level, xt, yt, zt, self);
+		}
+	}
 
 
 	bool water = isInWaterOrRain();
