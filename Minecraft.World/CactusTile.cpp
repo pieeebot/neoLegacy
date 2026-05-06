@@ -19,6 +19,32 @@ CactusTile::CactusTile(int id) : Tile(id, Material::cactus,isSolidRender())
 	iconBottom = nullptr;
 }
 
+void CactusTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int CactusTile::defaultBlockState()
+{
+	return 0;
+}
+
+int CactusTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0xF) : 0;
+}
+
+Tile::BlockState CactusTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0xF);
+}
+
+Tile::BlockState CactusTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0xF);
+}
+
 void CactusTile::tick(Level *level, int x, int y, int z, Random *random)
 {
 	if (level->isEmptyTile(x, y + 1, z))

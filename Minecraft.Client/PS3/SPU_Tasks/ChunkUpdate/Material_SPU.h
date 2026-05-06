@@ -10,11 +10,11 @@ public:
 	static const int air_Id = 0;
 	static const int grass_Id = 1;
 	static const int dirt_Id = 2;
-	static const int wood_Id = 3;
+	static const int planks_Id = 3;
 	static const int stone_Id = 4;
 	static const int metal_Id = 5;
-	static const int water_Id = 6;
-	static const int lava_Id = 7;
+	static const int flowing_water_Id = 6;
+	static const int flowing_lava_Id = 7;
 	static const int leaves_Id = 8;
 	static const int plant_Id = 9;
 	static const int replaceable_plant_Id = 10;
@@ -27,7 +27,7 @@ public:
 	static const int explosive_Id = 17;
 	static const int coral_Id = 18;
 	static const int ice_Id = 19;
-	static const int topSnow_Id = 20;
+	static const int snow_layer_Id = 20;
 	static const int snow_Id = 21;
 	static const int cactus_Id = 22;
 	static const int clay_Id = 23;

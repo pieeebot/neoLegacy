@@ -13,6 +13,11 @@ private:
 
 public:
 	TheEndPortalFrameTile(int id);
+	virtual void createBlockStateDefinition() override;
+	virtual int defaultBlockState() override;
+	virtual int convertBlockStateToLegacyData(BlockState *state) override;
+	virtual Tile::BlockState getBlockState(int data);
+	virtual Tile::BlockState getBlockState(LevelSource *level, int x, int y, int z) override;
 	virtual Icon *getTexture(int face, int data);
 	void registerIcons(IconRegister *iconRegister);
 	Icon *getEye();

@@ -14,6 +14,32 @@ DaylightDetectorTile::DaylightDetectorTile(int id, bool inverted) : BaseEntityTi
 	updateDefaultShape();
 }
 
+void DaylightDetectorTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int DaylightDetectorTile::defaultBlockState()
+{
+	return 0;
+}
+
+int DaylightDetectorTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0xF) : 0;
+}
+
+Tile::BlockState DaylightDetectorTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0xF);
+}
+
+Tile::BlockState DaylightDetectorTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0xF);
+}
+
 void DaylightDetectorTile::updateDefaultShape()
 {
 	setShape(0, 0, 0, 1, 6.0f / 16.0f, 1);
@@ -90,9 +116,9 @@ bool DaylightDetectorTile::use(Level *level, int x, int y, int z, shared_ptr<Pla
 		{
 			int data = level->getData(x, y, z);
 			if (inverted)
-				level->setTileAndData(x, y, z, Tile::daylightDetector_Id, data, Tile::UPDATE_INVISIBLE);
+				level->setTileAndData(x, y, z, Tile::daylight_detector_Id, data, Tile::UPDATE_INVISIBLE);
 			else
-				level->setTileAndData(x, y, z, Tile::invertedDaylightDetector_Id, data, Tile::UPDATE_INVISIBLE);
+				level->setTileAndData(x, y, z, Tile::daylight_detector_inverted_Id, data, Tile::UPDATE_INVISIBLE);
 
 			updateSignalStrength(level, x, y, z);
 		}

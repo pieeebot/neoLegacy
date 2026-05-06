@@ -251,7 +251,7 @@ wstring UIComponent_TutorialPopup::_SetIcon(int icon, int iAuxVal, bool isFoil, 
 		// remove any icon text
 		else if(temp.find(L"{*CraftingTableIcon*}")!=wstring::npos)
 		{
-			m_iconItem = std::make_shared<ItemInstance>(Tile::workBench_Id, 1, 0);
+			m_iconItem = std::make_shared<ItemInstance>(Tile::crafting_table_Id, 1, 0);
 		}
 		else if(temp.find(L"{*SticksIcon*}")!=wstring::npos)
 		{
@@ -259,19 +259,19 @@ wstring UIComponent_TutorialPopup::_SetIcon(int icon, int iAuxVal, bool isFoil, 
 		}
 		else if(temp.find(L"{*PlanksIcon*}")!=wstring::npos)
 		{
-			m_iconItem = std::make_shared<ItemInstance>(Tile::wood_Id, 1, 0);
+			m_iconItem = std::make_shared<ItemInstance>(Tile::planks_Id, 1, 0);
 		}
 		else if(temp.find(L"{*WoodenShovelIcon*}")!=wstring::npos)
 		{
-			m_iconItem = std::make_shared<ItemInstance>(Item::shovel_wood_Id, 1, 0);
+			m_iconItem = std::make_shared<ItemInstance>(Item::wooden_shovel_Id, 1, 0);
 		}
 		else if(temp.find(L"{*WoodenHatchetIcon*}")!=wstring::npos)
 		{
-			m_iconItem = std::make_shared<ItemInstance>(Item::hatchet_wood_Id, 1, 0);
+			m_iconItem = std::make_shared<ItemInstance>(Item::wooden_axe_Id, 1, 0);
 		}
 		else if(temp.find(L"{*WoodenPickaxeIcon*}")!=wstring::npos)
 		{
-			m_iconItem = std::make_shared<ItemInstance>(Item::pickAxe_wood_Id, 1, 0);
+			m_iconItem = std::make_shared<ItemInstance>(Item::wooden_pickaxe_Id, 1, 0);
 		}
 		else if(temp.find(L"{*FurnaceIcon*}")!=wstring::npos)
 		{
@@ -279,7 +279,7 @@ wstring UIComponent_TutorialPopup::_SetIcon(int icon, int iAuxVal, bool isFoil, 
 		}
 		else if(temp.find(L"{*WoodenDoorIcon*}")!=wstring::npos)
 		{
-			m_iconItem = std::make_shared<ItemInstance>(Item::door_wood, 1, 0);
+			m_iconItem = std::make_shared<ItemInstance>(Item::wooden_door, 1, 0);
 		}
 		else if(temp.find(L"{*TorchIcon*}")!=wstring::npos)
 		{
@@ -291,11 +291,11 @@ wstring UIComponent_TutorialPopup::_SetIcon(int icon, int iAuxVal, bool isFoil, 
 		}
 		else if(temp.find(L"{*FishingRodIcon*}")!=wstring::npos)
 		{
-			m_iconItem = std::make_shared<ItemInstance>(Item::fishingRod_Id, 1, 0);
+			m_iconItem = std::make_shared<ItemInstance>(Item::fishing_rod_Id, 1, 0);
 		}
 		else if(temp.find(L"{*FishIcon*}")!=wstring::npos)
 		{
-			m_iconItem = std::make_shared<ItemInstance>(Item::fish_raw_Id, 1, 0);
+			m_iconItem = std::make_shared<ItemInstance>(Item::fish_Id, 1, 0);
 		}
 		else if(temp.find(L"{*MinecartIcon*}")!=wstring::npos)
 		{
@@ -307,7 +307,7 @@ wstring UIComponent_TutorialPopup::_SetIcon(int icon, int iAuxVal, bool isFoil, 
 		}
 		else if(temp.find(L"{*PoweredRailIcon*}")!=wstring::npos)
 		{
-			m_iconItem = std::make_shared<ItemInstance>(Tile::goldenRail_Id, 1, 0);
+			m_iconItem = std::make_shared<ItemInstance>(Tile::golden_rail_Id, 1, 0);
 		}
 		else if(temp.find(L"{*StructuresIcon*}")!=wstring::npos)
 		{

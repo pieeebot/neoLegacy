@@ -2821,9 +2821,9 @@ else if (name== L"footstep") mc->particleEngine->add(shared_ptr<FootstepParticle
 else if (name== L"splash") mc->particleEngine->add(shared_ptr<SplashParticle>( new SplashParticle(level[playerIndex], x, y, z, xa, ya, za) ) );
 else if (name== L"largesmoke") mc->particleEngine->add(shared_ptr<SmokeParticle>( new SmokeParticle(level[playerIndex], x, y, z, xa, ya, za, 2.5f) ) );
 else if (name== L"reddust") mc->particleEngine->add(shared_ptr<RedDustParticle>( new RedDustParticle(level[playerIndex], x, y, z, (float) xa, (float) ya, (float) za) ) );
-else if (name== L"snowballpoof") mc->particleEngine->add(shared_ptr<BreakingItemParticle>( new BreakingItemParticle(level[playerIndex], x, y, z, Item::snowBall) ) );
+else if (name== L"snowballpoof") mc->particleEngine->add(shared_ptr<BreakingItemParticle>( new BreakingItemParticle(level[playerIndex], x, y, z, Item::snowball) ) );
 else if (name== L"snowshovel") mc->particleEngine->add(shared_ptr<SnowShovelParticle>( new SnowShovelParticle(level[playerIndex], x, y, z, xa, ya, za) ) );
-else if (name== L"slime") mc->particleEngine->add(shared_ptr<BreakingItemParticle>( new BreakingItemParticle(level[playerIndex], x, y, z, Item::slimeBall)) ) ;
+else if (name== L"slime") mc->particleEngine->add(shared_ptr<BreakingItemParticle>( new BreakingItemParticle(level[playerIndex], x, y, z, Item::slime_ball)) ) ;
 else if (name== L"heart") mc->particleEngine->add(shared_ptr<HeartParticle>( new HeartParticle(level[playerIndex], x, y, z, xa, ya, za) ) );
 }
 */
@@ -3048,7 +3048,7 @@ shared_ptr<Particle> LevelRenderer::addParticleInternal(ePARTICLE_TYPE eParticle
 		particle = std::make_shared<RedDustParticle>(lev, x, y, z, static_cast<float>(xa), static_cast<float>(ya), static_cast<float>(za));
 		break;
 	case eParticleType_snowballpoof:
-		particle = std::make_shared<BreakingItemParticle>(lev, x, y, z, Item::snowBall, textures);
+		particle = std::make_shared<BreakingItemParticle>(lev, x, y, z, Item::snowball, textures);
 		break;
 	case eParticleType_dripWater:
 		particle = std::make_shared<DripParticle>(lev, x, y, z, Material::water);
@@ -3060,7 +3060,7 @@ shared_ptr<Particle> LevelRenderer::addParticleInternal(ePARTICLE_TYPE eParticle
 		particle = std::make_shared<SnowShovelParticle>(lev, x, y, z, xa, ya, za);
 		break;
 	case eParticleType_slime:
-		particle = std::make_shared<BreakingItemParticle>(lev, x, y, z, Item::slimeBall, textures);
+		particle = std::make_shared<BreakingItemParticle>(lev, x, y, z, Item::slime_ball, textures);
 		break;
 	case eParticleType_heart:
 		particle = std::make_shared<HeartParticle>(lev, x, y, z, xa, ya, za);
@@ -3341,7 +3341,7 @@ void LevelRenderer::levelEvent(shared_ptr<Player> source, int type, int x, int y
 			double yp = y;
 			double zp = z + 0.5;
 
-			ePARTICLE_TYPE particle = PARTICLE_ICONCRACK(Item::eyeOfEnder->id,0);
+			ePARTICLE_TYPE particle = PARTICLE_ICONCRACK(Item::eye_of_ender->id,0);
 			for (int i = 0; i < 8; i++)
 			{
 				addParticle(particle, xp, yp, zp, random->nextGaussian() * 0.15, random->nextDouble() * 0.2, random->nextGaussian() * .15);
@@ -4018,7 +4018,7 @@ int LevelRenderer::checkAllPresentChunks(bool *faultFound)
 					for( int cz = 4; cz <= 12; cz++ )
 					{
 						int t0 = levelChunk->getTile(cx, 0, cz);
-						if( ( t0 != Tile::unbreakable_Id ) && (t0 != Tile::dirt_Id) )
+						if( ( t0 != Tile::bedrock_Id ) && (t0 != Tile::dirt_Id) )
 						{
 							*faultFound = true;
 						}

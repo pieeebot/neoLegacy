@@ -156,11 +156,11 @@ bool BrewingStandTileEntity::isBrewable()
 	}
 	else
 	{
-		if (!Item::items[ingredient->id]->hasPotionBrewingFormula() && ingredient->id != Item::bucket_water_Id && ingredient->id != Item::netherwart_seeds_Id)
+		if (!Item::items[ingredient->id]->hasPotionBrewingFormula() && ingredient->id != Item::water_bucket_Id && ingredient->id != Item::netherwart_seeds_Id)
 		{
 			return false;
 		}
-		bool isWater = ingredient->id == Item::bucket_water_Id;
+		bool isWater = ingredient->id == Item::water_bucket_Id;
 
 		// at least one destination potion must have a result
 		bool oneResult = false;
@@ -176,7 +176,7 @@ bool BrewingStandTileEntity::isBrewable()
 					break;
 				}
 			}
-			else if (isWater && items[dest] != nullptr && items[dest]->id == Item::glassBottle_Id)
+			else if (isWater && items[dest] != nullptr && items[dest]->id == Item::glass_bottle_Id)
 			{
 				oneResult = true;
 				break;
@@ -242,7 +242,7 @@ void BrewingStandTileEntity::doBrew()
 	}
 	else
 	{
-		bool isWater = ingredient->id == Item::bucket_water_Id;
+		bool isWater = ingredient->id == Item::water_bucket_Id;
 
 		for (int dest = 0; dest < 3; dest++)
 		{
@@ -252,7 +252,7 @@ void BrewingStandTileEntity::doBrew()
 				int newBrew = NORMALISE_POTION_AUXVAL( applyIngredient(currentBrew, ingredient) );
 				items[dest]->setAuxValue(newBrew);
 			}
-			else if (isWater && items[dest] != nullptr && items[dest]->id == Item::glassBottle_Id)
+			else if (isWater && items[dest] != nullptr && items[dest]->id == Item::glass_bottle_Id)
 			{
 				items[dest] = std::make_shared<ItemInstance>(Item::potion);
 			}
@@ -283,7 +283,7 @@ int BrewingStandTileEntity::applyIngredient(int currentBrew, shared_ptr<ItemInst
 	{
 #if !(_SIMPLIFIED_BREWING)
 		// 4J Stu - SIMPLIFIED_BREWING is on, so we never use this
-		if (ingredient->id == Item::bucket_water_Id)
+		if (ingredient->id == Item::water_bucket_Id)
 		{
 			return PotionBrewing::applyBrew(currentBrew, PotionBrewing::MOD_WATER);
 		}
@@ -428,11 +428,11 @@ bool BrewingStandTileEntity::canPlaceItem(int slot, shared_ptr<ItemInstance> ite
 		}
 		else
 		{
-			return Item::items[item->id]->hasPotionBrewingFormula() || item->id == Item::netherwart_seeds_Id || item->id == Item::bucket_water_Id;
+			return Item::items[item->id]->hasPotionBrewingFormula() || item->id == Item::netherwart_seeds_Id || item->id == Item::water_bucket_Id;
 		}
 	}
 
-	return item->id == Item::potion_Id || item->id == Item::glassBottle_Id;
+	return item->id == Item::potion_Id || item->id == Item::glass_bottle_Id;
 }
 
 void BrewingStandTileEntity::setBrewTime(int value)

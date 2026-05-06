@@ -45,8 +45,8 @@ public:
 	int getConnectDir(ChunkRebuildData *level, int x, int y, int z)
 	{
 		int fruitID = pumpkin_Id;
-		if(id == melonStem_Id)
-			fruitID = melon_Id;
+		if(id == melon_stem_Id)
+			fruitID = melon_block_Id;
 
 		int d = level->getData(x, y, z);
 		if (d < 7) return -1;

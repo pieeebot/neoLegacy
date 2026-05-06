@@ -13,6 +13,32 @@ BrewingStandTile::BrewingStandTile(int id) : BaseEntityTile(id, Material::metal,
 	iconBase = nullptr;
 }
 
+void BrewingStandTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int BrewingStandTile::defaultBlockState()
+{
+	return 0;
+}
+
+int BrewingStandTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0x7) : 0;
+}
+
+Tile::BlockState BrewingStandTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0x7);
+}
+
+Tile::BlockState BrewingStandTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0x7);
+}
+
 BrewingStandTile::~BrewingStandTile()
 {
 	delete random;
@@ -123,12 +149,12 @@ void BrewingStandTile::onRemove(Level *level, int x, int y, int z, int id, int d
 
 int BrewingStandTile::getResource(int data, Random *random, int playerBonusLevel)
 {
-	return Item::brewingStand_Id;
+	return Item::brewing_stand_Id;
 }
 
 int BrewingStandTile::cloneTileId(Level *level, int x, int y, int z)
 {
-	return Item::brewingStand_Id;
+	return Item::brewing_stand_Id;
 }
 
 bool BrewingStandTile::hasAnalogOutputSignal()

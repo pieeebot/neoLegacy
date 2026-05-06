@@ -529,3 +529,189 @@ void StairTile::registerIcons(IconRegister *iconRegister)
 {
 	// None
 }
+
+void StairTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int StairTile::defaultBlockState()
+{
+	return 0; // default state
+}
+
+Tile::BlockState StairTile::getBlockState(int data)
+{
+	int composite = data & 0x3;
+	if ((data & UPSIDEDOWN_BIT) != 0) composite |= UPSIDEDOWN_BIT;
+	return Tile::BlockState(composite);
+}
+
+Tile::BlockState StairTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	int data = level->getData(x, y, z);
+	int dir = data & 0x3;
+	bool upsideDown = (data & UPSIDEDOWN_BIT) != 0;
+
+	int shape = 0;
+
+	bool checkInnerPiece = true;
+	if (dir == DIR_EAST)
+	{
+		int backTile = level->getTile(x + 1, y, z);
+		int backData = level->getData(x + 1, y, z);
+		if (isStairs(backTile) && ((backData & UPSIDEDOWN_BIT) == (data & UPSIDEDOWN_BIT)))
+		{
+			int backDir = backData & 0x3;
+			if (backDir == DIR_NORTH && !isLockAttached(level, x, y, z + 1, data))
+			{
+				checkInnerPiece = false;
+			}
+			else if (backDir == DIR_SOUTH && !isLockAttached(level, x, y, z - 1, data))
+			{
+				checkInnerPiece = false;
+			}
+		}
+	}
+	else if (dir == DIR_WEST)
+	{
+		int backTile = level->getTile(x - 1, y, z);
+		int backData = level->getData(x - 1, y, z);
+		if (isStairs(backTile) && ((backData & UPSIDEDOWN_BIT) == (data & UPSIDEDOWN_BIT)))
+		{
+			int backDir = backData & 0x3;
+			if (backDir == DIR_NORTH && !isLockAttached(level, x, y, z + 1, data))
+			{
+				checkInnerPiece = false;
+			}
+			else if (backDir == DIR_SOUTH && !isLockAttached(level, x, y, z - 1, data))
+			{
+				checkInnerPiece = false;
+			}
+		}
+	}
+	else if (dir == DIR_SOUTH)
+	{
+		int backTile = level->getTile(x, y, z + 1);
+		int backData = level->getData(x, y, z + 1);
+		if (isStairs(backTile) && ((backData & UPSIDEDOWN_BIT) == (data & UPSIDEDOWN_BIT)))
+		{
+			int backDir = backData & 0x3;
+			if (backDir == DIR_WEST && !isLockAttached(level, x + 1, y, z, data))
+			{
+				checkInnerPiece = false;
+			}
+			else if (backDir == DIR_EAST && !isLockAttached(level, x - 1, y, z, data))
+			{
+				checkInnerPiece = false;
+			}
+		}
+	}
+	else if (dir == DIR_NORTH)
+	{
+		int backTile = level->getTile(x, y, z - 1);
+		int backData = level->getData(x, y, z - 1);
+		if (isStairs(backTile) && ((backData & UPSIDEDOWN_BIT) == (data & UPSIDEDOWN_BIT)))
+		{
+			int backDir = backData & 0x3;
+			if (backDir == DIR_WEST && !isLockAttached(level, x + 1, y, z, data))
+			{
+				checkInnerPiece = false;
+			}
+			else if (backDir == DIR_EAST && !isLockAttached(level, x - 1, y, z, data))
+			{
+				checkInnerPiece = false;
+			}
+		}
+	}
+
+	if (!checkInnerPiece)
+	{
+		shape = 2;
+	}
+	else
+	{
+		bool hasInnerPiece = false;
+		if (dir == DIR_EAST)
+		{
+			int frontTile = level->getTile(x - 1, y, z);
+			int frontData = level->getData(x - 1, y, z);
+			if (isStairs(frontTile) && ((frontData & UPSIDEDOWN_BIT) == (data & UPSIDEDOWN_BIT)))
+			{
+				int frontDir = frontData & 0x3;
+				if ((frontDir == DIR_NORTH && !isLockAttached(level, x, y, z - 1, data)) ||
+					(frontDir == DIR_SOUTH && !isLockAttached(level, x, y, z + 1, data)))
+				{
+					hasInnerPiece = true;
+				}
+			}
+		}
+		else if (dir == DIR_WEST)
+		{
+			int frontTile = level->getTile(x + 1, y, z);
+			int frontData = level->getData(x + 1, y, z);
+			if (isStairs(frontTile) && ((frontData & UPSIDEDOWN_BIT) == (data & UPSIDEDOWN_BIT)))
+			{
+				int frontDir = frontData & 0x3;
+				if ((frontDir == DIR_NORTH && !isLockAttached(level, x, y, z - 1, data)) ||
+					(frontDir == DIR_SOUTH && !isLockAttached(level, x, y, z + 1, data)))
+				{
+					hasInnerPiece = true;
+				}
+			}
+		}
+		else if (dir == DIR_SOUTH)
+		{
+			int frontTile = level->getTile(x, y, z - 1);
+			int frontData = level->getData(x, y, z - 1);
+			if (isStairs(frontTile) && ((frontData & UPSIDEDOWN_BIT) == (data & UPSIDEDOWN_BIT)))
+			{
+				int frontDir = frontData & 0x3;
+				if ((frontDir == DIR_WEST && !isLockAttached(level, x - 1, y, z, data)) ||
+					(frontDir == DIR_EAST && !isLockAttached(level, x + 1, y, z, data)))
+				{
+					hasInnerPiece = true;
+				}
+			}
+		}
+		else if (dir == DIR_NORTH)
+		{
+			int frontTile = level->getTile(x, y, z + 1);
+			int frontData = level->getData(x, y, z + 1);
+			if (isStairs(frontTile) && ((frontData & UPSIDEDOWN_BIT) == (data & UPSIDEDOWN_BIT)))
+			{
+				int frontDir = frontData & 0x3;
+				if ((frontDir == DIR_WEST && !isLockAttached(level, x - 1, y, z, data)) ||
+					(frontDir == DIR_EAST && !isLockAttached(level, x + 1, y, z, data)))
+				{
+					hasInnerPiece = true;
+				}
+			}
+		}
+
+		if (hasInnerPiece)
+		{
+			shape = 1;
+		}
+	}
+	
+	int composite = (dir & 0x3) | (upsideDown ? UPSIDEDOWN_BIT : 0) | ((shape & 0x7) << 3);
+	return Tile::BlockState(composite);
+}
+
+int StairTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	if (!state) return 0;
+	int composite = state->value;
+	int data = composite & 0x3;
+	if (composite & UPSIDEDOWN_BIT) data |= UPSIDEDOWN_BIT;
+	return data;
+}
+
+void StairTile::fillVirtualBlockStateProperties(Tile::BlockState *state, LevelSource *level, const BlockPos &pos)
+{
+	if (!state) return;
+	Tile::BlockState s = getBlockState(level, pos.getX(), pos.getY(), pos.getZ());
+	state->value = s.value;
+}

@@ -21,7 +21,7 @@ Icon_SPU *GrassTile_SPU::getTexture(ChunkRebuildData *level, int x, int y, int z
     if (face == Facing::UP) return &ms_pTileData->grass_iconTop;
     if (face == Facing::DOWN) return TileRef_SPU(dirt_Id)->getTexture(face);
      Material_SPU *above = level->getMaterial(x, y + 1, z);
-     if (above->getID() == Material_SPU::topSnow_Id || above->getID() == Material_SPU::snow_Id) 
+     if (above->getID() == Material_SPU::snow_layer_Id || above->getID() == Material_SPU::snow_Id) 
  		return &ms_pTileData->grass_iconSnowSide;
      else 
 		return icon();

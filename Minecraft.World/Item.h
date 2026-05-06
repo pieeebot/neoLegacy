@@ -195,124 +195,124 @@ private:
 public:
 	static ItemArray items;
 
-	static Item *shovel_iron;
-	static Item *pickAxe_iron;
-	static Item *hatchet_iron;
-	static Item *flintAndSteel;
+	static Item *iron_shovel;
+	static Item *iron_pickaxe;
+	static Item *iron_axe;
+	static Item *flint_and_steel;
 	static Item *apple;
 	static BowItem *bow;
 	static Item *arrow;
 	static Item *coal;
 	static Item *diamond;
-	static Item *ironIngot;
-	static Item *goldIngot;
-	static Item *sword_iron;
+	static Item *iron_ingot;
+	static Item *gold_ingot;
+	static Item *iron_sword;
 
-	static Item *sword_wood;
-	static Item *shovel_wood;
-	static Item *pickAxe_wood;
-	static Item *hatchet_wood;
+	static Item *wooden_sword;
+	static Item *wooden_shovel;
+	static Item *wooden_pickaxe;
+	static Item *wooden_axe;
 
-	static Item *sword_stone;
-	static Item *shovel_stone;
-	static Item *pickAxe_stone;
-	static Item *hatchet_stone;
+	static Item *stone_sword;
+	static Item *stone_shovel;
+	static Item *stone_pickaxe;
+	static Item *stone_axe;
 
-	static Item *sword_diamond;
-	static Item *shovel_diamond;
-	static Item *pickAxe_diamond;
-	static Item *hatchet_diamond;
+	static Item *diamond_sword;
+	static Item *diamond_shovel;
+	static Item *diamond_pickaxe;
+	static Item *diamond_axe;
 
 	static Item *stick;
 	static Item *bowl;
-	static Item *mushroomStew;
-	static Item *rabbitStew;
+	static Item *mushroom_stew;
+	static Item *rabbit_stew;
 
-	static Item *sword_gold;
-	static Item *shovel_gold;
-	static Item *pickAxe_gold;
-	static Item *hatchet_gold;
+	static Item *golden_sword;
+	static Item *golden_shovel;
+	static Item *golden_pickaxe;
+	static Item *golden_axe;
 
 	static Item *string;
 	static Item *feather;
 	static Item *gunpowder;
 
-	static Item *hoe_wood;
-	static Item *hoe_stone;
-	static Item *hoe_iron;
-	static Item *hoe_diamond;
-	static Item *hoe_gold;
+	static Item *wooden_hoe;
+	static Item *stone_hoe;
+	static Item *iron_hoe;
+	static Item *diamond_hoe;
+	static Item *golden_hoe;
 
-	static Item *seeds_wheat;
+	static Item *wheat_seeds;
 	static Item *wheat;
 	static Item *bread;
 
-	static ArmorItem *helmet_leather;
-	static ArmorItem *chestplate_leather;
-	static ArmorItem *leggings_leather;
-	static ArmorItem *boots_leather;
+	static ArmorItem *leather_helmet;
+	static ArmorItem *leather_chestplate;
+	static ArmorItem *leather_leggings;
+	static ArmorItem *leather_boots;
 
-	static ArmorItem *helmet_chain;
-	static ArmorItem *chestplate_chain;
-	static ArmorItem *leggings_chain;
-	static ArmorItem *boots_chain;
+	static ArmorItem *chainmail_helmet;
+	static ArmorItem *chainmail_chestplate;
+	static ArmorItem *chainmail_leggings;
+	static ArmorItem *chainmail_boots;
 
-	static ArmorItem *helmet_iron;
-	static ArmorItem *chestplate_iron;
-	static ArmorItem *leggings_iron;
-	static ArmorItem *boots_iron;
+	static ArmorItem *iron_helmet;
+	static ArmorItem *iron_chestplate;
+	static ArmorItem *iron_leggings;
+	static ArmorItem *iron_boots;
 
-	static ArmorItem *helmet_diamond;
-	static ArmorItem *chestplate_diamond;
-	static ArmorItem *leggings_diamond;
-	static ArmorItem *boots_diamond;
+	static ArmorItem *diamond_helmet;
+	static ArmorItem *diamond_chestplate;
+	static ArmorItem *diamond_leggings;
+	static ArmorItem *diamond_boots;
 
-	static ArmorItem *helmet_gold;
-	static ArmorItem *chestplate_gold;
-	static ArmorItem *leggings_gold;
-	static ArmorItem *boots_gold;
+	static ArmorItem *golden_helmet;
+	static ArmorItem *golden_chestplate;
+	static ArmorItem *golden_leggings;
+	static ArmorItem *golden_boots;
 
 	static Item *flint;
-	static Item *porkChop_raw;
-	static Item *porkChop_cooked;
+	static Item *raw_porkchop;
+	static Item *cooked_porkchop;
 	static Item *painting;
 
-	static Item *apple_gold;
+	static Item *golden_apple;
 
 	static Item *sign;
-	static Item *door_wood;
+	static Item *wooden_door;
 
-	static Item *bucket_empty;
-	static Item *bucket_water;
-	static Item *bucket_lava;
+	static Item *bucket;
+	static Item *water_bucket;
+	static Item *lava_bucket;
 
 	static Item *minecart;
 	static Item *saddle;
-	static Item *door_iron;
-	static Item *redStone;
-	static Item *snowBall;
+	static Item *iron_door;
+	static Item *redstone;
+	static Item *snowball;
 
 	static Item *boat;
 
 	static Item *leather;
-	static Item *bucket_milk;
+	static Item *milk_bucket;
 	static Item *brick;
 	static Item *clay;
 	static Item *reeds;
 	static Item *paper;
 	static Item *book;
-	static Item *slimeBall;
-	static Item *minecart_chest;
-	static Item *minecart_furnace;
+	static Item *slime_ball;
+	static Item *chest_minecart;
+	static Item *furnace_minecart;
 	static Item *egg;
 	static Item *compass;
-	static FishingRodItem *fishingRod;
+	static FishingRodItem *fishing_rod;
 	static Item *clock;
-	static Item *yellowDust;
-	static Item *fish_raw;
-	static Item *fish_cooked;
+	static Item *glowstone_dust;
+	static Item *raw_fish;
+	static Item *cooked_fish;
 
-	static Item *dye_powder;
+	static Item *dye;
 	static Item *bone;
 	static Item *sugar;
 	static Item *cake;
@@ -331,37 +331,37 @@ public:
 	static Item *seeds_pumpkin;
 	static Item *seeds_melon;
 
-	static Item *beef_raw;
-	static Item *beef_cooked;
-	static Item *chicken_raw;
-	static Item *chicken_cooked;
+	static Item *raw_beef;
+	static Item *cooked_beef;
+	static Item *raw_chicken;
+	static Item *cooked_chicken;
 	static Item *rotten_flesh;
 
-	static Item *enderPearl;
+	static Item *ender_pearl;
 
-	static Item *blazeRod;
-	static Item *ghastTear;
-	static Item *goldNugget;
+	static Item *blaze_rod;
+	static Item *ghast_tear;
+	static Item *gold_nugget;
 
 	static Item *netherwart_seeds;
 
 	static PotionItem *potion;
 	static Item *glassBottle;
 
-	static Item *spiderEye;
-	static Item *fermentedSpiderEye;
+	static Item *spider_eye;
+	static Item *fermented_spider_eye;
 
-	static Item *blazePowder;
-	static Item *magmaCream;
+	static Item *blaze_powder;
+	static Item *magma_cream;
 
-	static Item *brewingStand;
+	static Item *brewing_stand;
 	static Item *cauldron;
-	static Item *eyeOfEnder;
-	static Item *speckledMelon;
+	static Item *eye_of_ender;
+	static Item *speckled_melon;
 
-	static Item *spawnEgg;
+	static Item *spawn_egg;
 
-	static Item *expBottle;
+	static Item *experience_bottle;
 
 	static Item *skull;
 
@@ -383,55 +383,55 @@ public:
 	static Item *frame;
 
 	// TU14
-	static Item *writingBook;
-	static Item *writtenBook;
+	static Item *writable_book;
+	static Item *written_book;
 
 	static Item *emerald;
 
-	static Item *flowerPot;
+	static Item *flower_pot;
 
 	static Item *carrots;
 	static Item *potato;
-	static Item *potatoBaked;
-	static Item *potatoPoisonous;
+	static Item *baked_potato;
+	static Item *poisonous_potato;
 
-	static EmptyMapItem *emptyMap;
+	static EmptyMapItem *empty_map;
 
-	static Item *carrotGolden;
+	static Item *golden_carrot;
 
-	static Item *carrotOnAStick;
-	static Item *netherStar;
-	static Item *pumpkinPie;
+	static Item *carrot_on_a_stick;
+	static Item *nether_star;
+	static Item *pumpkin_pie;
 
 	static Item *fireworks;
-	static Item *fireworksCharge;
-	static Item *netherQuartz;
+	static Item *firework_charge;
+	static Item *nether_quartz;
 
 	static Item *comparator;
 	static Item *netherbrick;
-	static EnchantedBookItem *enchantedBook;
-	static Item *minecart_tnt;
-	static Item *minecart_hopper;
+	static EnchantedBookItem *enchanted_book;
+	static Item *tnt_minecart;
+	static Item *hopper_minecart;
 
-	static Item *horseArmorMetal;
-	static Item *horseArmorGold;
-	static Item *horseArmorDiamond;
+	static Item *iron_horse_armor;
+	static Item *golden_horse_armor;
+	static Item *diamond_horse_armor;
 	static Item *lead;
-	static Item *nameTag;
+	static Item *name_tag;
 
 	// TU25
-	static Item* door_spruce;
-	static Item* door_birch;
-	static Item* door_jungle;
-	static Item* door_acacia;
-	static Item* door_dark;
+	static Item* spruce_door;
+	static Item* birch_door;
+	static Item* jungle_door;
+	static Item* acacia_door;
+	static Item* dark_oak_door;
 	//TU31
-	static Item* mutton_raw;
-	static Item* mutton_cooked;
-	static Item* rabbit_raw;
-	static Item* rabbit_cooked;
+	static Item* raw_mutton;
+	static Item* cooked_mutton;
+	static Item* raw_rabbit;
+	static Item* cooked_rabbit;
 	static Item* rabbit_hide;
-	static Item* rabbits_foot;
+	static Item* rabbit_foot;
 	static Item* armor_stand;
 
 	static Item* prismarine_crystal;
@@ -439,234 +439,234 @@ public:
 	static Item* elytra;
 
 
-	static const int shovel_iron_Id			= 256;
-	static const int pickAxe_iron_Id		= 257;
-	static const int hatchet_iron_Id		= 258;
-	static const int flintAndSteel_Id		= 259;
+	static const int iron_shovel_Id			= 256;
+	static const int iron_pickaxe_Id		= 257;
+	static const int iron_axe_Id		= 258;
+	static const int flint_and_steel_Id		= 259;
 	static const int apple_Id				= 260;
 	static const int bow_Id					= 261;
 	static const int arrow_Id				= 262;
 	static const int coal_Id				= 263;
 	static const int diamond_Id				= 264;
-	static const int ironIngot_Id			= 265;
-	static const int goldIngot_Id			= 266;
-	static const int sword_iron_Id			= 267;
-	static const int sword_wood_Id			= 268;
-	static const int shovel_wood_Id			= 269;
-	static const int pickAxe_wood_Id		= 270;
-	static const int hatchet_wood_Id		= 271;
-	static const int sword_stone_Id			= 272;
-	static const int shovel_stone_Id		= 273;
-	static const int pickAxe_stone_Id		= 274;
-	static const int hatchet_stone_Id		= 275;
-	static const int sword_diamond_Id		= 276;
-	static const int shovel_diamond_Id		= 277;
-	static const int pickAxe_diamond_Id		= 278;
-	static const int hatchet_diamond_Id		= 279;
+	static const int iron_ingot_Id			= 265;
+	static const int gold_ingot_Id			= 266;
+	static const int iron_sword_Id			= 267;
+	static const int wooden_sword_Id			= 268;
+	static const int wooden_shovel_Id			= 269;
+	static const int wooden_pickaxe_Id		= 270;
+	static const int wooden_axe_Id		= 271;
+	static const int stone_sword_Id			= 272;
+	static const int stone_shovel_Id		= 273;
+	static const int stone_pickaxe_Id		= 274;
+	static const int stone_axe_Id		= 275;
+	static const int diamond_sword_Id		= 276;
+	static const int diamond_shovel_Id		= 277;
+	static const int diamond_pickaxe_Id		= 278;
+	static const int diamond_axe_Id		= 279;
 	static const int stick_Id				= 280;
 	static const int bowl_Id				= 281;
-	static const int mushroomStew_Id		= 282;
-	static const int sword_gold_Id			= 283;
-	static const int shovel_gold_Id			= 284;
-	static const int pickAxe_gold_Id		= 285;
-	static const int hatchet_gold_Id		= 286;
+	static const int mushroom_stew_Id		= 282;
+	static const int golden_sword_Id			= 283;
+	static const int golden_shovel_Id			= 284;
+	static const int golden_pickaxe_Id		= 285;
+	static const int golden_axe_Id		= 286;
 	static const int string_Id				= 287;
 	static const int feather_Id				= 288;
 	static const int gunpowder_Id			= 289;
-	static const int hoe_wood_Id			= 290;
-	static const int hoe_stone_Id			= 291;
-	static const int hoe_iron_Id			= 292;
-	static const int hoe_diamond_Id			= 293;
-	static const int hoe_gold_Id			= 294;
-	static const int seeds_wheat_Id			= 295;
+	static const int wooden_hoe_Id			= 290;
+	static const int stone_hoe_Id			= 291;
+	static const int iron_hoe_Id			= 292;
+	static const int diamond_hoe_Id			= 293;
+	static const int golden_hoe_Id			= 294;
+	static const int wheat_seeds_Id			= 295;
 	static const int wheat_Id				= 296;
 	static const int bread_Id				= 297;
 
-	static const int helmet_leather_Id		= 298;
-	static const int chestplate_leather_Id	= 299;
-	static const int leggings_leather_Id	= 300;
-	static const int boots_leather_Id		= 301;
+	static const int leather_helmet_Id		= 298;
+	static const int leather_chestplate_Id	= 299;
+	static const int leather_leggings_Id	= 300;
+	static const int leather_boots_Id		= 301;
 
-	static const int helmet_chain_Id		= 302;
-	static const int chestplate_chain_Id	= 303;
-	static const int leggings_chain_Id		= 304;
-	static const int boots_chain_Id			= 305;
+	static const int chainmail_helmet_Id		= 302;
+	static const int chainmail_chestplate_Id	= 303;
+	static const int chainmail_leggings_Id		= 304;
+	static const int chainmail_boots_Id			= 305;
 
-	static const int helmet_iron_Id			= 306;
-	static const int chestplate_iron_Id		= 307;
-	static const int leggings_iron_Id		= 308;
-	static const int boots_iron_Id			= 309;
+	static const int iron_helmet_Id			= 306;
+	static const int iron_chestplate_Id		= 307;
+	static const int iron_leggings_Id		= 308;
+	static const int iron_boots_Id			= 309;
 
-	static const int helmet_diamond_Id		= 310;
-	static const int chestplate_diamond_Id	= 311;
-	static const int leggings_diamond_Id	= 312;
-	static const int boots_diamond_Id		= 313;
+	static const int diamond_helmet_Id		= 310;
+	static const int diamond_chestplate_Id	= 311;
+	static const int diamond_leggings_Id	= 312;
+	static const int diamond_boots_Id		= 313;
 
-	static const int helmet_gold_Id			= 314;
-	static const int chestplate_gold_Id		= 315;
-	static const int leggings_gold_Id		= 316;
-	static const int boots_gold_Id			= 317;
+	static const int golden_helmet_Id			= 314;
+	static const int golden_chestplate_Id		= 315;
+	static const int golden_leggings_Id		= 316;
+	static const int golden_boots_Id			= 317;
 
 	static const int flint_Id				= 318;
-	static const int porkChop_raw_Id		= 319;
-	static const int porkChop_cooked_Id		= 320;
+	static const int porkchop_Id		= 319;
+	static const int cooked_porkchop_Id		= 320;
 	static const int painting_Id			= 321;
-	static const int apple_gold_Id			= 322;
-	static const int sign_Id				= 323;
-	static const int door_wood_Id			= 324;
-	static const int bucket_empty_Id		= 325;
-	static const int bucket_water_Id		= 326;
-	static const int bucket_lava_Id			= 327;
+	static const int golden_apple_Id			= 322;
+	static const int standing_sign_Id				= 323;
+	static const int wooden_door_Id			= 324;
+	static const int bucket_Id		= 325;
+	static const int water_bucket_Id		= 326;
+	static const int lava_bucket_Id			= 327;
 	static const int minecart_Id			= 328;
 	static const int saddle_Id				= 329;
-	static const int door_iron_Id			= 330;
-	static const int redStone_Id			= 331;
-	static const int snowBall_Id			= 332;
+	static const int iron_door_Id			= 330;
+	static const int redstone_Id			= 331;
+	static const int snowball_Id			= 332;
 	static const int boat_Id				= 333;
 	static const int leather_Id				= 334;
-	static const int bucket_milk_Id			= 335;
+	static const int milk_bucket_Id			= 335;
 	static const int brick_Id				= 336;
 	static const int clay_Id				= 337;
 	static const int reeds_Id				= 338;
 	static const int paper_Id				= 339;
 	static const int book_Id				= 340;
-	static const int slimeBall_Id			= 341;
-	static const int minecart_chest_Id		= 342;
-	static const int minecart_furnace_Id	= 343;
+	static const int slime_ball_Id			= 341;
+	static const int chest_minecart_Id		= 342;
+	static const int furnace_minecart_Id	= 343;
 	static const int egg_Id					= 344;
 	static const int compass_Id				= 345;
-	static const int fishingRod_Id			= 346;
+	static const int fishing_rod_Id			= 346;
 	static const int clock_Id				= 347;
-	static const int yellowDust_Id			= 348;
-	static const int fish_raw_Id			= 349;
-	static const int fish_cooked_Id			= 350;
-	static const int dye_powder_Id			= 351;
+	static const int glowstone_dust_Id			= 348;
+	static const int fish_Id			= 349;
+	static const int cooked_fish_Id			= 350;
+	static const int dye_Id			= 351;
 	static const int bone_Id				= 352;
 	static const int sugar_Id				= 353;
 	static const int cake_Id				= 354;
 	static const int bed_Id					= 355;
 	static const int repeater_Id			= 356;
 	static const int cookie_Id				= 357;
-	static const int map_Id					= 358;
+	static const int filled_map_Id					= 358;
 
 	// 1.7.3
 	static const int shears_Id				= 359;
 
 	// 1.8.2
-	static const int melon_Id				= 360;
-	static const int seeds_pumpkin_Id		= 361;
-	static const int seeds_melon_Id			= 362;
-	static const int beef_raw_Id			= 363;
-	static const int beef_cooked_Id			= 364;
-	static const int chicken_raw_Id			= 365;
-	static const int chicken_cooked_Id		= 366;
+	static const int melon_block_Id				= 360;
+	static const int pumpkin_seeds_Id		= 361;
+	static const int melon_seeds_Id			= 362;
+	static const int beef_Id			= 363;
+	static const int cooked_beef_Id			= 364;
+	static const int chicken_Id			= 365;
+	static const int cooked_chicken_Id		= 366;
 	static const int rotten_flesh_Id		= 367;
-	static const int enderPearl_Id			= 368;
+	static const int ender_pearl_Id			= 368;
 
 	// 1.0.1
-	static const int blazeRod_Id			= 369;
-	static const int ghastTear_Id			= 370;
-	static const int goldNugget_Id			= 371;
+	static const int blaze_rod_Id			= 369;
+	static const int ghast_tear_Id			= 370;
+	static const int gold_nugget_Id			= 371;
 	static const int netherwart_seeds_Id	= 372;
 	static const int potion_Id				= 373;
-	static const int glassBottle_Id			= 374;
-	static const int spiderEye_Id			= 375;
-	static const int fermentedSpiderEye_Id	= 376;
-	static const int blazePowder_Id			= 377;
-	static const int magmaCream_Id			= 378;
-	static const int brewingStand_Id		= 379;
+	static const int glass_bottle_Id			= 374;
+	static const int spider_eye_Id			= 375;
+	static const int fermented_spider_eye_Id	= 376;
+	static const int blaze_powder_Id			= 377;
+	static const int magma_cream_Id			= 378;
+	static const int brewing_stand_Id		= 379;
 	static const int cauldron_Id			= 380;
-	static const int eyeOfEnder_Id			= 381;
-	static const int speckledMelon_Id		= 382;
+	static const int eye_of_ender_Id			= 381;
+	static const int speckled_melon_block_Id		= 382;
 
 	// 1.1
-	static const int spawnEgg_Id		= 383;
+	static const int spawn_egg_Id		= 383;
 
-	static const int expBottle_Id			 = 384;
+	static const int experience_bottle_Id			 = 384;
 
 	// TU 12
 	static const int skull_Id				= 397;
 
-	static const int record_01_Id			= 2256;
-	static const int record_02_Id			= 2257;
-	static const int record_03_Id			= 2258;
-	static const int record_04_Id			= 2259;
-	static const int record_05_Id			= 2260;
-	static const int record_06_Id			= 2261;
-	static const int record_07_Id			= 2262;
+	static const int record_13_Id			= 2256;
+	static const int record_cat_Id			= 2257;
+	static const int record_blocks_Id			= 2258;
+	static const int record_chirp_Id			= 2259;
+	static const int record_far_Id			= 2260;
+	static const int record_mall_Id			= 2261;
+	static const int record_mellohi_Id			= 2262;
 
 	// 4J-PB - this one isn't playable in the PC game, but is fine in ours
-	static const int record_08_Id			= 2263;
-	static const int record_09_Id			= 2264;
-	static const int record_10_Id			= 2265;
+	static const int record_stal_Id			= 2263;
+	static const int record_strad_Id			= 2264;
+	static const int record_ward_Id			= 2265;
 	static const int record_11_Id			= 2266;
-	static const int record_12_Id			= 2267;
+	static const int record_wait_Id			= 2267;
 
 	// TU9
-	static const int fireball_Id			 = 385;
-	static const int itemFrame_Id			 = 389;
+	static const int fire_charge_Id			 = 385;
+	static const int item_frame_Id			 = 389;
 
 	// TU14
-	static const int writingBook_Id			 = 386;
-	static const int writtenBook_Id			 = 387;
+	static const int writable_book_Id			 = 386;
+	static const int written_book_Id			 = 387;
 
 	static const int emerald_Id				 = 388;
 
-	static const int flowerPot_Id = 390;
+	static const int flower_pot_Id = 390;
 
-	static const int carrots_Id = 391;
+	static const int carrot_Id = 391;
 	static const int potato_Id = 392;
-	static const int potatoBaked_Id = 393;
-	static const int potatoPoisonous_Id = 394;
+	static const int baked_potato_Id = 393;
+	static const int poisonous_potato_Id = 394;
 
-	static const int emptyMap_Id = 395;
+	static const int map_Id = 395;
 
-	static const int carrotGolden_Id = 396;
+	static const int golden_carrot_Id = 396;
 
-	static const int carrotOnAStick_Id = 398;
-	static const int netherStar_Id = 399;
-	static const int pumpkinPie_Id = 400;
+	static const int carrot_on_a_stick_Id = 398;
+	static const int nether_star_Id = 399;
+	static const int pumpkin_pie_Id = 400;
 
 	static const int fireworks_Id = 401;
-	static const int fireworksCharge_Id = 402;
+	static const int firework_charge_Id = 402;
 
-	static const int enchantedBook_Id = 403;
+	static const int enchanted_book_Id = 403;
 
 	static const int comparator_Id = 404;
-	static const int netherbrick_Id = 405;
-	static const int netherQuartz_Id = 406;
-	static const int minecart_tnt_Id = 407;
-	static const int minecart_hopper_Id = 408;
+	static const int nether_brick_Id = 405;
+	static const int quartz_Id = 406;
+	static const int tnt_minecart_Id = 407;
+	static const int hopper_minecart_Id = 408;
 
-	static const int horseArmorMetal_Id = 417;
-	static const int horseArmorGold_Id = 418;
-	static const int horseArmorDiamond_Id = 419;
+	static const int iron_horse_armor_Id = 417;
+	static const int golden_horse_armor_Id = 418;
+	static const int diamond_horse_armor_Id = 419;
 	static const int lead_Id = 420;
-	static const int nameTag_Id = 421;
+	static const int name_tag_Id = 421;
 	
 
 	// TU25
 
 	//422 command_block_minecart
 	static const int prismarine_shard_Id = 409;
-	static const int prismarine_cystal_Id = 410;
-	static const int rabbit_raw_Id = 411;
-	static const int rabbit_cooked_Id = 412;
-	static const int rabbitStew_Id = 413;
-	static const int rabbits_foot_Id = 414;
+	static const int prismarine_crystals_Id = 410;
+	static const int rabbit_Id = 411;
+	static const int cooked_rabbit_Id = 412;
+	static const int rabbit_stew_Id = 413;
+	static const int rabbit_foot_Id = 414;
 	static const int rabbit_hide_Id = 415;
 	static const int armor_stand_Id = 416;
 
-	static const int mutton_raw_Id = 423;
-	static const int mutton_cooked_Id = 424;
+	static const int mutton_Id = 423;
+	static const int cooked_mutton_Id = 424;
 	//425 banner
 	//426 end_crystal
 
-	static const int door_spruce_Id = 427;
-	static const int door_birch_Id = 428;
-	static const int door_jungle_Id = 429;
-	static const int door_acacia_Id = 430;
-	static const int door_dark_Id = 431;
+	static const int spruce_door_Id = 427;
+	static const int birch_door_Id = 428;
+	static const int jungle_door_Id = 429;
+	static const int acacia_door_Id = 430;
+	static const int dark_oak_door_Id = 431;
 
 
 	static const int elytra_Id = 443;

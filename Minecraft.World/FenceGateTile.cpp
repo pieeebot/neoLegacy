@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "FenceGateTile.h"
 #include "AABB.h"
+#include "BlockPos.h"
 #include "net.minecraft.world.level.h"
 #include "net.minecraft.world.h"
 #include "net.minecraft.h"
@@ -8,6 +9,88 @@
 
 FenceGateTile::FenceGateTile(int id) : DirectionalTile(id, Material::wood, isSolidRender() )
 {
+}
+
+void FenceGateTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int FenceGateTile::defaultBlockState()
+{
+	return 0;
+}
+
+int FenceGateTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	if (!state) return 0;
+	return state->value & (DirectionalTile::DIRECTION_MASK | OPEN_BIT | POWERED_BIT);
+}
+
+Tile::BlockState FenceGateTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & (DirectionalTile::DIRECTION_MASK | OPEN_BIT | POWERED_BIT));
+}
+
+Tile::BlockState FenceGateTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	int data = level->getData(x, y, z) & (DirectionalTile::DIRECTION_MASK | OPEN_BIT | POWERED_BIT);
+	int dir = DirectionalTile::getDirection(data);
+	bool inWall = false;
+
+	if (dir == Direction::NORTH || dir == Direction::SOUTH)
+	{
+		int westTile = level->getTile(x - 1, y, z);
+		int eastTile = level->getTile(x + 1, y, z);
+		inWall = (westTile == Tile::cobblestone_wall_Id) || (eastTile == Tile::cobblestone_wall_Id);
+	}
+	else
+	{
+		int northTile = level->getTile(x, y, z - 1);
+		int southTile = level->getTile(x, y, z + 1);
+		inWall = (northTile == Tile::cobblestone_wall_Id) || (southTile == Tile::cobblestone_wall_Id);
+	}
+
+	if (inWall)
+	{
+		data |= IN_WALL_BIT;
+	}
+
+	return Tile::BlockState(data);
+}
+
+void FenceGateTile::fillVirtualBlockStateProperties(Tile::BlockState *state, LevelSource *level, const BlockPos &pos)
+{
+	if (!state || !level) return;
+
+	int x = pos.getX();
+	int y = pos.getY();
+	int z = pos.getZ();
+
+	Tile::BlockState base = getBlockState(level, x, y, z);
+	state->value = base.value;
+
+	int dir = DirectionalTile::getDirection(base.value);
+	bool inWall = false;
+
+	if (dir == Direction::NORTH || dir == Direction::SOUTH)
+	{
+		int westTile = level->getTile(x - 1, y, z);
+		int eastTile = level->getTile(x + 1, y, z);
+		inWall = (westTile == Tile::cobblestone_wall_Id) || (eastTile == Tile::cobblestone_wall_Id);
+	}
+	else
+	{
+		int northTile = level->getTile(x, y, z - 1);
+		int southTile = level->getTile(x, y, z + 1);
+		inWall = (northTile == Tile::cobblestone_wall_Id) || (southTile == Tile::cobblestone_wall_Id);
+	}
+
+	if (inWall)
+	{
+		state->value |= IN_WALL_BIT;
+	}
 }
 
 Icon *FenceGateTile::getTexture(int face, int data)

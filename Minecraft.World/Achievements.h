@@ -42,7 +42,7 @@ public:
 	static Achievement *diamonds;
 	//static Achievement *portal; //4J-JEV: Whats this?
 	static Achievement *ghast;
-	static Achievement *blazeRod;
+	static Achievement *blaze_rod;
 	static Achievement *potion;
 	static Achievement *theEnd;
 	static Achievement *winGame;

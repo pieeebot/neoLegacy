@@ -210,12 +210,12 @@ void VillagerGolem::dropDeathLoot(bool wasKilledByPlayer, int playerBonusLevel)
 	int roses = random->nextInt(3);
 	for (int i = 0; i < roses; i++)
 	{
-		spawnAtLocation(Tile::rose_Id, 1);
+		spawnAtLocation(Tile::red_flower_Id, 1);
 	}
 	int iron = 3 + random->nextInt(3);
 	for (int i = 0; i < iron; i++)
 	{
-		spawnAtLocation(Item::ironIngot_Id, 1);
+		spawnAtLocation(Item::iron_ingot_Id, 1);
 	}
 }
 

@@ -15,7 +15,7 @@ public:
 public:
 	virtual Feature *getTreeFeature(Random *random);
 	virtual void buildSurfaceAtDefault(Level *level, Random *random, byte* chunkBlocks, int x, int z, double noiseVal) override;
-	virtual Feature* getFlowerFeature(Random* random, int x, int y, int z) override{return new FlowerFeature(Tile::rose_Id, Rose::BLUE_ORCHID);}
+	virtual Feature* getFlowerFeature(Random* random, int x, int y, int z) override{return new FlowerFeature(Tile::red_flower_Id, Rose::BLUE_ORCHID);}
 	// 4J Stu - Not using these any more
     //virtual int getGrassColor();
     //virtual int getFolageColor();

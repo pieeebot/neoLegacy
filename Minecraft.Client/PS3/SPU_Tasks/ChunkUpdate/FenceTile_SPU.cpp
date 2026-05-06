@@ -54,7 +54,7 @@ int FenceTile_SPU::getRenderShape()
 bool FenceTile_SPU::connectsTo(ChunkRebuildData *level, int x, int y, int z)
 {
     int tile = level->getTile(x, y, z);
-    if (tile == id || tile == Tile_SPU::fenceGate_Id)
+    if (tile == id || tile == Tile_SPU::fence_gate_Id)
 	{
         return true;
     }

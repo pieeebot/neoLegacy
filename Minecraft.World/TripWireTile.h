@@ -10,8 +10,14 @@ public:
 	static const int MASK_SUSPENDED = 0x2;
 	static const int MASK_ATTACHED = 0x4;
 	static const int MASK_DISARMED = 0x8;
+	static const int BLOCKSTATE_POWERED_BIT = 0x10;
 
 	TripWireTile(int id);
+	virtual void createBlockStateDefinition() override;
+	virtual int defaultBlockState() override;
+	virtual int convertBlockStateToLegacyData(BlockState *state) override;
+	virtual Tile::BlockState getBlockState(LevelSource *level, int x, int y, int z) override;
+	virtual Tile::BlockState getBlockState(int data);
 
 	int getTickDelay(Level *level);
 	AABB *getAABB(Level *level, int x, int y, int z);

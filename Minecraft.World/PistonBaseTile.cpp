@@ -53,6 +53,32 @@ PistonBaseTile::PistonBaseTile(int id, bool isSticky) : Tile(id, Material::pisto
 	iconPlatform = nullptr;
 }
 
+void PistonBaseTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int PistonBaseTile::defaultBlockState()
+{
+	return 0;
+}
+
+int PistonBaseTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0xF) : 0;
+}
+
+Tile::BlockState PistonBaseTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0xF);
+}
+
+Tile::BlockState PistonBaseTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0xF);
+}
+
 Icon *PistonBaseTile::getPlatformTexture()
 {
 	return iconPlatform;
@@ -97,7 +123,7 @@ Icon *PistonBaseTile::getTexture(const wstring &name)
 {
 	if (name.compare(EDGE_TEX) == 0) return Tile::pistonBase->icon;
 	if (name.compare(PLATFORM_TEX) == 0) return Tile::pistonBase->iconPlatform;
-	if (name.compare(PLATFORM_STICKY_TEX) == 0) return Tile::pistonStickyBase->iconPlatform;
+	if (name.compare(PLATFORM_STICKY_TEX) == 0) return Tile::sticky_piston->iconPlatform;
 	if (name.compare(INSIDE_TEX) == 0) return Tile::pistonBase->iconInside;
 
 	return nullptr;
@@ -300,7 +326,7 @@ bool PistonBaseTile::triggerEvent(Level *level, int x, int y, int z, int param1,
 		}
 
 		stopSharingIfServer(level, x, y, z);	// 4J added
-		level->setTileAndData(x, y, z, Tile::pistonMovingPiece_Id, facing, Tile::UPDATE_ALL);
+		level->setTileAndData(x, y, z, Tile::piston_extension_Id, facing, Tile::UPDATE_ALL);
 		level->setTileEntity(x, y, z, PistonMovingPiece::newMovingPieceEntity(id, facing, facing, false, true));
 
 		PIXEndNamedEvent();
@@ -318,7 +344,7 @@ bool PistonBaseTile::triggerEvent(Level *level, int x, int y, int z, int param1,
 
 			PIXEndNamedEvent();
 
-			if (block == Tile::pistonMovingPiece_Id)
+			if (block == Tile::piston_extension_Id)
 			{
 				PIXBeginNamedEvent(0,"Contract sticky phase B\n");
 				// the block two steps away is a moving piston block piece, so replace it with the real data,
@@ -342,7 +368,7 @@ bool PistonBaseTile::triggerEvent(Level *level, int x, int y, int z, int param1,
 
 			PIXBeginNamedEvent(0,"Contract sticky phase C\n");
 			if (!pistonPiece && block > 0 && (isPushable(block, level, twoX, twoY, twoZ, false))
-				&& (Tile::tiles[block]->getPistonPushReaction() == Material::PUSH_NORMAL || block == Tile::pistonBase_Id || block == Tile::pistonStickyBase_Id))
+				&& (Tile::tiles[block]->getPistonPushReaction() == Material::PUSH_NORMAL || block == Tile::piston_Id || block == Tile::sticky_piston_Id))
 			{
 				stopSharingIfServer(level, twoX, twoY, twoZ);	// 4J added
 
@@ -350,7 +376,7 @@ bool PistonBaseTile::triggerEvent(Level *level, int x, int y, int z, int param1,
 				y += Facing::STEP_Y[facing];
 				z += Facing::STEP_Z[facing];
 
-				level->setTileAndData(x, y, z, Tile::pistonMovingPiece_Id, blockData, Tile::UPDATE_ALL);
+				level->setTileAndData(x, y, z, Tile::piston_extension_Id, blockData, Tile::UPDATE_ALL);
 				level->setTileEntity(x, y, z, PistonMovingPiece::newMovingPieceEntity(block, blockData, facing, false, false));
 
 				ignoreUpdate(false);
@@ -476,13 +502,16 @@ int PistonBaseTile::getNewFacing(Level *level, int x, int y, int z, shared_ptr<L
 
 bool PistonBaseTile::isPushable(int block, Level *level, int cx, int cy, int cz, bool allowDestroyable)
 {
+	Tile *tile = Tile::tiles[block];
+	if (tile == nullptr) return false; // tu31 tutorial world fix
+
 	// special case for obsidian
 	if (block == Tile::obsidian_Id)
 	{
 		return false;
 	}
 
-	if (block == Tile::pistonBase_Id || block == Tile::pistonStickyBase_Id)
+	if (block == Tile::piston_Id || block == Tile::sticky_piston_Id)
 	{
 		// special case for piston bases
 		if (isExtended(level->getData(cx, cy, cz)))
@@ -492,17 +521,17 @@ bool PistonBaseTile::isPushable(int block, Level *level, int cx, int cy, int cz,
 	}
 	else
 	{
-		if (Tile::tiles[block]->getDestroySpeed(level, cx, cy, cz) == Tile::INDESTRUCTIBLE_DESTROY_TIME)
+		if (tile->getDestroySpeed(level, cx, cy, cz) == Tile::INDESTRUCTIBLE_DESTROY_TIME)
 		{
 			return false;
 		}
 
-		if (Tile::tiles[block]->getPistonPushReaction() == Material::PUSH_BLOCK)
+		if (tile->getPistonPushReaction() == Material::PUSH_BLOCK)
 		{
 			return false;
 		}
 
-		if (Tile::tiles[block]->getPistonPushReaction() == Material::PUSH_DESTROY)
+		if (tile->getPistonPushReaction() == Material::PUSH_DESTROY)
 		{
 			if(!allowDestroyable)
 			{
@@ -512,7 +541,7 @@ bool PistonBaseTile::isPushable(int block, Level *level, int cx, int cy, int cz,
 		}
 	}
 
-	if( Tile::tiles[block]->isEntityTile() )	// 4J - java uses instanceof EntityTile here
+	if( tile->isEntityTile() )	// 4J - java uses instanceof EntityTile here
 	{
 		// may not push tile entities
 		return false;
@@ -662,12 +691,12 @@ bool PistonBaseTile::createPush(Level *level, int sx, int sy, int sz, int facing
 
 		if (block == id && nx == sx && ny == sy && nz == sz)
 		{
-			level->setTileAndData(cx, cy, cz, Tile::pistonMovingPiece_Id, facing | (isSticky ? PistonExtensionTile::STICKY_BIT : 0), Tile::UPDATE_NONE);
-			level->setTileEntity(cx, cy, cz, PistonMovingPiece::newMovingPieceEntity(Tile::pistonExtensionPiece_Id, facing | (isSticky ? PistonExtensionTile::STICKY_BIT : 0), facing, true, false));
+			level->setTileAndData(cx, cy, cz, Tile::piston_extension_Id, facing | (isSticky ? PistonExtensionTile::STICKY_BIT : 0), Tile::UPDATE_NONE);
+			level->setTileEntity(cx, cy, cz, PistonMovingPiece::newMovingPieceEntity(Tile::piston_head_Id, facing | (isSticky ? PistonExtensionTile::STICKY_BIT : 0), facing, true, false));
 		}
 		else
 		{
-			level->setTileAndData(cx, cy, cz, Tile::pistonMovingPiece_Id, data, Tile::UPDATE_NONE);
+			level->setTileAndData(cx, cy, cz, Tile::piston_extension_Id, data, Tile::UPDATE_NONE);
 			level->setTileEntity(cx, cy, cz, PistonMovingPiece::newMovingPieceEntity(block, data, facing, true, false));
 		}
 		tiles[count++] = block;

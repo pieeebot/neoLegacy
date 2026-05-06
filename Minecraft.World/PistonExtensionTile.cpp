@@ -13,6 +13,32 @@ PistonExtensionTile::PistonExtensionTile(int id) : Tile(id, Material::piston,isS
 	setDestroyTime(0.5f);
 }
 
+void PistonExtensionTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int PistonExtensionTile::defaultBlockState()
+{
+	return 0;
+}
+
+int PistonExtensionTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0xF) : 0;
+}
+
+Tile::BlockState PistonExtensionTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0xF);
+}
+
+Tile::BlockState PistonExtensionTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0xF);
+}
+
 void PistonExtensionTile::setOverrideTopTexture(Icon *overrideTopTexture)
 {
 	this->overrideTopTexture = overrideTopTexture;
@@ -29,7 +55,7 @@ void PistonExtensionTile::playerWillDestroy(Level *level, int x, int y, int z, i
 	{
 		int facing = getFacing(data);
 		int tile = level->getTile(x - Facing::STEP_X[facing], y - Facing::STEP_Y[facing], z - Facing::STEP_Z[facing]);
-		if (tile == Tile::pistonBase_Id || tile == Tile::pistonStickyBase_Id)
+		if (tile == Tile::piston_Id || tile == Tile::sticky_piston_Id)
 		{
 			level->removeTile(x - Facing::STEP_X[facing], y - Facing::STEP_Y[facing], z - Facing::STEP_Z[facing]);
 		}
@@ -47,7 +73,7 @@ void PistonExtensionTile::onRemove(Level *level, int x, int y, int z, int id, in
 
 	int t = level->getTile(x, y, z);
 
-	if (t == Tile::pistonBase_Id || t == Tile::pistonStickyBase_Id)
+	if (t == Tile::piston_Id || t == Tile::sticky_piston_Id)
 	{
 		data = level->getData(x, y, z);
 		if (PistonBaseTile::isExtended(data))
@@ -203,7 +229,7 @@ void PistonExtensionTile::neighborChanged(Level *level, int x, int y, int z, int
 {
 	int facing = getFacing(level->getData(x, y, z));
 	int tile = level->getTile(x - Facing::STEP_X[facing], y - Facing::STEP_Y[facing], z - Facing::STEP_Z[facing]);
-	if (tile != Tile::pistonBase_Id && tile != Tile::pistonStickyBase_Id)
+	if (tile != Tile::piston_Id && tile != Tile::sticky_piston_Id)
 	{
 		level->removeTile(x, y, z);
 	}
@@ -223,8 +249,8 @@ int PistonExtensionTile::cloneTileId(Level *level, int x, int y, int z)
 	int data = level->getData(x, y, z);
 	if ((data & STICKY_BIT) != 0)
 	{
-		return Tile::pistonStickyBase_Id;
+		return Tile::sticky_piston_Id;
 	}
-	return Tile::pistonBase_Id;
+	return Tile::piston_Id;
 	return 0;
 }

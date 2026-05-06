@@ -9,10 +9,10 @@
 void OreRecipies::_init()
 {
 	ADD_OBJECT(map[0],Tile::goldBlock);
-	ADD_OBJECT(map[0],new ItemInstance(Item::goldIngot, 9));
+	ADD_OBJECT(map[0],new ItemInstance(Item::gold_ingot, 9));
 
 	ADD_OBJECT(map[1],Tile::ironBlock);
-	ADD_OBJECT(map[1],new ItemInstance(Item::ironIngot, 9));
+	ADD_OBJECT(map[1],new ItemInstance(Item::iron_ingot, 9));
 
 	ADD_OBJECT(map[2],Tile::diamondBlock);
 	ADD_OBJECT(map[2],new ItemInstance(Item::diamond, 9));
@@ -21,10 +21,10 @@ void OreRecipies::_init()
 	ADD_OBJECT(map[3],new ItemInstance(Item::emerald, 9));
 
 	ADD_OBJECT(map[4],Tile::lapisBlock);
-	ADD_OBJECT(map[4],new ItemInstance(Item::dye_powder, 9, DyePowderItem::BLUE));
+	ADD_OBJECT(map[4],new ItemInstance(Item::dye, 9, DyePowderItem::BLUE));
 
 	ADD_OBJECT(map[5],Tile::redstoneBlock);
-	ADD_OBJECT(map[5],new ItemInstance(Item::redStone, 9));
+	ADD_OBJECT(map[5],new ItemInstance(Item::redstone, 9));
 
 	ADD_OBJECT(map[6],Tile::coalBlock);
 	ADD_OBJECT(map[6],new ItemInstance(Item::coal, 9, CoalItem::STONE_COAL));

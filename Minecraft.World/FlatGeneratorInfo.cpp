@@ -239,7 +239,7 @@ FlatGeneratorInfo *FlatGeneratorInfo::getDefault()
 	FlatGeneratorInfo *result = new FlatGeneratorInfo();
 
 	result->setBiome(Biome::plains->id);
-	result->getLayers()->push_back(new FlatLayerInfo(1, Tile::unbreakable_Id));
+	result->getLayers()->push_back(new FlatLayerInfo(1, Tile::bedrock_Id));
 	result->getLayers()->push_back(new FlatLayerInfo(2, Tile::dirt_Id));
 	result->getLayers()->push_back(new FlatLayerInfo(1, Tile::grass_Id));
 	result->updateLayers();

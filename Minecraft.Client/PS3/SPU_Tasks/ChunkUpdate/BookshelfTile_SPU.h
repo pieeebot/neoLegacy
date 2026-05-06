@@ -11,7 +11,7 @@ public:
     virtual Icon_SPU *getTexture(int face, int data)
 	{
 		if (face == Facing::UP || face == Facing::DOWN) 
-			return TileRef_SPU(wood_Id)->getTexture(face);
+			return TileRef_SPU(planks_Id)->getTexture(face);
 		return Tile_SPU::getTexture(face, data);
 	}
 };

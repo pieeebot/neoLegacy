@@ -18,6 +18,32 @@ CakeTile::CakeTile(int id) : Tile(id, Material::cake,isSolidRender())
 	iconInner = nullptr;
 }
 
+void CakeTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int CakeTile::defaultBlockState()
+{
+	return 0;
+}
+
+int CakeTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0x7) : 0;
+}
+
+Tile::BlockState CakeTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0x7);
+}
+
+Tile::BlockState CakeTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0x7);
+}
+
 void CakeTile::updateShape(LevelSource *level, int x, int y, int z, int forceData, shared_ptr<TileEntity> forceEntity) // 4J added forceData, forceEntity param
 {
 	int d = level->getData(x, y, z);

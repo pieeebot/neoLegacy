@@ -43,7 +43,7 @@ float WitherSkull::getTileExplosionResistance(Explosion *explosion, Level *level
 {
 	float result = Fireball::getTileExplosionResistance(explosion, level, x, y, z, tile);
 
-	if (isDangerous() && tile != Tile::unbreakable && tile != Tile::endPortalTile && tile != Tile::endPortalFrameTile)
+	if (isDangerous() && tile != Tile::unbreakable && tile != Tile::end_portal && tile != Tile::end_portal_frame)
 	{
 		result = min(0.8f, result);
 	}

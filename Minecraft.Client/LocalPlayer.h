@@ -120,7 +120,7 @@ public:
 	virtual bool startEnchanting(int x, int y, int z, const wstring &name);					// 4J added bool return
 	virtual bool startRepairing(int x, int y, int z);
 	virtual bool openFurnace(shared_ptr<FurnaceTileEntity> furnace); // 4J added bool return
-	virtual bool openBrewingStand(shared_ptr<BrewingStandTileEntity> brewingStand); // 4J added bool return
+	virtual bool openBrewingStand(shared_ptr<BrewingStandTileEntity> brewing_stand); // 4J added bool return
 	virtual bool openBeacon(shared_ptr<BeaconTileEntity> beacon); // 4J added bool return
 	virtual bool openTrap(shared_ptr<DispenserTileEntity> trap);		// 4J added bool return
 	virtual bool openTrading(shared_ptr<Merchant> traderTarget, const wstring &name);

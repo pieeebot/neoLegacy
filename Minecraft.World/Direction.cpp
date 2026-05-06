@@ -89,6 +89,16 @@ int Direction::getDirection(double xd, double zd)
 	}
 }
 
+int Direction::from2DDataValue(int param)
+{
+    return (param & 3);
+}
+
+int Direction::getOpposite(int dir)
+{
+    return DIRECTION_OPPOSITE[dir & 3];
+}
+
 int Direction::getDirection(int x0, int z0, int x1, int z1)
 {
 	int xd = x0 - x1;

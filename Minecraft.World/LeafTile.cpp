@@ -137,7 +137,7 @@ void LeafTile::tick(Level *level, int x, int y, int z, Random *random)
 					for (int yo = -r; yo <= r; yo++)
 					{
 						int t = level->getTile(x + xo, y + yo, z + zo);
-						if (t == Tile::treeTrunk_Id || t == Tile::tree2Trunk_Id)
+						if (t == Tile::log_Id || t == Tile::log2_Id)
 						{
 							checkBuffer[(xo + WO) * WW + (yo + WO) * W + (zo + WO)] = 0;
 						}

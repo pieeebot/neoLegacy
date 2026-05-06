@@ -94,7 +94,7 @@ bool PortalTile::validPortalFrame(Level* level, int x, int y, int z, int xd, int
 	{
 		for (int yy = 0; yy < 3; yy++)
 		{
-			level->setTileAndData(x + xd * xx, y + yy, z + zd * xx, Tile::portalTile_Id, 0, Tile::UPDATE_CLIENTS);
+			level->setTileAndData(x + xd * xx, y + yy, z + zd * xx, Tile::portal_Id, 0, Tile::UPDATE_CLIENTS);
 		}
 	}
 		

@@ -108,7 +108,7 @@ int TileRenderer::getLightColor( Tile *tt, LevelSource *level, int x, int y, int
 		{
 			// Don't use the cache for liquid tiles, as they are the only type that seem to have their own implementation of getLightColor that actually is important.
 			// Without this we get patches of dark water where their lighting value is 0, it needs to pull in light from the tile above to work
-			if( ( tt->id >= Tile::water_Id ) && ( tt->id <= Tile::calmLava_Id ) ) return tt->getLightColor(level, x, y, z);
+			if( ( tt->id >= Tile::flowing_water_Id ) && ( tt->id <= Tile::lava_Id ) ) return tt->getLightColor(level, x, y, z);
 
 			if( cache[id] & cache_getLightColor_valid ) return cache[id] & cache_getLightColor_mask;
 
@@ -297,8 +297,8 @@ bool TileRenderer::tesselateInWorld( Tile* tt, int x, int y, int z, int forceDat
 				// these block types can take advantage of a faster version of shouldRenderFace
 				// there are others but this is an easy check which covers the majority
 				// Note: This now covers rock, grass, dirt, stoneBrice, wood, sapling, unbreakable, sand, gravel, goldOre, ironOre, coalOre, treeTrunk
-				if( ( tt->id <= Tile::unbreakable_Id  ) ||
-					( ( tt->id >= Tile::sand_Id ) && ( tt->id <= Tile::treeTrunk_Id ) ) )
+				if( ( tt->id <= Tile::bedrock_Id  ) ||
+					( ( tt->id >= Tile::sand_Id ) && ( tt->id <= Tile::log_Id ) ) )
 				{
 					faceFlags = tt->getFaceFlags( level, x, y, z );
 				}
@@ -2893,7 +2893,7 @@ bool TileRenderer::tesselateDustInWorld( Tile* tt, int x, int y, int z )
 	{
 		const float yStretch = .35f / 16.0f;
 
-		if ( level->isSolidBlockingTile( x - 1, y, z ) && level->getTile( x - 1, y + 1, z ) == Tile::redStoneDust_Id )
+		if ( level->isSolidBlockingTile( x - 1, y, z ) && level->getTile( x - 1, y + 1, z ) == Tile::redstone_wire_Id )
 		{
 			t->color( br * red, br * green, br * blue );
 			t->vertexUV( ( float )( x + dustOffset ), ( float )( y + 1 + yStretch ), static_cast<float>(z + 1), lineTexture->getU1(true), lineTexture->getV0(true) );
@@ -2907,7 +2907,7 @@ bool TileRenderer::tesselateDustInWorld( Tile* tt, int x, int y, int z )
 			t->vertexUV( ( float )( x + overlayOffset ), static_cast<float>(y + 0), static_cast<float>(z + 0), lineTextureOverlay->getU0(true), lineTextureOverlay->getV1(true) );
 			t->vertexUV( ( float )( x + overlayOffset ), ( float )( y + 1 + yStretch ), static_cast<float>(z + 0), lineTextureOverlay->getU1(true), lineTextureOverlay->getV1(true) );
 		}
-		if ( level->isSolidBlockingTile( x + 1, y, z ) && level->getTile( x + 1, y + 1, z ) == Tile::redStoneDust_Id )
+		if ( level->isSolidBlockingTile( x + 1, y, z ) && level->getTile( x + 1, y + 1, z ) == Tile::redstone_wire_Id )
 		{
 			t->color( br * red, br * green, br * blue );
 			t->vertexUV( ( float )( x + 1 - dustOffset ), static_cast<float>(y + 0), static_cast<float>(z + 1), lineTexture->getU0(true), lineTexture->getV1(true) );
@@ -2921,7 +2921,7 @@ bool TileRenderer::tesselateDustInWorld( Tile* tt, int x, int y, int z )
 			t->vertexUV( ( float )( x + 1 - overlayOffset ), ( float )( y + 1 + yStretch ), static_cast<float>(z + 0), lineTextureOverlay->getU1(true), lineTextureOverlay->getV0(true) );
 			t->vertexUV( ( float )( x + 1 - overlayOffset ), static_cast<float>(y + 0), static_cast<float>(z + 0), lineTextureOverlay->getU0(true), lineTextureOverlay->getV0(true) );
 		}
-		if ( level->isSolidBlockingTile( x, y, z - 1 ) && level->getTile( x, y + 1, z - 1 ) == Tile::redStoneDust_Id )
+		if ( level->isSolidBlockingTile( x, y, z - 1 ) && level->getTile( x, y + 1, z - 1 ) == Tile::redstone_wire_Id )
 		{
 			t->color( br * red, br * green, br * blue );
 			t->vertexUV( static_cast<float>(x + 1), static_cast<float>(y + 0), ( float )( z + dustOffset ), lineTexture->getU0(true), lineTexture->getV1(true) );
@@ -2935,7 +2935,7 @@ bool TileRenderer::tesselateDustInWorld( Tile* tt, int x, int y, int z )
 			t->vertexUV( static_cast<float>(x + 0), ( float )( y + 1 + yStretch ), ( float )( z + overlayOffset ), lineTextureOverlay->getU1(true), lineTextureOverlay->getV0(true) );
 			t->vertexUV( static_cast<float>(x + 0), static_cast<float>(y + 0), ( float )( z + overlayOffset ), lineTextureOverlay->getU0(true), lineTextureOverlay->getV0(true) );
 		}
-		if ( level->isSolidBlockingTile( x, y, z + 1 ) && level->getTile( x, y + 1, z + 1 ) == Tile::redStoneDust_Id )
+		if ( level->isSolidBlockingTile( x, y, z + 1 ) && level->getTile( x, y + 1, z + 1 ) == Tile::redstone_wire_Id )
 		{
 			t->color( br * red, br * green, br * blue );
 			t->vertexUV( static_cast<float>(x + 1), ( float )( y + 1 + yStretch ), ( float )( z + 1 - dustOffset ), lineTexture->getU1(true), lineTexture->getV0(true) );
@@ -6572,8 +6572,8 @@ bool TileRenderer::tesselateFenceGateInWorld(FenceGateTile *tt, int x, int y, in
 	float h20 = 5 / 16.0f;
 	float h21 = 16 / 16.0f;
 
-	if (((direction == Direction::NORTH || direction == Direction::SOUTH) && level->getTile(x - 1, y, z) == Tile::cobbleWall_Id && level->getTile(x + 1, y, z) == Tile::cobbleWall_Id)
-		|| ((direction == Direction::EAST || direction == Direction::WEST) && level->getTile(x, y, z - 1) == Tile::cobbleWall_Id && level->getTile(x, y, z + 1) == Tile::cobbleWall_Id))
+	if (((direction == Direction::NORTH || direction == Direction::SOUTH) && level->getTile(x - 1, y, z) == Tile::cobblestone_wall_Id && level->getTile(x + 1, y, z) == Tile::cobblestone_wall_Id)
+		|| ((direction == Direction::EAST || direction == Direction::WEST) && level->getTile(x, y, z - 1) == Tile::cobblestone_wall_Id && level->getTile(x, y, z + 1) == Tile::cobblestone_wall_Id))
 	{
 		h00 -= 3.0f / 16.0f;
 		h01 -= 3.0f / 16.0f;

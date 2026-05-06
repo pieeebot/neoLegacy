@@ -47,7 +47,7 @@ MultiPlayerChunkCache::MultiPlayerChunkCache(Level *level)
 					{
 						unsigned char tileId = 0;
 						if( y <= ( level->getSeaLevel() - 10 ) ) tileId = Tile::stone_Id;
-						else if( y < level->getSeaLevel() ) tileId = Tile::calmWater_Id;
+						else if( y < level->getSeaLevel() ) tileId = Tile::water_Id;
 
 						bytes[x << 11 | z << 7 | y] = tileId;
 					}

@@ -11,6 +11,39 @@ TripWireTile::TripWireTile(int id) : Tile(id, Material::decoration, isSolidRende
 	this->setTicking(true);
 }
 
+void TripWireTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int TripWireTile::defaultBlockState()
+{
+	return 0;
+}
+
+int TripWireTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0xF) : 0;
+}
+
+Tile::BlockState TripWireTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0xF);
+}
+
+Tile::BlockState TripWireTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	int data = level->getData(x, y, z);
+	int state = 0;
+	if (shouldConnectTo(level, x, y, z, data, Direction::NORTH)) state |= 0x1;
+	if (shouldConnectTo(level, x, y, z, data, Direction::SOUTH)) state |= 0x2;
+	if (shouldConnectTo(level, x, y, z, data, Direction::EAST)) state |= 0x4;
+	if (shouldConnectTo(level, x, y, z, data, Direction::WEST)) state |= 0x8;
+	if ((data & MASK_POWERED) == MASK_POWERED) state |= BLOCKSTATE_POWERED_BIT;
+	return Tile::BlockState(state);
+}
+
 int TripWireTile::getTickDelay(Level *level)
 {
 	// 4J:	Increased (x2); quick update caused problems with shared
@@ -122,7 +155,7 @@ void TripWireTile::updateSource(Level *level, int x, int y, int z, int data)
 			int zz = z + Direction::STEP_Z[dir] * i;
 			int tile = level->getTile(xx, y, zz);
 
-			if (tile == Tile::tripWireSource_Id)
+			if (tile == Tile::tripwire_hook_Id)
 			{
 				int sourceDir = level->getData(xx, y, zz) & TripWireSourceTile::MASK_DIR;
 
@@ -133,7 +166,7 @@ void TripWireTile::updateSource(Level *level, int x, int y, int z, int data)
 
 				break;
 			}
-			else if (tile != Tile::tripWire_Id)
+			else if (tile != Tile::tripwire_Id)
 			{
 				break;
 			}
@@ -209,7 +242,7 @@ bool TripWireTile::shouldConnectTo(LevelSource *level, int x, int y, int z, int 
 	int t = level->getTile(tx, ty, tz);
 	bool suspended = (data & MASK_SUSPENDED) == MASK_SUSPENDED;
 
-	if (t == Tile::tripWireSource_Id)
+	if (t == Tile::tripwire_hook_Id)
 	{
 		int otherData = level->getData(tx, ty, tz);
 		int facing = otherData & TripWireSourceTile::MASK_DIR;
@@ -217,7 +250,7 @@ bool TripWireTile::shouldConnectTo(LevelSource *level, int x, int y, int z, int 
 		return facing == Direction::DIRECTION_OPPOSITE[dir];
 	}
 
-	if (t == Tile::tripWire_Id)
+	if (t == Tile::tripwire_Id)
 	{
 		int otherData = level->getData(tx, ty, tz);
 		bool otherSuspended = (otherData & MASK_SUSPENDED) == MASK_SUSPENDED;

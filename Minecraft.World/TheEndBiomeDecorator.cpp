@@ -33,8 +33,8 @@ TheEndBiomeDecorator::SPIKE TheEndBiomeDecorator::SpikeValA[8]=
 
 TheEndBiomeDecorator::TheEndBiomeDecorator(Biome *biome) : BiomeDecorator(biome)
 {
-	spikeFeature = new SpikeFeature(Tile::endStone_Id);
-	endPodiumFeature = new EndPodiumFeature(Tile::endStone_Id);
+	spikeFeature = new SpikeFeature(Tile::end_stone_Id);
+	endPodiumFeature = new EndPodiumFeature(Tile::end_stone_Id);
 }
 
 void TheEndBiomeDecorator::decorate()

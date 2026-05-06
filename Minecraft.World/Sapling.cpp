@@ -38,6 +38,32 @@ Sapling::Sapling(int id) : Bush(id)
     icons = nullptr;
 }
 
+void Sapling::createBlockStateDefinition()
+{
+    if (!m_blockStateDefinition)
+        m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int Sapling::defaultBlockState()
+{
+    return 0;
+}
+
+int Sapling::convertBlockStateToLegacyData(BlockState *state)
+{
+    return state ? (state->value & (TYPE_MASK | AGE_BIT)) : 0;
+}
+
+Tile::BlockState Sapling::getBlockState(int data)
+{
+    return Tile::BlockState(data & (TYPE_MASK | AGE_BIT));
+}
+
+Tile::BlockState Sapling::getBlockState(LevelSource *level, int x, int y, int z)
+{
+    return Tile::BlockState(level->getData(x, y, z) & (TYPE_MASK | AGE_BIT));
+}
+
 void Sapling::updateDefaultShape()
 {
     float ss = 0.4f;

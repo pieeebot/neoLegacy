@@ -13,7 +13,7 @@ const int UIScene_LeaderboardsMenu::TitleIcons[UIScene_LeaderboardsMenu::NUM_LEA
 {
     {UIControl_LeaderboardList::e_ICON_TYPE_WALKED, UIControl_LeaderboardList::e_ICON_TYPE_FALLEN, Item::minecart_Id, Item::boat_Id, -1},
     {Tile::dirt_Id, Tile::cobblestone_Id, Tile::sand_Id, Tile::stone_Id, Tile::gravel_Id, Tile::clay_Id, Tile::obsidian_Id},
-    {Item::egg_Id, Item::wheat_Id, Tile::mushroom_brown_Id, Tile::reeds_Id, Item::bucket_milk_Id, Tile::pumpkin_Id, -1},
+    {Item::egg_Id, Item::wheat_Id, Tile::mushroom_brown_Id, Tile::reeds_Id, Item::milk_bucket_Id, Tile::pumpkin_Id, -1},
     {UIControl_LeaderboardList::e_ICON_TYPE_ZOMBIE, UIControl_LeaderboardList::e_ICON_TYPE_SKELETON, UIControl_LeaderboardList::e_ICON_TYPE_CREEPER, UIControl_LeaderboardList::e_ICON_TYPE_SPIDER, UIControl_LeaderboardList::e_ICON_TYPE_SPIDERJOKEY, UIControl_LeaderboardList::e_ICON_TYPE_ZOMBIEPIGMAN, UIControl_LeaderboardList::e_ICON_TYPE_SLIME},
 };
 const UIScene_LeaderboardsMenu::LeaderboardDescriptor UIScene_LeaderboardsMenu::LEADERBOARD_DESCRIPTORS[UIScene_LeaderboardsMenu::NUM_LEADERBOARDS][4] = {

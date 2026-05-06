@@ -116,10 +116,10 @@ FishingHook::FishingHook(Level *level,  std::shared_ptr<Player> mob) : Entity( l
 
 void FishingHook::getEnchantLevels() {
 	if (this->owner == nullptr) return;
-	std::shared_ptr<ItemInstance> fishingRod = owner->getSelectedItem();
+	std::shared_ptr<ItemInstance> fishing_rod = owner->getSelectedItem();
 	// TODO; Account for luck effect once implemented.
-	this->luckLevel = EnchantmentHelper::getEnchantmentLevel(65, fishingRod); // Luck of the sea
-	this->lureLevel = EnchantmentHelper::getEnchantmentLevel(64, fishingRod); // Lure
+	this->luckLevel = EnchantmentHelper::getEnchantmentLevel(65, fishing_rod); // Luck of the sea
+	this->lureLevel = EnchantmentHelper::getEnchantmentLevel(64, fishing_rod); // Lure
 }
 
 void FishingHook::defineSynchedData()
@@ -215,7 +215,7 @@ void FishingHook::tick()
 		if (this->previousItem == nullptr) {
 			this->previousItem = selectedItem;
 		}
-		if (owner->removed || !owner->isAlive() || selectedItem == nullptr || selectedItem->getItem() != Item::fishingRod || distanceToSqr(owner) > 32 * 32 || selectedItem != this->previousItem)
+		if (owner->removed || !owner->isAlive() || selectedItem == nullptr || selectedItem->getItem() != Item::fishing_rod || distanceToSqr(owner) > 32 * 32 || selectedItem != this->previousItem)
 		{
 			remove();
 			owner->fishing = nullptr;

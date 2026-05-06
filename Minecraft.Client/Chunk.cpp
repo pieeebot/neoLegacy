@@ -181,6 +181,7 @@ void Chunk::makeCopyForRebuild(Chunk *source)
 
 void Chunk::rebuild()
 {
+	if (this == nullptr) return;
 	PIXBeginNamedEvent(0,"Rebuilding chunk %d, %d, %d", x, y, z);
 #if defined __PS3__ && !defined DISABLE_SPU_CODE
 	rebuild_SPU();
@@ -281,15 +282,15 @@ void Chunk::rebuild()
 
 				// Establish whether this tile and its neighbours are all made of rock, dirt, unbreakable tiles, or have already
 				// been determined to meet this criteria themselves and have a tile of 255 set.
-				if( !( ( tileId == Tile::stone_Id ) || ( tileId == Tile::dirt_Id ) || ( tileId == Tile::unbreakable_Id ) || ( tileId == 255) ) ) continue;
+				if( !( ( tileId == Tile::stone_Id ) || ( tileId == Tile::dirt_Id ) || ( tileId == Tile::bedrock_Id ) || ( tileId == 255) ) ) continue;
 				tileId = tileIds[ offset + ( ( ( xx - 1 ) << 11 ) | ( ( zz + 0 ) << 7 ) | ( indexY + 0 )) ];
-				if( !( ( tileId == Tile::stone_Id ) || ( tileId == Tile::dirt_Id ) || ( tileId == Tile::unbreakable_Id ) || ( tileId == 255) ) ) continue;
+				if( !( ( tileId == Tile::stone_Id ) || ( tileId == Tile::dirt_Id ) || ( tileId == Tile::bedrock_Id ) || ( tileId == 255) ) ) continue;
 				tileId = tileIds[ offset + ( ( ( xx + 1 ) << 11 ) | ( ( zz + 0 ) << 7 ) | ( indexY + 0 )) ];
-				if( !( ( tileId == Tile::stone_Id ) || ( tileId == Tile::dirt_Id ) || ( tileId == Tile::unbreakable_Id ) || ( tileId == 255) ) ) continue;
+				if( !( ( tileId == Tile::stone_Id ) || ( tileId == Tile::dirt_Id ) || ( tileId == Tile::bedrock_Id ) || ( tileId == 255) ) ) continue;
 				tileId = tileIds[ offset + ( ( ( xx + 0 ) << 11 ) | ( ( zz - 1 ) << 7 ) | ( indexY + 0 )) ];
-				if( !( ( tileId == Tile::stone_Id ) || ( tileId == Tile::dirt_Id ) || ( tileId == Tile::unbreakable_Id ) || ( tileId == 255) ) ) continue;
+				if( !( ( tileId == Tile::stone_Id ) || ( tileId == Tile::dirt_Id ) || ( tileId == Tile::bedrock_Id ) || ( tileId == 255) ) ) continue;
 				tileId = tileIds[ offset + ( ( ( xx + 0 ) << 11 ) | ( ( zz + 1 ) << 7 ) | ( indexY + 0 )) ];
-				if( !( ( tileId == Tile::stone_Id ) || ( tileId == Tile::dirt_Id ) || ( tileId == Tile::unbreakable_Id ) || ( tileId == 255) ) ) continue;
+				if( !( ( tileId == Tile::stone_Id ) || ( tileId == Tile::dirt_Id ) || ( tileId == Tile::bedrock_Id ) || ( tileId == 255) ) ) continue;
 				// Treat the bottom of the world differently - we shouldn't ever be able to look up at this, so consider tiles as invisible
 				// if they are surrounded on sides other than the bottom
 				if( yy > 0 )
@@ -302,7 +303,7 @@ void Chunk::rebuild()
 						yMinusOneOffset = Level::COMPRESSED_CHUNK_SECTION_TILES;
 					}
 					tileId = tileIds[ yMinusOneOffset + ( ( ( xx + 0 ) << 11 ) | ( ( zz + 0 ) << 7 ) | indexYMinusOne ) ];
-					if( !( ( tileId == Tile::stone_Id ) || ( tileId == Tile::dirt_Id ) || ( tileId == Tile::unbreakable_Id ) || ( tileId == 255) ) ) continue;
+					if( !( ( tileId == Tile::stone_Id ) || ( tileId == Tile::dirt_Id ) || ( tileId == Tile::bedrock_Id ) || ( tileId == 255) ) ) continue;
 				}
 				int indexYPlusOne = yy + 1;
 				int yPlusOneOffset = 0;
@@ -312,7 +313,7 @@ void Chunk::rebuild()
 					yPlusOneOffset = Level::COMPRESSED_CHUNK_SECTION_TILES;
 				}
 				tileId = tileIds[ yPlusOneOffset + ( ( ( xx + 0 ) << 11 ) | ( ( zz + 0 ) << 7 ) | indexYPlusOne ) ];
-				if( !( ( tileId == Tile::stone_Id ) || ( tileId == Tile::dirt_Id ) || ( tileId == Tile::unbreakable_Id ) || ( tileId == 255) ) ) continue;
+				if( !( ( tileId == Tile::stone_Id ) || ( tileId == Tile::dirt_Id ) || ( tileId == Tile::bedrock_Id ) || ( tileId == 255) ) ) continue;
 
 				// This tile is surrounded. Flag it as not requiring to be rendered by setting its id to 255.
 				tileIds[ offset + ( ( ( xx + 0 ) << 11 ) | ( ( zz + 0 ) << 7 ) | ( indexY + 0 ) ) ] = 0xff;
@@ -404,6 +405,10 @@ void Chunk::rebuild()
 						}
 
 						Tile *tile = Tile::tiles[tileId];
+						if (tile == nullptr)
+						{
+							continue;
+						}
 						if (currentLayer == 0 && tile->isEntityTile())
 						{
 							shared_ptr<TileEntity> et = region->getTileEntity(x, y, z);

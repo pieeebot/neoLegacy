@@ -932,7 +932,9 @@ void Entity::move(double xa, double ya, double za, bool noEntityCubes)   // 4J -
 				playSound(eSoundType_LIQUID_SWIM, speed, 1 + (random->nextFloat() - random->nextFloat()) * 0.4f);
 			}
 			playStepSound(xt, yt, zt, t);
-			Tile::tiles[t]->stepOn(level, xt, yt, zt, self);
+			Tile *tile = Tile::tiles[t];
+			if (tile == nullptr && t != 0) return; // tu31 tutorial world fix
+			tile->stepOn(level, xt, yt, zt, self);
 		}
 	}
 
@@ -981,9 +983,10 @@ void Entity::checkInsideTiles()
 				for (int z = z0; z <= z1; z++)
 				{
 					int t = level->getTile(x, y, z);
-					if (t > 0)
+					Tile *tile = Tile::tiles[t];
+					if (t > 0 && tile != nullptr) // tu31 tutorial world fix
 					{
-						Tile::tiles[t]->entityInside(level, x, y, z, self);
+						tile->entityInside(level, x, y, z, self);
 					}
 				}
 	}
@@ -992,6 +995,8 @@ void Entity::checkInsideTiles()
 
 void Entity::playStepSound(int xt, int yt, int zt, int t)
 {
+	Tile *tile = Tile::tiles[t];
+	if (tile == nullptr && t != 0) return; // tu31 tutorial world fix
 	const Tile::SoundType *soundType = Tile::tiles[t]->soundType;
 	MemSect(31);
 
@@ -1006,7 +1011,7 @@ void Entity::playStepSound(int xt, int yt, int zt, int t)
 		}
 
 	}
-	if (level->getTile(xt, yt + 1, zt) == Tile::topSnow_Id)
+	if (level->getTile(xt, yt + 1, zt) == Tile::snow_layer_Id)
 	{
 		soundType = Tile::topSnow->soundType;
 		playSound(soundType->getStepSound(), soundType->getVolume() * 0.15f, soundType->getPitch());
@@ -1122,7 +1127,9 @@ bool Entity::isUnderLiquid(Material *material)
 	int yt = Mth::floor(yp);	// 4J - this used to be a nested pair of floors for some reason
 	int zt = Mth::floor(z);
 	int t = level->getTile(xt, yt, zt);
-	if (t != 0 && Tile::tiles[t]->material == material) {
+	Tile *tile = Tile::tiles[t];
+	if (tile == nullptr) return false; // tu31 tutorial world fix
+	if (t != 0 && tile->material == material) {
 		float hh = LiquidTile::getHeight(level->getData(xt, yt, zt)) - 1 / 9.0f;
 		float h = yt + 1 - hh;
 		return yp < h;

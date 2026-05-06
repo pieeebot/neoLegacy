@@ -10,8 +10,8 @@ public:
 
 	Icon_SPU *getTexture(int face, int data)
 	{
-		if(id == Tile_SPU::button_wood_Id) 
-			return TileRef_SPU(wood_Id)->getTexture(Facing::UP);
+		if(id == Tile_SPU::wooden_button_Id) 
+			return TileRef_SPU(planks_Id)->getTexture(Facing::UP);
 		else 
 			return TileRef_SPU(rock_Id)->getTexture(Facing::UP);
 	}

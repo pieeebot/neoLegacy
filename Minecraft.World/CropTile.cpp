@@ -21,6 +21,32 @@ CropTile::CropTile(int id) : Bush(id)
 	sendTileData();
 }
 
+void CropTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int CropTile::defaultBlockState()
+{
+	return 0;
+}
+
+int CropTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0x7) : 0;
+}
+
+Tile::BlockState CropTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0x7);
+}
+
+Tile::BlockState CropTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0x7);
+}
+
 // 4J Added override
 void CropTile::updateDefaultShape()
 {
@@ -118,7 +144,7 @@ int CropTile::getRenderShape()
 
 int CropTile::getBaseSeedId()
 {
-	return Item::seeds_wheat_Id;
+	return Item::wheat_seeds_Id;
 }
 
 int CropTile::getBasePlantId()

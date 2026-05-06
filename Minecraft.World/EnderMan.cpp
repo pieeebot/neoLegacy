@@ -27,16 +27,16 @@ void EnderMan::staticCtor()
 	MAY_TAKE[Tile::dirt_Id] = true;
 	MAY_TAKE[Tile::sand_Id] = true;
 	MAY_TAKE[Tile::gravel_Id] = true;
-	MAY_TAKE[Tile::flower_Id] = true;
-	MAY_TAKE[Tile::rose_Id] = true;
+	MAY_TAKE[Tile::yellow_flower_Id] = true;
+	MAY_TAKE[Tile::red_flower_Id] = true;
 	MAY_TAKE[Tile::mushroom_brown_Id] = true;
 	MAY_TAKE[Tile::mushroom_red_Id] = true;
 	MAY_TAKE[Tile::tnt_Id] = true;
 	MAY_TAKE[Tile::cactus_Id] = true;
 	MAY_TAKE[Tile::clay_Id] = true;
 	MAY_TAKE[Tile::pumpkin_Id] = true;
-	MAY_TAKE[Tile::melon_Id] = true;
-	MAY_TAKE[Tile::mycel_Id] = true;
+	MAY_TAKE[Tile::melon_block_Id] = true;
+	MAY_TAKE[Tile::mycelium_Id] = true;
 }
 
 EnderMan::EnderMan(Level *level) : Monster( level )
@@ -392,7 +392,7 @@ int EnderMan::getDeathSound()
 
 int EnderMan::getDeathLoot()
 {
-	return Item::enderPearl_Id;
+	return Item::ender_pearl_Id;
 }
 
 void EnderMan::dropDeathLoot(bool wasKilledByPlayer, int playerBonusLevel)

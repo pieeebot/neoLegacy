@@ -19,7 +19,7 @@ public:
 		// down is used by the torch tesselator
 		if (face == Facing::DOWN)
 		{
-			if (id==diode_on_Id)
+			if (id==powered_repeater_Id)
 			{
 				return TileRef_SPU(notGate_on_Id)->getTexture(face);
 			}
@@ -30,7 +30,7 @@ public:
 			return icon();
 		}
 		// edge of stone half-step
-		return TileRef_SPU(stoneSlab_Id)->getTexture(Facing::UP);
+		return TileRef_SPU(double_stone_slab_Id)->getTexture(Facing::UP);
 	}
     virtual bool shouldRenderFace(LevelSource *level, int x, int y, int z, int face)
 	{

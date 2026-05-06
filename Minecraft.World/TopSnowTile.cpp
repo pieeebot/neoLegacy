@@ -13,9 +13,36 @@ const int TopSnowTile::HEIGHT_MASK = 7; // max 8 steps
 
 TopSnowTile::TopSnowTile(int id) : Tile(id, Material::topSnow,isSolidRender())
 {
+	m_defaultBlockState = 1;
 	setShape(0, 0, 0, 1, 2 / 16.0f, 1);
 	setTicking(true);
 	updateShape(0);
+}
+
+void TopSnowTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int TopSnowTile::defaultBlockState()
+{
+	return 1;
+}
+
+int TopSnowTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state && state->value > 0 ? ((state->value - 1) & HEIGHT_MASK) : 0;
+}
+
+Tile::BlockState TopSnowTile::getBlockState(int data)
+{
+	return Tile::BlockState((data & HEIGHT_MASK) + 1);
+}
+
+Tile::BlockState TopSnowTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState((level->getData(x, y, z) & HEIGHT_MASK) + 1);
 }
 
 void TopSnowTile::registerIcons(IconRegister *iconRegister)
@@ -98,7 +125,7 @@ bool TopSnowTile::checkCanSurvive(Level *level, int x, int y, int z)
 
 void TopSnowTile::playerDestroy(Level *level, shared_ptr<Player> player, int x, int y, int z, int data)
 {
-	int type = Item::snowBall->id;
+	int type = Item::snowball->id;
 	int height = data & HEIGHT_MASK;
 	popResource(level, x, y, z, std::make_shared<ItemInstance>(type, height + 1, 0));
 	level->removeTile(x, y, z);
@@ -106,7 +133,7 @@ void TopSnowTile::playerDestroy(Level *level, shared_ptr<Player> player, int x, 
 
 int TopSnowTile::getResource(int data, Random *random, int playerBonusLevel)
 {
-	return Item::snowBall->id;
+	return Item::snowball->id;
 }
 
 int TopSnowTile::getResourceCount(Random *random)
@@ -128,7 +155,7 @@ bool TopSnowTile::shouldRenderFace(LevelSource *level, int x, int y, int z, int 
 	if (face == 1) return true;
 	// 4J - don't render faces if neighbouring tiles are also TopSnowTile with at least the same height as this one
 	// Otherwise we get horrible artifacts from the non-manifold geometry created. Fixes bug #8506
-	if ( ( level->getTile(x,y,z) == Tile::topSnow_Id ) && ( face >= 2 ) )
+	if ( ( level->getTile(x,y,z) == Tile::snow_layer_Id ) && ( face >= 2 ) )
 	{
 		int h0 = level->getData(x,y,z) & HEIGHT_MASK;
 		int xx = x;

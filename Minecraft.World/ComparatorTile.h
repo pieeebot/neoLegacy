@@ -13,6 +13,11 @@ private:
 
 public:
 	ComparatorTile(int id, bool on);
+	virtual void createBlockStateDefinition() override;
+	virtual int defaultBlockState() override;
+	virtual int convertBlockStateToLegacyData(BlockState *state) override;
+	virtual Tile::BlockState getBlockState(LevelSource *level, int x, int y, int z) override;
+	virtual Tile::BlockState getBlockState(int data);
 
 	virtual int getResource(int data, Random *random, int playerBonusLevel);
 	virtual int cloneTileId(Level *level, int x, int y, int z);

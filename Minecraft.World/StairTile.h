@@ -76,4 +76,13 @@ public:
 	virtual int getPlacedOnFaceDataValue(Level *level, int x, int y, int z, int face, float clickX, float clickY, float clickZ, int itemValue);
 	virtual HitResult *clip(Level *level, int xt, int yt, int zt, Vec3 *a, Vec3 *b);
 	virtual void registerIcons(IconRegister *iconRegister);
+
+	virtual void createBlockStateDefinition() override;
+	virtual int convertBlockStateToLegacyData(BlockState *state) override;
+	virtual int defaultBlockState() override;
+
+	virtual Tile::BlockState getBlockState(LevelSource *level, int x, int y, int z) override;
+	Tile::BlockState getBlockState(int data);
+
+	void fillVirtualBlockStateProperties(Tile::BlockState *state, LevelSource *level, const BlockPos &pos);
 };

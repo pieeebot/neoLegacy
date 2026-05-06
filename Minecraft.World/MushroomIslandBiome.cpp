@@ -13,7 +13,7 @@ MushroomIslandBiome::MushroomIslandBiome(int id) : Biome(id)
     decorator->mushroomCount = 1;
     decorator->hugeMushrooms = 1;
 
-    topMaterial = static_cast<byte>(Tile::mycel_Id);
+    topMaterial = static_cast<byte>(Tile::mycelium_Id);
 
     enemies.clear();
     friendlies.clear();

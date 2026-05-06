@@ -9,13 +9,13 @@
 #include "net.minecraft.h"
 
 static std::map<wstring, int> doorItemMap = {
-	{ L"doorWood",   Item::door_wood_Id   },
-	{ L"doorIron",   Item::door_iron_Id   },
-	{ L"doorSpruce", Item::door_spruce_Id },
-	{ L"doorBirch",  Item::door_birch_Id  },
-	{ L"doorJungle", Item::door_jungle_Id },
-	{ L"doorAcacia", Item::door_acacia_Id },
-	{ L"doorDark",   Item::door_dark_Id   }
+	{ L"doorWood",   Item::wooden_door_Id   },
+	{ L"doorIron",   Item::iron_door_Id   },
+	{ L"doorSpruce", Item::spruce_door_Id },
+	{ L"doorBirch",  Item::birch_door_Id  },
+	{ L"doorJungle", Item::jungle_door_Id },
+	{ L"doorAcacia", Item::acacia_door_Id },
+	{ L"doorDark",   Item::dark_oak_door_Id   }
 };
 
 DoorTile::DoorTile(int id, Material *material, const wstring& doorType) : Tile(id, material,isSolidRender())
@@ -180,7 +180,7 @@ void DoorTile::attack(Level *level, int x, int y, int z, shared_ptr<Player> play
 // 4J-PB - Adding a TestUse for tooltip display
 bool DoorTile::TestUse()
 {
-	return id == Tile::door_wood_Id;
+	return id == Tile::wooden_door_Id;
 }
 
 bool DoorTile::use(Level *level, int x, int y, int z, shared_ptr<Player> player, int clickedFace, float clickX, float clickY, float clickZ, bool soundOnly/*=false*/) // 4J added soundOnly param
@@ -354,4 +354,86 @@ void DoorTile::playerWillDestroy(Level *level, int x, int y, int z, int data, sh
 			}
 		}
 	}
+}
+
+void DoorTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int DoorTile::defaultBlockState()
+{
+	return 0; // closed
+}
+
+Tile::BlockState DoorTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	int composite = getCompositeData(level, x, y, z);
+	return Tile::BlockState(composite);
+}
+
+int DoorTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	if (!state) return 0;
+	int composite = state->value;
+
+	if (composite & C_IS_UPPER_MASK)
+	{
+		int base = (composite & C_RIGHT_HINGE_MASK) ? 9 : 8;
+		if (composite & C_OPEN_MASK) base |= 2;
+		return base;
+	}
+	else
+	{
+		int base = composite & C_DIR_MASK;
+		if (composite & C_OPEN_MASK) base |= 4;
+		return base;
+	}
+}
+
+Tile::BlockState DoorTile::getBlockState(int data)
+{
+	int composite = 0;
+	if ((data & UPPER_BIT) == 0) {
+		composite = data & C_LOWER_DATA_MASK;
+	} else {
+		composite = C_IS_UPPER_MASK;
+		if ((data & 1) != 0) composite |= C_RIGHT_HINGE_MASK;
+	}
+	return Tile::BlockState(composite);
+}
+
+void DoorTile::fillVirtualBlockStateProperties(Tile::BlockState *state, LevelSource *level, const BlockPos &pos)
+{
+	if (!state) return;
+	int composite = getCompositeData(level, pos.getX(), pos.getY(), pos.getZ());
+	state->value = composite;
+}
+
+bool DoorTile::use(Level *level, const BlockPos &pos, Tile::BlockState *state, shared_ptr<Player> player, int clickedFace, float clickX, float clickY, float clickZ, bool soundOnly)
+{
+	if (soundOnly)
+	{
+		if (material != Material::metal)
+			level->levelEvent(player, LevelEvent::SOUND_OPEN_DOOR, pos.getX(), pos.getY(), pos.getZ(), 0);
+		return false;
+	}
+
+	if (material == Material::metal) return true;
+
+	int composite = state ? state->value : getCompositeData(level, pos.getX(), pos.getY(), pos.getZ());
+	int lowerData = composite & C_LOWER_DATA_MASK;
+	lowerData ^= 4;
+
+	if ((composite & C_IS_UPPER_MASK) == 0) {
+		level->setData(pos.getX(), pos.getY(), pos.getZ(), lowerData, Tile::UPDATE_CLIENTS);
+		level->setTilesDirty(pos.getX(), pos.getY(), pos.getZ(), pos.getX(), pos.getY(), pos.getZ());
+	} else {
+		level->setData(pos.getX(), pos.getY() - 1, pos.getZ(), lowerData, Tile::UPDATE_CLIENTS);
+		level->setTilesDirty(pos.getX(), pos.getY() - 1, pos.getZ(), pos.getX(), pos.getY(), pos.getZ());
+	}
+
+	level->levelEvent(player, LevelEvent::SOUND_OPEN_DOOR, pos.getX(), pos.getY(), pos.getZ(), 0);
+	return true;
 }

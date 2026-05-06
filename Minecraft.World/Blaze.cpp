@@ -174,7 +174,7 @@ void Blaze::causeFallDamage(float distance)
 
 int Blaze::getDeathLoot()
 {
-	return Item::blazeRod_Id;
+	return Item::blaze_rod_Id;
 }
 
 bool Blaze::isOnFire()
@@ -189,13 +189,13 @@ void Blaze::dropDeathLoot(bool wasKilledByPlayer, int playerBonusLevel)
 		int count = random->nextInt(2 + playerBonusLevel);
 		for (int i = 0; i < count; i++)
 		{
-			spawnAtLocation(Item::blazeRod_Id, 1);
+			spawnAtLocation(Item::blaze_rod_Id, 1);
 		}
 		// 4J-PB - added to the XBLA version due to our limited amount of glowstone in the Nether - drop 0-2 glowstone dust
 		count = random->nextInt(3 + playerBonusLevel);
 		for (int i = 0; i < count; i++)
 		{
-			spawnAtLocation(Item::yellowDust_Id, 1);
+			spawnAtLocation(Item::glowstone_dust_Id, 1);
 		}
 	}
 }

@@ -36,14 +36,14 @@ bool StairTile_SPU::isStairs(int id)
 {
 	switch(id)
 	{
-	case Tile_SPU::stairs_wood_Id:
-	case Tile_SPU::stairs_stone_Id:
-	case Tile_SPU::stairs_bricks_Id:	
-	case Tile_SPU::stairs_stoneBrickSmooth_Id:
-	case Tile_SPU::stairs_netherBricks_Id:
-	case Tile_SPU::stairs_sandstone_Id:
-	case Tile_SPU::stairs_sprucewood_Id:
-	case Tile_SPU::stairs_birchwood_Id:
+	case Tile_SPU::oak_stairs_Id:
+	case Tile_SPU::stone_stairs_Id:
+	case Tile_SPU::brick_stairs_Id:	
+	case Tile_SPU::stone_brick_stairsSmooth_Id:
+	case Tile_SPU::nether_brick_stairs_Id:
+	case Tile_SPU::sandstone_stairs_Id:
+	case Tile_SPU::spruce_stairs_Id:
+	case Tile_SPU::birch_stairs_Id:
 		return true;
 	default:
 		return false;

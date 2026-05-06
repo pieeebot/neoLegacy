@@ -35,7 +35,7 @@ Rabbit::Rabbit(Level *level) : Animal(level)
     goalSelector.addGoal(1, new FloatGoal(this));
     goalSelector.addGoal(2, new PanicGoal(this, 1.2f));
     goalSelector.addGoal(3, new BreedGoal(this, 0.8f));
-    goalSelector.addGoal(4, new TemptGoal(this, 1.0f, Item::carrots_Id, false));
+    goalSelector.addGoal(4, new TemptGoal(this, 1.0f, Item::carrot_Id, false));
     goalSelector.addGoal(5, new FollowParentGoal(this, 1.1f));
     goalSelector.addGoal(6, new RandomStrollGoal(this, 0.6f));
     goalSelector.addGoal(7, new LookAtPlayerGoal(this, typeid(Player), 10.0f));
@@ -73,7 +73,7 @@ bool Rabbit::useNewAi() {
 void Rabbit::dropDeathLoot(bool wasKilledByPlayer, int lootingLevel) {
     
     int meatCount = random->nextInt(2) + random->nextInt(lootingLevel + 1);
-    int meatId = isOnFire() ? Item::rabbit_cooked_Id : Item::rabbit_raw_Id;
+    int meatId = isOnFire() ? Item::cooked_rabbit_Id : Item::rabbit_Id;
     spawnAtLocation(meatId, meatCount);
 
     
@@ -83,7 +83,7 @@ void Rabbit::dropDeathLoot(bool wasKilledByPlayer, int lootingLevel) {
     
     float footChance = 0.10f + (0.03f * lootingLevel);
     if (wasKilledByPlayer && random->nextFloat() < footChance) {
-        spawnAtLocation(Item::rabbits_foot_Id, 1);
+        spawnAtLocation(Item::rabbit_foot_Id, 1);
     }
 }
 
@@ -121,7 +121,7 @@ bool Rabbit::isFood(shared_ptr<ItemInstance> item) {
     
     
     int id = item->getItem()->id;
-    return id == Item::carrots_Id || id == Item::carrots_Id || id == Item::carrotGolden_Id;
+    return id == Item::carrot_Id || id == Item::carrot_Id || id == Item::golden_carrot_Id;
 }
 
 shared_ptr<AgableMob> Rabbit::getBreedOffspring(shared_ptr<AgableMob> target) {

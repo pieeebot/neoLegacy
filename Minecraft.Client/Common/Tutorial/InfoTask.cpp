@@ -40,11 +40,13 @@ bool InfoTask::isCompleted()
 	bool bAllComplete = true;
 
 	Minecraft *pMinecraft = Minecraft::GetInstance();
+	int tutorialPad = tutorial->getPad();
+	bool hasValidPad = (tutorialPad >= 0 && tutorialPad < XUSER_MAX_COUNT);
 
 	// If the player is under water then allow all keypresses so they can jump out
-	if( pMinecraft->localplayers[tutorial->getPad()]->isUnderLiquid(Material::water) ) return false;
+	if( hasValidPad && pMinecraft->localplayers[tutorialPad] != nullptr && pMinecraft->localplayers[tutorialPad]->isUnderLiquid(Material::water) ) return false;
 
-	if(ui.GetMenuDisplayed(tutorial->getPad()))
+	if(hasValidPad && ui.GetMenuDisplayed(tutorialPad))
 	{
 		// If a menu is displayed, then we use the handleUIInput to complete the task
 		bAllComplete = true;

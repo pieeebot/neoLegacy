@@ -137,7 +137,7 @@ void Silverfish::serverAiStep()
 					for (int zOff = 0; !doBreak && zOff <= 10 && zOff >= -10; zOff = (zOff <= 0) ? 1 - zOff : 0 - zOff)
 					{
 						int tile = level->getTile(baseX + xOff, baseY + yOff, baseZ + zOff);
-						if (tile == Tile::monsterStoneEgg_Id)
+						if (tile == Tile::monster_egg_Id)
 						{
 							if (!level->getGameRules()->getBoolean(GameRules::RULE_MOBGRIEFING))
 							{
@@ -159,7 +159,7 @@ void Silverfish::serverAiStep()
 							{
 								level->destroyTile(baseX + xOff, baseY + yOff, baseZ + zOff, false);
 							}
-							Tile::monsterStoneEgg->destroy(level, baseX + xOff, baseY + yOff, baseZ + zOff, 0);
+							Tile::monster_egg->destroy(level, baseX + xOff, baseY + yOff, baseZ + zOff, 0);
 
 							if (random->nextBoolean())
 							{
@@ -183,7 +183,7 @@ void Silverfish::serverAiStep()
 		int tile = level->getTile(tileX + Facing::STEP_X[facing], tileY + Facing::STEP_Y[facing], tileZ + Facing::STEP_Z[facing]);
 		if (StoneMonsterTile::isCompatibleHostBlock(tile))
 		{
-			level->setTileAndData(tileX + Facing::STEP_X[facing], tileY + Facing::STEP_Y[facing], tileZ + Facing::STEP_Z[facing], Tile::monsterStoneEgg_Id, StoneMonsterTile::getDataForHostBlock(tile), Tile::UPDATE_ALL);
+			level->setTileAndData(tileX + Facing::STEP_X[facing], tileY + Facing::STEP_Y[facing], tileZ + Facing::STEP_Z[facing], Tile::monster_egg_Id, StoneMonsterTile::getDataForHostBlock(tile), Tile::UPDATE_ALL);
 			spawnAnim();
 			remove();
 		}

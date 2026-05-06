@@ -34,8 +34,8 @@ Pig::Pig(Level *level) : Animal( level )
 	goalSelector.addGoal(1, new PanicGoal(this, 1.25));
 	goalSelector.addGoal(2, controlGoal = new ControlledByPlayerGoal(this, 0.3f, 0.25f));
 	goalSelector.addGoal(3, new BreedGoal(this, 1.0));
-	goalSelector.addGoal(4, new TemptGoal(this, 1.2, Item::carrotOnAStick_Id, false));
-	goalSelector.addGoal(4, new TemptGoal(this, 1.2, Item::carrots_Id, false));
+	goalSelector.addGoal(4, new TemptGoal(this, 1.2, Item::carrot_on_a_stick_Id, false));
+	goalSelector.addGoal(4, new TemptGoal(this, 1.2, Item::carrot_Id, false));
 	goalSelector.addGoal(5, new FollowParentGoal(this, 1.1));
 	goalSelector.addGoal(6, new RandomStrollGoal(this, 1.0));
 	goalSelector.addGoal(7, new LookAtPlayerGoal(this, typeid(Player), 6));
@@ -69,7 +69,7 @@ bool Pig::canBeControlledByRider()
 {
 	shared_ptr<ItemInstance> item = dynamic_pointer_cast<Player>(rider.lock())->getCarriedItem();
 
-	return item != nullptr && item->id == Item::carrotOnAStick_Id;
+	return item != nullptr && item->id == Item::carrot_on_a_stick_Id;
 }
 
 void Pig::defineSynchedData() 
@@ -127,8 +127,8 @@ bool Pig::mobInteract(shared_ptr<Player> player)
 
 int Pig::getDeathLoot() 
 {
-	if (this->isOnFire() ) return Item::porkChop_cooked->id;
-	return Item::porkChop_raw_Id;
+	if (this->isOnFire() ) return Item::cooked_porkchop->id;
+	return Item::porkchop_Id;
 }
 
 void Pig::dropDeathLoot(bool wasKilledByPlayer, int playerBonusLevel)
@@ -139,11 +139,11 @@ void Pig::dropDeathLoot(bool wasKilledByPlayer, int playerBonusLevel)
 	{
 		if (isOnFire())
 		{
-			spawnAtLocation(Item::porkChop_cooked_Id, 1);
+			spawnAtLocation(Item::cooked_porkchop_Id, 1);
 		}
 		else
 		{
-			spawnAtLocation(Item::porkChop_raw_Id, 1);
+			spawnAtLocation(Item::porkchop_Id, 1);
 		}
 	}
 	if (hasSaddle()) spawnAtLocation(Item::saddle_Id, 1);
@@ -199,7 +199,7 @@ shared_ptr<AgableMob> Pig::getBreedOffspring(shared_ptr<AgableMob> target)
 
 bool Pig::isFood(shared_ptr<ItemInstance> itemInstance)
 {
-	return itemInstance != nullptr && itemInstance->id == Item::carrots_Id;
+	return itemInstance != nullptr && itemInstance->id == Item::carrot_Id;
 }
 
 ControlledByPlayerGoal *Pig::getControlGoal()

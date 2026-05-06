@@ -16,6 +16,32 @@ FarmTile::FarmTile(int id) : Tile(id, Material::dirt,isSolidRender())
 	setLightBlock(255);
 }
 
+void FarmTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int FarmTile::defaultBlockState()
+{
+	return 0;
+}
+
+int FarmTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0x7) : 0;
+}
+
+Tile::BlockState FarmTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0x7);
+}
+
+Tile::BlockState FarmTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0x7);
+}
+
 // 4J Added override
 void FarmTile::updateDefaultShape()
 {
@@ -105,7 +131,7 @@ bool FarmTile::isUnderCrops(Level *level, int x, int y, int z)
 		for (int zz = z - r; zz <= z + r; zz++)
 		{
 			int tile = level->getTile(xx, y + 1, zz);
-			if (tile == Tile::wheat_Id || tile == Tile::melonStem_Id || tile == Tile::pumpkinStem_Id || tile == Tile::potatoes_Id || tile == Tile::carrots_Id)
+			if (tile == Tile::wheat_Id || tile == Tile::melon_stem_Id || tile == Tile::pumpkin_stem_Id || tile == Tile::potatoes_Id || tile == Tile::carrots_Id)
 			{
 				return true;
 			}

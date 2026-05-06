@@ -153,7 +153,7 @@ void PigZombie::dropDeathLoot(bool wasKilledByPlayer, int playerBonusLevel)
 	count = random->nextInt(2 + playerBonusLevel);
 	for (int i = 0; i < count; i++)
 	{
-		spawnAtLocation(Item::goldNugget_Id, 1);
+		spawnAtLocation(Item::gold_nugget_Id, 1);
 	}
 }
 
@@ -164,7 +164,7 @@ bool PigZombie::mobInteract(shared_ptr<Player> player)
 
 void PigZombie::dropRareDeathLoot(int rareLootLevel)
 {
-	spawnAtLocation(Item::goldIngot_Id, 1);
+	spawnAtLocation(Item::gold_ingot_Id, 1);
 }
 
 int PigZombie::getDeathLoot()
@@ -174,7 +174,7 @@ int PigZombie::getDeathLoot()
 
 void PigZombie::populateDefaultEquipmentSlots()
 {
-	setEquippedSlot(SLOT_WEAPON, std::make_shared<ItemInstance>(Item::sword_gold));
+	setEquippedSlot(SLOT_WEAPON, std::make_shared<ItemInstance>(Item::golden_sword));
 }
 
 MobGroupData *PigZombie::finalizeMobSpawn(MobGroupData *groupData, int extraData /*= 0*/) // 4J Added extraData param

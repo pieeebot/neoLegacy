@@ -16,6 +16,32 @@ HopperTile::HopperTile(int id) : BaseEntityTile(id, Material::metal, isSolidRend
 	setShape(0, 0, 0, 1, 1, 1);
 }
 
+void HopperTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int HopperTile::defaultBlockState()
+{
+	return 0;
+}
+
+int HopperTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0xF) : 0;
+}
+
+Tile::BlockState HopperTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0xF);
+}
+
+Tile::BlockState HopperTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return getBlockState(level->getData(x, y, z));
+}
+
 void HopperTile::updateShape(LevelSource *level, int x, int y, int z, int forceData , shared_ptr<TileEntity> forceEntity)
 {
 	setShape(0, 0, 0, 1, 1, 1);

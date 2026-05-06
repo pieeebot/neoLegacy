@@ -11,6 +11,11 @@ private:
 public:
 	static const int EXPLODE_BIT = 1;
 	TntTile(int id);
+	virtual void createBlockStateDefinition() override;
+	virtual int defaultBlockState() override;
+	virtual int convertBlockStateToLegacyData(BlockState *state) override;
+	virtual Tile::BlockState getBlockState(LevelSource *level, int x, int y, int z) override;
+	virtual Tile::BlockState getBlockState(int data);
 
 	virtual Icon *getTexture(int face, int data);
 	virtual void onPlace(Level *level, int x, int y, int z);

@@ -1242,37 +1242,37 @@ void IUIScene_AbstractContainerMenu::onMouseTick()
 						switch(iId)
 						{
 						case Item::bow_Id:
-						case Item::sword_wood_Id:
-						case Item::sword_stone_Id:
-						case Item::sword_iron_Id:
-						case Item::sword_diamond_Id:
+						case Item::wooden_sword_Id:
+						case Item::stone_sword_Id:
+						case Item::iron_sword_Id:
+						case Item::diamond_sword_Id:
 							buttonY=eToolTipQuickMoveWeapon;
 							break;
 
-						case Item::helmet_leather_Id:
-						case Item::chestplate_leather_Id:
-						case Item::leggings_leather_Id:
-						case Item::boots_leather_Id:
+						case Item::leather_helmet_Id:
+						case Item::leather_chestplate_Id:
+						case Item::leather_leggings_Id:
+						case Item::leather_boots_Id:
 
-						case Item::helmet_chain_Id:
-						case Item::chestplate_chain_Id:
-						case Item::leggings_chain_Id:
-						case Item::boots_chain_Id:
+						case Item::chainmail_helmet_Id:
+						case Item::chainmail_chestplate_Id:
+						case Item::chainmail_leggings_Id:
+						case Item::chainmail_boots_Id:
 
-						case Item::helmet_iron_Id:
-						case Item::chestplate_iron_Id:
-						case Item::leggings_iron_Id:
-						case Item::boots_iron_Id:
+						case Item::iron_helmet_Id:
+						case Item::iron_chestplate_Id:
+						case Item::iron_leggings_Id:
+						case Item::iron_boots_Id:
 
-						case Item::helmet_diamond_Id:
-						case Item::chestplate_diamond_Id:
-						case Item::leggings_diamond_Id:
-						case Item::boots_diamond_Id:
+						case Item::diamond_helmet_Id:
+						case Item::diamond_chestplate_Id:
+						case Item::diamond_leggings_Id:
+						case Item::diamond_boots_Id:
 
-						case Item::helmet_gold_Id:
-						case Item::chestplate_gold_Id:
-						case Item::leggings_gold_Id:
-						case Item::boots_gold_Id:
+						case Item::golden_helmet_Id:
+						case Item::golden_chestplate_Id:
+						case Item::golden_leggings_Id:
+						case Item::golden_boots_Id:
 
 
 						case Item::elytra_Id:

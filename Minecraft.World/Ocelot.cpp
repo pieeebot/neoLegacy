@@ -40,7 +40,7 @@ Ocelot::Ocelot(Level *level) : TamableAnimal(level)
 	getNavigation()->setAvoidWater(true);
 	goalSelector.addGoal(1, new FloatGoal(this));
 	goalSelector.addGoal(2, sitGoal, false);
-	goalSelector.addGoal(3, temptGoal = new TemptGoal(this, SNEAK_SPEED_MOD, Item::fish_raw_Id, true), false);
+	goalSelector.addGoal(3, temptGoal = new TemptGoal(this, SNEAK_SPEED_MOD, Item::fish_Id, true), false);
 	goalSelector.addGoal(4, new AvoidPlayerGoal(this, typeid(Player), 16, WALK_SPEED_MOD, SPRINT_SPEED_MOD));
 	goalSelector.addGoal(5, new FollowOwnerGoal(this, FOLLOW_SPEED_MOD, 10, 5));
 	goalSelector.addGoal(6, new OcelotSitOnTileGoal(this, SPRINT_SPEED_MOD));
@@ -199,7 +199,7 @@ bool Ocelot::mobInteract(shared_ptr<Player> player)
 	}
 	else
 	{
-		if (temptGoal->isRunning() && item != nullptr && item->id == Item::fish_raw_Id && player->distanceToSqr(shared_from_this()) < 3 * 3)
+		if (temptGoal->isRunning() && item != nullptr && item->id == Item::fish_Id && player->distanceToSqr(shared_from_this()) < 3 * 3)
 		{
 			// 4J-PB - don't lose the fish in creative mode
 			if (!player->abilities.instabuild) item->count--;
@@ -257,7 +257,7 @@ shared_ptr<AgableMob> Ocelot::getBreedOffspring(shared_ptr<AgableMob> target)
 
 bool Ocelot::isFood(shared_ptr<ItemInstance> itemInstance)
 {
-	return itemInstance != nullptr && itemInstance->id == Item::fish_raw_Id;
+	return itemInstance != nullptr && itemInstance->id == Item::fish_Id;
 }
 
 bool Ocelot::canMate(shared_ptr<Animal> animal)

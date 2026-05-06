@@ -14,6 +14,11 @@ public:
 	static const int WIRE_DIST_MAX = 2 + 40; // 2 hooks + x string
 
 	TripWireSourceTile(int id);
+	virtual void createBlockStateDefinition() override;
+	virtual int defaultBlockState() override;
+	virtual int convertBlockStateToLegacyData(BlockState *state) override;
+	virtual Tile::BlockState getBlockState(LevelSource *level, int x, int y, int z) override;
+	virtual Tile::BlockState getBlockState(int data);
 
 	AABB *getAABB(Level *level, int x, int y, int z);
 	bool blocksLight();

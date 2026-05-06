@@ -28,7 +28,14 @@
 #include "../Minecraft.World/net.minecraft.world.h"
 #include "../Minecraft.World/LevelChunk.h"
 #include "../Minecraft.World/Biome.h"
+#include "../Minecraft.World/HitResult.h"
 #include <Common/UI/UI.h>
+#include "../Minecraft.World/Tile.h"
+#include "../Minecraft.World/BlockStateDecoderRegistry.h"
+#include "../Minecraft.World/BlockStateDecoder.h"
+#include <map>
+#include <set>
+#include <cwctype>
 
 ResourceLocation Gui::PUMPKIN_BLUR_LOCATION = ResourceLocation(TN__BLUR__MISC_PUMPKINBLUR);
 
@@ -1157,6 +1164,111 @@ void Gui::render(float a, bool mouseFree, int xMouse, int yMouse)
             lines.push_back(L"Facing: " + std::wstring(cardinals[direction]) + L" (" + angleString + L")");
 
 			// We have to limit y to 256 as we don't get any information past that
+			// target block state
+			if (minecraft->hitResult != nullptr && minecraft->hitResult->type == HitResult::TILE)
+			{
+				int hx = minecraft->hitResult->x;
+				int hy = minecraft->hitResult->y;
+				int hz = minecraft->hitResult->z;
+				if (minecraft->level != NULL && minecraft->level->hasChunkAt(hx, hy, hz))
+				{
+					int tid = minecraft->level->getTile(hx, hy, hz);
+					if (tid >= 0 && tid < Tile::TILE_NUM_COUNT)
+					{
+						Tile *t = Tile::tiles[tid];
+						if (t != nullptr)
+						{
+							Tile::BlockState st = t->getBlockState(minecraft->level, hx, hy, hz);
+							// check registry so we dont end up with random integers
+							std::wstring decoded = BlockStateDecoderRegistry::decode(tid, st.value);
+				
+							if (decoded.empty()) {
+								if (tid == Tile::wooden_door_Id || tid == Tile::iron_door_Id || tid == Tile::spruce_door_Id || tid == Tile::birch_door_Id || tid == Tile::jungle_door_Id || tid == Tile::acacia_door_Id || tid == Tile::dark_oak_door_Id) {
+									decoded = BlockStateDecoder::doorPropsToString(BlockStateDecoder::decodeDoor(st.value));
+								}
+							}
+
+							if (!decoded.empty())
+							{
+								std::map<std::wstring, std::wstring> props;
+								std::set<std::wstring> shownProps;
+								auto appendProp = [&](const std::wstring &key) {
+									auto it = props.find(key);
+									if (it != props.end()) {
+										lines.push_back(key + L": " + it->second);
+										shownProps.insert(key);
+									}
+								};
+								size_t start = 0;
+								while (start < decoded.size()) {
+									size_t pos = decoded.find(L'\n', start);
+									std::wstring line = (pos == std::wstring::npos) ? decoded.substr(start) : decoded.substr(start, pos - start);
+									size_t colon = line.find(L':');
+									if (colon != std::wstring::npos) {
+										std::wstring key = line.substr(0, colon);
+										std::wstring val = line.substr(colon + 1);
+										auto trim = [](std::wstring &s) {
+											size_t i = 0;
+											while (i < s.size() && iswspace(s[i])) ++i;
+											if (i) s.erase(0, i);
+											// right
+											if (!s.empty()) {
+												size_t j = s.size() - 1;
+												while (j != (size_t)-1 && iswspace(s[j])) --j;
+												s.erase(j + 1);
+											}
+										};
+										trim(key);
+										trim(val);
+										props[key] = val;
+									}
+									if (pos == std::wstring::npos) break;
+									start = pos + 1;
+								}
+								lines.push_back(L"State:");
+								appendProp(L"age");
+								appendProp(L"moisture");
+								appendProp(L"facing");
+								appendProp(L"part");
+								appendProp(L"occupied");
+								appendProp(L"north");
+								appendProp(L"south");
+								appendProp(L"east");
+								appendProp(L"west");
+								appendProp(L"type");
+								appendProp(L"variant");
+								appendProp(L"axis");
+								appendProp(L"hinge");
+								appendProp(L"half");
+								appendProp(L"shape");
+								appendProp(L"up");
+								appendProp(L"extended");
+								appendProp(L"open");
+								appendProp(L"in_wall");
+								appendProp(L"attached");
+								appendProp(L"powered");
+								appendProp(L"power");
+								appendProp(L"triggered");
+								appendProp(L"explode");
+								appendProp(L"bites");
+								appendProp(L"mode");
+								appendProp(L"delay");
+								appendProp(L"enabled");
+								appendProp(L"eye");
+								appendProp(L"bottle_0");
+								appendProp(L"bottle_1");
+								appendProp(L"bottle_2");
+								appendProp(L"has_record");
+								for (const auto &entry : props) {
+									if (shownProps.find(entry.first) == shownProps.end()) {
+										lines.push_back(entry.first + L": " + entry.second);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
             if (minecraft->level != NULL && minecraft->level->hasChunkAt(xBlockPos, fmod(yBlockPos, 256), zBlockPos))
             {
                 LevelChunk *chunkAt = minecraft->level->getChunkAt(xBlockPos, zBlockPos);

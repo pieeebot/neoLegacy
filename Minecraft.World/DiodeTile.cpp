@@ -191,7 +191,7 @@ int DiodeTile::getInputSignal(Level *level, int x, int y, int z, int data)
 	int input = level->getSignal(xx, y, zz, Direction::DIRECTION_FACING[dir]);
 
 	if (input >= Redstone::SIGNAL_MAX) return input;
-	return max(input, level->getTile(xx, y, zz) == Tile::redStoneDust_Id ? level->getData(xx, y, zz) : Redstone::SIGNAL_NONE);
+	return max(input, level->getTile(xx, y, zz) == Tile::redstone_wire_Id ? level->getData(xx, y, zz) : Redstone::SIGNAL_NONE);
 }
 
 int DiodeTile::getAlternateSignal(LevelSource *level, int x, int y, int z, int data)
@@ -217,7 +217,7 @@ int DiodeTile::getAlternateSignalAt(LevelSource *level, int x, int y, int z, int
 
 	if (isAlternateInput(tile))
 	{
-		if (tile == Tile::redStoneDust_Id)
+		if (tile == Tile::redstone_wire_Id)
 		{
 			return level->getData(x, y, z);
 		}
@@ -309,7 +309,7 @@ int DiodeTile::getOutputSignal(LevelSource *level, int x, int y, int z, int data
 
 bool DiodeTile::isDiode(int id)
 {
-	return Tile::diode_off->isSameDiode(id) || Tile::comparator_off->isSameDiode(id);
+	return Tile::unpowered_repeater->isSameDiode(id) || Tile::comparator_off->isSameDiode(id);
 }
 
 bool DiodeTile::isSameDiode(int id)

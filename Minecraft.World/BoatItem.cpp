@@ -104,7 +104,7 @@ shared_ptr<ItemInstance> BoatItem::use(shared_ptr<ItemInstance> itemInstance, Le
 		int yt = hr->y;
 		int zt = hr->z;
 
-		if (level->getTile(xt, yt, zt) == Tile::topSnow_Id) yt--;
+		if (level->getTile(xt, yt, zt) == Tile::snow_layer_Id) yt--;
 		if( level->countInstanceOf(eTYPE_BOAT, true) < Level::MAX_XBOX_BOATS )		// 4J - added limit
 		{
 			shared_ptr<Boat> boat = std::make_shared<Boat>(level, xt + 0.5f, yt + 1.0f, zt + 0.5f);

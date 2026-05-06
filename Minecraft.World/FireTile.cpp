@@ -38,27 +38,62 @@ FireTile::~FireTile()
 	delete [] burnOdds;
 }
 
+void FireTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int FireTile::defaultBlockState()
+{
+	return 0;
+}
+
+int FireTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & AGE_MASK) : 0;
+}
+
+Tile::BlockState FireTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & AGE_MASK);
+}
+
+Tile::BlockState FireTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	int age = level->getData(x, y, z) & AGE_MASK;
+	int state = age;
+
+	if (canBurn(level, x + 1, y, z)) state |= EAST_BIT;
+	if (canBurn(level, x - 1, y, z)) state |= WEST_BIT;
+	if (canBurn(level, x, y, z + 1)) state |= SOUTH_BIT;
+	if (canBurn(level, x, y, z - 1)) state |= NORTH_BIT;
+	if (canBurn(level, x, y + 1, z)) state |= UP_BIT;
+
+	return Tile::BlockState(state);
+}
+
 void FireTile::init()
 {
-	setFlammable(Tile::wood_Id, FLAME_HARD, BURN_MEDIUM);
-	setFlammable(Tile::woodSlab_Id, FLAME_HARD, BURN_MEDIUM);
-	setFlammable(Tile::woodSlabHalf_Id, FLAME_HARD, BURN_MEDIUM);
+	setFlammable(Tile::planks_Id, FLAME_HARD, BURN_MEDIUM);
+	setFlammable(Tile::double_wooden_slab_Id, FLAME_HARD, BURN_MEDIUM);
+	setFlammable(Tile::wooden_slab_Id, FLAME_HARD, BURN_MEDIUM);
 	setFlammable(Tile::fence_Id, FLAME_HARD, BURN_MEDIUM);
-	setFlammable(Tile::stairs_wood_Id, FLAME_HARD, BURN_MEDIUM);
-	setFlammable(Tile::stairs_birchwood_Id, FLAME_HARD, BURN_MEDIUM);
-	setFlammable(Tile::stairs_sprucewood_Id, FLAME_HARD, BURN_MEDIUM);
-	setFlammable(Tile::stairs_junglewood_Id, FLAME_HARD, BURN_MEDIUM);
-	setFlammable(Tile::stairs_acaciawood_Id, FLAME_HARD, BURN_MEDIUM);
-	setFlammable(Tile::stairs_darkwood_Id, FLAME_HARD, BURN_MEDIUM);
-	setFlammable(Tile::treeTrunk_Id, FLAME_HARD, BURN_HARD);
+	setFlammable(Tile::oak_stairs_Id, FLAME_HARD, BURN_MEDIUM);
+	setFlammable(Tile::birch_stairs_Id, FLAME_HARD, BURN_MEDIUM);
+	setFlammable(Tile::spruce_stairs_Id, FLAME_HARD, BURN_MEDIUM);
+	setFlammable(Tile::jungle_stairs_Id, FLAME_HARD, BURN_MEDIUM);
+	setFlammable(Tile::acacia_stairs_Id, FLAME_HARD, BURN_MEDIUM);
+	setFlammable(Tile::dark_oak_stairs_Id, FLAME_HARD, BURN_MEDIUM);
+	setFlammable(Tile::log_Id, FLAME_HARD, BURN_HARD);
 	setFlammable(Tile::leaves_Id, FLAME_EASY, BURN_EASY);
 	setFlammable(Tile::bookshelf_Id, FLAME_EASY, BURN_MEDIUM);
 	setFlammable(Tile::tnt_Id, FLAME_MEDIUM, BURN_INSTANT);
 	setFlammable(Tile::tallgrass_Id, FLAME_INSTANT, BURN_INSTANT);
 	setFlammable(Tile::wool_Id, FLAME_EASY, BURN_EASY);
 	setFlammable(Tile::vine_Id, FLAME_MEDIUM, BURN_INSTANT);
-	setFlammable(Tile::coalBlock_Id, FLAME_HARD, BURN_HARD);
-	setFlammable(Tile::hayBlock_Id, FLAME_INSTANT, BURN_MEDIUM);
+	setFlammable(Tile::coal_block_Id, FLAME_HARD, BURN_HARD);
+	setFlammable(Tile::hay_block_Id, FLAME_INSTANT, BURN_MEDIUM);
 }
 
 void FireTile::setFlammable(int id, int flame, int burn)
@@ -123,10 +158,10 @@ void FireTile::tick(Level *level, int x, int y, int z, Random *random)
 	}
 
 
-	bool infiniBurn = level->getTile(x, y - 1, z) == Tile::netherRack_Id;
+	bool infiniBurn = level->getTile(x, y - 1, z) == Tile::netherrack_Id;
 	if (level->dimension->id == 1)		// 4J - was == instanceof TheEndDimension
 	{
-		if (level->getTile(x, y - 1, z) == Tile::unbreakable_Id) infiniBurn = true;
+		if (level->getTile(x, y - 1, z) == Tile::bedrock_Id) infiniBurn = true;
 	}
 
 	if (!mayPlace(level, x, y, z))

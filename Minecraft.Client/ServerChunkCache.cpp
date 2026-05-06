@@ -325,7 +325,7 @@ void ServerChunkCache::updateOverwriteHellChunk(LevelChunk* origChunk, LevelChun
 			for(int y=0;y<256;y++)
 			{
 				int playerTile = playerChunk->getTile(x,y,z);
-				if(playerTile == Tile::unbreakable_Id)	// if the tile is still unbreakable, the player hasn't changed it, so we can replace with the source
+				if(playerTile == Tile::bedrock_Id)	// if the tile is still unbreakable, the player hasn't changed it, so we can replace with the source
 					playerChunk->setTileAndData(x, y, z, origChunk->getTile(x,y,z), origChunk->getData(x,y,z));
 			}
 		}

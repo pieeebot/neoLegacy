@@ -19,6 +19,32 @@ TallGrass::TallGrass(int id) : Bush(id, Material::replaceable_plant)
 	this->updateDefaultShape();
 }
 
+void TallGrass::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int TallGrass::defaultBlockState()
+{
+	return 0;
+}
+
+int TallGrass::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0x3) : 0;
+}
+
+Tile::BlockState TallGrass::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0x3);
+}
+
+Tile::BlockState TallGrass::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0x3);
+}
+
 // 4J Added override
 void TallGrass::updateDefaultShape()
 {
@@ -68,7 +94,7 @@ int TallGrass::getColor(LevelSource *level, int x, int y, int z, int data)
 int TallGrass::getResource(int data, Random *random, int playerBonusLevel)
 {
 	if (random->nextInt(8) == 0) {
-		return Item::seeds_wheat->id;
+		return Item::wheat_seeds->id;
 	}
 
 	return -1;

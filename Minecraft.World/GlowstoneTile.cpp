@@ -18,5 +18,5 @@ int Glowstonetile::getResourceCount(Random *random)
 
 int Glowstonetile::getResource(int data, Random *random, int playerBonusLevel)
 {
-	return Item::yellowDust->id;
+	return Item::glowstone_dust->id;
 }

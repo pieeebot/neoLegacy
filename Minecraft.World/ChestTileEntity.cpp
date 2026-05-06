@@ -142,7 +142,29 @@ void ChestTileEntity::load(CompoundTag *base)
 	{
 		CompoundTag *tag = inventoryList->get(i);
 		unsigned int slot = tag->getByte(L"Slot") & 0xff;
-		if (slot >= 0 && slot < items->length) (*items)[slot] = ItemInstance::fromTag(tag);
+		if (slot < items->length)
+		{
+			shared_ptr<ItemInstance> loadedItem = ItemInstance::fromTag(tag);
+			if (loadedItem == nullptr)
+			{
+				Tag *idTag = tag->get(L"id");
+				int idType = idTag != nullptr ? idTag->getId() : -1;
+				
+				if (idType == Tag::TAG_String)
+				{
+					app.DebugPrintf("[ChestTileEntity] Missing chest item at %d,%d,%d slot=%u idType=%d idStr=%ls count=%d damage=%d\n", x, y, z, slot, idType, tag->getString(L"id").c_str(), tag->getByte(L"Count"), tag->getShort(L"Damage"));
+				}
+				else if (idType == Tag::TAG_Int)
+				{
+					app.DebugPrintf("[ChestTileEntity] Missing chest item at %d,%d,%d slot=%u idType=%d id=%d count=%d damage=%d\n", x, y, z, slot, idType, tag->getInt(L"id"), tag->getByte(L"Count"), tag->getShort(L"Damage"));
+				}
+				else
+				{
+					app.DebugPrintf("[ChestTileEntity] Missing chest item at %d,%d,%d slot=%u idType=%d id=%d count=%d damage=%d\n", x, y, z, slot, idType, tag->getShort(L"id"), tag->getByte(L"Count"), tag->getShort(L"Damage"));
+				}
+			}
+			(*items)[slot] = loadedItem;
+		}
 	}
 	isBonusChest = base->getBoolean(L"bonus");
 }

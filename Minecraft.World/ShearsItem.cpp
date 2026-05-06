@@ -11,7 +11,7 @@ ShearsItem::ShearsItem(int itemId) : Item(itemId)
 
 bool ShearsItem::mineBlock(shared_ptr<ItemInstance> itemInstance, Level *level, int tile, int x, int y, int z, shared_ptr<LivingEntity> owner)
 {
-	if (tile == Tile::leaves_Id || tile == Tile::web_Id || tile == Tile::tallgrass_Id || tile == Tile::vine_Id || tile == Tile::tripWire_Id)
+	if (tile == Tile::leaves_Id || tile == Tile::web_Id || tile == Tile::tallgrass_Id || tile == Tile::vine_Id || tile == Tile::tripwire_Id)
 	{
 		itemInstance->hurtAndBreak(1, owner);
 		return true;
@@ -21,7 +21,7 @@ bool ShearsItem::mineBlock(shared_ptr<ItemInstance> itemInstance, Level *level, 
 
 bool ShearsItem::canDestroySpecial(Tile *tile)
 {
-	return tile->id == Tile::web_Id || tile->id == Tile::redStoneDust_Id || tile->id == Tile::tripWire_Id;
+	return tile->id == Tile::web_Id || tile->id == Tile::redstone_wire_Id || tile->id == Tile::tripwire_Id;
 }
 
 float ShearsItem::getDestroySpeed(shared_ptr<ItemInstance> itemInstance, Tile *tile)

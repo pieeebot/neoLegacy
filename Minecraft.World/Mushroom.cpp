@@ -77,7 +77,7 @@ bool Mushroom::canSurvive(Level *level, int x, int y, int z)
 
 	int below = level->getTile(x, y - 1, z);
 
-	return below == Tile::mycel_Id || (level->getDaytimeRawBrightness(x, y, z) < 13 && mayPlaceOn(below));
+	return below == Tile::mycelium_Id || (level->getDaytimeRawBrightness(x, y, z) < 13 && mayPlaceOn(below));
 }
 bool Mushroom::growTree(Level *level, int x, int y, int z, Random *random, bool naturalGrowth, int entityId)
 {

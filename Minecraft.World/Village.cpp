@@ -346,7 +346,7 @@ bool Village::isDoor(int x, int y, int z)
 {
 	int tileId = level->getTile(x, y, z);
 	if (tileId <= 0) return false;
-	return tileId == Tile::door_wood_Id;
+	return tileId == Tile::wooden_door_Id;
 }
 
 void Village::calcInfo()

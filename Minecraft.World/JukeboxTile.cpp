@@ -66,6 +66,32 @@ JukeboxTile::JukeboxTile(int id) : BaseEntityTile(id, Material::wood)
 	iconTop = nullptr;
 }
 
+void JukeboxTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int JukeboxTile::defaultBlockState()
+{
+	return 0;
+}
+
+int JukeboxTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0x1) : 0;
+}
+
+Tile::BlockState JukeboxTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0x1);
+}
+
+Tile::BlockState JukeboxTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0x1);
+}
+
 Icon *JukeboxTile::getTexture(int face, int data)
 {
 	if (face == Facing::UP)
@@ -163,5 +189,5 @@ bool JukeboxTile::hasAnalogOutputSignal()
 int JukeboxTile::getAnalogOutputSignal(Level *level, int x, int y, int z, int dir)
 {
 	shared_ptr<ItemInstance> record = dynamic_pointer_cast<JukeboxTile::Entity>( level->getTileEntity(x, y, z))->getRecord();
-	return record == nullptr ? Redstone::SIGNAL_NONE : record->id + 1 - Item::record_01_Id;
+	return record == nullptr ? Redstone::SIGNAL_NONE : record->id + 1 - Item::record_13_Id;
 }

@@ -265,19 +265,19 @@ bool ServerPlayerGameMode::destroyBlock(int x, int y, int z)
 			if (!EnchantmentHelper::hasSilkTouch(player))
 			{
 				// (SYLV)todo: shouldnt we get these values from the actual blocks?
-				if (t == Tile::coalOre_Id)
+				if (t == Tile::coal_ore_Id)
 					eventExp = Mth::nextInt(level->random, 0, 2);
-				else if (t == Tile::diamondOre_Id)
+				else if (t == Tile::diamond_ore_Id)
 					eventExp = Mth::nextInt(level->random, 3, 7);
-				else if (t == Tile::emeraldOre_Id)
+				else if (t == Tile::emerald_ore_Id)
 					eventExp = Mth::nextInt(level->random, 3, 7);
-				else if (t == Tile::lapisOre_Id)
+				else if (t == Tile::lapis_ore_Id)
 					eventExp = Mth::nextInt(level->random, 2, 5);
-				else if (t == Tile::netherQuartz_Id)
+				else if (t == Tile::quartz_ore_Id)
 					eventExp = Mth::nextInt(level->random, 2, 5);
-				else if (t == Tile::redStoneOre_Id || t == Tile::redStoneOre_lit_Id)
+				else if (t == Tile::redstone_ore_Id || t == Tile::lit_redstone_ore_Id)
 					eventExp = 1 + level->random->nextInt(5);
-				else if (t == Tile::mobSpawner_Id)
+				else if (t == Tile::mob_spawner_Id)
 					eventExp = 15 + level->random->nextInt(15) + level->random->nextInt(15);
 			}
 		}

@@ -365,7 +365,7 @@ bool Wolf::mobInteract(shared_ptr<Player> player)
 					return true;
 				}			
 			}
-			else if (item->id == Item::dye_powder_Id)
+			else if (item->id == Item::dye_Id)
 			{
 				int color = ColoredTile::getTileDataForItemAuxValue(item->getAuxValue());
 				if (color != getCollarColor())

@@ -281,7 +281,7 @@ shared_ptr<ItemInstance> FilledBucketDispenseBehavior::execute(BlockSource *sour
 	FacingEnum *facing = DispenserTile::getFacing(source->getData());
 	if (bucket->emptyBucket(source->getWorld(), sourceX + facing->getStepX(), sourceY + facing->getStepY(), sourceZ + facing->getStepZ()))
 	{
-		dispensed->id = Item::bucket_empty->id;
+		dispensed->id = Item::bucket->id;
 		dispensed->count = 1;
 
 		outcome = ACTIVATED_ITEM;
@@ -309,11 +309,11 @@ shared_ptr<ItemInstance> EmptyBucketDispenseBehavior::execute(BlockSource *sourc
 	Item *targetType;
 	if (Material::water == material && dataValue == 0)
 	{
-		targetType = Item::bucket_water;
+		targetType = Item::water_bucket;
 	}
 	else if (Material::lava == material && dataValue == 0)
 	{
-		targetType = Item::bucket_lava;
+		targetType = Item::lava_bucket;
 	}
 	else
 	{

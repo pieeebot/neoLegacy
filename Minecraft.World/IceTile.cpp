@@ -48,7 +48,7 @@ void IceTile::playerDestroy(Level *level, shared_ptr<Player> player, int x, int 
 		Material *below = level->getMaterial(x, y - 1, z);
 		if (below->blocksMotion() || below->isLiquid())
 		{
-			level->setTileAndUpdate(x, y, z, Tile::water_Id);
+			level->setTileAndUpdate(x, y, z, Tile::flowing_water_Id);
 		}
 	}
 }
@@ -68,7 +68,7 @@ void IceTile::tick(Level *level, int x, int y, int z, Random *random)
 			return;
 		}
 		this->spawnResources(level, x, y, z, level->getData(x, y, z), 0);
-		level->setTileAndUpdate(x, y, z, Tile::calmWater_Id);
+		level->setTileAndUpdate(x, y, z, Tile::water_Id);
 	}
 }
 

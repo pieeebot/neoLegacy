@@ -28,7 +28,7 @@ MesaBiome::MesaBiome(int id, bool mesaPlateau, bool hasTrees) : Biome(id)
 
     this->topMaterial     = static_cast<byte>(Tile::sand_Id);
     this->topMaterialData = static_cast<byte>(SandTile::RED_SAND);
-    this->material        = static_cast<byte>(Tile::clayHardened_colored_Id);
+    this->material        = static_cast<byte>(Tile::stained_hardened_clay_Id);
     this->materialData    = static_cast<byte>(orangeColoredClayState);
 
     this->lastSeed             = INVALID_SEED;
@@ -68,7 +68,7 @@ void MesaBiome::generateBands(int64_t seed)
 
     for (int i = 0; i < BAND_COUNT; ++i)
     {
-        clayBands[i].blockId   = Tile::clayHardened_Id;
+        clayBands[i].blockId   = Tile::hardened_clay_Id;
         clayBands[i].blockData = defaultHardenedClayState;
     }
 
@@ -85,7 +85,7 @@ void MesaBiome::generateBands(int64_t seed)
             i += r.nextInt(5) + 1;
             if (i < BAND_COUNT)
             {
-                clayBands[i].blockId   = Tile::clayHardened_colored_Id;
+                clayBands[i].blockId   = Tile::stained_hardened_clay_Id;
                 clayBands[i].blockData = orangeColoredClayState;
             }
         }
@@ -99,7 +99,7 @@ void MesaBiome::generateBands(int64_t seed)
             int start = r.nextInt(BAND_COUNT);
             for (int k = 0; start + k < BAND_COUNT && k < len; ++k)
             {
-                clayBands[start + k].blockId   = Tile::clayHardened_colored_Id;
+                clayBands[start + k].blockId   = Tile::stained_hardened_clay_Id;
                 clayBands[start + k].blockData = yellowColoredClayState;
             }
         }
@@ -113,7 +113,7 @@ void MesaBiome::generateBands(int64_t seed)
             int start = r.nextInt(BAND_COUNT);
             for (int k = 0; start + k < BAND_COUNT && k < len; ++k)
             {
-                clayBands[start + k].blockId   = Tile::clayHardened_colored_Id;
+                clayBands[start + k].blockId   = Tile::stained_hardened_clay_Id;
                 clayBands[start + k].blockData = brownColoredClayState;
             }
         }
@@ -127,7 +127,7 @@ void MesaBiome::generateBands(int64_t seed)
             int start = r.nextInt(BAND_COUNT);
             for (int k = 0; start + k < BAND_COUNT && k < len; ++k)
             {
-                clayBands[start + k].blockId   = Tile::clayHardened_colored_Id;
+                clayBands[start + k].blockId   = Tile::stained_hardened_clay_Id;
                 clayBands[start + k].blockData = redColoredClayState;
             }
         }
@@ -141,19 +141,19 @@ void MesaBiome::generateBands(int64_t seed)
             cursor += r.nextInt(16) + 4;
             if (cursor >= BAND_COUNT) break;
 
-            clayBands[cursor].blockId   = Tile::clayHardened_colored_Id;
+            clayBands[cursor].blockId   = Tile::stained_hardened_clay_Id;
             clayBands[cursor].blockData = whiteColoredClayState;
 
             
             if (cursor > 1 && r.nextBoolean())
             {
-                clayBands[cursor - 1].blockId   = Tile::clayHardened_colored_Id;
+                clayBands[cursor - 1].blockId   = Tile::stained_hardened_clay_Id;
                 clayBands[cursor - 1].blockData = silverColoredClayState;
             }
             
             if (cursor < 63 && r.nextBoolean())
             {
-                clayBands[cursor + 1].blockId   = Tile::clayHardened_colored_Id;
+                clayBands[cursor + 1].blockId   = Tile::stained_hardened_clay_Id;
                 clayBands[cursor + 1].blockData = silverColoredClayState;
             }
         }
@@ -164,7 +164,7 @@ void MesaBiome::generateBands(int64_t seed)
 BandEntry MesaBiome::getBand(int x, int y, int z)
 {
     if (!clayBandsOffsetNoise || !clayBands)
-        return { Tile::clayHardened_Id, 0 };
+        return { Tile::hardened_clay_Id, 0 };
 
     
     double noiseVal = clayBandsOffsetNoise->getValue(
@@ -277,7 +277,7 @@ void MesaBiome::buildSurfaceAtDefault(Level* level, Random* random,
         
         if (y <= random->nextInt(5))
         {
-            chunkBlocks[idx] = static_cast<byte>(Tile::unbreakable_Id);
+            chunkBlocks[idx] = static_cast<byte>(Tile::bedrock_Id);
             continue;
         }
 
@@ -309,7 +309,7 @@ void MesaBiome::buildSurfaceAtDefault(Level* level, Random* random,
                 }
                 else
                 {
-                    chunkBlocks[idx] = static_cast<byte>(Tile::clayHardened_colored_Id);
+                    chunkBlocks[idx] = static_cast<byte>(Tile::stained_hardened_clay_Id);
                     chunkData[idx]   = static_cast<byte>(BAND_ORANGE);
                 }
             }
@@ -339,26 +339,26 @@ void MesaBiome::buildSurfaceAtDefault(Level* level, Random* random,
                 {
                     if (cosFlag)
                     {
-                        chunkBlocks[idx] = static_cast<byte>(Tile::clayHardened_Id);
+                        chunkBlocks[idx] = static_cast<byte>(Tile::hardened_clay_Id);
                     }
                     else
                     {
                         BandEntry band = getBand(x, y, z);
                         chunkBlocks[idx] = static_cast<byte>(band.blockId);
-                        if (band.blockId == Tile::clayHardened_colored_Id)
+                        if (band.blockId == Tile::stained_hardened_clay_Id)
                             chunkData[idx] = static_cast<byte>(band.blockData);
                     }
                 }
                 else
                 {
-                    chunkBlocks[idx] = static_cast<byte>(Tile::clayHardened_colored_Id);
+                    chunkBlocks[idx] = static_cast<byte>(Tile::stained_hardened_clay_Id);
                     chunkData[idx]   = static_cast<byte>(BAND_ORANGE);
                 }
             }
 
             
             if (y < seaLevel && chunkBlocks[idx] == 0)
-                chunkBlocks[idx] = static_cast<byte>(Tile::calmWater_Id);
+                chunkBlocks[idx] = static_cast<byte>(Tile::water_Id);
         }
         else if (run > 0)
         {
@@ -366,14 +366,14 @@ void MesaBiome::buildSurfaceAtDefault(Level* level, Random* random,
 
             if (underRedSand)
             {
-                chunkBlocks[idx] = static_cast<byte>(Tile::clayHardened_colored_Id);
+                chunkBlocks[idx] = static_cast<byte>(Tile::stained_hardened_clay_Id);
                 chunkData[idx]   = static_cast<byte>(BAND_ORANGE);
             }
             else
             {
                 BandEntry band = getBand(x, y, z);
                 chunkBlocks[idx] = static_cast<byte>(band.blockId);
-                if (band.blockId == Tile::clayHardened_colored_Id)
+                if (band.blockId == Tile::stained_hardened_clay_Id)
                     chunkData[idx] = static_cast<byte>(band.blockData);
             }
         }

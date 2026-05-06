@@ -949,9 +949,12 @@ bool LevelChunk::setTileAndData(int x, int y, int z, int _tile, int _data)
 	}
 	int xOffs = this->x * 16 + x;
 	int zOffs = this->z * 16 + z;
+
+	Tile *oldTile = Tile::tiles[old];
+	if (oldTile == nullptr & old != 0) return false; // tu31 tutorial world fix
 	if (old != 0 && !level->isClientSide)
 	{
-		Tile::tiles[old]->onRemoving(level, xOffs, y, zOffs, oldData);
+		oldTile->onRemoving(level, xOffs, y, zOffs, oldData);
 	}
 	PIXBeginNamedEvent(0,"Chunk setting tile");
 	blocks->set(x,y % Level::COMPRESSED_CHUNK_SECTION_HEIGHT,z,tile);
@@ -1329,7 +1332,9 @@ shared_ptr<TileEntity> LevelChunk::getTileEntity(int x, int y, int z)
 		if(level->m_bDisableAddNewTileEntities) return nullptr;
 
 		int t = getTile(x, y, z);
-		if (t <= 0 || !Tile::tiles[t]->isEntityTile()) return nullptr;
+		Tile *tile = Tile::tiles[t];
+		if (tile == nullptr) return nullptr; // tu31 tutorial world fix
+		if (t <= 0 || !tile->isEntityTile()) return nullptr;
 
 		// 4J-PB changed from this in 1.7.3
 		//EntityTile *et = (EntityTile *) Tile::tiles[t];
@@ -1337,7 +1342,7 @@ shared_ptr<TileEntity> LevelChunk::getTileEntity(int x, int y, int z)
 
 		//if (tileEntity == nullptr)
 		//{
-		tileEntity = dynamic_cast<EntityTile *>(Tile::tiles[t])->newTileEntity(level);
+		tileEntity = dynamic_cast<EntityTile *>(tile)->newTileEntity(level);
 		level->setTileEntity(this->x * 16 + x, y, this->z * 16 + z, tileEntity);
 		//}
 
@@ -2096,6 +2101,9 @@ void LevelChunk::setBiomes(byteArray biomes)
 // 4J - optimisation brought forward from 1.8.2
 int LevelChunk::getTopRainBlock(int x, int z)
 {
+	// check if sent data is not malformed causing a crash
+	if (x < 0 || x >= 16 || z < 0 || z >= 16) return 0;
+	
 	int slot = x | (z << 4);
 	int h = rainHeights[slot];
 
@@ -2106,7 +2114,8 @@ int LevelChunk::getTopRainBlock(int x, int z)
 		while (y > 0 && h == -1)
 		{
 			int t = getTile(x, y, z);
-			Material *m = t == 0 ? Material::air : Tile::tiles[t]->material;
+			Tile *tile = (t == 0) ? nullptr : Tile::tiles[t];
+			Material *m = (tile == nullptr) ? Material::air : tile->material;
 			if (!m->blocksMotion() && !m->isLiquid())
 			{
 				y--;

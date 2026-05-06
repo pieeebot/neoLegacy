@@ -40,11 +40,11 @@ bool SignItem::useOn(shared_ptr<ItemInstance> instance, shared_ptr<Player> playe
 		if (face == 1) 
 		{
 			int rot = Mth::floor(((player->yRot + 180) * 16) / 360 + 0.5) & 15;
-			level->setTileAndData(x, y, z, Tile::sign_Id, rot, Tile::UPDATE_ALL);
+			level->setTileAndData(x, y, z, Tile::standing_sign_Id, rot, Tile::UPDATE_ALL);
 		} 
 		else
 		{
-			level->setTileAndData(x, y, z, Tile::wallSign_Id, face, Tile::UPDATE_ALL);
+			level->setTileAndData(x, y, z, Tile::wall_standing_sign_Id, face, Tile::UPDATE_ALL);
 		}
 
 		instance->count--;
@@ -53,9 +53,9 @@ bool SignItem::useOn(shared_ptr<ItemInstance> instance, shared_ptr<Player> playe
 
 		// 4J-JEV: Hook for durango 'BlockPlaced' event.
 		player->awardStat(
-			GenericStats::blocksPlaced((face==1) ? Tile::sign_Id : Tile::wallSign_Id),
+			GenericStats::blocksPlaced((face==1) ? Tile::standing_sign_Id : Tile::wall_standing_sign_Id),
 			GenericStats::param_blocksPlaced( 
-				(face==1) ? Tile::sign_Id : Tile::wallSign_Id,
+				(face==1) ? Tile::standing_sign_Id : Tile::wall_standing_sign_Id,
 				instance->getAuxValue(),
 				1)
 			);

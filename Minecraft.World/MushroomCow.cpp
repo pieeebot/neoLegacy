@@ -28,11 +28,11 @@ bool MushroomCow::mobInteract(shared_ptr<Player> player)
 	{
 		if (item->count == 1) 
 		{
-			player->inventory->setItem(player->inventory->selected, std::make_shared<ItemInstance>(Item::mushroomStew));
+			player->inventory->setItem(player->inventory->selected, std::make_shared<ItemInstance>(Item::mushroom_stew));
 			return true;
 		}
 
-		if (player->inventory->add(std::make_shared<ItemInstance>(Item::mushroomStew)) && !player->abilities.instabuild) 
+		if (player->inventory->add(std::make_shared<ItemInstance>(Item::mushroom_stew)) && !player->abilities.instabuild) 
 		{
 			player->inventory->removeItem(player->inventory->selected, 1);
 			return true;
@@ -68,7 +68,7 @@ bool MushroomCow::canSpawn()
 	int xt = Mth::floor(x);
 	int yt = Mth::floor(bb->y0);
 	int zt = Mth::floor(z);
-	return ( level->getTile(xt, yt - 1, zt) == Tile::grass_Id || level->getTile(xt, yt - 1, zt) == Tile::mycel_Id ) && level->getDaytimeRawBrightness(xt, yt, zt) > 8 && PathfinderMob::canSpawn();
+	return ( level->getTile(xt, yt - 1, zt) == Tile::grass_Id || level->getTile(xt, yt - 1, zt) == Tile::mycelium_Id ) && level->getDaytimeRawBrightness(xt, yt, zt) > 8 && PathfinderMob::canSpawn();
 }
 
 shared_ptr<AgableMob> MushroomCow::getBreedOffspring(shared_ptr<AgableMob> target)

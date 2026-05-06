@@ -68,6 +68,6 @@ void DoorInteractGoal::tick()
 DoorTile *DoorInteractGoal::getDoorTile(int x, int y, int z)
 {
 	int tileId = mob->level->getTile(x, y, z);
-	if (tileId != Tile::door_wood_Id) return nullptr;
+	if (tileId != Tile::wooden_door_Id) return nullptr;
 	return static_cast<DoorTile *>(Tile::tiles[tileId]);
 }

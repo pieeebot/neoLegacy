@@ -11,7 +11,7 @@ MobSpawnerTileEntity::TileEntityMobSpawner::TileEntityMobSpawner(MobSpawnerTileE
 
 void MobSpawnerTileEntity::TileEntityMobSpawner::broadcastEvent(int id)
 {
-	m_parent->level->tileEvent(m_parent->x, m_parent->y, m_parent->z, Tile::mobSpawner_Id, id, 0);
+	m_parent->level->tileEvent(m_parent->x, m_parent->y, m_parent->z, Tile::mob_spawner_Id, id, 0);
 }
 
 Level *MobSpawnerTileEntity::TileEntityMobSpawner::getLevel()

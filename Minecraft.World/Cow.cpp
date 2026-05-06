@@ -94,11 +94,11 @@ void Cow::dropDeathLoot(bool wasKilledByPlayer, int playerBonusLevel)
 	{
 		if (isOnFire())
 		{
-			spawnAtLocation(Item::beef_cooked_Id, 1);
+			spawnAtLocation(Item::cooked_beef_Id, 1);
 		}
 		else
 		{
-			spawnAtLocation(Item::beef_raw_Id, 1);
+			spawnAtLocation(Item::beef_Id, 1);
 		}
 	}
 }
@@ -106,17 +106,17 @@ void Cow::dropDeathLoot(bool wasKilledByPlayer, int playerBonusLevel)
 bool Cow::mobInteract(shared_ptr<Player> player) 
 {
 	shared_ptr<ItemInstance> item = player->inventory->getSelected();
-	if (item != nullptr && item->id == Item::bucket_empty->id && !player->abilities.instabuild) 
+	if (item != nullptr && item->id == Item::bucket->id && !player->abilities.instabuild) 
 	{
 		player->awardStat(GenericStats::cowsMilked(),GenericStats::param_cowsMilked());
 
 		if (item->count-- == 0) 
 		{
-			player->inventory->setItem(player->inventory->selected, std::make_shared<ItemInstance>(Item::bucket_milk));
+			player->inventory->setItem(player->inventory->selected, std::make_shared<ItemInstance>(Item::milk_bucket));
 		} 
-		else if (!player->inventory->add(std::make_shared<ItemInstance>(Item::bucket_milk))) 
+		else if (!player->inventory->add(std::make_shared<ItemInstance>(Item::milk_bucket))) 
 		{
-			player->drop(std::make_shared<ItemInstance>(Item::bucket_milk));
+			player->drop(std::make_shared<ItemInstance>(Item::milk_bucket));
 		}
 		
 		return true;

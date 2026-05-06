@@ -21,7 +21,7 @@ public:
 	{
 		if (data == HOST_COBBLE)
 		{
-			return TileRef_SPU(stoneBrick_Id)->getTexture(face);
+			return TileRef_SPU(stonebrick_Id)->getTexture(face);
 		}
 		if (data == HOST_STONEBRICK)
 		{

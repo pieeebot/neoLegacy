@@ -67,10 +67,10 @@ void ThinFenceTile_SPU::updateShape(ChunkRebuildData *level, int x, int y, int z
 
 Icon_SPU *ThinFenceTile_SPU::getEdgeTexture()
 {
-	if(id == Tile_SPU::ironFence_Id)
-		return &ms_pTileData->ironFence_EdgeTexture;
-	if(id == Tile_SPU::thinGlass_Id)
-		return &ms_pTileData->thinGlass_EdgeTexture;
+	if(id == Tile_SPU::iron_bars_Id)
+		return &ms_pTileData->iron_bars_EdgeTexture;
+	if(id == Tile_SPU::glass_pane_Id)
+		return &ms_pTileData->glass_pane_EdgeTexture;
 #ifndef SN_TARGET_PS3_SPU
 	assert(0);
 #endif

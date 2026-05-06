@@ -11,7 +11,7 @@ SavannaTreeFeature::SavannaTreeFeature(bool doUpdate) : AbstractTreeFeature(doUp
 
 void SavannaTreeFeature::placeLog(Level* level, int x, int y, int z)
 {
-    placeBlock(level, x, y, z, Tile::tree2Trunk_Id, 0);
+    placeBlock(level, x, y, z, Tile::log2_Id, 0);
 }
 
 void SavannaTreeFeature::placeLeafAt(Level* level, int x, int y, int z)

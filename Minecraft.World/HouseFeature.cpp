@@ -41,7 +41,7 @@ bool HouseFeature::place(Level *level, Random *random, int x, int y, int z)
 			}
 			else
 			{
-				if (t == Tile::cobblestone_Id || t == Tile::mossyCobblestone_Id) return false;
+				if (t == Tile::cobblestone_Id || t == Tile::mossy_cobblestone_Id) return false;
 			}
 
 		}
@@ -101,14 +101,14 @@ bool HouseFeature::place(Level *level, Random *random, int x, int y, int z)
 				int material = -1;
 				if (yy == y0 + h - 1)
 				{
-					material = Tile::wood_Id;
+					material = Tile::planks_Id;
 				}
 				else if (xx >= xx0 && xx <= xx1 && zz >= zz0 && zz <= zz1)
 				{
 					material = 0;
 					if (yy == y0 - 1 || yy == y0 + h - 1 || xx == xx0 || zz == zz0 || xx == xx1 || zz == zz1)
 					{
-						if (yy <= y0 + random->nextInt(3)) material = Tile::mossyCobblestone_Id;
+						if (yy <= y0 + random->nextInt(3)) material = Tile::mossy_cobblestone_Id;
 						else material = Tile::cobblestone_Id;
 					}
 				}
@@ -137,7 +137,7 @@ bool HouseFeature::place(Level *level, Random *random, int x, int y, int z)
 		if (doorSide == 1) dir = 2;
 		if (doorSide == 3) dir = 3;
 
-		DoorItem::place(level, xx, y0, zz, dir, Tile::door_wood);
+		DoorItem::place(level, xx, y0, zz, dir, Tile::wooden_door);
 	}
 
 	for (int i = 0; i < (w * 2 + d * 2) * 3; i++)

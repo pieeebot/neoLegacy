@@ -769,29 +769,29 @@ Item *Mob::getEquipmentForSlot(int slot, int type)
 	switch (slot)
 	{
 	case SLOT_HELM:
-		if (type == 0) return Item::helmet_leather;
-		if (type == 1) return Item::helmet_gold;
-		if (type == 2) return Item::helmet_chain;
-		if (type == 3) return Item::helmet_iron;
-		if (type == 4) return Item::helmet_diamond;
+		if (type == 0) return Item::leather_helmet;
+		if (type == 1) return Item::golden_helmet;
+		if (type == 2) return Item::chainmail_helmet;
+		if (type == 3) return Item::iron_helmet;
+		if (type == 4) return Item::diamond_helmet;
 	case SLOT_CHEST:
-		if (type == 0) return Item::chestplate_leather;
-		if (type == 1) return Item::chestplate_gold;
-		if (type == 2) return Item::chestplate_chain;
-		if (type == 3) return Item::chestplate_iron;
-		if (type == 4) return Item::chestplate_diamond;
+		if (type == 0) return Item::leather_chestplate;
+		if (type == 1) return Item::golden_chestplate;
+		if (type == 2) return Item::chainmail_chestplate;
+		if (type == 3) return Item::iron_chestplate;
+		if (type == 4) return Item::diamond_chestplate;
 	case SLOT_LEGGINGS:
-		if (type == 0) return Item::leggings_leather;
-		if (type == 1) return Item::leggings_gold;
-		if (type == 2) return Item::leggings_chain;
-		if (type == 3) return Item::leggings_iron;
-		if (type == 4) return Item::leggings_diamond;
+		if (type == 0) return Item::leather_leggings;
+		if (type == 1) return Item::golden_leggings;
+		if (type == 2) return Item::chainmail_leggings;
+		if (type == 3) return Item::iron_leggings;
+		if (type == 4) return Item::diamond_leggings;
 	case SLOT_BOOTS:
-		if (type == 0) return Item::boots_leather;
-		if (type == 1) return Item::boots_gold;
-		if (type == 2) return Item::boots_chain;
-		if (type == 3) return Item::boots_iron;
-		if (type == 4) return Item::boots_diamond;
+		if (type == 0) return Item::leather_boots;
+		if (type == 1) return Item::golden_boots;
+		if (type == 2) return Item::chainmail_boots;
+		if (type == 3) return Item::iron_boots;
+		if (type == 4) return Item::diamond_boots;
 	}
 
 	return nullptr;

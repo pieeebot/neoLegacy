@@ -15,7 +15,7 @@ EntityTileRenderer::EntityTileRenderer()
 
 void EntityTileRenderer::render(Tile *tile, int data, float brightness, float alpha, bool setColor, bool useCompiled)
 {
-	if (tile->id == Tile::enderChest_Id)
+	if (tile->id == Tile::ender_chest_Id)
 	{
 		TileEntityRenderDispatcher::instance->render(enderChest, 0, 0, 0, 0, setColor, alpha, useCompiled);
 	}

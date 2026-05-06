@@ -78,7 +78,7 @@ do_cmake_configure() {
     local winsdk="$XWIN_CACHE/splat"
     local toolchain
     toolchain="$(write_toolchain)"
-    local c_flags="/MT -Wno-non-pod-varargs -fms-compatibility -fms-extensions --target=x86_64-pc-windows-msvc \
+    local c_flags="/MT -w -Wno-non-pod-varargs -fms-compatibility -fms-extensions --target=x86_64-pc-windows-msvc \
 -imsvc $winsdk/crt/include \
 -imsvc $winsdk/sdk/include/ucrt \
 -imsvc $winsdk/sdk/include/um \

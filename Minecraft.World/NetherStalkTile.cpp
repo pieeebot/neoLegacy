@@ -15,6 +15,32 @@ NetherStalkTile::NetherStalkTile(int id) : Bush(id)
 	icons = NULL;
 }
 
+void NetherStalkTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int NetherStalkTile::defaultBlockState()
+{
+	return 0;
+}
+
+int NetherStalkTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0x3) : 0;
+}
+
+Tile::BlockState NetherStalkTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0x3);
+}
+
+Tile::BlockState NetherStalkTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0x3);
+}
+
 // 4J Added override
 void NetherStalkTile::updateDefaultShape()
 {

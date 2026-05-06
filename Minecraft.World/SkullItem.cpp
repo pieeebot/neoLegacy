@@ -68,11 +68,11 @@ bool SkullItem::useOn(shared_ptr<ItemInstance> instance, shared_ptr<Player> play
 bool SkullItem::mayPlace(Level *level, int x, int y, int z, int face, shared_ptr<Player> player, shared_ptr<ItemInstance> item)
 {
 	int currentTile = level->getTile(x, y, z);
-	if (currentTile == Tile::topSnow_Id)
+	if (currentTile == Tile::snow_layer_Id)
 	{
 		face = Facing::UP;
 	}
-	else if (currentTile != Tile::vine_Id && currentTile != Tile::tallgrass_Id && currentTile != Tile::deadBush_Id)
+	else if (currentTile != Tile::vine_Id && currentTile != Tile::tallgrass_Id && currentTile != Tile::deadbush_Id)
 	{
 		if (face == 0) y--;
 		if (face == 1) y++;

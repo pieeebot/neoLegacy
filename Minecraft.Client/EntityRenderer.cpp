@@ -213,9 +213,11 @@ void EntityRenderer::renderShadow(shared_ptr<Entity> e, double x, double y, doub
 			for (int zt = z0; zt <= z1; zt++)
 			{				
 				int t = level->getTile(xt, yt - 1, zt);
+				Tile *tile = Tile::tiles[t];
+				if (tile == nullptr) continue; // tu31 tutorial world fix
 				if (t > 0 && level->getRawBrightness(xt, yt, zt) > 3)
 				{
-					renderTileShadow(Tile::tiles[t], x, y + e->getShadowHeightOffs() + fYLocalPlayerShadowOffset, z, xt, yt , zt, pow, r, xo, yo + e->getShadowHeightOffs() + fYLocalPlayerShadowOffset, zo);
+					renderTileShadow(tile, x, y + e->getShadowHeightOffs() + fYLocalPlayerShadowOffset, z, xt, yt , zt, pow, r, xo, yo + e->getShadowHeightOffs() + fYLocalPlayerShadowOffset, zo);
 				}			
 			}
 	tt->end();

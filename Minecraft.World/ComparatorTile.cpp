@@ -12,6 +12,33 @@ ComparatorTile::ComparatorTile(int id, bool on) : DiodeTile(id, on)
 	_isEntityTile = true;
 }
 
+void ComparatorTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int ComparatorTile::defaultBlockState()
+{
+	return 0;
+}
+
+int ComparatorTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	if (!state) return 0;
+	return state->value & (DirectionalTile::DIRECTION_MASK | BIT_OUTPUT_SUBTRACT | BIT_IS_LIT);
+}
+
+Tile::BlockState ComparatorTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & (DirectionalTile::DIRECTION_MASK | BIT_OUTPUT_SUBTRACT | BIT_IS_LIT));
+}
+
+Tile::BlockState ComparatorTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & (DirectionalTile::DIRECTION_MASK | BIT_OUTPUT_SUBTRACT | BIT_IS_LIT));
+}
+
 int ComparatorTile::getResource(int data, Random *random, int playerBonusLevel)
 {
 	return Item::comparator_Id;

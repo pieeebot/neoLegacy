@@ -37,19 +37,19 @@ public:
 			return &ms_pTileData->stoneSlab_iconSide;
 			break;	
 		case SAND_SLAB:
-			return TileRef_SPU(sandStone_Id)->getTexture(face); //Tile::sandStone->getTexture(face);
+			return TileRef_SPU(sandstone_Id)->getTexture(face); //Tile::sandStone->getTexture(face);
 		case WOOD_SLAB:
-			return TileRef_SPU(wood_Id)->getTexture(face); //Tile::wood->getTexture(face);
+			return TileRef_SPU(planks_Id)->getTexture(face); //Tile::wood->getTexture(face);
 		case COBBLESTONE_SLAB:
-			return TileRef_SPU(stoneBrick_Id)->getTexture(face); //Tile::stoneBrick->getTexture(face);
+			return TileRef_SPU(stonebrick_Id)->getTexture(face); //Tile::stoneBrick->getTexture(face);
 		case BRICK_SLAB:
-			return TileRef_SPU(redBrick_Id)->getTexture(face); //Tile::redBrick->getTexture(face);
+			return TileRef_SPU(brick_block_Id)->getTexture(face); //Tile::redBrick->getTexture(face);
  		case SMOOTHBRICK_SLAB:
  			return TileRef_SPU(stoneBrickSmooth_Id)->getTexture(face); //Tile::stoneBrickSmooth->getTexture(face, SmoothStoneBrickTile::TYPE_DEFAULT);
  		case NETHERBRICK_SLAB:
- 			return TileRef_SPU(netherBrick_Id)->getTexture(Facing::UP); //Tile::netherBrick->getTexture(Facing::UP);
+ 			return TileRef_SPU(nether_brick_Id)->getTexture(Facing::UP); //Tile::netherBrick->getTexture(Facing::UP);
 		case QUARTZ_SLAB:
-			return TileRef_SPU(quartzBlock_Id)->getTexture(face); //Tile::quartzBlock->getTexture(face);
+			return TileRef_SPU(quartz_block_Id)->getTexture(face); //Tile::quartzBlock->getTexture(face);
 
 		}
 

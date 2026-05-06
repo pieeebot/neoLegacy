@@ -11,17 +11,17 @@ HellSpringFeature::HellSpringFeature(int tile, bool insideRock)
 
 bool HellSpringFeature::place(Level *level, Random *random, int x, int y, int z)
 {
-	if (level->getTile(x, y + 1, z) != Tile::netherRack_Id) return false;
-	if (level->getTile(x, y - 1, z) != Tile::netherRack_Id) return false;
+	if (level->getTile(x, y + 1, z) != Tile::netherrack_Id) return false;
+	if (level->getTile(x, y - 1, z) != Tile::netherrack_Id) return false;
 
-	if (level->getTile(x, y, z) != 0 && level->getTile(x, y, z) != Tile::netherRack_Id) return false;
+	if (level->getTile(x, y, z) != 0 && level->getTile(x, y, z) != Tile::netherrack_Id) return false;
 
 	int rockCount = 0;
-	if (level->getTile(x - 1, y, z) == Tile::netherRack_Id) rockCount++;
-	if (level->getTile(x + 1, y, z) == Tile::netherRack_Id) rockCount++;
-	if (level->getTile(x, y, z - 1) == Tile::netherRack_Id) rockCount++;
-	if (level->getTile(x, y, z + 1) == Tile::netherRack_Id) rockCount++;
-	if (level->getTile(x, y - 1, z) == Tile::netherRack_Id) rockCount++;
+	if (level->getTile(x - 1, y, z) == Tile::netherrack_Id) rockCount++;
+	if (level->getTile(x + 1, y, z) == Tile::netherrack_Id) rockCount++;
+	if (level->getTile(x, y, z - 1) == Tile::netherrack_Id) rockCount++;
+	if (level->getTile(x, y, z + 1) == Tile::netherrack_Id) rockCount++;
+	if (level->getTile(x, y - 1, z) == Tile::netherrack_Id) rockCount++;
 
 	int holeCount = 0;
 	if (level->isEmptyTile(x - 1, y, z)) holeCount++;

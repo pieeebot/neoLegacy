@@ -55,7 +55,7 @@ bool DsItemEvent::onLeaderboard(ELeaderboardId leaderboard, eAcquisitionMethod m
 		switch (param->itemId)
 		{
 		case Tile::dirt_Id:	
-		case Tile::stoneBrick_Id:
+		case Tile::stonebrick_Id:
 		case Tile::sand_Id:	
 		case Tile::stone_Id:
 		case Tile::gravel_Id:
@@ -92,13 +92,13 @@ int DsItemEvent::mergeIds(int itemId)
 	case Tile::farmland_Id:
 		return Tile::dirt_Id;
 
-	case Tile::redstoneLight_Id:
-	case Tile::redstoneLight_lit_Id:
-		return Tile::redstoneLight_Id;
+	case Tile::redstone_lamp_Id:
+	case Tile::lit_redstone_lamp_Id:
+		return Tile::redstone_lamp_Id;
 
-	case Tile::redStoneOre_Id:
-	case Tile::redStoneOre_lit_Id:
-		return Tile::redStoneOre_Id;
+	case Tile::redstone_ore_Id:
+	case Tile::lit_redstone_ore_Id:
+		return Tile::redstone_ore_Id;
 	}
 }
 
@@ -769,7 +769,7 @@ Stat* DurangoStats::get_pigOneM()
 
 Stat *DurangoStats::get_cowsMilked()
 {
-	return get_itemsCrafted(Item::bucket_milk_Id);
+	return get_itemsCrafted(Item::milk_bucket_Id);
 }
 
 Stat* DurangoStats::get_killMob()
@@ -828,14 +828,14 @@ Stat* DurangoStats::get_itemsCrafted(int itemId)
 	{
 	// 4J-JEV:	These items can be crafted trivially to and from their block equivalents, 
 	//	'Acquire Hardware' also relies on 'Count_Crafted(IronIngot) == Count_Forged(IronIngot)" on the Stats server.
-	case Item::ironIngot_Id:
-	case Item::goldIngot_Id:
+	case Item::iron_ingot_Id:
+	case Item::gold_ingot_Id:
 	case Item::diamond_Id:
-	case Item::redStone_Id:
+	case Item::redstone_Id:
 	case Item::emerald_Id:
 		return nullptr;
 
-	case Item::dye_powder_Id:
+	case Item::dye_Id:
 	default:
 		return (Stat*) itemsAcquired;
 	}
@@ -930,7 +930,7 @@ byteArray DurangoStats::getParam_pigOneM(int distance)
 
 byteArray DurangoStats::getParam_cowsMilked()
 {
-	return DsItemEvent::createParamBlob(DsItemEvent::eAcquisitionMethod_Crafted, Item::bucket_milk_Id, 0, 1);
+	return DsItemEvent::createParamBlob(DsItemEvent::eAcquisitionMethod_Crafted, Item::milk_bucket_Id, 0, 1);
 }
 
 byteArray DurangoStats::getParam_blocksPlaced(int blockId, int data, int count)

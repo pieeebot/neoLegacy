@@ -164,9 +164,9 @@ bool MegaPineTreeFeature::isReplaceable(int tileId)
 		|| tileId == Tile::leaves2_Id
 		|| tileId == Tile::grass_Id
 		|| tileId == Tile::dirt_Id
-		|| tileId == Tile::treeTrunk_Id
+		|| tileId == Tile::log_Id
 		|| tileId == Tile::sapling_Id
-		|| tileId == Tile::deadBush_Id
+		|| tileId == Tile::deadbush_Id
 		|| tileId == Tile::tallgrass_Id
 		|| tileId == Tile::snow_Id;
 }
@@ -191,21 +191,21 @@ bool MegaPineTreeFeature::place(Level *level, Random *random, int x, int y, int 
 	{
 		if (isAirLeaves(level, x, y + j, z))
 		{
-			placeBlock(level, x, y + j, z, Tile::treeTrunk_Id, TreeTile::SPRUCE_TRUNK);
+			placeBlock(level, x, y + j, z, Tile::log_Id, TreeTile::SPRUCE_TRUNK);
 		}
 		if (j < height - 1) // 3 extra columns stop 1 short of the top
 		{
 			if (isAirLeaves(level, x + 1, y + j, z))
 			{
-				placeBlock(level, x + 1, y + j, z, Tile::treeTrunk_Id, TreeTile::SPRUCE_TRUNK);
+				placeBlock(level, x + 1, y + j, z, Tile::log_Id, TreeTile::SPRUCE_TRUNK);
 			}
 			if (isAirLeaves(level, x + 1, y + j, z + 1))
 			{
-				placeBlock(level, x + 1, y + j, z + 1, Tile::treeTrunk_Id, TreeTile::SPRUCE_TRUNK);
+				placeBlock(level, x + 1, y + j, z + 1, Tile::log_Id, TreeTile::SPRUCE_TRUNK);
 			}
 			if (isAirLeaves(level, x, y + j, z + 1))
 			{
-				placeBlock(level, x, y + j, z + 1, Tile::treeTrunk_Id, TreeTile::SPRUCE_TRUNK);
+				placeBlock(level, x, y + j, z + 1, Tile::log_Id, TreeTile::SPRUCE_TRUNK);
 			}
 		}
 	}

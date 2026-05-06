@@ -110,7 +110,7 @@ void LargeHellCaveFeature::addTunnel(int64_t seed, int xOffs, int zOffs, byteArr
 				{
 					int p = (xx * 16 + zz) * Level::genDepth + yy;
 					if (yy < 0 || yy >= Level::genDepth) continue;
-					if (blocks[p] == Tile::lava_Id || blocks[p] == Tile::calmLava_Id)
+					if (blocks[p] == Tile::flowing_lava_Id || blocks[p] == Tile::lava_Id)
 					{
 						detectedWater = true;
 					}
@@ -136,7 +136,7 @@ void LargeHellCaveFeature::addTunnel(int64_t seed, int xOffs, int zOffs, byteArr
 					if (yd > -0.7 && xd * xd + yd * yd + zd * zd < 1)
 					{
 						int block = blocks[p];
-						if (block == Tile::netherRack_Id || block == Tile::dirt_Id || block == Tile::grass_Id)
+						if (block == Tile::netherrack_Id || block == Tile::dirt_Id || block == Tile::grass_Id)
 						{
 							blocks[p] = static_cast<byte>(0);
 						}

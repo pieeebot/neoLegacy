@@ -423,7 +423,7 @@ bool MobSpawner::isSpawnPositionOk(MobCategory *category, Level *level, int x, i
 	{
 		if (!level->isTopSolidBlocking(x, y - 1, z)) return false;
 		int tt = level->getTile(x, y - 1, z);
-		return tt != Tile::unbreakable_Id && !level->isSolidBlockingTile(x, y, z) && !level->getMaterial(x, y, z)->isLiquid() && !level->isSolidBlockingTile(x, y + 1, z);
+		return tt != Tile::bedrock_Id && !level->isSolidBlockingTile(x, y, z) && !level->getMaterial(x, y, z)->isLiquid() && !level->isSolidBlockingTile(x, y + 1, z);
 	}
 				}
 

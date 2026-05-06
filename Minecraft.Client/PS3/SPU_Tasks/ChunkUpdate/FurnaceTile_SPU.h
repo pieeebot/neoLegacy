@@ -14,7 +14,7 @@ public:
 		if (face != data) return icon();
 		if(id == furnace_Id)
 			return &ms_pTileData->furnaceTile_iconFront;
-		else //furnace_lit_Id
+		else //lit_furnace_Id
 			return &ms_pTileData->furnaceTile_iconFront_lit;
 	}
 };

@@ -38,6 +38,11 @@ protected:
 public:
 	virtual int getResourceCount(Random* random);
 	virtual int getResource(int data, Random* random, int playerBonusLevel);
+	virtual void createBlockStateDefinition() override;
+	virtual int defaultBlockState() override;
+	virtual int convertBlockStateToLegacyData(BlockState *state) override;
+	virtual Tile::BlockState getBlockState(LevelSource *level, int x, int y, int z) override;
+	virtual Tile::BlockState getBlockState(int data);
 	virtual void onRemove(Level* level, int x, int y, int z, int id, int data);
 
 protected:

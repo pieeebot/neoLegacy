@@ -263,15 +263,15 @@ int EntityHorse::getArmorTypeForItem(shared_ptr<ItemInstance> armorItem)
 	{
 		return ARMOR_NONE;
 	}
-	if (armorItem->id == Item::horseArmorMetal_Id)
+	if (armorItem->id == Item::iron_horse_armor_Id)
 	{
 		return ARMOR_IRON;
 	}
-	else if (armorItem->id == Item::horseArmorGold_Id)
+	else if (armorItem->id == Item::golden_horse_armor_Id)
 	{
 		return ARMOR_GOLD;
 	}
-	else if (armorItem->id == Item::horseArmorDiamond_Id)
+	else if (armorItem->id == Item::diamond_horse_armor_Id)
 	{
 		return ARMOR_DIAMOND;
 	}
@@ -668,7 +668,7 @@ int EntityHorse::getMadSound()
 void EntityHorse::playStepSound(int xt, int yt, int zt, int t)
 {
 	const Tile::SoundType *soundType = Tile::tiles[t]->soundType;
-	if (level->getTile(xt, yt + 1, zt) == Tile::topSnow_Id)
+	if (level->getTile(xt, yt + 1, zt) == Tile::snow_layer_Id)
 	{
 		soundType = Tile::topSnow->soundType;
 	}
@@ -815,7 +815,7 @@ bool EntityHorse::mobInteract(shared_ptr<Player> player)
 {
 	shared_ptr<ItemInstance> itemstack = player->inventory->getSelected();
 
-	if (itemstack != nullptr && itemstack->id == Item::spawnEgg_Id)
+	if (itemstack != nullptr && itemstack->id == Item::spawn_egg_Id)
 	{
 		return Animal::mobInteract(player);
 	}
@@ -848,15 +848,15 @@ bool EntityHorse::mobInteract(shared_ptr<Player> player)
 		{
 			int armorType = -1;
 
-			if (itemstack->id == Item::horseArmorMetal_Id)
+			if (itemstack->id == Item::iron_horse_armor_Id)
 			{
 				armorType = ARMOR_IRON;
 			}
-			else if (itemstack->id == Item::horseArmorGold_Id)
+			else if (itemstack->id == Item::golden_horse_armor_Id)
 			{
 				armorType = ARMOR_GOLD;
 			}
-			else if (itemstack->id == Item::horseArmorDiamond_Id)
+			else if (itemstack->id == Item::diamond_horse_armor_Id)
 			{
 				armorType = ARMOR_DIAMOND;
 			}
@@ -897,7 +897,7 @@ bool EntityHorse::mobInteract(shared_ptr<Player> player)
 				_ageUp = 180;
 				temper = 3;
 			}
-			else if (itemstack->id == Tile::hayBlock_Id)
+			else if (itemstack->id == Tile::hay_block_Id)
 			{
 				_heal = 20;
 				_ageUp = 180;
@@ -908,7 +908,7 @@ bool EntityHorse::mobInteract(shared_ptr<Player> player)
 				_ageUp = 60;
 				temper = 3;
 			}
-			else if (itemstack->id == Item::carrotGolden_Id)
+			else if (itemstack->id == Item::golden_carrot_Id)
 			{
 				_heal = 4;
 				_ageUp = 60;
@@ -919,7 +919,7 @@ bool EntityHorse::mobInteract(shared_ptr<Player> player)
 					setInLove();
 				}
 			}
-			else if (itemstack->id == Item::apple_gold_Id)
+			else if (itemstack->id == Item::golden_apple_Id)
 			{
 				_heal = 10;
 				_ageUp = 240;
@@ -1836,7 +1836,7 @@ EntityHorse::HorseGroupData::HorseGroupData(int type, int variant)
 
 bool EntityHorse::isHorseArmor(int itemId)
 {
-	return itemId == Item::horseArmorMetal_Id || itemId == Item::horseArmorGold_Id || itemId == Item::horseArmorDiamond_Id;
+	return itemId == Item::iron_horse_armor_Id || itemId == Item::golden_horse_armor_Id || itemId == Item::diamond_horse_armor_Id;
 }
 
 bool EntityHorse::onLadder()

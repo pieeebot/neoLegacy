@@ -337,7 +337,7 @@ void WitherBoss::newServerAiStep()
 						int ty = feet + yStep;
 						int tz = oz + zStep;
 						int tile = level->getTile(tx, ty, tz);
-						if (tile > 0 && tile != Tile::unbreakable_Id && tile != Tile::endPortalTile_Id && tile != Tile::endPortalFrameTile_Id)
+						if (tile > 0 && tile != Tile::bedrock_Id && tile != Tile::end_portal_Id && tile != Tile::end_portal_frame_Id)
 						{
 							destroyed = level->destroyTile(tx, ty, tz, true) || destroyed;
 						}
@@ -495,7 +495,7 @@ bool WitherBoss::hurt(DamageSource *source, float dmg)
 
 void WitherBoss::dropDeathLoot(bool wasKilledByPlayer, int playerBonusLevel)
 {
-	spawnAtLocation(Item::netherStar_Id, 1);
+	spawnAtLocation(Item::nether_star_Id, 1);
 }
 
 void WitherBoss::checkDespawn()

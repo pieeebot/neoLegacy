@@ -16,7 +16,7 @@ int StoneMonsterTileItem::getLevelDataForAuxValue(int auxValue)
 
 Icon *StoneMonsterTileItem::getIcon(int itemAuxValue)
 {
-	return Tile::monsterStoneEgg->getTexture(0, itemAuxValue);
+	return Tile::monster_egg->getTexture(0, itemAuxValue);
 }
 
 unsigned int StoneMonsterTileItem::getDescriptionId(shared_ptr<ItemInstance> instance)

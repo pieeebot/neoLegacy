@@ -21,6 +21,12 @@ public:
 
     virtual int  isFullSize() = 0;
 
+    virtual void createBlockStateDefinition() override;
+    virtual int  defaultBlockState() override;
+    virtual int  convertBlockStateToLegacyData(BlockState *state) override;
+    virtual Tile::BlockState getBlockState(LevelSource *level, int x, int y, int z) override;
+    virtual Tile::BlockState getBlockState(int data);
+
     virtual void updateShape(
         LevelSource *level, int x, int y, int z,
         int forceData = -1,

@@ -107,7 +107,7 @@ int ItemFrame::getRotation()
 
 void ItemFrame::setRotation(int rotation) 
 {
-	getEntityData()->set(DATA_ROTATION, static_cast<byte>(rotation % 4));
+	getEntityData()->set(DATA_ROTATION, static_cast<byte>(rotation % 8));
 }
 
 void ItemFrame::addAdditonalSaveData(CompoundTag *tag) 

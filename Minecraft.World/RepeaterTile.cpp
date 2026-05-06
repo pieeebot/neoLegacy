@@ -12,6 +12,32 @@ RepeaterTile::RepeaterTile(int id, bool on) : DiodeTile(id, on)
 {
 }
 
+void RepeaterTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int RepeaterTile::defaultBlockState()
+{
+	return 0;
+}
+
+int RepeaterTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0xF) : 0;
+}
+
+Tile::BlockState RepeaterTile::getBlockState(int data)
+{
+	return Tile::BlockState((data & 0xF) | ((on ? 1 : 0) << 4));
+}
+
+Tile::BlockState RepeaterTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return getBlockState(level->getData(x, y, z));
+}
+
 bool RepeaterTile::use(Level *level, int x, int y, int z, shared_ptr<Player> player, int clickedFace, float clickX, float clickY, float clickZ, bool soundOnly)
 {
 	if (soundOnly)	return false;
@@ -31,12 +57,12 @@ int RepeaterTile::getTurnOnDelay(int data)
 
 DiodeTile *RepeaterTile::getOnTile()
 {
-	return Tile::diode_on;
+	return Tile::powered_repeater;
 }
 
 DiodeTile *RepeaterTile::getOffTile()
 {
-	return Tile::diode_off;
+	return Tile::unpowered_repeater;
 }
 
 int RepeaterTile::getResource(int data, Random *random, int playerBonusLevel)

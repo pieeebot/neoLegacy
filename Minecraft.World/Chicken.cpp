@@ -37,7 +37,7 @@ Chicken::Chicken(Level *level) : Animal( level )
 	goalSelector.addGoal(0, new FloatGoal(this));
 	goalSelector.addGoal(1, new PanicGoal(this, 1.4));
 	goalSelector.addGoal(2, new BreedGoal(this, 1.0));
-	goalSelector.addGoal(3, new TemptGoal(this, 1.0, Item::seeds_wheat_Id, false));
+	goalSelector.addGoal(3, new TemptGoal(this, 1.0, Item::wheat_seeds_Id, false));
 	goalSelector.addGoal(4, new FollowParentGoal(this, 1.1));
 	goalSelector.addGoal(5, new RandomStrollGoal(this, 1.0));
 	goalSelector.addGoal(6, new LookAtPlayerGoal(this, typeid(Player), 6));
@@ -131,11 +131,11 @@ void Chicken::dropDeathLoot(bool wasKilledByPlayer, int playerBonusLevel)
 	// and some meat
 	if (this->isOnFire()) 
 	{
-		spawnAtLocation(Item::chicken_cooked_Id, 1);
+		spawnAtLocation(Item::cooked_chicken_Id, 1);
 	}
 	else
 	{
-		spawnAtLocation(Item::chicken_raw_Id, 1);
+		spawnAtLocation(Item::chicken_Id, 1);
 	}
 }
 
@@ -168,5 +168,5 @@ shared_ptr<AgableMob> Chicken::getBreedOffspring(shared_ptr<AgableMob> target)
 
 bool Chicken::isFood(shared_ptr<ItemInstance> itemInstance)
 {
-	return (itemInstance->id == Item::seeds_wheat_Id) || (itemInstance->id == Item::netherwart_seeds_Id) || (itemInstance->id == Item::seeds_melon_Id) || (itemInstance->id == Item::seeds_pumpkin_Id);
+	return (itemInstance->id == Item::wheat_seeds_Id) || (itemInstance->id == Item::netherwart_seeds_Id) || (itemInstance->id == Item::melon_seeds_Id) || (itemInstance->id == Item::pumpkin_seeds_Id);
 }

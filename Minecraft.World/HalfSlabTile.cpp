@@ -12,6 +12,32 @@ HalfSlabTile::HalfSlabTile(int id, Material *material)
     Tile::lightBlock[id] = 0xFF;
 }
 
+void HalfSlabTile::createBlockStateDefinition()
+{
+    if (!m_blockStateDefinition)
+        m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int HalfSlabTile::defaultBlockState()
+{
+    return 0;
+}
+
+int HalfSlabTile::convertBlockStateToLegacyData(BlockState *state)
+{
+    return state ? (state->value & (TYPE_MASK | TOP_SLOT_BIT)) : 0;
+}
+
+Tile::BlockState HalfSlabTile::getBlockState(int data)
+{
+    return Tile::BlockState(data & (TYPE_MASK | TOP_SLOT_BIT));
+}
+
+Tile::BlockState HalfSlabTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+    return Tile::BlockState(level->getData(x, y, z) & (TYPE_MASK | TOP_SLOT_BIT));
+}
+
 void HalfSlabTile::DerivedInit()
 {
     

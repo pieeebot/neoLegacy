@@ -23,6 +23,32 @@ DispenserTile::DispenserTile(int id) : BaseEntityTile(id, Material::stone)
 	iconFrontVertical = nullptr;
 }
 
+void DispenserTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int DispenserTile::defaultBlockState()
+{
+	return 0;
+}
+
+int DispenserTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & (FACING_MASK | TRIGGER_BIT)) : 0;
+}
+
+Tile::BlockState DispenserTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & (FACING_MASK | TRIGGER_BIT));
+}
+
+Tile::BlockState DispenserTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & (FACING_MASK | TRIGGER_BIT));
+}
+
 int DispenserTile::getTickDelay(Level *level)
 {
 	return 4;

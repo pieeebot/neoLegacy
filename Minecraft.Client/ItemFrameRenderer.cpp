@@ -18,6 +18,7 @@
 #include "../Minecraft.World/net.minecraft.h"
 #include "CompassTexture.h"
 #include "Minimap.h"
+#include "../Minecraft.World/Level.h"
 
 ResourceLocation ItemFrameRenderer::MAP_BACKGROUND_LOCATION = ResourceLocation(TN_MISC_MAPBG);
 
@@ -41,7 +42,22 @@ void ItemFrameRenderer::render(shared_ptr<Entity>  _itemframe, double x, double 
 	int yt = itemFrame->yTile;
 	int zt = itemFrame->zTile + Direction::STEP_Z[itemFrame->dir];
 
-	glTranslatef(static_cast<float>(xt) - xOffs, static_cast<float>(yt) - yOffs, static_cast<float>(zt) - zOffs);
+	float back = 0.0f;
+
+	// set offset to 1 if the item frame is not placed by the player
+	if (itemFrame->level->isClientSide && !itemFrame->placedByPlayer)
+	{
+		back = 1.0f;
+	}
+
+	int dx = Direction::STEP_X[itemFrame->dir];
+	int dz = Direction::STEP_Z[itemFrame->dir];
+
+	glTranslatef(
+		static_cast<float>(xt) - xOffs - dx * back,
+		static_cast<float>(yt) - yOffs,
+		static_cast<float>(zt) - zOffs - dz * back
+	);
 
 	drawFrame(itemFrame);
 	drawItem(itemFrame);
@@ -123,20 +139,20 @@ void ItemFrameRenderer::drawItem(shared_ptr<ItemFrame> entity)
 
 	glTranslatef((-7.25f / 16.0f) * Direction::STEP_X[entity->dir], -0.18f, (-7.25f / 16.0f) * Direction::STEP_Z[entity->dir]);
 	glRotatef(180 + entity->yRot, 0, 1, 0);
-	glRotatef(-90 * entity->getRotation(), 0, 0, 1);
+	glRotatef(-45.0f * entity->getRotation(), 0, 0, 1);
 
-	switch (entity->getRotation()) 
-	{
-	case 1:
-		glTranslatef(-0.16f, -0.16f, 0);
-		break;
-	case 2:
-		glTranslatef(0, -0.32f, 0);
-		break;
-	case 3:
-		glTranslatef(0.16f, -0.16f, 0);
-		break;
-	}
+	static const float offsets[8][2] = {
+		{ 0.0f, 0.0f },
+		{ -0.08f, -0.08f },
+		{ -0.16f, -0.16f },
+		{ -0.08f, -0.24f },
+		{ 0.0f, -0.32f },
+		{ 0.08f, -0.24f },
+		{ 0.16f, -0.16f },
+		{ 0.08f, -0.08f }
+	};
+	int rotIndex = entity->getRotation() & 0x7;
+	glTranslatef(offsets[rotIndex][0], offsets[rotIndex][1], 0.0f);
 
 	if (itemEntity->getItem()->getItem() == Item::map) 
 	{

@@ -30,11 +30,11 @@ wstring ArmorRecipes::shapes[][4] =
 /*
 ArmorRecipes::map[5] = 
 {
-	{Item::leather, Tile::fire, Item::ironIngot, Item::diamond, Item::goldIngot}, 
-	{Item::helmet_cloth, Item::helmet_chain, Item::helmet_iron, Item::helmet_diamond, Item::helmet_gold}, 
-	{Item::chestplate_cloth, Item::chestplate_chain, Item::chestplate_iron, Item::chestplate_diamond, Item::chestplate_gold}, 
-	{Item::leggings_cloth, Item::leggings_chain, Item::leggings_iron, Item::leggings_diamond, Item::leggings_gold}, 
-	{Item::boots_cloth, Item::boots_chain, Item::boots_iron, Item::boots_diamond, Item::boots_gold}, 
+	{Item::leather, Tile::fire, Item::iron_ingot, Item::diamond, Item::gold_ingot}, 
+	{Item::helmet_cloth, Item::chainmail_helmet, Item::iron_helmet, Item::diamond_helmet, Item::golden_helmet}, 
+	{Item::chestplate_cloth, Item::chainmail_chestplate, Item::iron_chestplate, Item::diamond_chestplate, Item::golden_chestplate}, 
+	{Item::leggings_cloth, Item::chainmail_leggings, Item::iron_leggings, Item::diamond_leggings, Item::golden_leggings}, 
+	{Item::boots_cloth, Item::chainmail_boots, Item::iron_boots, Item::diamond_boots, Item::golden_boots}, 
 };
 */
 
@@ -45,33 +45,33 @@ void ArmorRecipes::_init()
 	// 4J-PB - removing the chain armour, since we show all possible recipes in the xbox game, and it's not one you can make
 	ADD_OBJECT(map[0],Item::leather);
 //	ADD_OBJECT(map[0],Tile::fire);
-	ADD_OBJECT(map[0],Item::ironIngot);
+	ADD_OBJECT(map[0],Item::iron_ingot);
 	ADD_OBJECT(map[0],Item::diamond);
-	ADD_OBJECT(map[0],Item::goldIngot);
+	ADD_OBJECT(map[0],Item::gold_ingot);
 
-	ADD_OBJECT(map[1],Item::helmet_leather);
-//	ADD_OBJECT(map[1],Item::helmet_chain);
-	ADD_OBJECT(map[1],Item::helmet_iron);
-	ADD_OBJECT(map[1],Item::helmet_diamond);
-	ADD_OBJECT(map[1],Item::helmet_gold);
+	ADD_OBJECT(map[1],Item::leather_helmet);
+//	ADD_OBJECT(map[1],Item::chainmail_helmet);
+	ADD_OBJECT(map[1],Item::iron_helmet);
+	ADD_OBJECT(map[1],Item::diamond_helmet);
+	ADD_OBJECT(map[1],Item::golden_helmet);
 
-	ADD_OBJECT(map[2],Item::chestplate_leather);
-//	ADD_OBJECT(map[2],Item::chestplate_chain);
-	ADD_OBJECT(map[2],Item::chestplate_iron);
-	ADD_OBJECT(map[2],Item::chestplate_diamond);
-	ADD_OBJECT(map[2],Item::chestplate_gold);
+	ADD_OBJECT(map[2],Item::leather_chestplate);
+//	ADD_OBJECT(map[2],Item::chainmail_chestplate);
+	ADD_OBJECT(map[2],Item::iron_chestplate);
+	ADD_OBJECT(map[2],Item::diamond_chestplate);
+	ADD_OBJECT(map[2],Item::golden_chestplate);
 
-	ADD_OBJECT(map[3],Item::leggings_leather);
-//	ADD_OBJECT(map[3],Item::leggings_chain);
-	ADD_OBJECT(map[3],Item::leggings_iron);
-	ADD_OBJECT(map[3],Item::leggings_diamond);
-	ADD_OBJECT(map[3],Item::leggings_gold);
+	ADD_OBJECT(map[3],Item::leather_leggings);
+//	ADD_OBJECT(map[3],Item::chainmail_leggings);
+	ADD_OBJECT(map[3],Item::iron_leggings);
+	ADD_OBJECT(map[3],Item::diamond_leggings);
+	ADD_OBJECT(map[3],Item::golden_leggings);
 
-	ADD_OBJECT(map[4],Item::boots_leather);
-//	ADD_OBJECT(map[4],Item::boots_chain);
-	ADD_OBJECT(map[4],Item::boots_iron);
-	ADD_OBJECT(map[4],Item::boots_diamond);
-	ADD_OBJECT(map[4],Item::boots_gold);
+	ADD_OBJECT(map[4],Item::leather_boots);
+//	ADD_OBJECT(map[4],Item::chainmail_boots);
+	ADD_OBJECT(map[4],Item::iron_boots);
+	ADD_OBJECT(map[4],Item::diamond_boots);
+	ADD_OBJECT(map[4],Item::golden_boots);
 }
 
 // 4J-PB added for quick equip in the inventory
@@ -79,37 +79,37 @@ ArmorRecipes::_eArmorType ArmorRecipes::GetArmorType(int iId)
 {
 	switch(iId)
 	{
-	case Item::helmet_leather_Id:	
-	case Item::helmet_chain_Id:	
-	case Item::helmet_iron_Id:		
-	case Item::helmet_diamond_Id:						
-	case Item::helmet_gold_Id:	
+	case Item::leather_helmet_Id:	
+	case Item::chainmail_helmet_Id:	
+	case Item::iron_helmet_Id:		
+	case Item::diamond_helmet_Id:						
+	case Item::golden_helmet_Id:	
 		return eArmorType_Helmet;
 		break;
 
-	case Item::chestplate_leather_Id:
-	case Item::chestplate_chain_Id:
-	case Item::chestplate_iron_Id:	
-	case Item::chestplate_diamond_Id:
-	case Item::chestplate_gold_Id:
+	case Item::leather_chestplate_Id:
+	case Item::chainmail_chestplate_Id:
+	case Item::iron_chestplate_Id:	
+	case Item::diamond_chestplate_Id:
+	case Item::golden_chestplate_Id:
 	case Item::elytra_Id:
 
 		return eArmorType_Chestplate;
 		break;
 
-	case Item::leggings_leather_Id:
-	case Item::leggings_chain_Id:	
-	case Item::leggings_iron_Id:
-	case Item::leggings_diamond_Id:
-	case Item::leggings_gold_Id:
+	case Item::leather_leggings_Id:
+	case Item::chainmail_leggings_Id:	
+	case Item::iron_leggings_Id:
+	case Item::diamond_leggings_Id:
+	case Item::golden_leggings_Id:
 		return eArmorType_Leggings;
 		break;
 
-	case Item::boots_leather_Id:		
-	case Item::boots_chain_Id:	
-	case Item::boots_iron_Id:
-	case Item::boots_diamond_Id:
-	case Item::boots_gold_Id:
+	case Item::leather_boots_Id:		
+	case Item::chainmail_boots_Id:	
+	case Item::iron_boots_Id:
+	case Item::diamond_boots_Id:
+	case Item::golden_boots_Id:
 		return eArmorType_Boots;
 		break;
 	}

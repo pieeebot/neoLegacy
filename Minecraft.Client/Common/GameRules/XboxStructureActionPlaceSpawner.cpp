@@ -7,7 +7,7 @@
 
 XboxStructureActionPlaceSpawner::XboxStructureActionPlaceSpawner()
 {
-	m_tile = Tile::mobSpawner_Id;
+	m_tile = Tile::mob_spawner_Id;
 	m_entityId = L"Pig";
 }
 

@@ -50,11 +50,11 @@ bool TileItem::useOn(shared_ptr<ItemInstance> instance, shared_ptr<Player> playe
 {
 	// 4J-PB - Adding a test only version to allow tooltips to be displayed
 	int currentTile = level->getTile(x, y, z);
-	if (currentTile == Tile::topSnow_Id && (level->getData(x, y, z) & TopSnowTile::HEIGHT_MASK) < 1) 
+	if (currentTile == Tile::snow_layer_Id && (level->getData(x, y, z) & TopSnowTile::HEIGHT_MASK) < 1) 
 	{
 		face = Facing::UP;
 	}
-	else if (currentTile == Tile::vine_Id || currentTile == Tile::tallgrass_Id || currentTile == Tile::deadBush_Id)
+	else if (currentTile == Tile::vine_Id || currentTile == Tile::tallgrass_Id || currentTile == Tile::deadbush_Id)
 	{
 	}
 	else 
@@ -87,12 +87,12 @@ bool TileItem::useOn(shared_ptr<ItemInstance> instance, shared_ptr<Player> playe
 			{
 				// 4J-JEV: Snow/Iron Golems do not have owners apparently.
 				int newTileId = level->getTile(x,y,z);
-				if ( (tileId == Tile::pumpkin_Id || tileId == Tile::litPumpkin_Id) && newTileId == 0 )
+				if ( (tileId == Tile::pumpkin_Id || tileId == Tile::lit_pumpkin_Id) && newTileId == 0 )
 				{
 					eINSTANCEOF golemType;
 					switch (undertile)
 					{
-					case Tile::ironBlock_Id:	golemType = eTYPE_VILLAGERGOLEM; break;
+					case Tile::iron_block_Id:	golemType = eTYPE_VILLAGERGOLEM; break;
 					case Tile::snow_Id:			golemType = eTYPE_SNOWMAN; break;
 					default:					golemType = eTYPE_NOTSET; break;
 					}
@@ -165,11 +165,11 @@ bool TileItem::useOn(shared_ptr<ItemInstance> instance, shared_ptr<Player> playe
 bool TileItem::mayPlace(Level *level, int x, int y, int z, int face, shared_ptr<Player> player, shared_ptr<ItemInstance> item) 
 {
 	int currentTile = level->getTile(x, y, z);
-	if (currentTile == Tile::topSnow_Id) 
+	if (currentTile == Tile::snow_layer_Id) 
 	{
 		face = Facing::UP;
 	} 
-	else if (currentTile != Tile::vine_Id && currentTile != Tile::tallgrass_Id && currentTile != Tile::deadBush_Id) 
+	else if (currentTile != Tile::vine_Id && currentTile != Tile::tallgrass_Id && currentTile != Tile::deadbush_Id) 
 	{
 		if (face == 0) y--;
 		if (face == 1) y++;

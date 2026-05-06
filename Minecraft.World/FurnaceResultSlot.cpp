@@ -85,9 +85,9 @@ void FurnaceResultSlot::checkTakeAchievements(shared_ptr<ItemInstance> carried)
 			GenericStats::param_itemsSmelted(carried->id, carried->getAuxValue(), removeCount)
 			);
 	}
-	if (carried->id == Item::ironIngot_Id) player->awardStat(GenericStats::acquireIron(), GenericStats::param_acquireIron());
-	if (carried->id == Item::fish_cooked_Id) player->awardStat(GenericStats::cookFish(), GenericStats::param_cookFish());
-	//if (carried->id == Item::porkChop_cooked_Id) GenericStats::itemsCrafted(Item::porkChop_cooked_Id);
+	if (carried->id == Item::iron_ingot_Id) player->awardStat(GenericStats::acquireIron(), GenericStats::param_acquireIron());
+	if (carried->id == Item::cooked_fish_Id) player->awardStat(GenericStats::cookFish(), GenericStats::param_cookFish());
+	//if (carried->id == Item::cooked_porkchop_Id) GenericStats::itemsCrafted(Item::cooked_porkchop_Id);
 
 	removeCount = 0;
 }

@@ -69,10 +69,10 @@ void PumpkinTile::onPlace(Level *level, int x, int y, int z)
 			level->addParticle(eParticleType_snowshovel, x + level->random->nextDouble(), y - 2 + level->random->nextDouble() * 2.5, z + level->random->nextDouble(), 0, 0, 0);
 		}
 	}
-	else if (level->getTile(x, y - 1, z) == Tile::ironBlock_Id && level->getTile(x, y - 2, z) == Tile::ironBlock_Id)
+	else if (level->getTile(x, y - 1, z) == Tile::iron_block_Id && level->getTile(x, y - 2, z) == Tile::iron_block_Id)
 	{
-		bool xArms = level->getTile(x - 1, y - 1, z) == Tile::ironBlock_Id && level->getTile(x + 1, y - 1, z) == Tile::ironBlock_Id;
-		bool zArms = level->getTile(x, y - 1, z - 1) == Tile::ironBlock_Id && level->getTile(x, y - 1, z + 1) == Tile::ironBlock_Id;
+		bool xArms = level->getTile(x - 1, y - 1, z) == Tile::iron_block_Id && level->getTile(x + 1, y - 1, z) == Tile::iron_block_Id;
+		bool zArms = level->getTile(x, y - 1, z - 1) == Tile::iron_block_Id && level->getTile(x, y - 1, z + 1) == Tile::iron_block_Id;
 		if (xArms || zArms)
 		{
 			if (!level->isClientSide)
@@ -122,23 +122,23 @@ void PumpkinTile::onPlace(Level *level, int x, int y, int z)
 				{
 					// If we can't spawn it, at least give the resources back
 					Tile::spawnResources(level, x, y, z, level->getData(x, y, z), 0);
-					Tile::tiles[Tile::ironBlock_Id]->spawnResources(level, x, y - 1, z, level->getData(x, y - 1, z), 0);
-					Tile::tiles[Tile::ironBlock_Id]->spawnResources(level, x, y - 2, z, level->getData(x, y - 2, z), 0);
+					Tile::tiles[Tile::iron_block_Id]->spawnResources(level, x, y - 1, z, level->getData(x, y - 1, z), 0);
+					Tile::tiles[Tile::iron_block_Id]->spawnResources(level, x, y - 2, z, level->getData(x, y - 2, z), 0);
 					level->setTileAndData(x, y, z, 0, 0, Tile::UPDATE_CLIENTS);
 					level->setTileAndData(x, y - 1, z, 0, 0, Tile::UPDATE_CLIENTS);
 					level->setTileAndData(x, y - 2, z, 0, 0, Tile::UPDATE_CLIENTS);
 
 					if(xArms)
 					{
-						Tile::tiles[Tile::ironBlock_Id]->spawnResources(level, x - 1, y - 1, z, level->getData(x - 1, y - 1, z), 0);
-						Tile::tiles[Tile::ironBlock_Id]->spawnResources(level, x + 1, y - 1, z, level->getData(x + 1, y - 1, z), 0);
+						Tile::tiles[Tile::iron_block_Id]->spawnResources(level, x - 1, y - 1, z, level->getData(x - 1, y - 1, z), 0);
+						Tile::tiles[Tile::iron_block_Id]->spawnResources(level, x + 1, y - 1, z, level->getData(x + 1, y - 1, z), 0);
 						level->setTileAndData(x - 1, y - 1, z, 0, 0, Tile::UPDATE_CLIENTS);
 						level->setTileAndData(x + 1, y - 1, z, 0, 0, Tile::UPDATE_CLIENTS);
 					}
 					else
 					{
-						Tile::tiles[Tile::ironBlock_Id]->spawnResources(level, x, y - 1, z - 1, level->getData(x, y - 1, z - 1), 0);
-						Tile::tiles[Tile::ironBlock_Id]->spawnResources(level, x, y - 1, z + 1, level->getData(x, y - 1, z + 1), 0);
+						Tile::tiles[Tile::iron_block_Id]->spawnResources(level, x, y - 1, z - 1, level->getData(x, y - 1, z - 1), 0);
+						Tile::tiles[Tile::iron_block_Id]->spawnResources(level, x, y - 1, z + 1, level->getData(x, y - 1, z + 1), 0);
 						level->setTileAndData(x, y - 1, z - 1, 0, 0, Tile::UPDATE_CLIENTS);
 						level->setTileAndData(x, y - 1, z + 1, 0, 0, Tile::UPDATE_CLIENTS);
 					}

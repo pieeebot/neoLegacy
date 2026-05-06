@@ -126,7 +126,7 @@ void FallingTile::tick()
 			zd *= 0.7f;
 			yd *= -0.5f;
 
-			if (level->getTile(xt, yt, zt) != Tile::pistonMovingPiece_Id)
+			if (level->getTile(xt, yt, zt) != Tile::piston_extension_Id)
 			{
 				remove();
 				if (!cancelDrop && level->mayPlace(tile, xt, yt, zt, true, 1, nullptr, nullptr) && !HeavyTile::isFree(level, xt, yt - 1, zt) && level->setTileAndData(xt, yt, zt, tile, data, Tile::UPDATE_ALL))

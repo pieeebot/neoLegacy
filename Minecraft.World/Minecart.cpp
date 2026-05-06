@@ -313,7 +313,7 @@ void Minecart::tick()
 			int data = level->getData(xt, yt, zt);
 			moveAlongTrack(xt, yt, zt, max, slideSpeed, tile, data);
 
-			if (tile == Tile::activatorRail_Id)
+			if (tile == Tile::activator_rail_Id)
 			{
 				activateMinecart(xt, yt, zt, (data & BaseRailTile::RAIL_DATA_BIT) != 0);
 			}
@@ -410,7 +410,7 @@ void Minecart::moveAlongTrack(int xt, int yt, int zt, double maxSpeed, double sl
 
 	bool powerTrack = false;
 	bool haltTrack = false;
-	if (tile == Tile::goldenRail_Id)
+	if (tile == Tile::golden_rail_Id)
 	{
 		powerTrack = (data & BaseRailTile::RAIL_DATA_BIT) != 0;
 		haltTrack = !powerTrack;

@@ -141,13 +141,13 @@ shared_ptr<ItemInstance> BucketItem::use(shared_ptr<ItemInstance> itemInstance, 
 
 				if (--itemInstance->count <= 0)
 				{
-					return std::make_shared<ItemInstance>(Item::bucket_water);
+					return std::make_shared<ItemInstance>(Item::water_bucket);
 				}
 				else
 				{
-					if (!player->inventory->add(std::make_shared<ItemInstance>(Item::bucket_water)))
+					if (!player->inventory->add(std::make_shared<ItemInstance>(Item::water_bucket)))
 					{
-						player->drop(std::make_shared<ItemInstance>(Item::bucket_water_Id, 1, 0));
+						player->drop(std::make_shared<ItemInstance>(Item::water_bucket_Id, 1, 0));
 					}
 					return itemInstance;
 				}
@@ -168,13 +168,13 @@ shared_ptr<ItemInstance> BucketItem::use(shared_ptr<ItemInstance> itemInstance, 
 				}
 				if (--itemInstance->count <= 0)
 				{
-					return std::make_shared<ItemInstance>(Item::bucket_lava);
+					return std::make_shared<ItemInstance>(Item::lava_bucket);
 				}
 				else
 				{
-					if (!player->inventory->add(std::make_shared<ItemInstance>(Item::bucket_lava)))
+					if (!player->inventory->add(std::make_shared<ItemInstance>(Item::lava_bucket)))
 					{
-						player->drop(std::make_shared<ItemInstance>(Item::bucket_lava_Id, 1, 0));
+						player->drop(std::make_shared<ItemInstance>(Item::lava_bucket_Id, 1, 0));
 					}
 					return itemInstance;
 				}
@@ -183,7 +183,7 @@ shared_ptr<ItemInstance> BucketItem::use(shared_ptr<ItemInstance> itemInstance, 
 		else if (content < 0)
 		{
 			delete hr;
-			return std::make_shared<ItemInstance>(Item::bucket_empty);
+			return std::make_shared<ItemInstance>(Item::bucket);
 		}
 		else
 		{
@@ -199,7 +199,7 @@ shared_ptr<ItemInstance> BucketItem::use(shared_ptr<ItemInstance> itemInstance, 
 
 			if (emptyBucket(level, xt, yt, zt) && !player->abilities.instabuild)
 			{
-				return std::make_shared<ItemInstance>(Item::bucket_empty);
+				return std::make_shared<ItemInstance>(Item::bucket);
 			}
 
 		}
@@ -217,7 +217,7 @@ bool BucketItem::emptyBucket(Level *level, int xt, int yt, int zt)
 
 	if (level->isEmptyTile(xt, yt, zt) || nonSolid) 
 	{
-		if (level->dimension->ultraWarm && content == Tile::water_Id) 
+		if (level->dimension->ultraWarm && content == Tile::flowing_water_Id) 
 		{
 			level->playSound(xt + 0.5f, yt + 0.5f, zt + 0.5f, eSoundType_RANDOM_FIZZ, 0.5f, 2.6f + (level->random->nextFloat() - level->random->nextFloat()) * 0.8f);
 

@@ -246,7 +246,7 @@ int Slime::getDeathSound()
 
 int Slime::getDeathLoot()
 {
-	if (getSize() == 1) return Item::slimeBall->id;
+	if (getSize() == 1) return Item::slime_ball->id;
 	return 0;
 }
 

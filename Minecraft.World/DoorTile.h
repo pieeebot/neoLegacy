@@ -62,4 +62,15 @@ public:
 	int getCompositeData(LevelSource *level, int x, int y, int z);
 	virtual int cloneTileId(Level *level, int x, int y, int z);
 	virtual void playerWillDestroy(Level *level, int x, int y, int z, int data, shared_ptr<Player> player);
+
+	virtual void createBlockStateDefinition() override;
+	virtual int convertBlockStateToLegacyData(BlockState *state) override;
+	virtual int defaultBlockState() override;
+
+	Tile::BlockState getBlockState(LevelSource *level, int x, int y, int z);
+	Tile::BlockState getBlockState(int data);
+
+	void fillVirtualBlockStateProperties(Tile::BlockState *state, LevelSource *level, const BlockPos &pos);
+
+	virtual bool use(Level *level, const BlockPos &pos, Tile::BlockState *state, shared_ptr<Player> player, int clickedFace, float clickX, float clickY, float clickZ, bool soundOnly = false);
 };

@@ -20,15 +20,15 @@ void WeaponRecipies::_init()
 
 	ADD_OBJECT(map[0],Tile::wood);
 	ADD_OBJECT(map[0],Tile::cobblestone);
-	ADD_OBJECT(map[0],Item::ironIngot);
+	ADD_OBJECT(map[0],Item::iron_ingot);
 	ADD_OBJECT(map[0],Item::diamond);
-	ADD_OBJECT(map[0],Item::goldIngot);
+	ADD_OBJECT(map[0],Item::gold_ingot);
 
-	ADD_OBJECT(map[1],Item::sword_wood);
-	ADD_OBJECT(map[1],Item::sword_stone);
-	ADD_OBJECT(map[1],Item::sword_iron);
-	ADD_OBJECT(map[1],Item::sword_diamond);
-	ADD_OBJECT(map[1],Item::sword_gold);
+	ADD_OBJECT(map[1],Item::wooden_sword);
+	ADD_OBJECT(map[1],Item::stone_sword);
+	ADD_OBJECT(map[1],Item::iron_sword);
+	ADD_OBJECT(map[1],Item::diamond_sword);
+	ADD_OBJECT(map[1],Item::golden_sword);
 }
 
 void WeaponRecipies::addRecipes(Recipes *r) 

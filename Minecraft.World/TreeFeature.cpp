@@ -44,7 +44,7 @@ bool TreeFeature::place(Level *level, Random *random, int x, int y, int z)
 				if (yy >= 0 && yy < Level::maxBuildHeight)
 				{
 					int tt = level->getTile(xx, yy, zz);
-					if (tt != 0 && tt != Tile::leaves_Id && tt != Tile::grass_Id && tt != Tile::dirt_Id && tt != Tile::treeTrunk_Id) free = false;
+					if (tt != 0 && tt != Tile::leaves_Id && tt != Tile::grass_Id && tt != Tile::dirt_Id && tt != Tile::log_Id) free = false;
 				}
 				else
 				{
@@ -88,7 +88,7 @@ bool TreeFeature::place(Level *level, Random *random, int x, int y, int z)
 		int t = level->getTile(x, y + hh, z);
 		if (t == 0 || t == Tile::leaves_Id)
 		{
-			placeBlock(level, x, y + hh, z, Tile::treeTrunk_Id, trunkType);
+			placeBlock(level, x, y + hh, z, Tile::log_Id, trunkType);
 			if (addJungleFeatures && hh > 0)
 			{
 				if (random->nextInt(3) > 0 && level->isEmptyTile(x - 1, y + hh, z))

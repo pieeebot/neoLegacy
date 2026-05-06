@@ -85,14 +85,14 @@ Recipes::Recipes()
 		L"sczg",
 		L"#", //
 
-		L'#', new ItemInstance(Tile::tree2Trunk, 1, TreeTile2::ACACIA_TRUNK),
+		L'#', new ItemInstance(Tile::log2, 1, TreeTile2::ACACIA_TRUNK),
 		L'S');
 
 	addShapedRecipy(new ItemInstance(Tile::wood, 4, TreeTile::DARK_TRUNK), //
 		L"sczg",
 		L"#", //
 
-		L'#', new ItemInstance(Tile::tree2Trunk, 1, TreeTile2::DARK_TRUNK),
+		L'#', new ItemInstance(Tile::log2, 1, TreeTile2::DARK_TRUNK),
 		L'S');
 
 	addShapedRecipy(new ItemInstance(Item::stick, 4), //
@@ -132,7 +132,7 @@ Recipes::Recipes()
 		L" i ", //
 		L"iii", //
 
-		L'I', Tile::ironBlock, L'i', Item::ironIngot,
+		L'I', Tile::ironBlock, L'i', Item::iron_ingot,
 		L'S');
 
 	// 4J Stu - Reordered for crafting menu
@@ -223,12 +223,12 @@ Recipes::Recipes()
 		L'#', Tile::netherBrick,
 		L'S');
 
-	addShapedRecipy(new ItemInstance(Tile::ironFence, 16), //
+	addShapedRecipy(new ItemInstance(Tile::iron_bars, 16), //
 		L"sscig",
 		L"###", //
 		L"###", //
 
-		L'#', Item::ironIngot,
+		L'#', Item::iron_ingot,
 		L'S');
 
 	addShapedRecipy(new ItemInstance(Tile::fenceGate, 1), //
@@ -279,7 +279,7 @@ Recipes::Recipes()
 		L'#', Item::stick, L'W', new ItemInstance(Tile::wood, 1, TreeTile::DARK_TRUNK),
 		L'S');
 
-	addShapedRecipy(new ItemInstance(Item::door_wood, 3), //
+	addShapedRecipy(new ItemInstance(Item::wooden_door, 3), //
 		L"sssczg",
 		L"##", //
 		L"##", //
@@ -288,7 +288,7 @@ Recipes::Recipes()
 		L'#', new ItemInstance(Tile::wood, 1, 0),
 		L'S');
 
-	addShapedRecipy(new ItemInstance(Item::door_birch, 3), //
+	addShapedRecipy(new ItemInstance(Item::birch_door, 3), //
 		L"sssczg",
 		L"##", //
 		L"##", //
@@ -297,7 +297,7 @@ Recipes::Recipes()
 		L'#', new ItemInstance(Tile::wood, 1, TreeTile::BIRCH_TRUNK),
 		L'S');
 
-	addShapedRecipy(new ItemInstance(Item::door_spruce, 3), //
+	addShapedRecipy(new ItemInstance(Item::spruce_door, 3), //
 		L"sssczg",
 		L"##", //
 		L"##", //
@@ -306,7 +306,7 @@ Recipes::Recipes()
 		L'#', new ItemInstance(Tile::wood, 1, TreeTile::SPRUCE_TRUNK),
 		L'S');
 
-	addShapedRecipy(new ItemInstance(Item::door_jungle, 3), //
+	addShapedRecipy(new ItemInstance(Item::jungle_door, 3), //
 		L"sssczg",
 		L"##", //
 		L"##", //
@@ -315,7 +315,7 @@ Recipes::Recipes()
 		L'#', new ItemInstance(Tile::wood, 1, TreeTile::JUNGLE_TRUNK),
 		L'S');
 
-	addShapedRecipy(new ItemInstance(Item::door_acacia, 3), //
+	addShapedRecipy(new ItemInstance(Item::acacia_door, 3), //
 		L"sssczg",
 		L"##", //
 		L"##", //
@@ -324,7 +324,7 @@ Recipes::Recipes()
 		L'#', new ItemInstance(Tile::wood, 1, TreeTile::ACACIA_TRUNK),
 		L'S');
 
-	addShapedRecipy(new ItemInstance(Item::door_dark, 3), //
+	addShapedRecipy(new ItemInstance(Item::dark_oak_door, 3), //
 		L"sssczg",
 		L"##", //
 		L"##", //
@@ -333,13 +333,13 @@ Recipes::Recipes()
 		L'#', new ItemInstance(Tile::wood, 1, TreeTile::DARK_TRUNK),
 		L'S');
 
-	addShapedRecipy(new ItemInstance(Item::door_iron, 3), //
+	addShapedRecipy(new ItemInstance(Item::iron_door, 3), //
 		L"ssscig",
 		L"##", //
 		L"##", //
 		L"##", //
 
-		L'#', Item::ironIngot,
+		L'#', Item::iron_ingot,
 		L'S');
 
 	addShapedRecipy(new ItemInstance(Tile::trapdoor, 2), //
@@ -355,7 +355,7 @@ Recipes::Recipes()
 		L"##", //
 		L"##", //
 
-		L'#', Item::ironIngot,
+		L'#', Item::iron_ingot,
 		L'S');
 
 	addShapedRecipy(new ItemInstance(Tile::stairs_wood, 4), //
@@ -385,7 +385,7 @@ Recipes::Recipes()
 		L'#', Tile::redBrick,
 		L'S');
 
-	addShapedRecipy(new ItemInstance(Tile::stairs_stoneBrickSmooth, 4), //
+	addShapedRecipy(new ItemInstance(Tile::stone_brick_stairsSmooth, 4), //
 		L"sssctg",
 		L"#  ", //
 		L"## ", //
@@ -394,7 +394,7 @@ Recipes::Recipes()
 		L'#', Tile::stoneBrick,
 		L'S');
 
-	addShapedRecipy(new ItemInstance(Tile::stairs_netherBricks, 4), //
+	addShapedRecipy(new ItemInstance(Tile::nether_brick_stairs, 4), //
 		L"sssctg",
 		L"#  ", //
 		L"## ", //
@@ -486,7 +486,7 @@ Recipes::Recipes()
 		L"##", //
 		L"##", //
 
-		L'#', Item::snowBall,
+		L'#', Item::snowball,
 		L'S');
 
 	addShapedRecipy(new ItemInstance(Tile::prismarine, 1), //
@@ -513,7 +513,7 @@ Recipes::Recipes()
 		L"#X#", //
 		L"###", //
 
-		L'#', Item::prismarine_shard, L'X', new ItemInstance(Item::dye_powder, 1, DyePowderItem::BLACK),
+		L'#', Item::prismarine_shard, L'X', new ItemInstance(Item::dye, 1, DyePowderItem::BLACK),
 		L'S');
 
 	addShapedRecipy(new ItemInstance(Tile::topSnow, 6), //
@@ -667,7 +667,7 @@ Recipes::Recipes()
 		L"BEB", //
 		L"CCC", //
 
-		L'A', Item::bucket_milk,//
+		L'A', Item::milk_bucket,//
 		L'B', Item::sugar,//
 		L'C', Item::wheat, L'E', Item::egg,
 		L'F');
@@ -685,7 +685,7 @@ Recipes::Recipes()
 		L"X#X", //
 		L"X X", //
 
-		L'X', Item::ironIngot,//
+		L'X', Item::iron_ingot,//
 		L'#', Item::stick,
 		L'V');
 
@@ -695,8 +695,8 @@ Recipes::Recipes()
 		L"X#X", //
 		L"XRX", //
 
-		L'X', Item::goldIngot,//
-		L'R', Item::redStone,//
+		L'X', Item::gold_ingot,//
+		L'R', Item::redstone,//
 		L'#', Item::stick,
 		L'V');
 
@@ -706,7 +706,7 @@ Recipes::Recipes()
 		L"X#X", //
 		L"XSX", //
 
-		L'X', Item::ironIngot,//
+		L'X', Item::iron_ingot,//
 		L'#', Tile::redstoneTorch_on,//
 		L'S', Item::stick,
 		L'V');
@@ -717,8 +717,8 @@ Recipes::Recipes()
 		L"X#X", //
 		L"XRX", //
 
-		L'X', Item::ironIngot,//
-		L'R', Item::redStone,//
+		L'X', Item::iron_ingot,//
+		L'R', Item::redstone,//
 		L'#', Tile::pressurePlate_stone,
 		L'V');
 
@@ -727,10 +727,10 @@ Recipes::Recipes()
 		L"# #", //
 		L"###", //
 
-		L'#', Item::ironIngot,
+		L'#', Item::iron_ingot,
 		L'V');
 
-	addShapedRecipy(new ItemInstance(Item::minecart_chest, 1), //
+	addShapedRecipy(new ItemInstance(Item::chest_minecart, 1), //
 		L"ssctcig",
 		L"A", //
 		L"B", //
@@ -738,7 +738,7 @@ Recipes::Recipes()
 		L'A', Tile::chest, L'B', Item::minecart,
 		L'V');
 
-	addShapedRecipy(new ItemInstance(Item::minecart_furnace, 1), //
+	addShapedRecipy(new ItemInstance(Item::furnace_minecart, 1), //
 		L"ssctcig",
 		L"A", //
 		L"B", //
@@ -746,7 +746,7 @@ Recipes::Recipes()
 		L'A', Tile::furnace, L'B', Item::minecart,
 		L'V');
 
-	addShapedRecipy(new ItemInstance(Item::minecart_tnt, 1), //
+	addShapedRecipy(new ItemInstance(Item::tnt_minecart, 1), //
 		L"ssctcig",
 		L"A", //
 		L"B", //
@@ -754,7 +754,7 @@ Recipes::Recipes()
 		L'A', Tile::tnt, L'B', Item::minecart,
 		L'V');
 
-	addShapedRecipy(new ItemInstance(Item::minecart_hopper, 1), //
+	addShapedRecipy(new ItemInstance(Item::hopper_minecart, 1), //
 		L"ssctcig",
 		L"A", //
 		L"B", //
@@ -770,7 +770,7 @@ Recipes::Recipes()
 		L'#', Tile::wood,
 		L'V');
 
-	addShapedRecipy(new ItemInstance((Item *)Item::fishingRod, 1), //
+	addShapedRecipy(new ItemInstance((Item *)Item::fishing_rod, 1), //
 		L"ssscicig",
 		L"  #", //
 		L" #X", //
@@ -779,20 +779,20 @@ Recipes::Recipes()
 		L'#', Item::stick, L'X', Item::string,
 		L'T');
 
-	addShapedRecipy(new ItemInstance(Item::carrotOnAStick, 1), //
+	addShapedRecipy(new ItemInstance(Item::carrot_on_a_stick, 1), //
 		L"sscicig",
 		L"# ", //
 		L" X", //
 
-		L'#', Item::fishingRod, L'X', Item::carrots,
+		L'#', Item::fishing_rod, L'X', Item::carrots,
 		L'T')->keepTag();
 
-	addShapedRecipy(new ItemInstance(Item::flintAndSteel, 1), //
+	addShapedRecipy(new ItemInstance(Item::flint_and_steel, 1), //
 		L"sscicig",
 		L"A ", //
 		L" B", //
 
-		L'A', Item::ironIngot, L'B', Item::flint,
+		L'A', Item::iron_ingot, L'B', Item::flint,
 		L'T');
 
 	addShapedRecipy(new ItemInstance(Item::bread, 1), //
@@ -826,12 +826,12 @@ Recipes::Recipes()
 
 	pWeaponRecipies->addRecipes(this);
 
-	addShapedRecipy(new ItemInstance(Item::bucket_empty, 1), //
+	addShapedRecipy(new ItemInstance(Item::bucket, 1), //
 		L"sscig",
 		L"# #", //
 		L" # ", //
 
-		L'#', Item::ironIngot,
+		L'#', Item::iron_ingot,
 		L'T');
 
 	addShapedRecipy(new ItemInstance(Item::bowl, 4), //
@@ -875,7 +875,7 @@ Recipes::Recipes()
 		L"##", //
 		L"##", //
 
-		L'#', Item::yellowDust,
+		L'#', Item::glowstone_dust,
 		L'T');
 
 	addShapedRecipy(new ItemInstance(Tile::quartzBlock, 1), //
@@ -883,7 +883,7 @@ Recipes::Recipes()
 		L"##", //
 		L"##", //
 
-		L'#', Item::netherQuartz,
+		L'#', Item::nether_quartz,
 		L'S');
 
 	addShapedRecipy(new ItemInstance(Tile::lever, 1), //
@@ -900,7 +900,7 @@ Recipes::Recipes()
 		L"S", //
 		L"#", //
 
-		L'#', Tile::wood, L'S', Item::stick, L'I', Item::ironIngot,
+		L'#', Tile::wood, L'S', Item::stick, L'I', Item::iron_ingot,
 		L'M');
 
 	addShapedRecipy(new ItemInstance(Tile::redstoneTorch_on, 1), //
@@ -908,7 +908,7 @@ Recipes::Recipes()
 		L"X", //
 		L"#", //
 
-		L'#', Item::stick, L'X', Item::redStone,
+		L'#', Item::stick, L'X', Item::redstone,
 		L'M');
 
 	addShapedRecipy(new ItemInstance(Item::repeater, 1), //
@@ -916,7 +916,7 @@ Recipes::Recipes()
 		L"#X#", //
 		L"III", //
 
-		L'#', Tile::redstoneTorch_on, L'X', Item::redStone, L'I', new ItemInstance(Tile::stone, 1, 0),
+		L'#', Tile::redstoneTorch_on, L'X', Item::redstone, L'I', new ItemInstance(Tile::stone, 1, 0),
 		L'M');
 
 	addShapedRecipy(new ItemInstance(Item::comparator, 1), //
@@ -925,7 +925,7 @@ Recipes::Recipes()
 		L"#X#", //
 		L"III", //
 
-		L'#', Tile::redstoneTorch_on, L'X', Item::netherQuartz, L'I', new ItemInstance(Tile::stone, 1, 0),
+		L'#', Tile::redstoneTorch_on, L'X', Item::nether_quartz, L'I', new ItemInstance(Tile::stone, 1, 0),
 		L'M');
 
 	addShapedRecipy(new ItemInstance(Tile::daylightDetector),
@@ -934,7 +934,7 @@ Recipes::Recipes()
 		L"QQQ",
 		L"WWW",
 
-		L'G', Tile::glass, L'Q', Item::netherQuartz, L'W', Tile::woodSlabHalf,
+		L'G', Tile::glass, L'Q', Item::nether_quartz, L'W', Tile::woodSlabHalf,
 		L'M');
 
 	addShapedRecipy(new ItemInstance(Tile::hopper),
@@ -943,7 +943,7 @@ Recipes::Recipes()
 		L"ICI", //
 		L" I ", //
 
-		L'I', Item::ironIngot, L'C', Tile::chest,
+		L'I', Item::iron_ingot, L'C', Tile::chest,
 		L'M');
 
 	addShapedRecipy(new ItemInstance(Item::clock, 1), //
@@ -951,22 +951,22 @@ Recipes::Recipes()
 		L" # ", //
 		L"#X#", //
 		L" # ", //
-		L'#', Item::goldIngot, L'X', Item::redStone,
+		L'#', Item::gold_ingot, L'X', Item::redstone,
 		L'T');
 
-	addShapelessRecipy(new ItemInstance(Item::eyeOfEnder, 1), //
+	addShapelessRecipy(new ItemInstance(Item::eye_of_ender, 1), //
 		L"iig",
-		Item::enderPearl, Item::blazePowder,
+		Item::ender_pearl, Item::blaze_powder,
 		L'T');
 
 	addShapelessRecipy(new ItemInstance(Item::fireball, 3), //
 		L"iiig",
-		Item::gunpowder, Item::blazePowder,Item::coal,
+		Item::gunpowder, Item::blaze_powder,Item::coal,
 		L'T');
 
 	addShapelessRecipy(new ItemInstance(Item::fireball, 3), //
 		L"iizg",
-		Item::gunpowder, Item::blazePowder,new ItemInstance(Item::coal, 1, CoalItem::CHAR_COAL),
+		Item::gunpowder, Item::blaze_powder,new ItemInstance(Item::coal, 1, CoalItem::CHAR_COAL),
 		L'T');
 
 	addShapedRecipy(new ItemInstance(Item::lead, 2), //
@@ -975,7 +975,7 @@ Recipes::Recipes()
 		L"~O ", //
 		L"  ~", //
 
-		L'~', Item::string, L'O', Item::slimeBall,
+		L'~', Item::string, L'O', Item::slime_ball,
 		L'T');
 
 
@@ -985,10 +985,10 @@ Recipes::Recipes()
 		L"#X#", //
 		L" # ", //
 
-		L'#', Item::ironIngot, L'X', Item::redStone,
+		L'#', Item::iron_ingot, L'X', Item::redstone,
 		L'T');
 
-	addShapedRecipy(new ItemInstance((Item*)Item::emptyMap, 1), //
+	addShapedRecipy(new ItemInstance((Item*)Item::empty_map, 1), //
 		L"ssscicig",
 		L"###", //
 		L"#X#", //
@@ -1023,18 +1023,18 @@ Recipes::Recipes()
 		L'#', new ItemInstance(Tile::stone, 1, 0),
 		L'M');
 
-	addShapedRecipy(new ItemInstance(Tile::weightedPlate_heavy, 1), //
+	addShapedRecipy(new ItemInstance(Tile::heavy_weighted_pressure_plate, 1), //
 		L"scig",
 		L"##", //
 
-		L'#', Item::ironIngot,
+		L'#', Item::iron_ingot,
 		L'M');
 
-	addShapedRecipy(new ItemInstance(Tile::weightedPlate_light, 1), //
+	addShapedRecipy(new ItemInstance(Tile::light_weighted_pressure_plate, 1), //
 		L"scig",
 		L"##", //
 
-		L'#', Item::goldIngot,
+		L'#', Item::gold_ingot,
 		L'M');
 
 	addShapedRecipy(new ItemInstance(Tile::dispenser, 1), //
@@ -1042,7 +1042,7 @@ Recipes::Recipes()
 		L"###", //
 		L"#X#", //
 		L"#R#", //
-		L'#', Tile::cobblestone, L'X', Item::bow, L'R', Item::redStone,
+		L'#', Tile::cobblestone, L'X', Item::bow, L'R', Item::redstone,
 		L'M');
 
 	addShapedRecipy(new ItemInstance(Tile::dropper, 1), //
@@ -1051,7 +1051,7 @@ Recipes::Recipes()
 		L"# #", //
 		L"#R#", //
 
-		L'#', Tile::cobblestone, L'R', Item::redStone,
+		L'#', Tile::cobblestone, L'R', Item::redstone,
 		L'M');
 
 	addShapedRecipy(new ItemInstance(Item::cauldron, 1), //
@@ -1060,15 +1060,15 @@ Recipes::Recipes()
 		L"# #", //
 		L"###", //
 
-		L'#', Item::ironIngot,
+		L'#', Item::iron_ingot,
 		L'T');
 
-	addShapedRecipy(new ItemInstance(Item::brewingStand, 1), //
+	addShapedRecipy(new ItemInstance(Item::brewing_stand, 1), //
 		L"ssctcig",
 		L" B ", //
 		L"###", //
 
-		L'#', Tile::cobblestone, L'B', Item::blazeRod,
+		L'#', Tile::cobblestone, L'B', Item::blaze_rod,
 		L'S');
 
 
@@ -1080,7 +1080,7 @@ Recipes::Recipes()
 		L'A', Tile::pumpkin, L'B', Tile::torch,
 		L'T');
 
-	addShapedRecipy(new ItemInstance(Item::flowerPot, 1), //
+	addShapedRecipy(new ItemInstance(Item::flower_pot, 1), //
 		L"sscig",
 		L"# #", //
 		L" # ", //
@@ -1131,15 +1131,15 @@ Recipes::Recipes()
 		Item::leather,
 		L'D');
 
-	addShapelessRecipy(new ItemInstance(Item::writingBook, 1),
+	addShapelessRecipy(new ItemInstance(Item::writable_book, 1),
 		L"iiig",
 		Item::book,
 		Item::feather,
-		ItemInstance(Item::dye_powder, 1, DyePowderItem::BLACK),
+		ItemInstance(Item::dye, 1, DyePowderItem::BLACK),
 		L'D');
 
-	//addShapelessRecipy(new ItemInstance(Item.writingBook, 1), //
-	//            Item.book, new ItemInstance(Item.dye_powder, 1, DyePowderItem.BLACK), Item.feather);
+	//addShapelessRecipy(new ItemInstance(Item.writable_book, 1), //
+	//            Item.book, new ItemInstance(Item.dye, 1, DyePowderItem.BLACK), Item.feather);
 
 	addShapedRecipy(new ItemInstance(Tile::noteblock, 1), //
 		L"sssctcig",
@@ -1147,7 +1147,7 @@ Recipes::Recipes()
 		L"#X#", //
 		L"###", //
 
-		L'#', Tile::wood, L'X', Item::redStone,
+		L'#', Tile::wood, L'X', Item::redstone,
 		L'M');
 
 	addShapedRecipy(new ItemInstance(Tile::bookshelf, 1), //
@@ -1180,19 +1180,19 @@ Recipes::Recipes()
 
 	pOreRecipies->addRecipes(this);
 
-	addShapedRecipy(new ItemInstance(Item::goldIngot), //
+	addShapedRecipy(new ItemInstance(Item::gold_ingot), //
 		L"ssscig",
 		L"###", //
 		L"###", //
 		L"###", //
 
-		L'#', Item::goldNugget,
+		L'#', Item::gold_nugget,
 		L'D');
 
-	addShapedRecipy(new ItemInstance(Item::goldNugget, 9), //
+	addShapedRecipy(new ItemInstance(Item::gold_nugget, 9), //
 		L"scig",
 		L"#", //
-		L'#', Item::goldIngot,
+		L'#', Item::gold_ingot,
 		L'D');
 
 	// 4J-PB - moving into decorations to make the structures list smaller
@@ -1212,15 +1212,15 @@ Recipes::Recipes()
         L"#X#", //
         L"#R#", //
 
-        L'#', Tile::cobblestone, L'X', Item::ironIngot, L'R', Item::redStone, L'T', Tile::wood,
+        L'#', Tile::cobblestone, L'X', Item::iron_ingot, L'R', Item::redstone, L'T', Tile::wood,
 		L'M');
 
-    addShapedRecipy(new ItemInstance(static_cast<Tile *>(Tile::pistonStickyBase), 1), //
+    addShapedRecipy(new ItemInstance(static_cast<Tile *>(Tile::sticky_piston), 1), //
 		L"sscictg",
         L"S", //
         L"P", //
 
-        L'S', Item::slimeBall, L'P', Tile::pistonBase,
+        L'S', Item::slime_ball, L'P', Tile::pistonBase,
 		L'M');
 
 
@@ -1233,20 +1233,20 @@ Recipes::Recipes()
 		L'P', Item::paper, L'G', Item::gunpowder,
 		L'D');
 
-	addShapedRecipy(new ItemInstance(Item::fireworksCharge,1), //
+	addShapedRecipy(new ItemInstance(Item::firework_charge,1), //
 		L"sscicig",
 		L" D ", //
 		L" G ", //
 
-		L'D', Item::dye_powder, L'G', Item::gunpowder,
+		L'D', Item::dye, L'G', Item::gunpowder,
 		L'D');
 
-	addShapedRecipy(new ItemInstance(Item::fireworksCharge,1), //
+	addShapedRecipy(new ItemInstance(Item::firework_charge,1), //
 		L"sscicig",
 		L" D ", //
 		L" C ", //
 
-		L'D', Item::dye_powder, L'C', Item::fireworksCharge,
+		L'D', Item::dye, L'C', Item::firework_charge,
 		L'D');
 
 

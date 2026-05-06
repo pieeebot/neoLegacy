@@ -110,7 +110,7 @@ bool SpruceFeature::place(Level *level, Random *random, int x, int y, int z)
     for (int hh = 0; hh < treeHeight - topOffset; hh++)
 	{
         int t = level->getTile(x, y + hh, z);
-        if (t == 0 || t == Tile::leaves_Id) placeBlock(level, x, y + hh, z, Tile::treeTrunk_Id, TreeTile::SPRUCE_TRUNK);
+        if (t == 0 || t == Tile::leaves_Id) placeBlock(level, x, y + hh, z, Tile::log_Id, TreeTile::SPRUCE_TRUNK);
     }
     return true;
 }

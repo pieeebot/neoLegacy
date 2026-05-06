@@ -11,6 +11,12 @@ class FireTile : public Tile
 public:
 	static const wstring TEXTURE_FIRST;
 	static const wstring TEXTURE_SECOND;
+	static const int AGE_MASK = 0xF;
+	static const int EAST_BIT = 1 << 4;
+	static const int WEST_BIT = 1 << 5;
+	static const int SOUTH_BIT = 1 << 6;
+	static const int NORTH_BIT = 1 << 7;
+	static const int UP_BIT = 1 << 8;
 
 	static const int FLAME_INSTANT = 60;
 	static const int FLAME_EASY = 30;
@@ -31,6 +37,11 @@ protected:
 	FireTile(int id);
 	virtual ~FireTile();
 public:
+	virtual void createBlockStateDefinition() override;
+	virtual int defaultBlockState() override;
+	virtual int convertBlockStateToLegacyData(BlockState *state) override;
+	virtual Tile::BlockState getBlockState(LevelSource *level, int x, int y, int z) override;
+	virtual Tile::BlockState getBlockState(int data);
 	void init();
 private:
 	void setFlammable(int id, int flame, int burn);

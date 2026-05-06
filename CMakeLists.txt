@@ -234,10 +234,16 @@ if(TARGET Minecraft.Server)
   add_dependencies(Minecraft.Server GenerateStringIdLookup)
 endif()
 
+# item.h takes priority as some tile.h blocks are not meant to be accessed
+# for example: the wheat 'block' (stage 1 wheat crop) is NOT supposed to override the normal wheat item
 set(_item_map_inputs
+  "${CMAKE_CURRENT_SOURCE_DIR}/Minecraft.World/Item.h" 
   "${CMAKE_CURRENT_SOURCE_DIR}/Minecraft.World/Tile.h"
-  "${CMAKE_CURRENT_SOURCE_DIR}/Minecraft.World/Item.h"
 )
+
+if(NOT PLATFORM_NAME STREQUAL "Windows64")
+  string(REPLACE ";" "\\;" _item_map_inputs "${_item_map_inputs}")
+endif()
 
 #neo: added ItemNameMap generation
 add_custom_command(

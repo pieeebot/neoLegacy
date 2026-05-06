@@ -61,7 +61,7 @@ int WaterlilyTile::getColor(LevelSource *level, int x, int y, int z, int data) /
 
 bool WaterlilyTile::mayPlaceOn(int tile)
 {
-	return tile == Tile::calmWater_Id;
+	return tile == Tile::water_Id;
 }
 
 bool WaterlilyTile::canSurvive(Level *level, int x, int y, int z)

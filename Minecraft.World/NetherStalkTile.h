@@ -16,6 +16,11 @@ private:
 public:
 	NetherStalkTile(int id);
     virtual void updateDefaultShape(); // 4J Added override
+	virtual void createBlockStateDefinition() override;
+	virtual int defaultBlockState() override;
+	virtual int convertBlockStateToLegacyData(BlockState *state) override;
+	virtual Tile::BlockState getBlockState(LevelSource *level, int x, int y, int z) override;
+	virtual Tile::BlockState getBlockState(int data);
     virtual bool mayPlaceOn(int tile);
 
 	// Brought forward to fix #60073 - TU7: Content: Gameplay: Nether Warts cannot be placed next to each other in the Nether

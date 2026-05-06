@@ -24,7 +24,7 @@ int LiquidTile_SPU::getColor(ChunkRebuildData *level, int x, int y, int z)
 int LiquidTile_SPU::getColor(ChunkRebuildData *level, int x, int y, int z, int d)
 {
  	// MGH - TODO
-	if (getMaterial()->getID() == Material_SPU::water_Id)
+	if (getMaterial()->getID() == Material_SPU::flowing_water_Id)
 	{
 		//            Biome b = level.getBiomeSource().getBiome(x, z);
 		//            return b.waterColor;
@@ -62,16 +62,16 @@ Icon_SPU *LiquidTile_SPU::getTexture(int face, int data)
 {
 	if (face == Facing::DOWN || face == Facing::UP)
 	{
-		if(id == water_Id || id == calmWater_Id)
+		if(id == flowing_water_Id || id == water_Id)
 			return &ms_pTileData->liquidTile_iconWaterStill;
-		else //(id == lava_Id || id == calmLava_Id)
+		else //(id == flowing_lava_Id || id == lava_Id)
 			return &ms_pTileData->liquidTile_iconLavaStill;
 	}
 	else
 	{
-		if(id == water_Id || id == calmWater_Id)
+		if(id == flowing_water_Id || id == water_Id)
 			return &ms_pTileData->liquidTile_iconWaterFlow;
-		else //(id == lava_Id || id == calmLava_Id)
+		else //(id == flowing_lava_Id || id == lava_Id)
 			return &ms_pTileData->liquidTile_iconLavaFlow;
     }
 }
@@ -201,21 +201,21 @@ float LiquidTile_SPU::getBrightness(ChunkRebuildData *level, int x, int y, int z
 
 int LiquidTile_SPU::getRenderLayer()
 {
-	return getMaterial()->getID() == Material_SPU::water_Id ? 1 : 0;
+	return getMaterial()->getID() == Material_SPU::flowing_water_Id ? 1 : 0;
 }
 
 
 double LiquidTile_SPU::getSlopeAngle(ChunkRebuildData *level, int x, int y, int z, Material_SPU *m)
 {
     Vec3_SPU flow = Vec3_SPU(0,0,0);
-    if (m->getID() == Material_SPU::water_Id)
+    if (m->getID() == Material_SPU::flowing_water_Id)
 	{
-		TileRef_SPU tRef(Tile_SPU::water_Id);
+		TileRef_SPU tRef(Tile_SPU::flowing_water_Id);
 		flow = static_cast<LiquidTile_SPU *>(tRef.getPtr())->getFlow(level, x, y, z);
 	}
-    if (m->getID() == Material_SPU::lava_Id)
+    if (m->getID() == Material_SPU::flowing_lava_Id)
 	{
-		TileRef_SPU tRef(Tile_SPU::lava_Id);
+		TileRef_SPU tRef(Tile_SPU::flowing_lava_Id);
 		flow = static_cast<LiquidTile_SPU *>(tRef.getPtr())->getFlow(level, x, y, z);
 	}
     if (flow.x == 0 && flow.z == 0) return -1000;

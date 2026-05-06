@@ -118,7 +118,7 @@ bool OcelotSitOnTileGoal::isValidTarget(Level *level, int x, int y, int z)
 			return true;
 		}
 	}
-	else if (tile == Tile::furnace_lit_Id)
+	else if (tile == Tile::lit_furnace_Id)
 	{
 		return true;
 	}

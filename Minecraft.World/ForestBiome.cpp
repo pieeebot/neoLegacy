@@ -268,15 +268,15 @@ Feature* ForestBiome::getFlowerFeature(Random* random, int x, int y, int z)
        
         int fType = random->nextInt(9); 
         switch (fType) {
-            case 0: return new FlowerFeature(Tile::flower_Id, 0); 
-            case 1: return new FlowerFeature(Tile::rose_Id, 0);   
-            case 2: return new FlowerFeature(Tile::rose_Id, Rose::ALLIUM); 
-            case 3: return new FlowerFeature(Tile::rose_Id, Rose::AZURE_BLUET); 
-            case 4: return new FlowerFeature(Tile::rose_Id, Rose::RED_TULIP); 
-            case 5: return new FlowerFeature(Tile::rose_Id, Rose::ORANGE_TULIP); 
-            case 6: return new FlowerFeature(Tile::rose_Id, Rose::WHITE_TULIP);
-            case 7: return new FlowerFeature(Tile::rose_Id, Rose::PINK_TULIP); 
-            case 8: return new FlowerFeature(Tile::rose_Id, Rose::OXEYE_DAISY); 
+            case 0: return new FlowerFeature(Tile::yellow_flower_Id, 0); 
+            case 1: return new FlowerFeature(Tile::red_flower_Id, 0);   
+            case 2: return new FlowerFeature(Tile::red_flower_Id, Rose::ALLIUM); 
+            case 3: return new FlowerFeature(Tile::red_flower_Id, Rose::AZURE_BLUET); 
+            case 4: return new FlowerFeature(Tile::red_flower_Id, Rose::RED_TULIP); 
+            case 5: return new FlowerFeature(Tile::red_flower_Id, Rose::ORANGE_TULIP); 
+            case 6: return new FlowerFeature(Tile::red_flower_Id, Rose::WHITE_TULIP);
+            case 7: return new FlowerFeature(Tile::red_flower_Id, Rose::PINK_TULIP); 
+            case 8: return new FlowerFeature(Tile::red_flower_Id, Rose::OXEYE_DAISY); 
         }
     }
     else if (biomeType == 2 || biomeType == 3) 

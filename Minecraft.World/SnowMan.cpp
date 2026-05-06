@@ -76,7 +76,7 @@ void SnowMan::aiStep()
 			{
 				if (Tile::topSnow->mayPlace(level, xx, yy, zz))
 				{
-					level->setTileAndUpdate(xx, yy, zz, Tile::topSnow_Id);
+					level->setTileAndUpdate(xx, yy, zz, Tile::snow_layer_Id);
 				}
 			}
 		}
@@ -85,7 +85,7 @@ void SnowMan::aiStep()
 
 int SnowMan::getDeathLoot()
 {
-	return Item::snowBall_Id;
+	return Item::snowball_Id;
 }
 
 
@@ -94,7 +94,7 @@ void SnowMan::dropDeathLoot(bool wasKilledByPlayer, int playerBonusLevel)
 	// drop some feathers
 	int count = random->nextInt(16);
 	for (int i = 0; i < count; i++) {
-		spawnAtLocation(Item::snowBall_Id, 1);
+		spawnAtLocation(Item::snowball_Id, 1);
 	}
 }
 

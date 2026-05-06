@@ -17,7 +17,7 @@ public:
 		if (face == Facing::UP) return &ms_pTileData->mycelTile_iconTop;
 		if (face == Facing::DOWN) return TileRef_SPU(dirt_Id)->getTexture(face);
 		Material_SPU *above = level->getMaterial(x, y + 1, z);
-		if (above->getID() == Material_SPU::topSnow_Id || above->getID() == Material_SPU::snow_Id) 
+		if (above->getID() == Material_SPU::snow_layer_Id || above->getID() == Material_SPU::snow_Id) 
 			return &ms_pTileData->mycelTile_iconSnowSide;
 		else return icon();
 

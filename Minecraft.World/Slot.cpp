@@ -131,7 +131,7 @@ bool Slot::mayCombine(shared_ptr<ItemInstance> second)
 	if(thisItem)
 	{
 		bool thisIsDyableArmor = thisItem->getMaterial() == ArmorItem::ArmorMaterial::CLOTH;
-		bool itemIsDye = second->id == Item::dye_powder_Id;
+		bool itemIsDye = second->id == Item::dye_Id;
 		return thisIsDyableArmor && itemIsDye;
 	}
 	// 4J Stu - This condition taken from Recipes::getItemFor to repair items, but added the damaged check to skip when the result is pointless

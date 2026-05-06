@@ -275,10 +275,10 @@ void Zombie::dropRareDeathLoot(int rareLootLevel)
 	switch (random->nextInt(3))
 	{
 	case 0:
-		spawnAtLocation(Item::ironIngot_Id, 1);
+		spawnAtLocation(Item::iron_ingot_Id, 1);
 		break;
 	case 1:
-		spawnAtLocation(Item::carrots_Id, 1);
+		spawnAtLocation(Item::carrot_Id, 1);
 		break;
 	case 2:
 		spawnAtLocation(Item::potato_Id, 1);
@@ -295,11 +295,11 @@ void Zombie::populateDefaultEquipmentSlots()
 		int rand = random->nextInt(3);
 		if (rand == 0)
 		{
-			setEquippedSlot(SLOT_WEAPON, std::make_shared<ItemInstance>(Item::sword_iron));
+			setEquippedSlot(SLOT_WEAPON, std::make_shared<ItemInstance>(Item::iron_sword));
 		}
 		else
 		{
-			setEquippedSlot(SLOT_WEAPON, std::make_shared<ItemInstance>(Item::shovel_iron));
+			setEquippedSlot(SLOT_WEAPON, std::make_shared<ItemInstance>(Item::iron_shovel));
 		}
 	}
 }
@@ -430,7 +430,7 @@ bool Zombie::mobInteract(shared_ptr<Player> player)
 {
 	shared_ptr<ItemInstance> item = player->getSelectedItem();
 
-	if (item != nullptr && item->getItem() == Item::apple_gold && item->getAuxValue() == 0 && isVillager() && hasEffect(MobEffect::weakness))
+	if (item != nullptr && item->getItem() == Item::golden_apple && item->getAuxValue() == 0 && isVillager() && hasEffect(MobEffect::weakness))
 	{
 		if (!player->abilities.instabuild) item->count--;
 		if (item->count <= 0)
@@ -515,7 +515,7 @@ int Zombie::getConversionProgress()
 				{
 					int tile = level->getTile(xx, yy, zz);
 
-					if (tile == Tile::ironFence_Id || tile == Tile::bed_Id)
+					if (tile == Tile::iron_bars_Id || tile == Tile::bed_Id)
 					{
 						if (random->nextFloat() < 0.3f) amount++;
 						specialBlocksCount++;

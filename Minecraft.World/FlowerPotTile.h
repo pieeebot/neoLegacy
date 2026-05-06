@@ -18,6 +18,11 @@ public:
 	static const int TYPE_FERN = 11;
 
 	FlowerPotTile(int id);
+	virtual void createBlockStateDefinition() override;
+	virtual int defaultBlockState() override;
+	virtual int convertBlockStateToLegacyData(BlockState *state) override;
+	virtual Tile::BlockState getBlockState(LevelSource *level, int x, int y, int z) override;
+	virtual Tile::BlockState getBlockState(int data);
 
 	void updateDefaultShape();
 	bool isSolidRender(bool isServerLevel = false);

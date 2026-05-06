@@ -32,9 +32,9 @@ public:
 	static bool shouldConnectTo(ChunkRebuildData *level, int x, int y, int z, int direction)
 	{
 		int t = level->getTile(x, y, z);
-		if (t == Tile_SPU::redStoneDust_Id) return true;
+		if (t == Tile_SPU::redstone_wire_Id) return true;
 		if (t == 0) return false;
-		if (t == Tile_SPU::diode_off_Id || t == Tile_SPU::diode_on_Id)
+		if (t == Tile_SPU::unpowered_repeater_Id || t == Tile_SPU::powered_repeater_Id)
 		{
 			int data = level->getData(x, y, z);
 			return direction == (data & DiodeTile_SPU::DIRECTION_MASK) || direction == Direction::DIRECTION_OPPOSITE[data & DiodeTile_SPU::DIRECTION_MASK];

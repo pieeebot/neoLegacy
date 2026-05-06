@@ -384,7 +384,7 @@ void Player::tick()
 			this->drop( shared_ptr<ItemInstance>( new ItemInstance(Item::map) ) );
 			this->drop( shared_ptr<ItemInstance>( new ItemInstance(Item::record_01) ) );
 			this->drop( shared_ptr<ItemInstance>( new ItemInstance(Item::record_02) ) );
-			this->drop( shared_ptr<ItemInstance>(new ItemInstance( Item::pickAxe_diamond, 1 )) );
+			this->drop( shared_ptr<ItemInstance>(new ItemInstance( Item::diamond_pickaxe, 1 )) );
 #endif
 
 #ifdef __PS3__
@@ -394,7 +394,7 @@ void Player::tick()
 			// 		this->drop( shared_ptr<ItemInstance>( new ItemInstance(Item::map) ) );
 			// 		this->drop( shared_ptr<ItemInstance>( new ItemInstance(Item::record_01) ) );
 			// 		this->drop( shared_ptr<ItemInstance>( new ItemInstance(Item::record_02) ) );
-			// 		this->drop( shared_ptr<ItemInstance>(new ItemInstance( Item::pickAxe_diamond, 1 )) );
+			// 		this->drop( shared_ptr<ItemInstance>(new ItemInstance( Item::diamond_pickaxe, 1 )) );
 			// #endif
 #endif
 
@@ -404,11 +404,11 @@ void Player::tick()
 			this->drop( shared_ptr<ItemInstance>( new ItemInstance(Item::map) ) );
 			this->drop( shared_ptr<ItemInstance>( new ItemInstance(Item::record_01) ) );
 			this->drop( shared_ptr<ItemInstance>( new ItemInstance(Item::record_02) ) );
-			this->drop( shared_ptr<ItemInstance>(new ItemInstance( Item::pickAxe_diamond, 1 )) );
+			this->drop( shared_ptr<ItemInstance>(new ItemInstance( Item::diamond_pickaxe, 1 )) );
 #endif
 #endif
 			// 4J-PB - Throw items out at the start of the level
-			//this->drop( new ItemInstance( Item::pickAxe_diamond, 1 ) );
+			//this->drop( new ItemInstance( Item::diamond_pickaxe, 1 ) );
 			//this->drop( new ItemInstance( Tile::workBench, 1 ) );
 			//this->drop( new ItemInstance( Tile::treeTrunk, 8 ) );
 			//this->drop( shared_ptr<ItemInstance>( new ItemInstance( Item::milk, 3 ) ) );
@@ -456,7 +456,7 @@ void Player::tick()
 			//        increaseXp(10);
 
 			{
-				//            ItemInstance itemInstance = new ItemInstance(Item.pickAxe_diamond);
+				//            ItemInstance itemInstance = new ItemInstance(Item.diamond_pickaxe);
 				//            itemInstance.enchant(Enchantment.diggingBonus, 3);
 				//            inventory.add(itemInstance);
 			}
@@ -475,16 +475,16 @@ void Player::tick()
 			int poweredCount = 0;
 			for(int i = 10; i < 2800; ++i)
 			{
-				level->setTileAndData(x+i,y-1,z-2,Tile::quartzBlock_Id,0,Tile::UPDATE_CLIENTS);
-				level->setTileAndData(x+i,y,z-2,Tile::quartzBlock_Id,0,Tile::UPDATE_CLIENTS);
-				level->setTileAndData(x+i,y+1,z-2,Tile::quartzBlock_Id,0,Tile::UPDATE_CLIENTS);
+				level->setTileAndData(x+i,y-1,z-2,Tile::quartz_block_Id,0,Tile::UPDATE_CLIENTS);
+				level->setTileAndData(x+i,y,z-2,Tile::quartz_block_Id,0,Tile::UPDATE_CLIENTS);
+				level->setTileAndData(x+i,y+1,z-2,Tile::quartz_block_Id,0,Tile::UPDATE_CLIENTS);
 				level->setTileAndData(x+i,y+2,z-2,Tile::glowstone_Id,0,Tile::UPDATE_CLIENTS);
-				level->setTileAndData(x+i,y+3,z-2,Tile::quartzBlock_Id,0,Tile::UPDATE_CLIENTS);
+				level->setTileAndData(x+i,y+3,z-2,Tile::quartz_block_Id,0,Tile::UPDATE_CLIENTS);
 
-				level->setTileAndData(x+i,y-1,z-1,Tile::stoneBrick_Id,0,Tile::UPDATE_CLIENTS);
+				level->setTileAndData(x+i,y-1,z-1,Tile::stonebrick_Id,0,Tile::UPDATE_CLIENTS);
 				if(i%20 == 0)
 				{
-					level->setTileAndData(x+i,y,z-1,Tile::redstoneTorch_on_Id,0,Tile::UPDATE_CLIENTS);
+					level->setTileAndData(x+i,y,z-1,Tile::redstone_torch_Id,0,Tile::UPDATE_CLIENTS);
 					poweredCount = 4;
 				}
 				else
@@ -495,10 +495,10 @@ void Player::tick()
 				level->setTileAndData(x+i,y+2,z-1,0,0,Tile::UPDATE_CLIENTS);
 				level->setTileAndData(x+i,y+3,z-1,0,0,Tile::UPDATE_CLIENTS);
 
-				level->setTileAndData(x+i,y-1,z,Tile::stoneBrick_Id,0,Tile::UPDATE_CLIENTS);
+				level->setTileAndData(x+i,y-1,z,Tile::stonebrick_Id,0,Tile::UPDATE_CLIENTS);
 				if(poweredCount>0)
 				{
-					level->setTileAndData(x+i,y,z,Tile::goldenRail_Id,0,Tile::UPDATE_CLIENTS);
+					level->setTileAndData(x+i,y,z,Tile::golden_rail_Id,0,Tile::UPDATE_CLIENTS);
 					--poweredCount;
 				}
 				else
@@ -509,7 +509,7 @@ void Player::tick()
 				level->setTileAndData(x+i,y+2,z,0,0,Tile::UPDATE_CLIENTS);
 				level->setTileAndData(x+i,y+3,z,0,0,Tile::UPDATE_CLIENTS);
 
-				level->setTileAndData(x+i,y-1,z+1,Tile::stoneBrick_Id,0,Tile::UPDATE_CLIENTS);
+				level->setTileAndData(x+i,y-1,z+1,Tile::stonebrick_Id,0,Tile::UPDATE_CLIENTS);
 				if((i+5)%20 == 0)
 				{
 					level->setTileAndData(x+i,y,z+1,Tile::torch_Id,0,Tile::UPDATE_CLIENTS);
@@ -522,11 +522,11 @@ void Player::tick()
 				level->setTileAndData(x+i,y+2,z+1,0,0,Tile::UPDATE_CLIENTS);
 				level->setTileAndData(x+i,y+3,z+1,0,0,Tile::UPDATE_CLIENTS);
 
-				level->setTileAndData(x+i,y-1,z+2,Tile::quartzBlock_Id,0,Tile::UPDATE_CLIENTS);
-				level->setTileAndData(x+i,y,z+2,Tile::quartzBlock_Id,0,Tile::UPDATE_CLIENTS);
-				level->setTileAndData(x+i,y+1,z+2,Tile::quartzBlock_Id,0,Tile::UPDATE_CLIENTS);
+				level->setTileAndData(x+i,y-1,z+2,Tile::quartz_block_Id,0,Tile::UPDATE_CLIENTS);
+				level->setTileAndData(x+i,y,z+2,Tile::quartz_block_Id,0,Tile::UPDATE_CLIENTS);
+				level->setTileAndData(x+i,y+1,z+2,Tile::quartz_block_Id,0,Tile::UPDATE_CLIENTS);
 				level->setTileAndData(x+i,y+2,z+2,Tile::glowstone_Id,0,Tile::UPDATE_CLIENTS);
-				level->setTileAndData(x+i,y+3,z+2,Tile::quartzBlock_Id,0,Tile::UPDATE_CLIENTS);
+				level->setTileAndData(x+i,y+3,z+2,Tile::quartz_block_Id,0,Tile::UPDATE_CLIENTS);
 			}
 			madeTrack = true;
 		}
@@ -1548,7 +1548,7 @@ void Player::openTextEdit(shared_ptr<TileEntity> sign)
 {
 }
 
-bool Player::openBrewingStand(shared_ptr<BrewingStandTileEntity> brewingStand)
+bool Player::openBrewingStand(shared_ptr<BrewingStandTileEntity> brewing_stand)
 {
 	return true;
 }
@@ -2494,9 +2494,9 @@ void Player::makeStuckInWeb()
 Icon *Player::getItemInHandIcon(shared_ptr<ItemInstance> item, int layer)
 {
 	Icon *icon = LivingEntity::getItemInHandIcon(item, layer);
-	if (item->id == Item::fishingRod->id && fishing != nullptr)
+	if (item->id == Item::fishing_rod->id && fishing != nullptr)
 	{
-		icon = Item::fishingRod->getEmptyIcon();
+		icon = Item::fishing_rod->getEmptyIcon();
 	}
 	else if (item->getItem()->hasMultipleSpriteLayers())
 	{
@@ -3075,11 +3075,11 @@ bool Player::isAllowedToUse(Tile *tile)
 		{
 			switch(tile->id)
 			{
-			case Tile::door_wood_Id:
-			case Tile::button_stone_Id:
-			case Tile::button_wood_Id:
+			case Tile::wooden_door_Id:
+			case Tile::stone_button_Id:
+			case Tile::wooden_button_Id:
 			case Tile::lever_Id:
-			case Tile::fenceGate_Id:
+			case Tile::fence_gate_Id:
 			case Tile::trapdoor_Id:
 				allowed = true;
 				break;
@@ -3092,13 +3092,13 @@ bool Player::isAllowedToUse(Tile *tile)
 			{
 			case Tile::chest_Id:
 			case Tile::furnace_Id:
-			case Tile::furnace_lit_Id:
+			case Tile::lit_furnace_Id:
 			case Tile::dispenser_Id:
-			case Tile::brewingStand_Id:
-			case Tile::enchantTable_Id:
-			case Tile::workBench_Id:
+			case Tile::brewing_stand_Id:
+			case Tile::enchanting_table_Id:
+			case Tile::crafting_table_Id:
 			case Tile::anvil_Id:
-			case Tile::enderChest_Id:
+			case Tile::ender_chest_Id:
 				allowed = true;
 				break;
 			}
@@ -3108,21 +3108,21 @@ bool Player::isAllowedToUse(Tile *tile)
 		{
 			switch(tile->id)
 			{
-			case Tile::door_wood_Id:
-			case Tile::button_stone_Id:
-			case Tile::button_wood_Id:
+			case Tile::wooden_door_Id:
+			case Tile::stone_button_Id:
+			case Tile::wooden_button_Id:
 			case Tile::lever_Id:
-			case Tile::fenceGate_Id:
+			case Tile::fence_gate_Id:
 			case Tile::trapdoor_Id:
 			case Tile::chest_Id:
 			case Tile::furnace_Id:
-			case Tile::furnace_lit_Id:
+			case Tile::lit_furnace_Id:
 			case Tile::dispenser_Id:
-			case Tile::brewingStand_Id:
-			case Tile::enchantTable_Id:
-			case Tile::workBench_Id:
+			case Tile::brewing_stand_Id:
+			case Tile::enchanting_table_Id:
+			case Tile::crafting_table_Id:
 			case Tile::anvil_Id:
-			case Tile::enderChest_Id:
+			case Tile::ender_chest_Id:
 				allowed =  false;
 				break;
 			default:
@@ -3149,28 +3149,28 @@ bool Player::isAllowedToUse(shared_ptr<ItemInstance> item)
 		switch(item->id)
 		{
 			// food
-		case Item::mushroomStew_Id:
+		case Item::mushroom_stew_Id:
 		case Item::apple_Id:
 		case Item::bread_Id:
-		case Item::porkChop_raw_Id:
-		case Item::porkChop_cooked_Id:
-		case Item::apple_gold_Id:
-		case Item::fish_raw_Id:
-		case Item::fish_cooked_Id:
+		case Item::porkchop_Id:
+		case Item::cooked_porkchop_Id:
+		case Item::golden_apple_Id:
+		case Item::fish_Id:
+		case Item::cooked_fish_Id:
 		case Item::cookie_Id:
-		case Item::beef_cooked_Id:
-		case Item::beef_raw_Id:
-		case Item::chicken_cooked_Id:
-		case Item::chicken_raw_Id:
-		case Item::melon_Id:
+		case Item::cooked_beef_Id:
+		case Item::beef_Id:
+		case Item::cooked_chicken_Id:
+		case Item::chicken_Id:
+		case Item::melon_block_Id:
 		case Item::rotten_flesh_Id:
 			// bow
 		case Item::bow_Id:
-		case Item::sword_diamond_Id:
-		case Item::sword_gold_Id:
-		case Item::sword_iron_Id:
-		case Item::sword_stone_Id:
-		case Item::sword_wood_Id:
+		case Item::diamond_sword_Id:
+		case Item::golden_sword_Id:
+		case Item::iron_sword_Id:
+		case Item::stone_sword_Id:
+		case Item::wooden_sword_Id:
 			allowed = true;
 			break;
 		}

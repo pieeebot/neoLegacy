@@ -127,7 +127,7 @@ void FurnaceTile::setLit(bool lit, Level *level, int x, int y, int z)
 	shared_ptr<TileEntity> te = level->getTileEntity(x, y, z);
 
 	noDrop = true;
-	if (lit) level->setTileAndUpdate(x, y, z, Tile::furnace_lit_Id);
+	if (lit) level->setTileAndUpdate(x, y, z, Tile::lit_furnace_Id);
 	else level->setTileAndUpdate(x, y, z, Tile::furnace_Id);
 	noDrop = false;
 

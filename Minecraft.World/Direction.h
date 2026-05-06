@@ -32,6 +32,9 @@ public:
 	// for [direction][world-facing] it gives [tile-facing]
 	static int RELATIVE_DIRECTION_FACING[4][6];
 
+    static int getOpposite(int dir);
+    static int from2DDataValue(int param);
+
 	static int getDirection(double xd, double zd);
 	static int getDirection(int x0, int z0, int x1, int z1);
 

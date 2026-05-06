@@ -97,11 +97,11 @@ void HellRandomLevelSource::prepareHeights(int xOffs, int zOffs, byteArray block
 							int tileId = 0;
 							if (yc * CHUNK_HEIGHT + y < waterHeight)
 							{
-								tileId = Tile::calmLava_Id;
+								tileId = Tile::lava_Id;
 							}
 							if (val > 0)
 							{
-								tileId = Tile::netherRack_Id;
+								tileId = Tile::netherrack_Id;
 							}
 
 							blocks[offs] = static_cast<byte>(tileId);
@@ -147,8 +147,8 @@ void HellRandomLevelSource::buildSurfaces(int xOffs, int zOffs, byteArray blocks
 
 			int run = -1;
 
-			byte top = (byte) Tile::netherRack_Id;
-			byte material = (byte) Tile::netherRack_Id;
+			byte top = (byte) Tile::netherrack_Id;
+			byte material = (byte) Tile::netherrack_Id;
 
 			for (int y = Level::genDepthMinusOne; y >= 0; y--)
 			{
@@ -160,7 +160,7 @@ void HellRandomLevelSource::buildSurfaces(int xOffs, int zOffs, byteArray blocks
 				{
 					if( z - random->nextInt( 4 ) <= 0 || xOffs < -(m_XZSize/2) )
 					{
-						blocks[offs] = static_cast<byte>(Tile::unbreakable_Id);
+						blocks[offs] = static_cast<byte>(Tile::bedrock_Id);
 						blockSet = true;
 					}
 				}
@@ -168,7 +168,7 @@ void HellRandomLevelSource::buildSurfaces(int xOffs, int zOffs, byteArray blocks
 				{
 					if( x - random->nextInt( 4 ) <= 0 || zOffs < -(m_XZSize/2))
 					{
-						blocks[offs] = static_cast<byte>(Tile::unbreakable_Id);
+						blocks[offs] = static_cast<byte>(Tile::bedrock_Id);
 						blockSet = true;
 					}
 				}
@@ -176,7 +176,7 @@ void HellRandomLevelSource::buildSurfaces(int xOffs, int zOffs, byteArray blocks
 				{
 					if( z + random->nextInt(4) >= 15 || xOffs > (m_XZSize/2))
 					{
-						blocks[offs] = static_cast<byte>(Tile::unbreakable_Id);
+						blocks[offs] = static_cast<byte>(Tile::bedrock_Id);
 						blockSet = true;
 					}
 				}
@@ -184,7 +184,7 @@ void HellRandomLevelSource::buildSurfaces(int xOffs, int zOffs, byteArray blocks
 				{
 					if( x + random->nextInt(4) >= 15 || zOffs > (m_XZSize/2) )
 					{
-						blocks[offs] = static_cast<byte>(Tile::unbreakable_Id);
+						blocks[offs] = static_cast<byte>(Tile::bedrock_Id);
 						blockSet = true;
 					}
 				}
@@ -193,7 +193,7 @@ void HellRandomLevelSource::buildSurfaces(int xOffs, int zOffs, byteArray blocks
 
 				if (y >= Level::genDepthMinusOne - random->nextInt(5) || y <= 0 + random->nextInt(5))
 				{
-					blocks[offs] = static_cast<byte>(Tile::unbreakable_Id);
+					blocks[offs] = static_cast<byte>(Tile::bedrock_Id);
 				}
 				else
 				{
@@ -203,27 +203,27 @@ void HellRandomLevelSource::buildSurfaces(int xOffs, int zOffs, byteArray blocks
 					{
 						run = -1;
 					}
-					else if (old == Tile::netherRack_Id)
+					else if (old == Tile::netherrack_Id)
 					{
 						if (run == -1)
 						{
 							if (runDepth <= 0)
 							{
 								top = 0;
-								material = static_cast<byte>(Tile::netherRack_Id);
+								material = static_cast<byte>(Tile::netherrack_Id);
 							}
 							else if (y >= waterHeight - 4 && y <= waterHeight + 1)
 							{
-								top = static_cast<byte>(Tile::netherRack_Id);
-								material = static_cast<byte>(Tile::netherRack_Id);
+								top = static_cast<byte>(Tile::netherrack_Id);
+								material = static_cast<byte>(Tile::netherrack_Id);
 								if (gravel) top = static_cast<byte>(Tile::gravel_Id);
-								if (gravel) material = static_cast<byte>(Tile::netherRack_Id);
+								if (gravel) material = static_cast<byte>(Tile::netherrack_Id);
 								if (sand)
 								{
 									// 4J Stu - Make some nether wart spawn outside of the nether fortresses
 									if(random->nextInt(16) == 0)
 									{
-										top = static_cast<byte>(Tile::netherStalk_Id);
+										top = static_cast<byte>(Tile::nether_wart_Id);
 
 										// Place the nether wart on top of the soul sand
 										y += 1;
@@ -234,13 +234,13 @@ void HellRandomLevelSource::buildSurfaces(int xOffs, int zOffs, byteArray blocks
 									}
 									else
 									{
-										top = static_cast<byte>(Tile::soulsand_Id);
+										top = static_cast<byte>(Tile::soul_sand_Id);
 									}
 								}
-								if (sand) material = static_cast<byte>(Tile::soulsand_Id);
+								if (sand) material = static_cast<byte>(Tile::soul_sand_Id);
 							}
 
-							if (y < waterHeight && top == 0) top = static_cast<byte>(Tile::calmLava_Id);
+							if (y < waterHeight && top == 0) top = static_cast<byte>(Tile::lava_Id);
 
 							run = runDepth;
 							// 4J Stu - If sand, then allow adding nether wart at heights below the water level
@@ -441,7 +441,7 @@ void HellRandomLevelSource::postProcess(ChunkSource *parent, int xt, int zt)
 		int x = xo + pprandom->nextInt(16) + 8;
 		int y = pprandom->nextInt(Level::genDepth - 8) + 4;
 		int z = zo + pprandom->nextInt(16) + 8;
-		HellSpringFeature(Tile::lava_Id, false).place(level, pprandom, x, y, z);
+		HellSpringFeature(Tile::flowing_lava_Id, false).place(level, pprandom, x, y, z);
 	}
 
 	int count = pprandom->nextInt(pprandom->nextInt(10) + 1) + 1;
@@ -487,7 +487,7 @@ void HellRandomLevelSource::postProcess(ChunkSource *parent, int xt, int zt)
 		FlowerFeature(Tile::mushroom_red_Id).place(level, pprandom, x, y, z);
 	}
 
-	OreFeature quartzFeature(Tile::netherQuartz_Id, 13, Tile::netherRack_Id);
+	OreFeature quartzFeature(Tile::quartz_ore_Id, 13, Tile::netherrack_Id);
 	for (int i = 0; i < 16; i++)
 	{
 		int x = xo + pprandom->nextInt(16);
@@ -501,7 +501,7 @@ void HellRandomLevelSource::postProcess(ChunkSource *parent, int xt, int zt)
 		int x = xo + random->nextInt(16);
 		int y = random->nextInt(Level::genDepth - 20) + 10;
 		int z = zo + random->nextInt(16);
-		HellSpringFeature hellSpringFeature(Tile::lava_Id, true);
+		HellSpringFeature hellSpringFeature(Tile::flowing_lava_Id, true);
 		hellSpringFeature.place(level, random, x, y, z);
 	}
 
@@ -540,7 +540,7 @@ vector<Biome::MobSpawnerData *> *HellRandomLevelSource::getMobsAt(MobCategory *m
 		{
 			return netherBridgeFeature->getBridgeEnemies();
 		}
-		if ((netherBridgeFeature->isInsideBoundingFeature(x, y, z) && level->getTile(x, y - 1, z) == Tile::netherBrick_Id))
+		if ((netherBridgeFeature->isInsideBoundingFeature(x, y, z) && level->getTile(x, y - 1, z) == Tile::nether_brick_Id))
 		{
 			return netherBridgeFeature->getBridgeEnemies();
 		}

@@ -67,7 +67,7 @@ void FishingHookRenderer::render(shared_ptr<Entity> _hook, double x, double y, d
 		if (ownerPlayer != nullptr)
 		{
 			shared_ptr<ItemInstance> selected = ownerPlayer->inventory->getSelected();
-			if (selected == nullptr || selected->id != Item::fishingRod_Id)
+			if (selected == nullptr || selected->id != Item::fishing_rod_Id)
 			{
 				handDir = -handDir;
 			}

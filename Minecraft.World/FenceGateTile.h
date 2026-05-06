@@ -5,9 +5,17 @@ class FenceGateTile : public DirectionalTile
 {
 private:
 	static const int OPEN_BIT = 4;
+	static const int POWERED_BIT = 8;
+	static const int IN_WALL_BIT = 16;
 	Icon* icon;
 public:
 	FenceGateTile(int id);
+	virtual void createBlockStateDefinition() override;
+	virtual int defaultBlockState() override;
+	virtual int convertBlockStateToLegacyData(BlockState *state) override;
+	virtual Tile::BlockState getBlockState(LevelSource *level, int x, int y, int z) override;
+	virtual Tile::BlockState getBlockState(int data);
+	void fillVirtualBlockStateProperties(Tile::BlockState *state, LevelSource *level, const BlockPos &pos);
 	Icon *getTexture(int face, int data);
 	virtual bool mayPlace(Level *level, int x, int y, int z);
 	virtual AABB *getAABB(Level *level, int x, int y, int z);

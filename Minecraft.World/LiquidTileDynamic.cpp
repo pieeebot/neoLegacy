@@ -207,7 +207,9 @@ void LiquidTileDynamic::trySpreadTo(Level *level, int x, int y, int z, int fromX
 				}
 				else
 				{
-					Tile::tiles[old]->spawnResources(level, x, y, z, level->getData(x, y, z), 0);
+					Tile *tile = Tile::tiles[old];
+					if (tile == nullptr) return; // tu31 tutorial world fix
+					tile->spawnResources(level, x, y, z, level->getData(x, y, z), 0);
 				}
 			}
 		}
@@ -313,12 +315,13 @@ bool *LiquidTileDynamic::getSpread(Level *level, int x, int y, int z)
 bool LiquidTileDynamic::isWaterBlocking(Level *level, int x, int y, int z)
 {
 	int t = level->getTile(x, y, z);
-	if (t == Tile::door_wood_Id || t == Tile::door_iron_Id || t == Tile::sign_Id || t == Tile::ladder_Id || t == Tile::reeds_Id)
+	if (t == Tile::wooden_door_Id || t == Tile::iron_door_Id || t == Tile::standing_sign_Id || t == Tile::ladder_Id || t == Tile::reeds_Id)
 	{
 		return true;
 	}
-	if (t == 0) return false;
-	Material *m = Tile::tiles[t]->material;
+	Tile *tile = Tile::tiles[t];
+	if (t == 0 || tile == nullptr) return false; // tu31 tutorial world fix
+	Material *m = tile->material;
 	if (m == Material::portal) return true;
 	if (m->blocksMotion()) return true;
 	return false;

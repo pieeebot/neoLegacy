@@ -107,15 +107,15 @@ int _ArmorMaterial::getTierItemId() const
 	}
 	else if (this == CHAIN)
 	{
-		return Item::ironIngot_Id;
+		return Item::iron_ingot_Id;
 	}
 	else if (this == GOLD)
 	{
-		return Item::goldIngot_Id;
+		return Item::gold_ingot_Id;
 	}
 	else if (this == IRON)
 	{
-		return Item::ironIngot_Id;
+		return Item::iron_ingot_Id;
 	}
 	else if (this == DIAMOND)
 	{
@@ -289,13 +289,13 @@ Icon *ArmorItem::getEmptyIcon(int slot)
 	switch (slot)
 	{
 	case 0:
-		return Item::helmet_diamond->iconEmpty;
+		return Item::diamond_helmet->iconEmpty;
 	case 1:
-		return Item::chestplate_diamond->iconEmpty;
+		return Item::diamond_chestplate->iconEmpty;
 	case 2:
-		return Item::leggings_diamond->iconEmpty;
+		return Item::diamond_leggings->iconEmpty;
 	case 3:
-		return Item::boots_diamond->iconEmpty;
+		return Item::diamond_boots->iconEmpty;
 	}
 
 	return nullptr;

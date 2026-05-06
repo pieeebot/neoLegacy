@@ -15,7 +15,7 @@ ExtremeHillsBiome::ExtremeHillsBiome(int id) : ExtremeHillsBiome(id, false)
 ExtremeHillsBiome::ExtremeHillsBiome(int id, bool extraTrees) : Biome(id)
 {
     
-    silverfishFeature = new OreFeature(Tile::monsterStoneEgg_Id, 9);
+    silverfishFeature = new OreFeature(Tile::monster_egg_Id, 9);
    
     taigaFeature = new SpruceFeature(false);
 
@@ -61,7 +61,7 @@ void ExtremeHillsBiome::decorate(Level* level, Random* random, int xo, int zo)
             int tile = level->getTile(x, y, z);
             if (tile == Tile::stone_Id)
             {
-                level->setTileAndData(x, y, z, Tile::emeraldOre_Id, 0, Tile::UPDATE_CLIENTS);
+                level->setTileAndData(x, y, z, Tile::emerald_ore_Id, 0, Tile::UPDATE_CLIENTS);
             }
         }
     }

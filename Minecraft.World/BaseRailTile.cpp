@@ -32,6 +32,36 @@ BaseRailTile::Rail::Rail(Level *level, int x, int y, int z)
 	}
 }
 
+void BaseRailTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int BaseRailTile::defaultBlockState()
+{
+	return 0;
+}
+
+int BaseRailTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	if (!state) return 0;
+	int mask = RAIL_DIRECTION_MASK | (usesDataBit ? RAIL_DATA_BIT : 0);
+	return state->value & mask;
+}
+
+Tile::BlockState BaseRailTile::getBlockState(int data)
+{
+	int mask = RAIL_DIRECTION_MASK | (usesDataBit ? RAIL_DATA_BIT : 0);
+	return Tile::BlockState(data & mask);
+}
+
+Tile::BlockState BaseRailTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	int mask = RAIL_DIRECTION_MASK | (usesDataBit ? RAIL_DATA_BIT : 0);
+	return Tile::BlockState(level->getData(x, y, z) & mask);
+}
+
 BaseRailTile::Rail::~Rail()
 {
 	for( size_t i = 0; i < connections.size(); i++ )
@@ -351,7 +381,7 @@ bool BaseRailTile::isRail(Level *level, int x, int y, int z)
 
 bool BaseRailTile::isRail(int id)
 {
-	return id == Tile::rail_Id || id == Tile::goldenRail_Id || id == Tile::detectorRail_Id || id == Tile::activatorRail_Id;
+	return id == Tile::rail_Id || id == Tile::golden_rail_Id || id == Tile::detector_rail_Id || id == Tile::activator_rail_Id;
 }
 
 BaseRailTile::BaseRailTile(int id, bool usesDataBit) : Tile(id, Material::decoration, isSolidRender())

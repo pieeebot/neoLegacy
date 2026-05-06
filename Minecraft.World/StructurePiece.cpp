@@ -250,7 +250,7 @@ int StructurePiece::getOrientationData( int tile, int data )
 			}
 		}
 	}
-	else if ( tile == Tile::door_wood_Id || tile == Tile::door_iron_Id )
+	else if ( tile == Tile::wooden_door_Id || tile == Tile::iron_door_Id )
 	{
 		if ( orientation == Direction::SOUTH )
 		{
@@ -280,7 +280,7 @@ int StructurePiece::getOrientationData( int tile, int data )
 			return ( data + 3 ) & 3;
 		}
 	}
-	else if ( tile == Tile::stairs_stone_Id || tile == Tile::stairs_wood_Id || tile == Tile::stairs_netherBricks_Id || tile == Tile::stairs_stoneBrick_Id || tile == Tile::stairs_sandstone_Id)
+	else if ( tile == Tile::stone_stairs_Id || tile == Tile::oak_stairs_Id || tile == Tile::nether_brick_stairs_Id || tile == Tile::stone_brick_stairs_Id || tile == Tile::sandstone_stairs_Id)
 	{
 		if ( orientation == Direction::SOUTH )
 		{
@@ -437,7 +437,7 @@ int StructurePiece::getOrientationData( int tile, int data )
 			}
 		}
 	}
-	else if (tile == Tile::tripWireSource_Id || (Tile::tiles[tile] != nullptr && dynamic_cast<DirectionalTile *>(Tile::tiles[tile])))
+	else if (tile == Tile::tripwire_hook_Id || (Tile::tiles[tile] != nullptr && dynamic_cast<DirectionalTile *>(Tile::tiles[tile])))
 	{
 		if (orientation == Direction::SOUTH)
 		{
@@ -485,7 +485,7 @@ int StructurePiece::getOrientationData( int tile, int data )
 			}
 		}
 	}
-	else if (tile == Tile::pistonBase_Id || tile == Tile::pistonStickyBase_Id || tile == Tile::lever_Id || tile == Tile::dispenser_Id)
+	else if (tile == Tile::piston_Id || tile == Tile::sticky_piston_Id || tile == Tile::lever_Id || tile == Tile::dispenser_Id)
 	{
 		if (orientation == Direction::SOUTH)
 		{
@@ -851,6 +851,6 @@ void StructurePiece::createDoor( Level* level, BoundingBox* chunkBB, Random* ran
 
 	if ( chunkBB->isInside( worldX, worldY, worldZ ) )
 	{
-		DoorItem::place( level, worldX, worldY, worldZ, orientation, Tile::door_wood );
+		DoorItem::place( level, worldX, worldY, worldZ, orientation, Tile::wooden_door );
 	}
 }

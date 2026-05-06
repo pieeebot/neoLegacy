@@ -121,7 +121,7 @@ bool LakeFeature::place(Level *level, Random *random, int x, int y, int z)
 					if (level->getTile(x + xx, y + yy - 1, z + zz) == Tile::dirt_Id && level->getBrightness(LightLayer::Sky, x + xx, y + yy, z + zz) > 0)
 					{
 						Biome *b = level->getBiome(x + xx, z + zz);
-						if (b->topMaterial == Tile::mycel_Id) level->setTileAndData(x + xx, y + yy - 1, z + zz, Tile::mycel_Id, 0, Tile::UPDATE_CLIENTS);
+						if (b->topMaterial == Tile::mycelium_Id) level->setTileAndData(x + xx, y + yy - 1, z + zz, Tile::mycelium_Id, 0, Tile::UPDATE_CLIENTS);
 						else level->setTileAndData(x + xx, y + yy - 1, z + zz, Tile::grass_Id, 0, Tile::UPDATE_CLIENTS);
 					}
 				}

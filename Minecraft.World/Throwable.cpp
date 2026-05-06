@@ -206,7 +206,7 @@ void Throwable::tick()
 
 	if (res != nullptr)
 	{
-		if ( (res->type == HitResult::TILE) && (level->getTile(res->x, res->y, res->z) == Tile::portalTile_Id) )
+		if ( (res->type == HitResult::TILE) && (level->getTile(res->x, res->y, res->z) == Tile::portal_Id) )
 		{
 			handleInsidePortal();
 		}

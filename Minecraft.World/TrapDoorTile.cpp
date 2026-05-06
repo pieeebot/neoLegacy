@@ -13,6 +13,32 @@ TrapDoorTile::TrapDoorTile(int id, Material *material) : Tile(id, material,isSol
 	setShape(0.5f - r, 0, 0.5f - r, 0.5f + r, h, 0.5f + r);
 }
 
+void TrapDoorTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int TrapDoorTile::defaultBlockState()
+{
+	return 0;
+}
+
+int TrapDoorTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0xF) : 0;
+}
+
+Tile::BlockState TrapDoorTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0xF);
+}
+
+Tile::BlockState TrapDoorTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0xF);
+}
+
 bool TrapDoorTile::blocksLight()
 {
 	return false;

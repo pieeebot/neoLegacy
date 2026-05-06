@@ -238,7 +238,7 @@ bool EnchantmentMenu::clickMenuButton(shared_ptr<Player> player, int i)
 			{
 				
 				player->giveExperienceLevels(-(i + 1));
-				if (isBook) item->id = Item::enchantedBook_Id;
+				if (isBook) item->id = Item::enchanted_book_Id;
 				int randomIndex = isBook ? random.nextInt(newEnchantment->size()) : -1;
 				
 				for (int index = 0; index < newEnchantment->size(); index++)
@@ -246,7 +246,7 @@ bool EnchantmentMenu::clickMenuButton(shared_ptr<Player> player, int i)
 					EnchantmentInstance* e = newEnchantment->at(index);
 					if (isBook)
 					{
-						Item::enchantedBook->addEnchantment(item, e);
+						Item::enchanted_book->addEnchantment(item, e);
 						en = true;
 					}
 					else
@@ -327,7 +327,7 @@ void EnchantmentMenu::removed(shared_ptr<Player> player)
 
 bool EnchantmentMenu::stillValid(shared_ptr<Player> player) 
 {
-	if (level->getTile(x, y, z) != Tile::enchantTable_Id) return false;
+	if (level->getTile(x, y, z) != Tile::enchanting_table_Id) return false;
 	if (player->distanceToSqr(x + 0.5, y + 0.5, z + 0.5) > 8 * 8) return false;
 	return true;
 }

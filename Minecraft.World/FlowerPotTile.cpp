@@ -11,6 +11,32 @@ FlowerPotTile::FlowerPotTile(int id) : Tile(id, Material::decoration, isSolidRen
 	sendTileData();
 }
 
+void FlowerPotTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int FlowerPotTile::defaultBlockState()
+{
+	return 0;
+}
+
+int FlowerPotTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0xF) : 0;
+}
+
+Tile::BlockState FlowerPotTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0xF);
+}
+
+Tile::BlockState FlowerPotTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0xF);
+}
+
 void FlowerPotTile::updateDefaultShape()
 {
 	float size = 6.0f / 16.0f;
@@ -64,7 +90,7 @@ int FlowerPotTile::cloneTileId(Level *level, int x, int y, int z)
 
 	if (item == nullptr)
 	{
-		return Item::flowerPot_Id;
+		return Item::flower_pot_Id;
 	}
 	else
 	{
@@ -78,7 +104,7 @@ int FlowerPotTile::cloneTileData(Level *level, int x, int y, int z)
 
 	if (item == nullptr)
 	{
-		return Item::flowerPot_Id;
+		return Item::flower_pot_Id;
 	}
 	else
 	{
@@ -119,7 +145,7 @@ void FlowerPotTile::spawnResources(Level *level, int x, int y, int z, int data, 
 
 int FlowerPotTile::getResource(int data, Random *random, int playerBonusLevel)
 {
-	return Item::flowerPot_Id;
+	return Item::flower_pot_Id;
 }
 
 shared_ptr<ItemInstance> FlowerPotTile::getItemFromType(int type)
@@ -157,12 +183,12 @@ int FlowerPotTile::getTypeFromItem(shared_ptr<ItemInstance> item)
 {
 	int id = item->getItem()->id;
 
-	if (id == Tile::rose_Id) return TYPE_FLOWER_RED;
-	if (id == Tile::flower_Id) return TYPE_FLOWER_YELLOW;
+	if (id == Tile::red_flower_Id) return TYPE_FLOWER_RED;
+	if (id == Tile::yellow_flower_Id) return TYPE_FLOWER_YELLOW;
 	if (id == Tile::cactus_Id) return TYPE_CACTUS;
 	if (id == Tile::mushroom_brown_Id) return TYPE_MUSHROOM_BROWN;
 	if (id == Tile::mushroom_red_Id) return TYPE_MUSHROOM_RED;
-	if (id == Tile::deadBush_Id) return TYPE_DEAD_BUSH;
+	if (id == Tile::deadbush_Id) return TYPE_DEAD_BUSH;
 
 	if (id == Tile::sapling_Id)
 	{

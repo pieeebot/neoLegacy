@@ -117,13 +117,13 @@ void ControlledByPlayerGoal::tick()
 	{
 		shared_ptr<ItemInstance> carriedItem = player->getCarriedItem();
 
-		if (carriedItem != nullptr && carriedItem->id == Item::carrotOnAStick_Id)
+		if (carriedItem != nullptr && carriedItem->id == Item::carrot_on_a_stick_Id)
 		{
 			carriedItem->hurtAndBreak(1, player);
 
 			if (carriedItem->count == 0)
 			{
-				shared_ptr<ItemInstance> replacement = std::make_shared<ItemInstance>(Item::fishingRod);
+				shared_ptr<ItemInstance> replacement = std::make_shared<ItemInstance>(Item::fishing_rod);
 				replacement->setTag(carriedItem->tag);
 				player->inventory->items[player->inventory->selected] = replacement;
 			}

@@ -154,7 +154,7 @@ bool Villager::mobInteract(shared_ptr<Player> player)
 {
 	// [EB]: Truly dislike this code but I don't see another easy way
 	shared_ptr<ItemInstance> item = player->inventory->getSelected();
-	bool holdingSpawnEgg = item != nullptr && item->id == Item::spawnEgg_Id;
+	bool holdingSpawnEgg = item != nullptr && item->id == Item::spawn_egg_Id;
 
 	if (!holdingSpawnEgg && isAlive() && !isTrading() && !isBaby())
 	{
@@ -408,15 +408,15 @@ void Villager::addOffers(int addCount)
 	case PROFESSION_FARMER:
 		addItemForTradeIn(newOffers, Item::wheat_Id, random, getRecipeChance(.9f));
 		addItemForTradeIn(newOffers, Tile::wool_Id, random, getRecipeChance(.5f));
-		addItemForTradeIn(newOffers, Item::chicken_raw_Id, random, getRecipeChance(.5f));
-		addItemForTradeIn(newOffers, Item::fish_cooked_Id, random, getRecipeChance(.4f));
+		addItemForTradeIn(newOffers, Item::chicken_Id, random, getRecipeChance(.5f));
+		addItemForTradeIn(newOffers, Item::cooked_fish_Id, random, getRecipeChance(.4f));
 		addItemForPurchase(newOffers, Item::bread_Id, random, getRecipeChance(.9f));
-		addItemForPurchase(newOffers, Item::melon_Id, random, getRecipeChance(.3f));
+		addItemForPurchase(newOffers, Item::melon_block_Id, random, getRecipeChance(.3f));
 		addItemForPurchase(newOffers, Item::apple_Id, random, getRecipeChance(.3f));
 		addItemForPurchase(newOffers, Item::cookie_Id, random, getRecipeChance(.3f));
 		addItemForPurchase(newOffers, Item::shears_Id, random, getRecipeChance(.3f));
-		addItemForPurchase(newOffers, Item::flintAndSteel_Id, random, getRecipeChance(.3f));
-		addItemForPurchase(newOffers, Item::chicken_cooked_Id, random, getRecipeChance(.3f));
+		addItemForPurchase(newOffers, Item::flint_and_steel_Id, random, getRecipeChance(.3f));
+		addItemForPurchase(newOffers, Item::cooked_chicken_Id, random, getRecipeChance(.3f));
 		addItemForPurchase(newOffers, Item::arrow_Id, random, getRecipeChance(.5f));
 		if (random->nextFloat() < getRecipeChance(.5f))
 		{
@@ -425,74 +425,74 @@ void Villager::addOffers(int addCount)
 		break;
 	case PROFESSION_BUTCHER:
 		addItemForTradeIn(newOffers, Item::coal_Id, random, getRecipeChance(.7f));
-		addItemForTradeIn(newOffers, Item::porkChop_raw_Id, random, getRecipeChance(.5f));
-		addItemForTradeIn(newOffers, Item::beef_raw_Id, random, getRecipeChance(.5f));
+		addItemForTradeIn(newOffers, Item::porkchop_Id, random, getRecipeChance(.5f));
+		addItemForTradeIn(newOffers, Item::beef_Id, random, getRecipeChance(.5f));
 		addItemForPurchase(newOffers, Item::saddle_Id, random, getRecipeChance(.1f));
-		addItemForPurchase(newOffers, Item::chestplate_leather_Id, random, getRecipeChance(.3f));
-		addItemForPurchase(newOffers, Item::boots_leather_Id, random, getRecipeChance(.3f));
-		addItemForPurchase(newOffers, Item::helmet_leather_Id, random, getRecipeChance(.3f));
-		addItemForPurchase(newOffers, Item::leggings_leather_Id, random, getRecipeChance(.3f));
-		addItemForPurchase(newOffers, Item::porkChop_cooked_Id, random, getRecipeChance(.3f));
-		addItemForPurchase(newOffers, Item::beef_cooked_Id, random, getRecipeChance(.3f));
+		addItemForPurchase(newOffers, Item::leather_chestplate_Id, random, getRecipeChance(.3f));
+		addItemForPurchase(newOffers, Item::leather_boots_Id, random, getRecipeChance(.3f));
+		addItemForPurchase(newOffers, Item::leather_helmet_Id, random, getRecipeChance(.3f));
+		addItemForPurchase(newOffers, Item::leather_leggings_Id, random, getRecipeChance(.3f));
+		addItemForPurchase(newOffers, Item::cooked_porkchop_Id, random, getRecipeChance(.3f));
+		addItemForPurchase(newOffers, Item::cooked_beef_Id, random, getRecipeChance(.3f));
 		break;
 	case PROFESSION_SMITH:
 		addItemForTradeIn(newOffers, Item::coal_Id, random, getRecipeChance(.7f));
-		addItemForTradeIn(newOffers, Item::ironIngot_Id, random, getRecipeChance(.5f));
-		addItemForTradeIn(newOffers, Item::goldIngot_Id, random, getRecipeChance(.5f));
+		addItemForTradeIn(newOffers, Item::iron_ingot_Id, random, getRecipeChance(.5f));
+		addItemForTradeIn(newOffers, Item::gold_ingot_Id, random, getRecipeChance(.5f));
 		addItemForTradeIn(newOffers, Item::diamond_Id, random, getRecipeChance(.5f));
 
-		addItemForPurchase(newOffers, Item::sword_iron_Id, random, getRecipeChance(.5f));
-		addItemForPurchase(newOffers, Item::sword_diamond_Id, random, getRecipeChance(.5f));
-		addItemForPurchase(newOffers, Item::hatchet_iron_Id, random, getRecipeChance(.3f));
-		addItemForPurchase(newOffers, Item::hatchet_diamond_Id, random, getRecipeChance(.3f));
-		addItemForPurchase(newOffers, Item::pickAxe_iron_Id, random, getRecipeChance(.5f));
-		addItemForPurchase(newOffers, Item::pickAxe_diamond_Id, random, getRecipeChance(.5f));
-		addItemForPurchase(newOffers, Item::shovel_iron_Id, random, getRecipeChance(.2f));
-		addItemForPurchase(newOffers, Item::shovel_diamond_Id, random, getRecipeChance(.2f));
-		addItemForPurchase(newOffers, Item::hoe_iron_Id, random, getRecipeChance(.2f));
-		addItemForPurchase(newOffers, Item::hoe_diamond_Id, random, getRecipeChance(.2f));
-		addItemForPurchase(newOffers, Item::boots_iron_Id, random, getRecipeChance(.2f));
-		addItemForPurchase(newOffers, Item::boots_diamond_Id, random, getRecipeChance(.2f));
-		addItemForPurchase(newOffers, Item::helmet_iron_Id, random, getRecipeChance(.2f));
-		addItemForPurchase(newOffers, Item::helmet_diamond_Id, random, getRecipeChance(.2f));
-		addItemForPurchase(newOffers, Item::chestplate_iron_Id, random, getRecipeChance(.2f));
-		addItemForPurchase(newOffers, Item::chestplate_diamond_Id, random, getRecipeChance(.2f));
-		addItemForPurchase(newOffers, Item::leggings_iron_Id, random, getRecipeChance(.2f));
-		addItemForPurchase(newOffers, Item::leggings_diamond_Id, random, getRecipeChance(.2f));
-		addItemForPurchase(newOffers, Item::boots_chain_Id, random, getRecipeChance(.1f));
-		addItemForPurchase(newOffers, Item::helmet_chain_Id, random, getRecipeChance(.1f));
-		addItemForPurchase(newOffers, Item::chestplate_chain_Id, random, getRecipeChance(.1f));
-		addItemForPurchase(newOffers, Item::leggings_chain_Id, random, getRecipeChance(.1f));
+		addItemForPurchase(newOffers, Item::iron_sword_Id, random, getRecipeChance(.5f));
+		addItemForPurchase(newOffers, Item::diamond_sword_Id, random, getRecipeChance(.5f));
+		addItemForPurchase(newOffers, Item::iron_axe_Id, random, getRecipeChance(.3f));
+		addItemForPurchase(newOffers, Item::diamond_axe_Id, random, getRecipeChance(.3f));
+		addItemForPurchase(newOffers, Item::iron_pickaxe_Id, random, getRecipeChance(.5f));
+		addItemForPurchase(newOffers, Item::diamond_pickaxe_Id, random, getRecipeChance(.5f));
+		addItemForPurchase(newOffers, Item::iron_shovel_Id, random, getRecipeChance(.2f));
+		addItemForPurchase(newOffers, Item::diamond_shovel_Id, random, getRecipeChance(.2f));
+		addItemForPurchase(newOffers, Item::iron_hoe_Id, random, getRecipeChance(.2f));
+		addItemForPurchase(newOffers, Item::diamond_hoe_Id, random, getRecipeChance(.2f));
+		addItemForPurchase(newOffers, Item::iron_boots_Id, random, getRecipeChance(.2f));
+		addItemForPurchase(newOffers, Item::diamond_boots_Id, random, getRecipeChance(.2f));
+		addItemForPurchase(newOffers, Item::iron_helmet_Id, random, getRecipeChance(.2f));
+		addItemForPurchase(newOffers, Item::diamond_helmet_Id, random, getRecipeChance(.2f));
+		addItemForPurchase(newOffers, Item::iron_chestplate_Id, random, getRecipeChance(.2f));
+		addItemForPurchase(newOffers, Item::diamond_chestplate_Id, random, getRecipeChance(.2f));
+		addItemForPurchase(newOffers, Item::iron_leggings_Id, random, getRecipeChance(.2f));
+		addItemForPurchase(newOffers, Item::diamond_leggings_Id, random, getRecipeChance(.2f));
+		addItemForPurchase(newOffers, Item::chainmail_boots_Id, random, getRecipeChance(.1f));
+		addItemForPurchase(newOffers, Item::chainmail_helmet_Id, random, getRecipeChance(.1f));
+		addItemForPurchase(newOffers, Item::chainmail_chestplate_Id, random, getRecipeChance(.1f));
+		addItemForPurchase(newOffers, Item::chainmail_leggings_Id, random, getRecipeChance(.1f));
 		break;
 	case PROFESSION_LIBRARIAN:
 		addItemForTradeIn(newOffers, Item::paper_Id, random, getRecipeChance(.8f));
 		addItemForTradeIn(newOffers, Item::book_Id, random, getRecipeChance(.8f));
-		//addItemForTradeIn(newOffers, Item::writtenBook_Id, random, getRecipeChance(0.3f));
+		//addItemForTradeIn(newOffers, Item::written_book_Id, random, getRecipeChance(0.3f));
 		addItemForPurchase(newOffers, Tile::bookshelf_Id, random, getRecipeChance(.8f));
 		addItemForPurchase(newOffers, Tile::glass_Id, random, getRecipeChance(.2f));
 		addItemForPurchase(newOffers, Item::compass_Id, random, getRecipeChance(.2f));
 		addItemForPurchase(newOffers, Item::clock_Id, random, getRecipeChance(.2f));
-		addItemForPurchase(newOffers, Item::nameTag_Id, random, getRecipeChance(.2f));
+		addItemForPurchase(newOffers, Item::name_tag_Id, random, getRecipeChance(.2f));
 
 		if (random->nextFloat() < getRecipeChance(0.07f))
 		{
 			Enchantment *enchantment = Enchantment::validEnchantments[random->nextInt(Enchantment::validEnchantments.size())];
 			int level = Mth::nextInt(random, enchantment->getMinLevel(), enchantment->getMaxLevel());
-			shared_ptr<ItemInstance> book = Item::enchantedBook->createForEnchantment(new EnchantmentInstance(enchantment, level));
+			shared_ptr<ItemInstance> book = Item::enchanted_book->createForEnchantment(new EnchantmentInstance(enchantment, level));
 			int cost = 2 + random->nextInt(5 + (level * 10)) + 3 * level;
 
 			newOffers->push_back(new MerchantRecipe(std::make_shared<ItemInstance>(Item::book), std::make_shared<ItemInstance>(Item::emerald, cost), book));
 		}
 		break;
 	case PROFESSION_PRIEST:
-		addItemForPurchase(newOffers, Item::eyeOfEnder_Id, random, getRecipeChance(.3f));
-		addItemForPurchase(newOffers, Item::expBottle_Id, random, getRecipeChance(.2f));
-		addItemForPurchase(newOffers, Item::redStone_Id, random, getRecipeChance(.4f));
+		addItemForPurchase(newOffers, Item::eye_of_ender_Id, random, getRecipeChance(.3f));
+		addItemForPurchase(newOffers, Item::experience_bottle_Id, random, getRecipeChance(.2f));
+		addItemForPurchase(newOffers, Item::redstone_Id, random, getRecipeChance(.4f));
 		addItemForPurchase(newOffers, Tile::glowstone_Id, random, getRecipeChance(.3f));
 		{
 			int enchantItems[] = {
-				Item::sword_iron_Id, Item::sword_diamond_Id, Item::chestplate_iron_Id, Item::chestplate_diamond_Id, Item::hatchet_iron_Id, Item::hatchet_diamond_Id, Item::pickAxe_iron_Id,
-				Item::pickAxe_diamond_Id
+				Item::iron_sword_Id, Item::diamond_sword_Id, Item::iron_chestplate_Id, Item::diamond_chestplate_Id, Item::iron_axe_Id, Item::diamond_axe_Id, Item::iron_pickaxe_Id,
+				Item::diamond_pickaxe_Id
 			};
 			for (unsigned int i = 0; i < 8; ++i)
 			{
@@ -510,7 +510,7 @@ void Villager::addOffers(int addCount)
 
 	if (newOffers->empty())
 	{
-		addItemForTradeIn(newOffers, Item::goldIngot_Id, random, 1.0f);
+		addItemForTradeIn(newOffers, Item::gold_ingot_Id, random, 1.0f);
 	}
 
 	// shuffle the list to make it more interesting
@@ -539,69 +539,69 @@ void Villager::overrideOffers(MerchantRecipeList *recipeList)
 void Villager::staticCtor()
 {
 	MIN_MAX_VALUES[Item::coal_Id] = pair<int,int>(16, 24);
-	MIN_MAX_VALUES[Item::ironIngot_Id] = pair<int,int>(8, 10);
-	MIN_MAX_VALUES[Item::goldIngot_Id] = pair<int,int>(8, 10);
+	MIN_MAX_VALUES[Item::iron_ingot_Id] = pair<int,int>(8, 10);
+	MIN_MAX_VALUES[Item::gold_ingot_Id] = pair<int,int>(8, 10);
 	MIN_MAX_VALUES[Item::diamond_Id] = pair<int,int>(4, 6);
 	MIN_MAX_VALUES[Item::paper_Id] = pair<int,int>(24, 36);
 	MIN_MAX_VALUES[Item::book_Id] = pair<int,int>(11, 13);
-	//MIN_MAX_VALUES.insert(Item::writtenBook_Id, pair<int,int>(1, 1));
-	MIN_MAX_VALUES[Item::enderPearl_Id] = pair<int,int>(3, 4);
-	MIN_MAX_VALUES[Item::eyeOfEnder_Id] = pair<int,int>(2, 3);
-	MIN_MAX_VALUES[Item::porkChop_raw_Id] = pair<int,int>(14, 18);
-	MIN_MAX_VALUES[Item::beef_raw_Id] = pair<int,int>(14, 18);
-	MIN_MAX_VALUES[Item::chicken_raw_Id] = pair<int,int>(14, 18);
-	MIN_MAX_VALUES[Item::fish_cooked_Id] = pair<int,int>(9, 13);
-	MIN_MAX_VALUES[Item::seeds_wheat_Id] = pair<int,int>(34, 48);
-	MIN_MAX_VALUES[Item::seeds_melon_Id] = pair<int,int>(30, 38);
-	MIN_MAX_VALUES[Item::seeds_pumpkin_Id] = pair<int,int>(30, 38);
+	//MIN_MAX_VALUES.insert(Item::written_book_Id, pair<int,int>(1, 1));
+	MIN_MAX_VALUES[Item::ender_pearl_Id] = pair<int,int>(3, 4);
+	MIN_MAX_VALUES[Item::eye_of_ender_Id] = pair<int,int>(2, 3);
+	MIN_MAX_VALUES[Item::porkchop_Id] = pair<int,int>(14, 18);
+	MIN_MAX_VALUES[Item::beef_Id] = pair<int,int>(14, 18);
+	MIN_MAX_VALUES[Item::chicken_Id] = pair<int,int>(14, 18);
+	MIN_MAX_VALUES[Item::cooked_fish_Id] = pair<int,int>(9, 13);
+	MIN_MAX_VALUES[Item::wheat_seeds_Id] = pair<int,int>(34, 48);
+	MIN_MAX_VALUES[Item::melon_seeds_Id] = pair<int,int>(30, 38);
+	MIN_MAX_VALUES[Item::pumpkin_seeds_Id] = pair<int,int>(30, 38);
 	MIN_MAX_VALUES[Item::wheat_Id] = pair<int,int>(18, 22);
 	MIN_MAX_VALUES[Tile::wool_Id] = pair<int,int>(14, 22);
 	MIN_MAX_VALUES[Item::rotten_flesh_Id] = pair<int,int>(36, 64);
 
-	MIN_MAX_PRICES[Item::flintAndSteel_Id] = pair<int,int>(3, 4);
+	MIN_MAX_PRICES[Item::flint_and_steel_Id] = pair<int,int>(3, 4);
 	MIN_MAX_PRICES[Item::shears_Id] = pair<int,int>(3, 4);
-	MIN_MAX_PRICES[Item::sword_iron_Id] = pair<int,int>(7, 11);
-	MIN_MAX_PRICES[Item::sword_diamond_Id] = pair<int,int>(12, 14);
-	MIN_MAX_PRICES[Item::hatchet_iron_Id] = pair<int,int>(6, 8);
-	MIN_MAX_PRICES[Item::hatchet_diamond_Id] = pair<int,int>(9, 12);
-	MIN_MAX_PRICES[Item::pickAxe_iron_Id] = pair<int,int>(7, 9);
-	MIN_MAX_PRICES[Item::pickAxe_diamond_Id] = pair<int,int>(10, 12);
-	MIN_MAX_PRICES[Item::shovel_iron_Id] = pair<int,int>(4, 6);
-	MIN_MAX_PRICES[Item::shovel_diamond_Id] = pair<int,int>(7, 8);
-	MIN_MAX_PRICES[Item::hoe_iron_Id] = pair<int,int>(4, 6);
-	MIN_MAX_PRICES[Item::hoe_diamond_Id] = pair<int,int>(7, 8);
-	MIN_MAX_PRICES[Item::boots_iron_Id] = pair<int,int>(4, 6);
-	MIN_MAX_PRICES[Item::boots_diamond_Id] = pair<int,int>(7, 8);
-	MIN_MAX_PRICES[Item::helmet_iron_Id] = pair<int,int>(4, 6);
-	MIN_MAX_PRICES[Item::helmet_diamond_Id] = pair<int,int>(7, 8);
-	MIN_MAX_PRICES[Item::chestplate_iron_Id] = pair<int,int>(10, 14);
-	MIN_MAX_PRICES[Item::chestplate_diamond_Id] = pair<int,int>(16, 19);
-	MIN_MAX_PRICES[Item::leggings_iron_Id] = pair<int,int>(8, 10);
-	MIN_MAX_PRICES[Item::leggings_diamond_Id] = pair<int,int>(11, 14);
-	MIN_MAX_PRICES[Item::boots_chain_Id] = pair<int,int>(5, 7);
-	MIN_MAX_PRICES[Item::helmet_chain_Id] = pair<int,int>(5, 7);
-	MIN_MAX_PRICES[Item::chestplate_chain_Id] = pair<int,int>(11, 15);
-	MIN_MAX_PRICES[Item::leggings_chain_Id] = pair<int,int>(9, 11);
+	MIN_MAX_PRICES[Item::iron_sword_Id] = pair<int,int>(7, 11);
+	MIN_MAX_PRICES[Item::diamond_sword_Id] = pair<int,int>(12, 14);
+	MIN_MAX_PRICES[Item::iron_axe_Id] = pair<int,int>(6, 8);
+	MIN_MAX_PRICES[Item::diamond_axe_Id] = pair<int,int>(9, 12);
+	MIN_MAX_PRICES[Item::iron_pickaxe_Id] = pair<int,int>(7, 9);
+	MIN_MAX_PRICES[Item::diamond_pickaxe_Id] = pair<int,int>(10, 12);
+	MIN_MAX_PRICES[Item::iron_shovel_Id] = pair<int,int>(4, 6);
+	MIN_MAX_PRICES[Item::diamond_shovel_Id] = pair<int,int>(7, 8);
+	MIN_MAX_PRICES[Item::iron_hoe_Id] = pair<int,int>(4, 6);
+	MIN_MAX_PRICES[Item::diamond_hoe_Id] = pair<int,int>(7, 8);
+	MIN_MAX_PRICES[Item::iron_boots_Id] = pair<int,int>(4, 6);
+	MIN_MAX_PRICES[Item::diamond_boots_Id] = pair<int,int>(7, 8);
+	MIN_MAX_PRICES[Item::iron_helmet_Id] = pair<int,int>(4, 6);
+	MIN_MAX_PRICES[Item::diamond_helmet_Id] = pair<int,int>(7, 8);
+	MIN_MAX_PRICES[Item::iron_chestplate_Id] = pair<int,int>(10, 14);
+	MIN_MAX_PRICES[Item::diamond_chestplate_Id] = pair<int,int>(16, 19);
+	MIN_MAX_PRICES[Item::iron_leggings_Id] = pair<int,int>(8, 10);
+	MIN_MAX_PRICES[Item::diamond_leggings_Id] = pair<int,int>(11, 14);
+	MIN_MAX_PRICES[Item::chainmail_boots_Id] = pair<int,int>(5, 7);
+	MIN_MAX_PRICES[Item::chainmail_helmet_Id] = pair<int,int>(5, 7);
+	MIN_MAX_PRICES[Item::chainmail_chestplate_Id] = pair<int,int>(11, 15);
+	MIN_MAX_PRICES[Item::chainmail_leggings_Id] = pair<int,int>(9, 11);
 	MIN_MAX_PRICES[Item::bread_Id] = pair<int,int>(-4, -2);
-	MIN_MAX_PRICES[Item::melon_Id] = pair<int,int>(-8, -4);
+	MIN_MAX_PRICES[Item::melon_block_Id] = pair<int,int>(-8, -4);
 	MIN_MAX_PRICES[Item::apple_Id] = pair<int,int>(-8, -4);
 	MIN_MAX_PRICES[Item::cookie_Id] = pair<int,int>(-10, -7);
 	MIN_MAX_PRICES[Tile::glass_Id] = pair<int,int>(-5, -3);
 	MIN_MAX_PRICES[Tile::bookshelf_Id] = pair<int,int>(3, 4);
-	MIN_MAX_PRICES[Item::chestplate_leather_Id] = pair<int,int>(4, 5);
-	MIN_MAX_PRICES[Item::boots_leather_Id] = pair<int,int>(2, 4);
-	MIN_MAX_PRICES[Item::helmet_leather_Id] = pair<int,int>(2, 4);
-	MIN_MAX_PRICES[Item::leggings_leather_Id] = pair<int,int>(2, 4);
+	MIN_MAX_PRICES[Item::leather_chestplate_Id] = pair<int,int>(4, 5);
+	MIN_MAX_PRICES[Item::leather_boots_Id] = pair<int,int>(2, 4);
+	MIN_MAX_PRICES[Item::leather_helmet_Id] = pair<int,int>(2, 4);
+	MIN_MAX_PRICES[Item::leather_leggings_Id] = pair<int,int>(2, 4);
 	MIN_MAX_PRICES[Item::saddle_Id] = pair<int,int>(6, 8);
-	MIN_MAX_PRICES[Item::expBottle_Id] = pair<int,int>(-4, -1);
-	MIN_MAX_PRICES[Item::redStone_Id] = pair<int,int>(-4, -1);
+	MIN_MAX_PRICES[Item::experience_bottle_Id] = pair<int,int>(-4, -1);
+	MIN_MAX_PRICES[Item::redstone_Id] = pair<int,int>(-4, -1);
 	MIN_MAX_PRICES[Item::compass_Id] = pair<int,int>(10, 12);
 	MIN_MAX_PRICES[Item::clock_Id] = pair<int,int>(10, 12);
 	MIN_MAX_PRICES[Tile::glowstone_Id] = pair<int,int>(-3, -1);
-	MIN_MAX_PRICES[Item::porkChop_cooked_Id] = pair<int,int>(-7, -5);
-	MIN_MAX_PRICES[Item::beef_cooked_Id] = pair<int,int>(-7, -5);
-	MIN_MAX_PRICES[Item::chicken_cooked_Id] = pair<int,int>(-8, -6);
-	MIN_MAX_PRICES[Item::eyeOfEnder_Id] = pair<int,int>(7, 11);
+	MIN_MAX_PRICES[Item::cooked_porkchop_Id] = pair<int,int>(-7, -5);
+	MIN_MAX_PRICES[Item::cooked_beef_Id] = pair<int,int>(-7, -5);
+	MIN_MAX_PRICES[Item::cooked_chicken_Id] = pair<int,int>(-8, -6);
+	MIN_MAX_PRICES[Item::eye_of_ender_Id] = pair<int,int>(7, 11);
 	MIN_MAX_PRICES[Item::arrow_Id] = pair<int,int>(-12, -8);
 }
 

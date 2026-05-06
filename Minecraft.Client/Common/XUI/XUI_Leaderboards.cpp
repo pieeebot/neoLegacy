@@ -34,7 +34,7 @@ LPCWSTR CScene_Leaderboards::m_TextColumnNameA[7]=
 const int CScene_Leaderboards::TitleIcons[CScene_Leaderboards::NUM_LEADERBOARDS][7] = 
 {
 	{ XZP_ICON_WALKED,		XZP_ICON_FALLEN,		Item::minecart_Id,		Item::boat_Id,					nullptr },
-	{ Tile::dirt_Id,		Tile::stoneBrick_Id,	Tile::sand_Id,			Tile::rock_Id,			Tile::gravel_Id,		Tile::clay_Id,			Tile::obsidian_Id },
+	{ Tile::dirt_Id,		Tile::stonebrick_Id,	Tile::sand_Id,			Tile::rock_Id,			Tile::gravel_Id,		Tile::clay_Id,			Tile::obsidian_Id },
 	{ Item::egg_Id,			Item::wheat_Id,			Tile::mushroom1_Id,		Tile::reeds_Id,			Item::milk_Id,	Tile::pumpkin_Id,		nullptr },
 	{ XZP_ICON_ZOMBIE,		XZP_ICON_SKELETON,		XZP_ICON_CREEPER,		XZP_ICON_SPIDER,		XZP_ICON_SPIDERJOCKEY,	XZP_ICON_ZOMBIEPIGMAN,	XZP_ICON_SLIME },
 };

@@ -46,7 +46,7 @@ bool HugeMushroomFeature::place(Level *level, Random *random, int x, int y, int 
 	}
 
 	int belowTile = level->getTile(x, y - 1, z);
-	if (belowTile != Tile::dirt_Id && belowTile != Tile::grass_Id && belowTile != Tile::mycel_Id)
+	if (belowTile != Tile::dirt_Id && belowTile != Tile::grass_Id && belowTile != Tile::mycelium_Id)
 	{
 		return false;
 	}
@@ -91,7 +91,7 @@ bool HugeMushroomFeature::place(Level *level, Random *random, int x, int y, int 
 				if (data == 5 && yy < y + treeHeight) data = 0;
 				if (data != 0 || y >= y + treeHeight - 1)
 				{
-					if (!Tile::solid[level->getTile(xx, yy, zz)]) placeBlock(level, xx, yy, zz, Tile::hugeMushroom_brown_Id + type, data);
+					if (!Tile::solid[level->getTile(xx, yy, zz)]) placeBlock(level, xx, yy, zz, Tile::brown_mushroom_block_Id + type, data);
 				}
 			}
 		}
@@ -99,7 +99,7 @@ bool HugeMushroomFeature::place(Level *level, Random *random, int x, int y, int 
 	for (int hh = 0; hh < treeHeight; hh++)
 	{
 		int t = level->getTile(x, y + hh, z);
-		if (!Tile::solid[t]) placeBlock(level, x, y + hh, z, Tile::hugeMushroom_brown_Id + type, 10);
+		if (!Tile::solid[t]) placeBlock(level, x, y + hh, z, Tile::brown_mushroom_block_Id + type, 10);
 	}
 	return true;
 }

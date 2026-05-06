@@ -589,11 +589,11 @@ bool MultiPlayerLevel::doSetTileAndData(int x, int y, int z, int tile, int data)
 	// water changing from static to dynamic for instance. Note that this is only called from a client connection,
 	// and so the thing being notified of any update through tileUpdated is the renderer
 	int prevTile = getTile(x, y, z);
-	bool visuallyImportant = (!( ( ( prevTile == Tile::water_Id ) && ( tile == Tile::calmWater_Id ) )   ||
-		( ( prevTile == Tile::calmWater_Id )  && ( tile == Tile::water_Id ) )	||
-		( ( prevTile == Tile::lava_Id )		&& ( tile == Tile::calmLava_Id ) )	||
-		( ( prevTile == Tile::calmLava_Id )		&& ( tile == Tile::calmLava_Id ) )	||
-		( ( prevTile == Tile::calmLava_Id )	&& ( tile == Tile::lava_Id ) ) ) );
+	bool visuallyImportant = (!( ( ( prevTile == Tile::flowing_water_Id ) && ( tile == Tile::water_Id ) )   ||
+		( ( prevTile == Tile::water_Id )  && ( tile == Tile::flowing_water_Id ) )	||
+		( ( prevTile == Tile::flowing_lava_Id )		&& ( tile == Tile::lava_Id ) )	||
+		( ( prevTile == Tile::lava_Id )		&& ( tile == Tile::lava_Id ) )	||
+		( ( prevTile == Tile::lava_Id )	&& ( tile == Tile::flowing_lava_Id ) ) ) );
 	// If we're the host, need to tell the renderer for updates even if they don't change things as the host
 	// might have been sharing data and so set it already, but the renderer won't know to update
 	if( (Level::setTileAndData(x, y, z, tile, data, Tile::UPDATE_ALL) || g_NetworkManager.IsHost() ) )
@@ -721,13 +721,15 @@ void MultiPlayerLevel::animateTickDoWork()
 			int y = cy + random->nextInt(8);
 			int z = cz + random->nextInt(8);
 			int t = getTile(x, y, z);
+			Tile *tile = Tile::tiles[t];
+			if (tile == nullptr) return; // tu31 tutorial world fix
 			if (random->nextInt(8) > y && t == 0 && dimension->hasBedrockFog())			// 4J - test for bedrock fog brought forward from 1.2.3
 			{
 				addParticle(eParticleType_depthsuspend, x + random->nextFloat(), y + random->nextFloat(), z + random->nextFloat(), 0, 0, 0);
 			}
 			else if (t > 0)
 			{
-				Tile::tiles[t]->animateTick(this, x, y, z, animateRandom);
+				tile->animateTick(this, x, y, z, animateRandom);
 			}
 		}
 	}

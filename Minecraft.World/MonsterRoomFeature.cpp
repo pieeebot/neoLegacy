@@ -10,20 +10,20 @@
 WeighedTreasure *MonsterRoomFeature::monsterRoomTreasure[MonsterRoomFeature::TREASURE_ITEMS_COUNT] = 
 {
 		new WeighedTreasure(Item::saddle_Id, 0, 1, 1, 10),
-		new WeighedTreasure(Item::ironIngot_Id, 0, 1, 4, 10),
+		new WeighedTreasure(Item::iron_ingot_Id, 0, 1, 4, 10),
 		new WeighedTreasure(Item::bread_Id, 0, 1, 1, 10),
 		new WeighedTreasure(Item::wheat_Id, 0, 1, 4, 10),
 		new WeighedTreasure(Item::gunpowder_Id, 0, 1, 4, 10),
 		new WeighedTreasure(Item::string_Id, 0, 1, 4, 10),
-		new WeighedTreasure(Item::bucket_empty_Id, 0, 1, 1, 10),
-		new WeighedTreasure(Item::apple_gold_Id, 0, 1, 1, 1),
-		new WeighedTreasure(Item::redStone_Id, 0, 1, 4, 10),
-		new WeighedTreasure(Item::record_01_Id, 0, 1, 1, 10),
-		new WeighedTreasure(Item::record_02_Id, 0, 1, 1, 10),
-		new WeighedTreasure(Item::nameTag_Id, 0, 1, 1, 10),
-		new WeighedTreasure(Item::horseArmorGold_Id, 0, 1, 1, 2),
-		new WeighedTreasure(Item::horseArmorMetal_Id, 0, 1, 1, 5),
-		new WeighedTreasure(Item::horseArmorDiamond_Id, 0, 1, 1, 1),
+		new WeighedTreasure(Item::bucket_Id, 0, 1, 1, 10),
+		new WeighedTreasure(Item::golden_apple_Id, 0, 1, 1, 1),
+		new WeighedTreasure(Item::redstone_Id, 0, 1, 4, 10),
+		new WeighedTreasure(Item::record_13_Id, 0, 1, 1, 10),
+		new WeighedTreasure(Item::record_cat_Id, 0, 1, 1, 10),
+		new WeighedTreasure(Item::name_tag_Id, 0, 1, 1, 10),
+		new WeighedTreasure(Item::golden_horse_armor_Id, 0, 1, 1, 2),
+		new WeighedTreasure(Item::iron_horse_armor_Id, 0, 1, 1, 5),
+		new WeighedTreasure(Item::diamond_horse_armor_Id, 0, 1, 1, 1),
 };
 
 bool MonsterRoomFeature::place(Level *level, Random *random, int x, int y, int z)
@@ -74,7 +74,7 @@ bool MonsterRoomFeature::place(Level *level, Random *random, int x, int y, int z
 					{
 						if (yy == y - 1 && random->nextInt(4) != 0)
 						{
-							level->setTileAndData(xx, yy, zz, Tile::mossyCobblestone_Id, 0, Tile::UPDATE_CLIENTS);
+							level->setTileAndData(xx, yy, zz, Tile::mossy_cobblestone_Id, 0, Tile::UPDATE_CLIENTS);
 						}
 						else
 						{
@@ -108,7 +108,7 @@ bool MonsterRoomFeature::place(Level *level, Random *random, int x, int y, int z
 
 			level->setTileAndData(xc, yc, zc, Tile::chest_Id, 0, Tile::UPDATE_CLIENTS);
 			WeighedTreasureArray wrapperArray(monsterRoomTreasure, TREASURE_ITEMS_COUNT);
-			WeighedTreasureArray treasure = WeighedTreasure::addToTreasure(wrapperArray, Item::enchantedBook->createForRandomTreasure(random));
+			WeighedTreasureArray treasure = WeighedTreasure::addToTreasure(wrapperArray, Item::enchanted_book->createForRandomTreasure(random));
 			shared_ptr<ChestTileEntity> chest = dynamic_pointer_cast<ChestTileEntity >( level->getTileEntity(xc, yc, zc) );
 			if (chest != nullptr )
 			{
@@ -120,7 +120,7 @@ bool MonsterRoomFeature::place(Level *level, Random *random, int x, int y, int z
 	}
 
 
-	level->setTileAndData(x, y, z, Tile::mobSpawner_Id, 0, Tile::UPDATE_CLIENTS);
+	level->setTileAndData(x, y, z, Tile::mob_spawner_Id, 0, Tile::UPDATE_CLIENTS);
 	shared_ptr<MobSpawnerTileEntity> entity = dynamic_pointer_cast<MobSpawnerTileEntity>( level->getTileEntity(x, y, z) );
 	if( entity != nullptr )
 	{

@@ -752,11 +752,11 @@ bool LocalPlayer::openFurnace(shared_ptr<FurnaceTileEntity> furnace)
 	return success;
 }
 
-bool LocalPlayer::openBrewingStand(shared_ptr<BrewingStandTileEntity> brewingStand)
+bool LocalPlayer::openBrewingStand(shared_ptr<BrewingStandTileEntity> brewing_stand)
 {
-	bool success = app.LoadBrewingStandMenu(GetXboxPad(),inventory, brewingStand);
+	bool success = app.LoadBrewingStandMenu(GetXboxPad(),inventory, brewing_stand);
 	if( success ) ui.PlayUISFX(eSFX_Press);
-	//minecraft.setScreen(new BrewingStandScreen(inventory, brewingStand));
+	//minecraft.setScreen(new BrewingStandScreen(inventory, brewing_stand));
 	return success;
 }
 
@@ -978,26 +978,26 @@ void LocalPlayer::awardStat(Stat *stat, byteArray param)
 		// MOAR TOOLS
 		{
 			Stat *toolStats[4][5];
-			toolStats[0][0] = GenericStats::itemsCrafted(Item::shovel_wood->id);
-			toolStats[0][1] = GenericStats::itemsCrafted(Item::shovel_stone->id);
-			toolStats[0][2] = GenericStats::itemsCrafted(Item::shovel_iron->id);
-			toolStats[0][3] = GenericStats::itemsCrafted(Item::shovel_diamond->id);
-			toolStats[0][4] = GenericStats::itemsCrafted(Item::shovel_gold->id);
-			toolStats[1][0] = GenericStats::itemsCrafted(Item::pickAxe_wood->id); 
-			toolStats[1][1] = GenericStats::itemsCrafted(Item::pickAxe_stone->id);
-			toolStats[1][2] = GenericStats::itemsCrafted(Item::pickAxe_iron->id);
-			toolStats[1][3] = GenericStats::itemsCrafted(Item::pickAxe_diamond->id);
-			toolStats[1][4] = GenericStats::itemsCrafted(Item::pickAxe_gold->id);
-			toolStats[2][0] = GenericStats::itemsCrafted(Item::hatchet_wood->id);
-			toolStats[2][1] = GenericStats::itemsCrafted(Item::hatchet_stone->id);
-			toolStats[2][2] = GenericStats::itemsCrafted(Item::hatchet_iron->id);
-			toolStats[2][3] = GenericStats::itemsCrafted(Item::hatchet_diamond->id);
-			toolStats[2][4] = GenericStats::itemsCrafted(Item::hatchet_gold->id);
-			toolStats[3][0] = GenericStats::itemsCrafted(Item::hoe_wood->id);
-			toolStats[3][1] = GenericStats::itemsCrafted(Item::hoe_stone->id);
-			toolStats[3][2] = GenericStats::itemsCrafted(Item::hoe_iron->id);
-			toolStats[3][3] = GenericStats::itemsCrafted(Item::hoe_diamond->id);
-			toolStats[3][4] = GenericStats::itemsCrafted(Item::hoe_gold->id);
+			toolStats[0][0] = GenericStats::itemsCrafted(Item::wooden_shovel->id);
+			toolStats[0][1] = GenericStats::itemsCrafted(Item::stone_shovel->id);
+			toolStats[0][2] = GenericStats::itemsCrafted(Item::iron_shovel->id);
+			toolStats[0][3] = GenericStats::itemsCrafted(Item::diamond_shovel->id);
+			toolStats[0][4] = GenericStats::itemsCrafted(Item::golden_shovel->id);
+			toolStats[1][0] = GenericStats::itemsCrafted(Item::wooden_pickaxe->id); 
+			toolStats[1][1] = GenericStats::itemsCrafted(Item::stone_pickaxe->id);
+			toolStats[1][2] = GenericStats::itemsCrafted(Item::iron_pickaxe->id);
+			toolStats[1][3] = GenericStats::itemsCrafted(Item::diamond_pickaxe->id);
+			toolStats[1][4] = GenericStats::itemsCrafted(Item::golden_pickaxe->id);
+			toolStats[2][0] = GenericStats::itemsCrafted(Item::wooden_axe->id);
+			toolStats[2][1] = GenericStats::itemsCrafted(Item::stone_axe->id);
+			toolStats[2][2] = GenericStats::itemsCrafted(Item::iron_axe->id);
+			toolStats[2][3] = GenericStats::itemsCrafted(Item::diamond_axe->id);
+			toolStats[2][4] = GenericStats::itemsCrafted(Item::golden_axe->id);
+			toolStats[3][0] = GenericStats::itemsCrafted(Item::wooden_hoe->id);
+			toolStats[3][1] = GenericStats::itemsCrafted(Item::stone_hoe->id);
+			toolStats[3][2] = GenericStats::itemsCrafted(Item::iron_hoe->id);
+			toolStats[3][3] = GenericStats::itemsCrafted(Item::diamond_hoe->id);
+			toolStats[3][4] = GenericStats::itemsCrafted(Item::golden_hoe->id);
 		
 			bool justCraftedTool = false;
 			for (int i=0; i<4; i++)
@@ -1063,8 +1063,8 @@ void LocalPlayer::awardStat(Stat *stat, byteArray param)
 		// AWARD : Porkchop, cook and eat a porkchop.
 		{
 			Stat *cookPorkchop, *eatPorkchop;
-			cookPorkchop = GenericStats::itemsSmelted(Item::porkChop_cooked_Id);
-			eatPorkchop = GenericStats::itemsUsed(Item::porkChop_cooked_Id);
+			cookPorkchop = GenericStats::itemsSmelted(Item::cooked_porkchop_Id);
+			eatPorkchop = GenericStats::itemsUsed(Item::cooked_porkchop_Id);
 
 			if ( stat == cookPorkchop || stat == eatPorkchop )
 			{
@@ -1111,7 +1111,7 @@ void LocalPlayer::awardStat(Stat *stat, byteArray param)
 		// AWARD : The Haggler, Acquire 30 emeralds.
 		{
 			Stat *emeraldMined, *emeraldBought;
-			emeraldMined = GenericStats::blocksMined(Tile::emeraldOre_Id);
+			emeraldMined = GenericStats::blocksMined(Tile::emerald_ore_Id);
 			emeraldBought = GenericStats::itemsBought(Item::emerald_Id);
 
 			if ( stat == emeraldMined || stat == emeraldBought )
@@ -1134,8 +1134,8 @@ void LocalPlayer::awardStat(Stat *stat, byteArray param)
 		// AWARD : Pot Planter, craft and place a flowerpot.
 		{
 			Stat *craftFlowerpot, *placeFlowerpot;
-			craftFlowerpot = GenericStats::itemsCrafted(Item::flowerPot_Id);
-			placeFlowerpot = GenericStats::blocksPlaced(Tile::flowerPot_Id);
+			craftFlowerpot = GenericStats::itemsCrafted(Item::flower_pot_Id);
+			placeFlowerpot = GenericStats::blocksPlaced(Tile::flower_pot_Id);
 
 			if ( stat == craftFlowerpot || stat == placeFlowerpot )
 			{
@@ -1149,9 +1149,9 @@ void LocalPlayer::awardStat(Stat *stat, byteArray param)
 		// AWARD : It's a Sign, craft and place a sign.
 		{
 			Stat *craftSign, *placeWallsign, *placeSignpost;
-			craftSign = GenericStats::itemsCrafted(Item::sign_Id);
-			placeWallsign = GenericStats::blocksPlaced(Tile::wallSign_Id);
-			placeSignpost = GenericStats::blocksPlaced(Tile::sign_Id);
+			craftSign = GenericStats::itemsCrafted(Item::standing_sign_Id);
+			placeWallsign = GenericStats::blocksPlaced(Tile::wall_standing_sign_Id);
+			placeSignpost = GenericStats::blocksPlaced(Tile::standing_sign_Id);
 
 			if ( stat == craftSign || stat == placeWallsign || stat == placeSignpost )
 			{
@@ -1642,7 +1642,7 @@ bool LocalPlayer::handleMouseClick(int button)
 			{
 				// If I have an empty bucket in my hand, it's going to be filled with milk, so turn off mayUse
 				shared_ptr<ItemInstance> item = inventory->getSelected();
-				if(item && (item->id==Item::bucket_empty_Id))
+				if(item && (item->id==Item::bucket_Id))
 				{
 					mayUse=false;
 				}
@@ -1720,7 +1720,7 @@ void LocalPlayer::updateRichPresence()
 	if((m_iPad!=-1)/* && !ui.GetMenuDisplayed(m_iPad)*/ )
 	{
 		shared_ptr<ItemInstance> selectedItem = inventory->getSelected();
-		if(selectedItem != nullptr && selectedItem->id == Item::fishingRod_Id)
+		if(selectedItem != nullptr && selectedItem->id == Item::fishing_rod_Id)
 		{
 			app.SetRichPresenceContext(m_iPad,CONTEXT_GAME_STATE_FISHING);
 		}

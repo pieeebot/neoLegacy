@@ -194,7 +194,7 @@ bool SpawnEggItem::useOn(shared_ptr<ItemInstance> itemInstance, shared_ptr<Playe
 
 	int tile = level->getTile(x, y, z);
 
-	if (tile == Tile::mobSpawner_Id)
+	if (tile == Tile::mob_spawner_Id)
 	{
 		
 		shared_ptr<MobSpawnerTileEntity> spawnerTile = dynamic_pointer_cast<MobSpawnerTileEntity>(level->getTileEntity(x, y, z));

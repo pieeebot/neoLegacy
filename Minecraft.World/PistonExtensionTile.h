@@ -12,6 +12,11 @@ private:
 
 public:
 	PistonExtensionTile(int id);
+	virtual void createBlockStateDefinition() override;
+	virtual int defaultBlockState() override;
+	virtual int convertBlockStateToLegacyData(BlockState *state) override;
+	virtual Tile::BlockState getBlockState(int data);
+	virtual Tile::BlockState getBlockState(LevelSource *level, int x, int y, int z) override;
 	virtual void setOverrideTopTexture(Icon *overrideTopTexture);
 	virtual void clearOverrideTopTexture();
 	virtual void playerWillDestroy(Level *level, int x, int y, int z, int data, shared_ptr<Player> player);

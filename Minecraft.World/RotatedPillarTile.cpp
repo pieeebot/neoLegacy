@@ -6,6 +6,32 @@ RotatedPillarTile::RotatedPillarTile(int id, Material *material) : Tile(id, mate
 {
 }
 
+void RotatedPillarTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int RotatedPillarTile::defaultBlockState()
+{
+	return 0;
+}
+
+int RotatedPillarTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & MASK_FACING) : 0;
+}
+
+Tile::BlockState RotatedPillarTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & MASK_FACING);
+}
+
+Tile::BlockState RotatedPillarTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & MASK_FACING);
+}
+
 int RotatedPillarTile::getRenderShape()
 {
 	return Tile::SHAPE_TREE;

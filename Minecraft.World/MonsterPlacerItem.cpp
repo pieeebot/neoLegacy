@@ -176,11 +176,11 @@ bool MonsterPlacerItem::useOn(shared_ptr<ItemInstance> itemInstance, shared_ptr<
 	int tile = level->getTile(x, y, z);
 
 #ifndef _CONTENT_PACKAGE
-	if(app.DebugSettingsOn() && tile == Tile::mobSpawner_Id)
+	if(app.DebugSettingsOn() && tile == Tile::mob_spawner_Id)
 	{
 		// 4J Stu - Force adding this as a tile update
 		level->setTile(x,y,z,0);
-		level->setTile(x,y,z,Tile::mobSpawner_Id);
+		level->setTile(x,y,z,Tile::mob_spawner_Id);
 		shared_ptr<MobSpawnerTileEntity> mste = dynamic_pointer_cast<MobSpawnerTileEntity>( level->getTileEntity(x,y,z) );
 		if(mste != NULL)
 		{
@@ -196,7 +196,7 @@ bool MonsterPlacerItem::useOn(shared_ptr<ItemInstance> itemInstance, shared_ptr<
 
 	double yOff = 0;
 	// 4J-PB - missing parentheses added
-	if (face == Facing::UP && (tile == Tile::fence_Id || tile == Tile::netherFence_Id))
+	if (face == Facing::UP && (tile == Tile::fence_Id || tile == Tile::nether_brick_fence_Id))
 	{
 		// special case
 		yOff = .5;

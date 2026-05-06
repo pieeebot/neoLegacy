@@ -225,7 +225,7 @@ bool BrewingStandMenu::PotionSlot::mayCombine(shared_ptr<ItemInstance> second)
 
 bool BrewingStandMenu::PotionSlot::mayPlaceItem(shared_ptr<ItemInstance> item)
 {
-	return item != nullptr && (item->id == Item::potion_Id || item->id == Item::glassBottle_Id);
+	return item != nullptr && (item->id == Item::potion_Id || item->id == Item::glass_bottle_Id);
 }
 
 BrewingStandMenu::IngredientsSlot::IngredientsSlot(shared_ptr<Container> container, int slot, int x, int y) : Slot(container, slot, x ,y)
@@ -249,7 +249,7 @@ bool BrewingStandMenu::IngredientsSlot::mayPlace(shared_ptr<ItemInstance> item)
 		}
 		else
 		{
-			return Item::items[item->id]->hasPotionBrewingFormula() || item->id == Item::netherwart_seeds_Id || item->id == Item::bucket_water_Id;
+			return Item::items[item->id]->hasPotionBrewingFormula() || item->id == Item::netherwart_seeds_Id || item->id == Item::water_bucket_Id;
 		}
 	}
 	return false;

@@ -27,7 +27,7 @@ bool ArmorDyeRecipe::matches(shared_ptr<CraftingContainer> craftSlots, Level *le
 				return false;
 			}
 		}
-		else if (item->id == Item::dye_powder_Id)
+		else if (item->id == Item::dye_Id)
 		{
 			dyes.push_back(item);
 		}
@@ -83,7 +83,7 @@ shared_ptr<ItemInstance> ArmorDyeRecipe::assembleDyedArmor(shared_ptr<CraftingCo
 					return nullptr;
 				}
 			}
-			else if (item->id == Item::dye_powder_Id)
+			else if (item->id == Item::dye_Id)
 			{
 				int tileData = ColoredTile::getTileDataForItemAuxValue(item->getAuxValue());
 				int red = static_cast<int>(Sheep::COLOR[tileData][0] * 0xFF);

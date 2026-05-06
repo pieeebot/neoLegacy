@@ -118,10 +118,12 @@ bool TutorialHint::onLookAtEntity(eINSTANCEOF type)
 int TutorialHint::tick()
 {
 	int returnVal = -1;
+	int tutorialPad = m_tutorial->getPad();
+	bool hasValidPad = (tutorialPad >= 0 && tutorialPad < XUSER_MAX_COUNT);
 	switch(m_type)
 	{
 	case e_Hint_SwimUp:
-		if( Minecraft::GetInstance()->localplayers[m_tutorial->getPad()]->isUnderLiquid(Material::water) ) returnVal = m_descriptionId; 
+		if( hasValidPad && Minecraft::GetInstance()->localplayers[tutorialPad] != nullptr && Minecraft::GetInstance()->localplayers[tutorialPad]->isUnderLiquid(Material::water) ) returnVal = m_descriptionId; 
 		break;
 	}
 	return returnVal;

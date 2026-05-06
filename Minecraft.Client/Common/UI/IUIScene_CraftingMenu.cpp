@@ -269,7 +269,7 @@ bool IUIScene_CraftingMenu::handleKeyDown(int iPad, int iAction, bool bRepeat)
 					//pMinecraft->soundEngine->playUI( L"random.pop", 1.0f, 1.0f);
 					ui.PlayUISFX(eSFX_Craft);
 
-					if(pTempItemInst->id != Item::fireworksCharge_Id && pTempItemInst->id != Item::fireworks_Id)
+					if(pTempItemInst->id != Item::firework_charge_Id && pTempItemInst->id != Item::fireworks_Id)
 					{
 						// and remove those resources from your inventory
 						for(int i=0;i<pRecipeIngredientsRequired[iRecipe].iIngC;i++)
@@ -312,16 +312,16 @@ bool IUIScene_CraftingMenu::handleKeyDown(int iPad, int iAction, bool bRepeat)
 						//4J Gordon: Achievements
 						switch(pTempItemInst->id )
 						{
-						case Tile::workBench_Id:		m_pPlayer->awardStat(GenericStats::buildWorkbench(),		GenericStats::param_buildWorkbench());		break;
-						case Item::pickAxe_wood_Id:		m_pPlayer->awardStat(GenericStats::buildPickaxe(),			GenericStats::param_buildPickaxe());		break;
+						case Tile::crafting_table_Id:		m_pPlayer->awardStat(GenericStats::buildWorkbench(),		GenericStats::param_buildWorkbench());		break;
+						case Item::wooden_pickaxe_Id:		m_pPlayer->awardStat(GenericStats::buildPickaxe(),			GenericStats::param_buildPickaxe());		break;
 						case Tile::furnace_Id:			m_pPlayer->awardStat(GenericStats::buildFurnace(),			GenericStats::param_buildFurnace());		break;
-						//case Item::hoe_wood_Id:			m_pPlayer->awardStat(GenericStats::buildHoe(),				GenericStats::param_buildHoe());			break;
+						//case Item::wooden_hoe_Id:			m_pPlayer->awardStat(GenericStats::buildHoe(),				GenericStats::param_buildHoe());			break;
 						case Item::bread_Id:			m_pPlayer->awardStat(GenericStats::makeBread(),				GenericStats::param_makeBread());			break;
 						case Item::cake_Id:				m_pPlayer->awardStat(GenericStats::bakeCake(),				GenericStats::param_bakeCake());			break;
-						case Item::pickAxe_stone_Id:	m_pPlayer->awardStat(GenericStats::buildBetterPickaxe(),	GenericStats::param_buildBetterPickaxe());	break;
-						//case Item::sword_wood_Id:		m_pPlayer->awardStat(GenericStats::buildSword(),			GenericStats::param_buildSword());			break;
+						case Item::stone_pickaxe_Id:	m_pPlayer->awardStat(GenericStats::buildBetterPickaxe(),	GenericStats::param_buildBetterPickaxe());	break;
+						//case Item::wooden_sword_Id:		m_pPlayer->awardStat(GenericStats::buildSword(),			GenericStats::param_buildSword());			break;
 						case Tile::dispenser_Id:		m_pPlayer->awardStat(GenericStats::dispenseWithThis(),		GenericStats::param_dispenseWithThis());	break;
-						case Tile::enchantTable_Id:		m_pPlayer->awardStat(GenericStats::enchantments(),			GenericStats::param_enchantments());		break;
+						case Tile::enchanting_table_Id:		m_pPlayer->awardStat(GenericStats::enchantments(),			GenericStats::param_enchantments());		break;
 						case Tile::bookshelf_Id:		m_pPlayer->awardStat(GenericStats::bookcase(),				GenericStats::param_bookcase());			break;
 						}
 						switch (pTempItemInst->getItem()->getBaseItemType()) {
@@ -1088,7 +1088,7 @@ void IUIScene_CraftingMenu::DisplayIngredients()
 			{
 				idescID=IDS_ANY_WOOL;
 			}
-			else if((pTempItemInst->id==Item::fireworksCharge_Id) && (id==Item::dye_powder_Id))
+			else if((pTempItemInst->id==Item::firework_charge_Id) && (id==Item::dye_Id))
 			{
 				idescID=IDS_ITEM_DYE_POWDER;
 				iAuxVal = 1;
@@ -1158,7 +1158,7 @@ void IUIScene_CraftingMenu::DisplayIngredients()
 					{
 						iAuxVal = 0xFF;
 					}
-					else if( pTempItemInst->id==Item::fireworksCharge_Id && id == Item::dye_powder_Id)
+					else if( pTempItemInst->id==Item::firework_charge_Id && id == Item::dye_Id)
 					{
 						iAuxVal = 1;
 					}

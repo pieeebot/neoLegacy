@@ -84,7 +84,7 @@ bool BirchFeature::place(Level *level, Random *random, int x, int y, int z)
     for (int hh = 0; hh < treeHeight; hh++)
     {
         int t = level->getTile(x, y + hh, z);
-        if (t == 0 || t == Tile::leaves_Id) placeBlock(level, x, y + hh, z, Tile::treeTrunk_Id, TreeTile::BIRCH_TRUNK);
+        if (t == 0 || t == Tile::leaves_Id) placeBlock(level, x, y + hh, z, Tile::log_Id, TreeTile::BIRCH_TRUNK);
     }
     return true;
 }

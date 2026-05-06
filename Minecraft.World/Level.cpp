@@ -963,7 +963,9 @@ Material *Level::getMaterial(int x, int y, int z)
 {
 	int t = getTile(x, y, z);
 	if (t == 0) return Material::air;
-	return Tile::tiles[t]->material;
+	Tile *tile = Tile::tiles[t];
+	if (tile == nullptr) return Material::air;
+	return tile->material;
 }
 
 int Level::getData(int x, int y, int z)
@@ -1516,7 +1518,7 @@ HitResult *Level::clip(Vec3 *a, Vec3 *b, bool liquid, bool solidOnly)
 			// No collision
 
 		}
-		else if (t > 0 && tile->mayPick(data, liquid))
+		else if (t > 0 && tile != nullptr && tile->mayPick(data, liquid))
 		{
 			HitResult *r = tile->clip(this, xTile0, yTile0, zTile0, a, b);
 			if (r != nullptr) return r;
@@ -1618,7 +1620,7 @@ HitResult *Level::clip(Vec3 *a, Vec3 *b, bool liquid, bool solidOnly)
 			// No collision
 
 		}
-		else if (t > 0 && tile->mayPick(data, liquid))
+		else if (t > 0 && tile != nullptr && tile->mayPick(data, liquid))
 		{
 			HitResult *r = tile->clip(this, xTile0, yTile0, zTile0, a, b);
 			if (r != nullptr) return r;
@@ -2682,7 +2684,7 @@ bool Level::containsFireTile(AABB *box)
 				{
 					int t = getTile(x, y, z);
 
-					if (t == Tile::fire_Id || t == Tile::lava_Id || t == Tile::calmLava_Id) return true;
+					if (t == Tile::fire_Id || t == Tile::flowing_lava_Id || t == Tile::lava_Id) return true;
 				}
 	}
 	return false;
@@ -3360,7 +3362,7 @@ bool Level::shouldFreeze(int x, int y, int z, bool checkNeighbors)
 	if (y >= 0 && y < maxBuildHeight && getBrightness(LightLayer::Block, x, y, z) < 10)
 	{
 		int current = getTile(x, y, z);
-		if ((current == Tile::calmWater_Id || current == Tile::water_Id) && getData(x, y, z) == 0)
+		if ((current == Tile::water_Id || current == Tile::flowing_water_Id) && getData(x, y, z) == 0)
 		{
 			if (!checkNeighbors) return true;
 
@@ -3991,7 +3993,9 @@ int Level::getDirectSignal(int x, int y, int z, int dir)
 {
 	int t = getTile(x, y, z);
 	if (t == 0) return Redstone::SIGNAL_NONE;
-	return Tile::tiles[t]->getDirectSignal(this, x, y, z, dir);
+	Tile *tile = Tile::tiles[t];
+	if (tile == nullptr) return Redstone::SIGNAL_NONE; // tu31 tutorial world fix
+	return tile->getDirectSignal(this, x, y, z, dir);
 }
 
 int Level::getDirectSignalTo(int x, int y, int z)
@@ -4024,8 +4028,9 @@ int Level::getSignal(int x, int y, int z, int dir)
 		return getDirectSignalTo(x, y, z);
 	}
 	int t = getTile(x, y, z);
-	if (t == 0) return Redstone::SIGNAL_NONE;
-	return Tile::tiles[t]->getSignal(this, x, y, z, dir);
+	Tile *tile = Tile::tiles[t];
+	if (t == 0 || tile == nullptr) return Redstone::SIGNAL_NONE;
+	return tile->getSignal(this, x, y, z, dir);
 }
 
 bool Level::hasNeighborSignal(int x, int y, int z)

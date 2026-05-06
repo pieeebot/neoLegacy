@@ -196,11 +196,11 @@ int Region::getRawBrightness(int x, int y, int z, bool propagate)
 		int id = getTile(x, y, z);
 		switch(id)
 		{
-		case Tile::stoneSlabHalf_Id:
-		case Tile::woodSlabHalf_Id:
+		case Tile::stone_slab_Id:
+		case Tile::wooden_slab_Id:
 		case Tile::farmland_Id:
-		case Tile::stairs_stone_Id:
-		case Tile::stairs_wood_Id:
+		case Tile::stone_stairs_Id:
+		case Tile::oak_stairs_Id:
 			{
 				int br = getRawBrightness(x, y + 1, z, false);
 				int br1 = getRawBrightness(x + 1, y, z, false);
@@ -246,7 +246,9 @@ Material *Region::getMaterial(int x, int y, int z)
 {
 	int t = getTile(x, y, z);
 	if (t == 0) return Material::air;
-	return Tile::tiles[t]->material;
+	Tile *tile = Tile::tiles[t];
+	if (tile == nullptr) return Material::air;
+	return tile->material;
 }
 
 

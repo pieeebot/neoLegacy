@@ -131,7 +131,7 @@ void BeaconTileEntity::updateShape()
 				for (int lz = z - step; lz <= z + step; lz++)
 				{
 					int tile = level->getTile(lx, ly, lz);
-					if (tile != Tile::emeraldBlock_Id && tile != Tile::goldBlock_Id && tile != Tile::diamondBlock_Id && tile != Tile::ironBlock_Id)
+					if (tile != Tile::emerald_block_Id && tile != Tile::gold_block_Id && tile != Tile::diamond_block_Id && tile != Tile::iron_block_Id)
 					{
 						isOk = false;
 						break;
@@ -373,5 +373,5 @@ void BeaconTileEntity::stopOpen()
 
 bool BeaconTileEntity::canPlaceItem(int slot, shared_ptr<ItemInstance> item)
 {
-	return (item->id == Item::emerald_Id || item->id == Item::diamond_Id || item->id == Item::goldIngot_Id || item->id == Item::ironIngot_Id);
+	return (item->id == Item::emerald_Id || item->id == Item::diamond_Id || item->id == Item::gold_ingot_Id || item->id == Item::iron_ingot_Id);
 }

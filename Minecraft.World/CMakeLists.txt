@@ -11,6 +11,11 @@ set(MINECRAFT_WORLD_SOURCES
   ${SOURCES_COMMON}
 )
 
+list(APPEND MINECRAFT_WORLD_SOURCES
+  "${CMAKE_CURRENT_SOURCE_DIR}/BlockStateDecoder.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/BlockStateDecoderRegistry.cpp"
+)
+
 add_library(Minecraft.World STATIC ${MINECRAFT_WORLD_SOURCES})
 
 target_include_directories(Minecraft.World

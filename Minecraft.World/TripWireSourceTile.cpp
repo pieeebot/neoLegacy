@@ -10,6 +10,32 @@ TripWireSourceTile::TripWireSourceTile(int id) : Tile(id, Material::decoration, 
 	this->setTicking(true);
 }
 
+void TripWireSourceTile::createBlockStateDefinition()
+{
+	if (!m_blockStateDefinition)
+		m_blockStateDefinition = new BlockStateDefinition(this);
+}
+
+int TripWireSourceTile::defaultBlockState()
+{
+	return 0;
+}
+
+int TripWireSourceTile::convertBlockStateToLegacyData(BlockState *state)
+{
+	return state ? (state->value & 0xF) : 0;
+}
+
+Tile::BlockState TripWireSourceTile::getBlockState(int data)
+{
+	return Tile::BlockState(data & 0xF);
+}
+
+Tile::BlockState TripWireSourceTile::getBlockState(LevelSource *level, int x, int y, int z)
+{
+	return Tile::BlockState(level->getData(x, y, z) & 0xF);
+}
+
 AABB *TripWireSourceTile::getAABB(Level *level, int x, int y, int z)
 {
 	return nullptr;
@@ -115,7 +141,7 @@ void TripWireSourceTile::calculateState(Level *level, int x, int y, int z, int i
 	int dir = data & MASK_DIR;
 	bool wasAttached = (data & MASK_ATTACHED) == MASK_ATTACHED;
 	bool wasPowered = (data & MASK_POWERED) == MASK_POWERED;
-	bool attached = id == Tile::tripWireSource_Id; // id is only != TripwireSource_id when 'onRemove' 
+	bool attached = id == Tile::tripwire_hook_Id; // id is only != tripwire_hook_Id when 'onRemove' 
 	bool powered = false;
 	bool suspended = !level->isTopSolidBlocking(x, y - 1, z);
 	int stepX = Direction::STEP_X[dir];
@@ -130,7 +156,7 @@ void TripWireSourceTile::calculateState(Level *level, int x, int y, int z, int i
 		int zz = z + stepZ * i;
 		int tile = level->getTile(xx, y, zz);
 
-		if (tile == Tile::tripWireSource_Id)
+		if (tile == Tile::tripwire_hook_Id)
 		{
 			int otherData = level->getData(xx, y, zz);
 
@@ -141,7 +167,7 @@ void TripWireSourceTile::calculateState(Level *level, int x, int y, int z, int i
 
 			break;
 		}
-		else if (tile == Tile::tripWire_Id || i == wireSource) // wireSource is the wiretile that caused an 'updateSource'
+		else if (tile == Tile::tripwire_Id || i == wireSource) // wireSource is the wiretile that caused an 'updateSource'
 		{
 			int wireData = i == wireSource ? wireSourceData : level->getData(xx, y, zz);
 			bool wireArmed = (wireData & TripWireTile::MASK_DISARMED) != TripWireTile::MASK_DISARMED;

@@ -805,7 +805,12 @@ shared_ptr<Packet> TrackedEntity::getAddEntityPacket()
 			app.DebugPrintf("eTYPE_ITEM_FRAME xyz %d,%d,%d\n",ix,iy,iz);
 		}
 
-		shared_ptr<AddEntityPacket> packet = std::make_shared<AddEntityPacket>(e, AddEntityPacket::ITEM_FRAME, frame->dir, yRotp, xRotp, xp, yp, zp);
+		int data = frame->dir & 0xFF;
+		if (frame->placedByPlayer)
+		{
+			data |= 0x100;
+		}
+		shared_ptr<AddEntityPacket> packet = std::make_shared<AddEntityPacket>(e, AddEntityPacket::ITEM_FRAME, data, yRotp, xRotp, xp, yp, zp);
 		packet->x = Mth::floor(frame->xTile * 32.0f);
 		packet->y = Mth::floor(frame->yTile * 32.0f);
 		packet->z = Mth::floor(frame->zTile * 32.0f);
